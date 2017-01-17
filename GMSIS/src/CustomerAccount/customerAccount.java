@@ -10,5 +10,8 @@ package CustomerAccount;
  * @author User
  */
 public class customerAccount {
-    
+    public static void main(String[] args)
+    {
+        System.out.println("Jaon.");
+    }
 }

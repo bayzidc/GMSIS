@@ -10,5 +10,9 @@ package SpecialistRepairs;
  * @author User
  */
 public class specialist {
+    public static void main(String[] args)
+    {
+        System.out.println("Hamza");
+    }
     
 }

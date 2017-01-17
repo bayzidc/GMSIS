@@ -10,5 +10,8 @@ package PartsRecord;
  * @author User
  */
 public class partsRecord {
-    
+    public static void main(String[] args)
+    {
+        System.out.println("Fabiha");
+    }
 }
