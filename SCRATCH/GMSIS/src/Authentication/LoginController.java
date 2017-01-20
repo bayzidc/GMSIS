@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -41,8 +42,7 @@ public class LoginController implements Initializable {
     private Button loginBtn;
     @FXML
     private Button newBtn;
-    @FXML
-    private Label invalid_label;
+
     @FXML
     private void handleButton(ActionEvent event) throws IOException
     {
@@ -71,7 +71,7 @@ public class LoginController implements Initializable {
         {
             username.clear();
             pass.clear();
-            invalid_label.setText("Sorry, invalid userID or password");
+            JOptionPane.showMessageDialog(null,"Sorry,Invalid userID or password.");
         }
     }
            
