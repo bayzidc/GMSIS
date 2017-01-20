@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.LoginController">
    <children>
       <Label fx:id="titleID" alignment="CENTER" layoutX="178.0" layoutY="33.0" prefHeight="75.0" prefWidth="245.0" text="Welcome to GMSIS" textFill="#ee0606">
          <font>
@@ -17,7 +16,8 @@
       </Label>
       <TextField fx:id="username" layoutX="189.0" layoutY="132.0" prefHeight="33.0" prefWidth="223.0" promptText="User ID..." />
       <PasswordField fx:id="pass" layoutX="189.0" layoutY="188.0" prefHeight="33.0" prefWidth="223.0" text="password" />
-      <Button fx:id="loginBtn" layoutX="189.0" layoutY="256.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="75.0" text="Login" />
-      <Button fx:id="newBtn" layoutX="285.0" layoutY="256.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="121.0" text="New User?" />
+      <Button fx:id="loginBtn" layoutX="189.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="75.0" text="Login" />
+      <Button fx:id="newBtn" layoutX="285.0" layoutY="256.0" mnemonicParsing="false" onAction="#handleButton" prefHeight="33.0" prefWidth="121.0" text="New User?" />
+      <Label fx:id="invalid_label" layoutX="178.0" layoutY="312.0" prefHeight="33.0" prefWidth="295.0" text="Label" textFill="#f50303" />
    </children>
 </AnchorPane>
