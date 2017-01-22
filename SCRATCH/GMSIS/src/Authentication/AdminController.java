@@ -46,7 +46,15 @@ public class AdminController implements Initializable {
         stage.setScene(new_User_scene);
         stage.show();
     }
-     
+     @FXML
+     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException
+     {
+        Parent del_User = FXMLLoader.load(getClass().getResource("DeleteUser.fxml"));
+        Scene del_User_scene = new Scene(del_User);
+        Stage deletePage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        deletePage.setScene(del_User_scene);
+        deletePage.show();
+     }
      @FXML
      private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException
      {
@@ -56,6 +64,8 @@ public class AdminController implements Initializable {
         stageLogout.setScene(logout_Scene);
         stageLogout.show();
      }
+     
+     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
