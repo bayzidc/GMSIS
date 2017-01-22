@@ -61,7 +61,7 @@ public class LoginController implements Initializable {
         Scene new_User_scene = new Scene(new_User);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
-        if(isValidLogin())
+        if(isValidLogin() && pass.getText().equals("password1"))
         {
             stage.hide();           
             stage.setScene(new_User_scene);
