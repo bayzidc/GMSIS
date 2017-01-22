@@ -5,11 +5,18 @@
  */
 package Authentication;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -30,6 +37,25 @@ public class AdminController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    @FXML
+     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException
+    {
+        Parent new_User = FXMLLoader.load(getClass().getResource("NewUser.fxml"));
+        Scene new_User_scene = new Scene(new_User);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new_User_scene);
+        stage.show();
+    }
+     
+     @FXML
+     private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException
+     {
+        Parent logoutPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Scene logout_Scene = new Scene(logoutPage);
+        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageLogout.setScene(logout_Scene);
+        stageLogout.show();
+     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

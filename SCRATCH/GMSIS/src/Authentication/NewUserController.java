@@ -32,9 +32,6 @@ import javax.swing.*;
  * @author User
  */
 public class NewUserController implements Initializable {
-    private String firstN = "";
-    private String surn = "";
-    private String newID = "";
 
     @FXML
     private Label titleLabel;
@@ -52,7 +49,7 @@ public class NewUserController implements Initializable {
     @FXML
     private void submitButton(ActionEvent event) throws IOException, ClassNotFoundException
     {
-        Parent new_User = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Parent new_User = FXMLLoader.load(getClass().getResource("Admin.fxml"));
         Scene new_User_scene = new Scene(new_User);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
