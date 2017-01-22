@@ -10,7 +10,7 @@
    <children>
       <Label fx:id="titleLabel" alignment="CENTER" layoutX="141.0" layoutY="34.0" prefHeight="38.0" prefWidth="223.0" text="Create User" textFill="#078aeb">
          <font>
-            <Font size="23.0" />
+            <Font name="System Bold" size="23.0" />
          </font></Label>
       <TextField fx:id="firstName" layoutX="162.0" layoutY="95.0" prefHeight="30.0" prefWidth="180.0" promptText="First Name..." />
       <TextField fx:id="surname" layoutX="162.0" layoutY="144.0" prefHeight="30.0" prefWidth="180.0" promptText="Surname..." />
