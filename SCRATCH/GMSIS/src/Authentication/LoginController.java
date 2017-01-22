@@ -61,11 +61,28 @@ public class LoginController implements Initializable {
         Scene new_User_scene = new Scene(new_User);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
+        Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
+        Scene admin_Scene = new Scene(adminUser);
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        
+        Parent customer = FXMLLoader.load(getClass().getResource("Customer.fxml"));
+        Scene customer_Scene = new Scene(customer);
+        Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        
+        
         if(isValidLogin() && pass.getText().equals("password1"))
         {
-            stage.hide();           
-            stage.setScene(new_User_scene);
-            stage.show();
+            stage2.hide();           
+            stage2.setScene(admin_Scene);
+            stage2.show();
+        }
+        
+        else if(isValidLogin() && !pass.getText().equals("password1"))
+        {
+            stage3.hide();
+            stage3.setScene(customer_Scene);
+            stage3.show();
+         
         }
         else
         {

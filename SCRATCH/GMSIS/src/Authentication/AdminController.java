@@ -7,7 +7,9 @@ package Authentication;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
@@ -15,6 +17,15 @@ import javafx.fxml.Initializable;
  * @author User
  */
 public class AdminController implements Initializable {
+
+    @FXML
+    private Button createUser;
+    @FXML
+    private Button editUser;
+    @FXML
+    private Button deleteUser;
+    @FXML
+    private Button logout;
 
     /**
      * Initializes the controller class.
