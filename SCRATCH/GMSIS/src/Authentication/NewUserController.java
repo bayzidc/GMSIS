@@ -45,6 +45,8 @@ public class NewUserController implements Initializable {
     @FXML
     private TextField newUserID;
     @FXML
+    private TextField newPassword;
+    @FXML
     private Button submitBtn;
 
     @FXML
@@ -73,8 +75,8 @@ public class NewUserController implements Initializable {
     private boolean isSubmitForm() throws ClassNotFoundException
     {
         boolean submit = false;
-        System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        
+        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
+        System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
         Connection conn = null;
         
         try
@@ -84,11 +86,13 @@ public class NewUserController implements Initializable {
             
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into NewUsers(FirstName,Surname,UserID) values(?,?,?)";
+            //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
+            String sql = "insert into Login(UserID,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, firstName.getText());
-            state.setString(2, surname.getText());
-            state.setString(3, newUserID.getText());
+            //state.setString(1, firstName.getText());
+            //state.setString(2, surname.getText());
+            state.setString(1, newUserID.getText());
+            state.setString(2, newPassword.getText());
             
             state.execute();
             
