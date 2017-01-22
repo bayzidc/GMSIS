@@ -85,7 +85,7 @@ public class LoginController implements Initializable {
         java.sql.Statement state = null;
         try
         {
-            conn = DriverManager.getConnection("jdbc:sqlite:Login.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             conn.setAutoCommit(false);
             
             System.out.println("Opened Database Successfully");

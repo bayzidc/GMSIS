@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.swing.*;
 
 /**
  * FXML Controller class
@@ -31,9 +32,9 @@ import javafx.stage.Stage;
  * @author User
  */
 public class NewUserController implements Initializable {
-    String firstN = "";
-    String surn = "";
-    String newID = "";
+    private String firstN = "";
+    private String surn = "";
+    private String newID = "";
 
     @FXML
     private Label titleLabel;
@@ -53,7 +54,7 @@ public class NewUserController implements Initializable {
         Scene new_User_scene = new Scene(new_User);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
-        if(isSubmitForm(firstN,surn,newID))
+        if(isSubmitForm())
         {
             System.out.println("Added to database");
             stage.hide();           
@@ -69,43 +70,40 @@ public class NewUserController implements Initializable {
         }
     }
     @FXML
-    private boolean isSubmitForm(String firstN, String surn, String newID) throws ClassNotFoundException
+    private boolean isSubmitForm() throws ClassNotFoundException
     {
         boolean submit = false;
-        System.out.println("SELECT * FROM newUser WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
+        System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         
         Connection conn = null;
         
-        PreparedStatement state = null;
-        ResultSet rs = null;
         try
         {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:NewUsers.sqlite");
-            conn.setAutoCommit(false);
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             
             System.out.println("Opened Database Successfully");
-            String sql = ("INSERT INTO newUser(FirstName,Surname,UserID) VALUES(?,?,?)");
-            state = conn.prepareStatement(sql);
+            
+            String sql = "insert into NewUsers(FirstName,Surname,UserID) values(?,?,?)";
+            PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
             state.setString(2, surname.getText());
             state.setString(3, newUserID.getText());
             
-            rs = state.executeQuery();
+            state.execute();
             
             state.close();
-            rs.close();
             conn.close();
+            
+            submit=true;
+            
         }
         catch(SQLException e)
         {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return submit;
-        
-            
-            
+        return submit;       
             
         }
     /**
