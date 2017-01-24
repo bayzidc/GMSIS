@@ -73,7 +73,7 @@ public class LoginController implements Initializable {
         {
             username.clear();
             pass.clear();
-            JOptionPane.showMessageDialog(null,"Sorry,Invalid userID or password.");
+            JOptionPane.showMessageDialog(null,"Sorry,Invalid Username or password.");
         }
     }
            

@@ -73,7 +73,7 @@ public class NewUserController implements Initializable {
     {
         boolean submit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Username= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
         Connection conn = null;
         
         try
