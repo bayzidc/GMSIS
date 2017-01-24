@@ -73,7 +73,7 @@ public class NewUserController implements Initializable {
     {
         boolean submit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
         Connection conn = null;
         
         try
@@ -84,7 +84,7 @@ public class NewUserController implements Initializable {
             System.out.println("Opened Database Successfully");
             
             //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
-            String sql = "insert into Login(UserID,Password) values(?,?)";
+            String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             //state.setString(1, firstName.getText());
             //state.setString(2, surname.getText());

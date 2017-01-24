@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
         Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
         
-        if(isValidLogin() && pass.getText().equals("password1"))
+        if(isValidLogin() && pass.getText().equals("pass1"))
         {
             stage2.hide();           
             stage2.setScene(admin_Scene);
@@ -80,7 +80,7 @@ public class LoginController implements Initializable {
     private boolean isValidLogin()
     {
         boolean loggedIn = false;
-        System.out.println("SELECT * FROM Login WHERE UserID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
         
         Connection conn = null;
         
@@ -93,12 +93,12 @@ public class LoginController implements Initializable {
             System.out.println("Opened Database Successfully");
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE UserID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("UserID") !=null && rs.getString("Password") !=null)
+                if(rs.getString("Username") !=null && rs.getString("Password") !=null)
                         {
-                            String userID = rs.getString("UserID");
+                            String userID = rs.getString("Username");
                             String password = rs.getString("Password");
                             loggedIn = true;
                         }
