@@ -62,7 +62,7 @@ public class LoginController implements Initializable {
             stage2.show();
         }
         
-        else if(isValidLogin() && !pass.getText().equals("password1"))
+        else if(isValidLogin() && !pass.getText().equals("pass1"))
         {
             stage3.hide();
             stage3.setScene(customer_Scene);
@@ -96,7 +96,7 @@ public class LoginController implements Initializable {
             ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("Username") !=null && rs.getString("Password") !=null)
+                if(rs.getString("UserID") !=null && rs.getString("Password") !=null)
                         {
                             String userID = rs.getString("Username");
                             String password = rs.getString("Password");

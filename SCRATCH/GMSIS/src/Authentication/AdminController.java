@@ -48,12 +48,21 @@ public class AdminController implements Initializable {
     }
      @FXML
      private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException
-     {
+    {
         Parent del_User = FXMLLoader.load(getClass().getResource("DeleteUser.fxml"));
         Scene del_User_scene = new Scene(del_User);
-        Stage deletePage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        deletePage.setScene(del_User_scene);
-        deletePage.show();
+        Stage delPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        delPage.setScene(del_User_scene);
+        delPage.show();
+    }
+     @FXML
+     private void editButton(ActionEvent event) throws IOException, ClassNotFoundException
+     {
+        Parent edit_User = FXMLLoader.load(getClass().getResource("EditUsers.fxml"));
+        Scene edit_User_scene = new Scene(edit_User);
+        Stage editPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        editPage.setScene(edit_User_scene);
+        editPage.show();
      }
      @FXML
      private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException

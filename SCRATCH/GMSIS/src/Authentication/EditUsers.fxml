@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.EditUsersController">
-    
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.EditUsersController">
+   <children>
+      <Label fx:id="editLabel" layoutX="242.0" layoutY="45.0" prefHeight="37.0" prefWidth="118.0" text="Edit User Details">
+         <font>
+            <Font name="Calibri Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="newUserLabel" layoutX="81.0" layoutY="108.0" prefHeight="29.0" prefWidth="125.0" text="Enter new UserID: " />
+      <Label fx:id="newPassLabel" layoutX="81.0" layoutY="178.0" prefHeight="22.0" prefWidth="118.0" text="Enter new Password:" />
+      <TextField fx:id="newUserID" layoutX="206.0" layoutY="110.0" prefHeight="29.0" prefWidth="178.0" />
+      <TextField fx:id="newPass" layoutX="206.0" layoutY="177.0" prefHeight="29.0" prefWidth="178.0" />
+      <Button fx:id="submitBtn" layoutX="260.0" layoutY="259.0" mnemonicParsing="false" onAction="#editButton" prefHeight="22.0" prefWidth="59.0" text="Submit" />
+   </children>
 </AnchorPane>
