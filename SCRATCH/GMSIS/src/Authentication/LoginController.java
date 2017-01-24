@@ -96,7 +96,7 @@ public class LoginController implements Initializable {
             ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("UserID") !=null && rs.getString("Password") !=null)
+                if(rs.getString("Username") !=null && rs.getString("Password") !=null)
                         {
                             String userID = rs.getString("Username");
                             String password = rs.getString("Password");
