@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,6 +72,12 @@ public class DeleteUserController implements Initializable {
     {
         boolean userDeleted = false;
         
+        if(!contains())
+        {
+            JOptionPane.showMessageDialog(null,"The Username " + userID.getText() + " does not exist");
+            return false;
+        }
+        
         System.out.println("SELECT * FROM Login WHERE Username= " + "'" + userID.getText() + "'");
         Connection conn = null;
         
@@ -100,6 +107,41 @@ public class DeleteUserController implements Initializable {
             
         }
 
+    private boolean contains()
+    {
+        boolean check = false;
+        
+        Connection conn = null;
+        
+        java.sql.Statement state = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn.setAutoCommit(false);
+            
+            state = conn.createStatement();
+            
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + userID.getText() + "'");
+            while(rs.next())
+            {
+                if(rs.getString("Username").equals(userID.getText()))
+                        {  
+                            check = true;
+                            break;
+                        }
+            }
+            rs.close();
+            state.close();
+            conn.close();
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return check;
+        
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
