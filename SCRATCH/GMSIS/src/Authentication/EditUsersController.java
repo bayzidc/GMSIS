@@ -32,6 +32,8 @@ import javafx.stage.Stage;
 public class EditUsersController implements Initializable {
 
     @FXML
+    private Label currentUser;
+    @FXML
     private Label editLabel;
     @FXML
     private Label newUserLabel;
@@ -42,74 +44,70 @@ public class EditUsersController implements Initializable {
     @FXML
     private TextField newPass;
     @FXML
+    private TextField currentText;
+    @FXML
     private Button submitBtn;
 
     /**
      * Initializes the controller class.
      */
-    @FXML 
-    private void editButton(ActionEvent event) throws IOException, ClassNotFoundException
-    {
+    @FXML
+    private void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
-        
-        if(isEditForm())
-        {
+
+        if (isEditForm()) {
             System.out.println("Edited User");
-            stage2.hide();           
+            stage2.hide();
             stage2.setScene(admin_Scene);
             stage2.show();
-        }
-        else
-        {
+        } else {
             newUserID.clear();
             newPass.clear();
         }
-    
-        }
-    private boolean isEditForm() throws ClassNotFoundException
-    {
+
+    }
+
+    private boolean isEditForm() throws ClassNotFoundException {
         boolean edit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        
+
         Connection conn = null;
-        
-        try
-        {
+
+        try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+
             System.out.println("Opened Database Successfully");
-            
+
             //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
-            String sql = "UPDATE Login SET UserID=?, Password=?";
+            String sql = "UPDATE Login SET Username=?, Password=? WHERE Username=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, newUserID.getText());
             state.setString(2, newPass.getText());
+            state.setString(3, currentText.getText());
             //state.setString(1, newUserID.getText());
             //state.setString(2, newPassword.getText());
-            
+
             state.execute();
-            
+
             state.close();
             conn.close();
-            
-            edit=true;
-            
-        }
-        catch(SQLException e)
-        {
+
+            edit = true;
+
+        } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return edit;       
-            
-        }
+        return edit;
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }
