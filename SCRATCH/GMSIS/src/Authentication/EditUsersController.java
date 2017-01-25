@@ -84,7 +84,7 @@ public class EditUsersController implements Initializable {
             System.out.println("Opened Database Successfully");
             
             //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
-            String sql = "update Login set UserID=?, Password=?";
+            String sql = "UPDATE Login SET UserID=?, Password=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, newUserID.getText());
             state.setString(2, newPass.getText());
