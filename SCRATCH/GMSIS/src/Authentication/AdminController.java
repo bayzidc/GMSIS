@@ -33,6 +33,8 @@ public class AdminController implements Initializable {
     private Button deleteUser;
     @FXML
     private Button logout;
+    @FXML
+    private Button vehicleButton;
 
     /**
      * Initializes the controller class.
@@ -72,6 +74,16 @@ public class AdminController implements Initializable {
         Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageLogout.setScene(logout_Scene);
         stageLogout.show();
+     }
+     
+     @FXML
+     private void vehicleBtn(ActionEvent event) throws IOException, ClassNotFoundException
+     {
+        Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/VehRecord.fxml"));
+        Scene vehicle_Scene = new Scene(vehicle_Page);
+        Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageVehicle.setScene(vehicle_Scene);
+        stageVehicle.show();
      }
      
      

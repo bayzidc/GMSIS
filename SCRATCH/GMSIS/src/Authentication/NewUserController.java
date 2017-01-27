@@ -40,8 +40,6 @@ public class NewUserController implements Initializable {
     @FXML
     private TextField surname;
     @FXML
-    private TextField newUserID;
-    @FXML
     private TextField newPassword;
     @FXML
     private Button submitBtn;
@@ -64,7 +62,6 @@ public class NewUserController implements Initializable {
         {
             firstName.clear();
             surname.clear();
-            newUserID.clear();
             titleLabel.setText("Invalid Inputs.");
         }
     }
@@ -73,7 +70,7 @@ public class NewUserController implements Initializable {
     {
         boolean submit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Username= " + "'" + newUserID.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Password= " + "'" + newPassword.getText() + "'");
         Connection conn = null;
         
         try
@@ -83,13 +80,12 @@ public class NewUserController implements Initializable {
             
             System.out.println("Opened Database Successfully");
             
-            //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
-            String sql = "insert into Login(Username,Password) values(?,?)";
+            String sql = "insert into Login(FirstName,Surname,Password) values(?,?,?)";
+            //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
-            //state.setString(1, firstName.getText());
-            //state.setString(2, surname.getText());
-            state.setString(1, newUserID.getText());
-            state.setString(2, newPassword.getText());
+            state.setString(1, firstName.getText());
+            state.setString(2, surname.getText());
+            state.setString(3, newPassword.getText());
             
             state.execute();
             

@@ -40,11 +40,11 @@ public class EditUsersController implements Initializable {
     @FXML
     private Label newPassLabel;
     @FXML
-    private TextField newUserID;
+    private TextField currentID;
+    @FXML
+    private TextField currentPassword;
     @FXML
     private TextField newPass;
-    @FXML
-    private TextField currentText;
     @FXML
     private Button submitBtn;
 
@@ -63,7 +63,8 @@ public class EditUsersController implements Initializable {
             stage2.setScene(admin_Scene);
             stage2.show();
         } else {
-            newUserID.clear();
+            currentID.clear();
+            currentPassword.clear();
             newPass.clear();
         }
 
@@ -81,14 +82,10 @@ public class EditUsersController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            //String sql = "insert into Login(FirstName,Surname,UserID) values(?,?,?)";
-            String sql = "UPDATE Login SET Username=?, Password=? WHERE Username=?";
+            String sql = "UPDATE Login SET Password=? WHERE ID=?";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, newUserID.getText());
-            state.setString(2, newPass.getText());
-            state.setString(3, currentText.getText());
-            //state.setString(1, newUserID.getText());
-            //state.setString(2, newPassword.getText());
+            state.setString(1, newPass.getText());
+            state.setString(2,currentID.getText());
 
             state.execute();
 

@@ -78,7 +78,7 @@ public class DeleteUserController implements Initializable {
             return false;
         }
         
-        System.out.println("SELECT * FROM Login WHERE Username= " + "'" + userID.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE ID= " + "'" + userID.getText() + "'");
         Connection conn = null;
         
         try
@@ -87,7 +87,7 @@ public class DeleteUserController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             
             System.out.println("Opened Database Successfully");
-            String sql = "DELETE FROM Login WHERE Username= ?";
+            String sql = "DELETE FROM Login WHERE ID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, userID.getText());
             state.executeUpdate();
@@ -121,10 +121,10 @@ public class DeleteUserController implements Initializable {
             
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + userID.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + userID.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("Username").equals(userID.getText()))
+                if(rs.getString("ID").equals(userID.getText()))
                         {  
                             check = true;
                             break;

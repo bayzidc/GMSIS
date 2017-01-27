@@ -13,9 +13,8 @@
             <Font name="System Bold" size="23.0" />
          </font></Label>
       <TextField fx:id="firstName" layoutX="162.0" layoutY="95.0" prefHeight="30.0" prefWidth="180.0" promptText="First Name..." />
-      <TextField fx:id="surname" layoutX="162.0" layoutY="144.0" prefHeight="30.0" prefWidth="180.0" promptText="Surname..." />
-      <TextField fx:id="newUserID" layoutX="162.0" layoutY="192.0" prefHeight="30.0" prefWidth="180.0" promptText="New UserID..." />
+      <TextField fx:id="surname" layoutX="162.0" layoutY="137.0" prefHeight="30.0" prefWidth="180.0" promptText="Surname..." />
       <Button fx:id="submitBtn" layoutX="215.0" layoutY="272.0" mnemonicParsing="false" onAction="#submitButton" prefHeight="30.0" prefWidth="57.0" text="Submit" />
-      <TextField fx:id="newPassword" layoutX="162.0" layoutY="232.0" prefHeight="30.0" prefWidth="180.0" promptText="New Password..." />
+      <TextField fx:id="newPassword" layoutX="162.0" layoutY="187.0" prefHeight="30.0" prefWidth="180.0" promptText="New Password..." />
    </children>
 </AnchorPane>

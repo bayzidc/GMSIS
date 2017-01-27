@@ -80,7 +80,7 @@ public class LoginController implements Initializable {
     private boolean isValidLogin()
     {
         boolean loggedIn = false;
-        System.out.println("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+        System.out.println("SELECT * FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
         
         Connection conn = null;
         
@@ -93,12 +93,12 @@ public class LoginController implements Initializable {
             System.out.println("Opened Database Successfully");
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE Username= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("Username") !=null && rs.getString("Password") !=null)
+                if(rs.getString("ID") !=null && rs.getString("Password") !=null)
                         {
-                            String userID = rs.getString("Username");
+                            String userID = rs.getString("ID");
                             String password = rs.getString("Password");
                             loggedIn = true;
                         }
