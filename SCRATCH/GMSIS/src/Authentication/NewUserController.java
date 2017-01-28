@@ -54,6 +54,9 @@ public class NewUserController implements Initializable {
         if(isSubmitForm())
         {
             System.out.println("Added to database");
+            
+            JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
+            
             stage.hide();           
             stage.setScene(new_User_scene);
             stage.show();
@@ -103,6 +106,38 @@ public class NewUserController implements Initializable {
         return submit;       
             
         }
+    
+    private String getID() throws ClassNotFoundException
+    {
+         Connection conn = null;
+        
+         String id = "";
+         
+        java.sql.Statement state = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn.setAutoCommit(false);
+            
+            state = conn.createStatement();
+            
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'");
+            while(rs.next())
+            {
+                 id = rs.getString("ID");
+            }
+            rs.close();
+            state.close();
+            conn.close();
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return id;
+        
+    }
     /**
      * Initializes the controller class.
      */
