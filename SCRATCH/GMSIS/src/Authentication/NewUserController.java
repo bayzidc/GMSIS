@@ -80,11 +80,12 @@ public class NewUserController implements Initializable {
             
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into Login(Username, Password) values(?,?)";
+            String sql = "insert into Login(FirstName, Surname, Password) values(?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
-            state.setString(2, newPassword.getText());
+            state.setString(2,surname.getText());
+            state.setString(3, newPassword.getText());
             
             state.execute();
             
