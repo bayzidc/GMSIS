@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
         }
     }
            
-    private boolean isValidLogin()
+    public boolean isValidLogin()
     {
         boolean loggedIn = false;
         System.out.println("SELECT * FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
