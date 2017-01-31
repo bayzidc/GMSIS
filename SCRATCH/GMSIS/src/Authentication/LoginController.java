@@ -55,14 +55,14 @@ public class LoginController implements Initializable {
         Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
         
-        if(isValidLogin() && pass.getText().equals("pass1"))
+        if(isValidLogin() && username.getText().equals("10000") && pass.getText().equals("pass1"))
         {
             stage2.hide();           
             stage2.setScene(admin_Scene);
             stage2.show();
         }
         
-        else if(isValidLogin() && !pass.getText().equals("pass1"))
+        else if(isValidLogin())
         {
             stage3.hide();
             stage3.setScene(customer_Scene);

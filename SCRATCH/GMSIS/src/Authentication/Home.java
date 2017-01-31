@@ -29,11 +29,11 @@ public class Home {
       return ID.get();
    }
 
-   public String Firstname() {
+   public String getFirstName() {
       return firstName.get();
    }
 
-   public String Surname() {
+   public String getSurname() {
       return surname.get();
    }
 
