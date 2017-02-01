@@ -4,20 +4,21 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="511.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
    <children>
-      <Label layoutX="273.0" layoutY="9.0" prefHeight="36.0" prefWidth="133.0" text="Admin Page">
+      <Label layoutX="276.0" layoutY="29.0" prefHeight="36.0" prefWidth="133.0" text="Admin Page">
          <font>
             <Font name="Bauhaus 93" size="20.0" />
          </font></Label>
-      <Button fx:id="createUser" layoutX="42.0" layoutY="334.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
+      <Button fx:id="createUser" layoutX="76.0" layoutY="256.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
       <Button fx:id="editUser" layoutX="42.0" layoutY="359.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="91.0" text="Edit User" />
       <Button fx:id="deleteUser" layoutX="42.0" layoutY="384.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="91.0" text="Delete User" />
       <Button fx:id="logout" layoutX="667.0" layoutY="9.0" mnemonicParsing="false" onAction="#logoutButton" prefHeight="25.0" prefWidth="61.0" text="Logout" />
-      <Button fx:id="vehicleButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#vehicleBtn" prefHeight="25.0" prefWidth="107.0" text="Vehicle Record" />
+      <Button fx:id="vehicleButton" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onAction="#vehicleBtn" prefHeight="25.0" prefWidth="107.0" text="Vehicle Record" />
       <TableView fx:id="table" layoutX="240.0" layoutY="69.0" prefHeight="265.0" prefWidth="481.0">
         <columns>
           <TableColumn fx:id="passCol" prefWidth="152.0" text="Password" />
@@ -26,5 +27,8 @@
             <TableColumn fx:id="surnameCol" prefWidth="140.0" text="Surname" />
         </columns>
       </TableView>
+      <TextField fx:id="firstName" layoutX="47.0" layoutY="95.0" promptText="First Name..." />
+      <TextField fx:id="surname" layoutX="47.0" layoutY="150.0" promptText="Surname..." />
+      <TextField fx:id="newPass" layoutX="47.0" layoutY="202.0" promptText="New Password..." />
    </children>
 </AnchorPane>
