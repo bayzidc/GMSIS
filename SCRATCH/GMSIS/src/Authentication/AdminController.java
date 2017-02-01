@@ -89,10 +89,11 @@ public class AdminController implements Initializable {
         delPage.setScene(del_User_scene);
         delPage.show();*/
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this user? (Yes or No) ");
-        if(confirmDelete.equalsIgnoreCase("Yes"))
+        if(confirmDelete.equalsIgnoreCase("Yes") && isDeleted())
         {
-            //JOptionPane.showMessageDialog(null, userID.getText() + " has been deleted");  
-            deleteData();
+            
+            String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
+            JOptionPane.showMessageDialog(null, ID + " has been deleted");  
             buildData();
         }
         
@@ -259,7 +260,7 @@ public class AdminController implements Initializable {
     }
     
     public void deleteData()
-    {
+    {   
         int i = index.get();
         if(i>-1)
         {
@@ -267,31 +268,30 @@ public class AdminController implements Initializable {
            table.getSelectionModel().clearSelection();
         }
     }
-    
-    /*private boolean isDeleted() throws ClassNotFoundException
+
+    private boolean isDeleted() throws ClassNotFoundException
     {
         boolean userDeleted = false;
         
+        String ID = table.getSelectionModel().getSelectedItem().getID();
+        
         if(!contains())
         {
-            JOptionPane.showMessageDialog(null,"The Username " + userID.getText() + " does not exist");
+            JOptionPane.showMessageDialog(null,"The Username " + ID + " does not exist");
             return false;
         }
         
-
         Connection conn = null;
         
         try
         {
-            Home cm = new Home();
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM Login WHERE ID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
-            
-            cm.ID.set(state.getString("ID"));
+            state.setString(1, ID);
             state.executeUpdate();
             
             state.close();
@@ -315,6 +315,8 @@ public class AdminController implements Initializable {
         
         Connection conn = null;
         
+        String ID = table.getSelectionModel().getSelectedItem().getID();
+        
         java.sql.Statement state = null;
         try
         {
@@ -323,10 +325,10 @@ public class AdminController implements Initializable {
             
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + userID.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + ID + "'");
             while(rs.next())
             {
-                if(rs.getString("ID").equals(userID.getText()))
+                if(rs.getString("ID").equals(ID))
                         {  
                             check = true;
                             break;
@@ -343,7 +345,7 @@ public class AdminController implements Initializable {
         }
         return check;
         
-    }*/
+    }
     
 
     
