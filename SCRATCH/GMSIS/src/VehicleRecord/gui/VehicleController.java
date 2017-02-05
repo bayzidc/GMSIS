@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package VehicleRecord;
+package VehicleRecord.gui;
 
+import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,8 +22,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -31,7 +35,7 @@ import javafx.stage.Stage;
  *
  * @author User
  */
-public class VehRecordController implements Initializable {
+public class VehicleController implements Initializable {
 
     ObservableList<String> vehicleBox = FXCollections.observableArrayList("Car","Van","Truck");
     ObservableList<String> quickSelection = FXCollections.observableArrayList("Honda Jazz", "Ford Focus", "Audi A5", "Toyota Yaris", "Vauxhall Corsa");
@@ -70,6 +74,17 @@ public class VehRecordController implements Initializable {
     private Button searchVehicles;
     @FXML
     private Button backBtn;
+     @FXML private TableView<Vehicle> table;
+    @FXML private TableColumn<Vehicle, String> regCol;
+    @FXML private TableColumn<Vehicle, String> makeCol;
+    @FXML private TableColumn<Vehicle, String> modelCol;
+    @FXML private TableColumn<Vehicle, Double> engSizeCol;
+    @FXML private TableColumn<Vehicle, String> fuelTypeCol;
+    @FXML private TableColumn<Vehicle, String> colourCol;
+    @FXML private TableColumn<Vehicle, String> motRenewalCol;
+    @FXML private TableColumn<Vehicle, String> lastServiceCol;
+    @FXML private TableColumn<Vehicle, Integer> mileageCol;
+    
    
     /**
      * Initializes the controller class.
@@ -91,6 +106,25 @@ public class VehRecordController implements Initializable {
         vehicleChoice.setItems(vehicleBox);
         quickSel.setItems(quickSelection);
         fuelType.setItems(fuelT);
+        
+        regCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String>("Reg Number"));        
+    makeCol.setCellValueFactory(                
+        new PropertyValueFactory<Vehicle,String>("Make"));
+    modelCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String>("Model"));        
+    engSizeCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,Double>("Engine Size"));
+    fuelTypeCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String>("Fuel Type"));        
+    colourCol.setCellValueFactory(                
+        new PropertyValueFactory<Vehicle,String>("Colour"));
+    motRenewalCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String>("M.O.T Date"));        
+    lastServiceCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String>("Date of Last Serv"));
+    mileageCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,Integer>("Mileage"));
     }    
     @FXML
     private void handleYesBox()

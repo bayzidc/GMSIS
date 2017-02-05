@@ -5,14 +5,16 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="575.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.VehRecordController">
+<AnchorPane id="AnchorPane" prefHeight="575.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
-      <Label layoutX="215.0" layoutY="14.0" prefHeight="35.0" prefWidth="148.0" text="Vehicle Record">
+      <Label layoutX="378.0" layoutY="9.0" prefHeight="35.0" prefWidth="148.0" text="Vehicle Record">
          <font>
             <Font name="Bauhaus 93" size="20.0" />
          </font>
@@ -47,5 +49,18 @@
       <Button fx:id="queryList" layoutX="18.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Query List" />
       <Button fx:id="searchVehicles" layoutX="102.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Search Vehicle" />
       <Button fx:id="backBtn" layoutX="18.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+      <TableView fx:id="table" layoutX="378.0" layoutY="50.0" prefHeight="248.0" prefWidth="708.0">
+        <columns>
+          <TableColumn fx:id="regCol" prefWidth="86.0" text="Reg Number" />
+          <TableColumn fx:id="makeCol" prefWidth="70.0" text="Make" />
+            <TableColumn fx:id="modelCol" prefWidth="70.0" text="Model" />
+            <TableColumn fx:id="engSizeCol" prefWidth="75.0" text="Engine Size" />
+            <TableColumn fx:id="fuelTypeCol" prefWidth="75.0" text="Fuel Type" />
+            <TableColumn fx:id="colourCol" prefWidth="75.0" text="Colour" />
+            <TableColumn fx:id="motRenewalCol" prefWidth="75.0" text="M.O.T Date" />
+            <TableColumn fx:id="lastServiceCol" prefWidth="104.0" text="Date of Last Serv" />
+            <TableColumn fx:id="mileageCol" prefWidth="77.0" text="Mileage" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
