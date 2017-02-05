@@ -56,6 +56,12 @@ public class AdminController implements Initializable {
     @FXML
     private TextField surname;
     @FXML
+    private TextField id;
+    @FXML
+    private TextField oldPass;
+    @FXML
+    private TextField Pass;
+    @FXML
     private TextField newPass;
     @FXML private TableView<Home> table;
     @FXML private TableColumn<Home, String> passCol;
@@ -79,6 +85,9 @@ public class AdminController implements Initializable {
         createData();
         buildData();
         JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
+        firstName.clear();
+        surname.clear();
+        newPass.clear();
     }
      @FXML
      private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException
@@ -93,7 +102,9 @@ public class AdminController implements Initializable {
         {
             
             String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
-            JOptionPane.showMessageDialog(null, ID + " has been deleted");  
+            JOptionPane.showMessageDialog(null, ID + " has been deleted"); 
+            //String p = table.getSelectionModel().getSelectedItem().getPassword();
+        firstName.setVisible(false);
             buildData();
         }
         
@@ -102,11 +113,12 @@ public class AdminController implements Initializable {
      @FXML
      private void editButton(ActionEvent event) throws IOException, ClassNotFoundException
      {
-        Parent edit_User = FXMLLoader.load(getClass().getResource("EditUsers.fxml"));
+        /*Parent edit_User = FXMLLoader.load(getClass().getResource("EditUsers.fxml"));
         Scene edit_User_scene = new Scene(edit_User);
         Stage editPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         editPage.setScene(edit_User_scene);
-        editPage.show();
+        editPage.show();*/
+        editUser();
      }
      @FXML
      private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException
@@ -159,9 +171,56 @@ public class AdminController implements Initializable {
     }
 }
 
+    public void editUser() //print on text field
+    {
+        String ID = table.getSelectionModel().getSelectedItem().getID();
+        String pass = table.getSelectionModel().getSelectedItem().getPassword();
+        
+        id.setText(ID);
+        oldPass.setText(pass);
+    }
         // TODO
     
+    @FXML
+    private void updatePass(ActionEvent event) throws IOException, ClassNotFoundException //update button
+    {
+        isEditForm();
+        JOptionPane.showMessageDialog(null,"Updated");
+        buildData();
+        id.clear();
+        oldPass.clear();
+        Pass.clear();
+    }
+     private void isEditForm() throws ClassNotFoundException 
+     {
+        
+        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
 
+        Connection conn = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully");
+
+            String sql = "UPDATE Login SET Password=? WHERE ID=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            state.setString(1, Pass.getText());
+            state.setString(2,id.getText());
+
+            state.execute();
+
+            state.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+     
+     }
+    
     public void buildData(){        
     data = FXCollections.observableArrayList();
     Connection conn = null;
@@ -227,7 +286,7 @@ public class AdminController implements Initializable {
         //return submit;       
             
         }
-    private String getID() throws ClassNotFoundException
+   private String getID() throws ClassNotFoundException
     {
          Connection conn = null;
         
@@ -259,7 +318,7 @@ public class AdminController implements Initializable {
         
     }
     
-    public void deleteData()
+    /*public void deleteData()
     {   
         int i = index.get();
         if(i>-1)
@@ -267,7 +326,7 @@ public class AdminController implements Initializable {
            data.remove(i);
            table.getSelectionModel().clearSelection();
         }
-    }
+    }*/
 
     private boolean isDeleted() throws ClassNotFoundException
     {
