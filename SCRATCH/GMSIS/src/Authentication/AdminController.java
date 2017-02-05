@@ -332,12 +332,6 @@ public class AdminController implements Initializable {
         
         String ID = table.getSelectionModel().getSelectedItem().getID();
         
-        if(!contains())
-        {
-            JOptionPane.showMessageDialog(null,"The Username " + ID + " does not exist");
-            return false;
-        }
-        
         Connection conn = null;
         
         try
@@ -365,46 +359,6 @@ public class AdminController implements Initializable {
         return userDeleted;   
             
         }
-
-    private boolean contains()
-    {
-        boolean check = false;
-        
-        Connection conn = null;
-        
-        String ID = table.getSelectionModel().getSelectedItem().getID();
-        
-        java.sql.Statement state = null;
-        try
-        {
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            conn.setAutoCommit(false);
-            
-            state = conn.createStatement();
-            
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + ID + "'");
-            while(rs.next())
-            {
-                if(rs.getString("ID").equals(ID))
-                        {  
-                            check = true;
-                            break;
-                        }
-            }
-            rs.close();
-            state.close();
-            conn.close();
-        }
-        catch(Exception e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return check;
-        
-    }
-    
-
     
     }
   
