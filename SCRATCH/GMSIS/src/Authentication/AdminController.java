@@ -52,6 +52,8 @@ public class AdminController implements Initializable {
     @FXML
     private Button vehicleButton;
     @FXML
+    private Button partsButtton;
+    @FXML
     private TextField firstName;
     @FXML
     private TextField surname;
@@ -136,6 +138,16 @@ public class AdminController implements Initializable {
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
         stageVehicle.show();
+     }
+     
+     @FXML
+     private void partsButtn(ActionEvent event) throws IOException, ClassNotFoundException
+     {
+        Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord.gui/parts.fxml"));
+        Scene parts_Scene = new Scene(partsRecordPage);
+        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageParts.setScene(parts_Scene);
+        stageParts.show();
      }
      
      
