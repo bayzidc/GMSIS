@@ -104,7 +104,7 @@ public class AdminController implements Initializable {
         {
             
             String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
-            JOptionPane.showMessageDialog(null, ID + " has been deleted"); 
+            JOptionPane.showMessageDialog(null,"UserID: " + ID + " has been deleted"); 
             buildData();
         }
         

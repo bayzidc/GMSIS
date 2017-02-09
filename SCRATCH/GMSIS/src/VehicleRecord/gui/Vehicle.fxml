@@ -19,8 +19,8 @@
             <Font name="Bauhaus 93" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="62.0" prefHeight="15.0" prefWidth="81.0" text="Vehicle Type :" />
-      <ChoiceBox fx:id="vehicleChoice" layoutX="95.0" layoutY="58.0" prefHeight="17.0" prefWidth="81.0" />
+      <Label layoutX="10.0" layoutY="75.0" prefHeight="15.0" prefWidth="81.0" text="Vehicle Type :" />
+      <ChoiceBox fx:id="vehicleChoice" layoutX="94.0" layoutY="71.0" prefHeight="17.0" prefWidth="81.0" />
       <Label layoutX="14.0" layoutY="103.0" prefHeight="17.0" prefWidth="73.0" text="Warranty? : " />
       <CheckBox fx:id="yesWarranty" layoutX="95.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleYesBox" onMouseClicked="#checkBox1" text="Yes" />
       <CheckBox fx:id="noWarranty" layoutX="138.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleNoBox" onMouseClicked="#checkBox2" text="No" />
@@ -46,8 +46,7 @@
       <TextField fx:id="regNumber" layoutX="141.0" layoutY="205.0" prefHeight="25.0" prefWidth="81.0" />
       <ChoiceBox fx:id="quickSel" layoutX="107.0" layoutY="180.0" prefWidth="150.0" />
       <TextArea fx:id="nameAndAdd" layoutX="209.0" layoutY="121.0" prefHeight="58.0" prefWidth="117.0" />
-      <Button fx:id="queryList" layoutX="18.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Query List" />
-      <Button fx:id="searchVehicles" layoutX="102.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Search Vehicle" />
+      <Button fx:id="queryList" layoutX="76.0" layoutY="562.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="81.0" text="Query List" />
       <Button fx:id="backBtn" layoutX="18.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <TableView fx:id="table" layoutX="343.0" layoutY="42.0" prefHeight="335.0" prefWidth="1151.0">
         <columns>
@@ -66,8 +65,13 @@
             <TableColumn fx:id="vecIDCol" prefWidth="88.0" text="VehicleID" />
         </columns>
       </TableView>
-      <Button fx:id="addBtn" layoutX="22.0" layoutY="459.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
-      <Button fx:id="editBtn" layoutX="89.0" layoutY="459.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="deleteBtn" layoutX="147.0" layoutY="459.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Delete" />
+      <Button fx:id="addBtn" layoutX="112.0" layoutY="466.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
+      <Button fx:id="editBtn" layoutX="171.0" layoutY="466.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="49.0" text="Edit" />
+      <Button fx:id="deleteBtn" layoutX="234.0" layoutY="466.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="73.0" text="Delete" />
+      <Button fx:id="updateBtn" layoutX="234.0" layoutY="421.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="67.0" text="Update" />
+      <TextField fx:id="id" layoutX="74.0" layoutY="40.0" prefHeight="17.0" prefWidth="41.0" />
+      <Label layoutX="14.0" layoutY="44.0" prefHeight="17.0" prefWidth="59.0" text="VehicleID:" />
+      <TextField fx:id="searchVehicle" layoutX="21.0" layoutY="505.0" prefHeight="35.0" prefWidth="198.0" promptText="Search Vehicle..." />
+      <Button fx:id="viewBtn" layoutX="11.0" layoutY="466.0" mnemonicParsing="false" onAction="#viewButton" prefHeight="25.0" prefWidth="89.0" text="View Vehicles" />
    </children>
 </AnchorPane>
