@@ -55,6 +55,12 @@ public class NewUserController implements Initializable {
         {
             System.out.println("Added to database");
             
+            //Alert alert = new Alert(AlertType.INFORMATION);
+            //alert.setTitle("Information");
+            //alert.setHeaderText("null");
+            //alert.setContentText("Your unique User ID is " + getID());
+            //alert.showAndWait();
+            
             JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
             
             stage.hide();           

@@ -18,6 +18,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -73,7 +75,12 @@ public class LoginController implements Initializable {
         {
             username.clear();
             pass.clear();
-            JOptionPane.showMessageDialog(null,"Sorry,Invalid Username or password.");
+            Alert alert = new Alert(AlertType.ERROR); // Pop up box
+	    alert.setTitle("Error");
+	    alert.setHeaderText("Invalid Username or password.");
+          //alert.setContentText("Try");
+            alert.showAndWait();
+            //JOptionPane.showMessageDialog(null,"Sorry,Invalid Username or password.");
         }
     }
            
