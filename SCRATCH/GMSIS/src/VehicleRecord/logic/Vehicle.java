@@ -30,6 +30,11 @@ public class Vehicle {
    public SimpleStringProperty motRenewal = new SimpleStringProperty();
    public SimpleStringProperty lastService = new SimpleStringProperty();
    public SimpleIntegerProperty mileage = new SimpleIntegerProperty();
+   public SimpleStringProperty vehicleType = new SimpleStringProperty();
+   public SimpleStringProperty warranty = new SimpleStringProperty();
+   public SimpleStringProperty warNameAndAdd = new SimpleStringProperty();
+   public SimpleIntegerProperty vecID = new SimpleIntegerProperty();
+   
    
    
 
@@ -64,5 +69,24 @@ public class Vehicle {
    public int getMileage() {
       return mileage.get();
    }
+   
+   public String getVehicleType()
+   {
+       return vehicleType.get();
+   }
+   
+   public String getWarranty()
+   {
+       return warranty.get();
+   }
+   
+   public String getWarNameAndAdd()
+   {
+      return warNameAndAdd.get();
+   }
     
+   public int getVecID()
+   {
+       return vecID.get();
+   }
 }

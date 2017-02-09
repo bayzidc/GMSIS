@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="575.0" prefWidth="1105.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
+<AnchorPane id="AnchorPane" prefHeight="607.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
       <Label layoutX="378.0" layoutY="9.0" prefHeight="35.0" prefWidth="148.0" text="Vehicle Record">
          <font>
@@ -22,8 +22,8 @@
       <Label layoutX="14.0" layoutY="62.0" prefHeight="15.0" prefWidth="81.0" text="Vehicle Type :" />
       <ChoiceBox fx:id="vehicleChoice" layoutX="95.0" layoutY="58.0" prefHeight="17.0" prefWidth="81.0" />
       <Label layoutX="14.0" layoutY="103.0" prefHeight="17.0" prefWidth="73.0" text="Warranty? : " />
-      <CheckBox fx:id="yesWarranty" layoutX="95.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleYesBox" text="Yes" />
-      <CheckBox fx:id="noWarranty" layoutX="138.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleNoBox" text="No" />
+      <CheckBox fx:id="yesWarranty" layoutX="95.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleYesBox" onMouseClicked="#checkBox1" text="Yes" />
+      <CheckBox fx:id="noWarranty" layoutX="138.0" layoutY="103.0" mnemonicParsing="false" onAction="#handleNoBox" onMouseClicked="#checkBox2" text="No" />
       <Label layoutX="14.0" layoutY="133.0" prefHeight="17.0" prefWidth="198.0" text="Warranty Name and Address(If yes) :" />
       <Label layoutX="14.0" layoutY="184.0" prefHeight="17.0" prefWidth="96.0" text="Quick Selection : " />
       <Label layoutX="14.0" layoutY="209.0" prefHeight="17.0" prefWidth="117.0" text="Registration Number :" />
@@ -49,7 +49,7 @@
       <Button fx:id="queryList" layoutX="18.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Query List" />
       <Button fx:id="searchVehicles" layoutX="102.0" layoutY="504.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Search Vehicle" />
       <Button fx:id="backBtn" layoutX="18.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <TableView fx:id="table" layoutX="378.0" layoutY="50.0" prefHeight="248.0" prefWidth="708.0">
+      <TableView fx:id="table" layoutX="343.0" layoutY="42.0" prefHeight="335.0" prefWidth="1151.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="86.0" text="Reg Number" />
           <TableColumn fx:id="makeCol" prefWidth="70.0" text="Make" />
@@ -60,7 +60,14 @@
             <TableColumn fx:id="motRenewalCol" prefWidth="75.0" text="M.O.T Date" />
             <TableColumn fx:id="lastServiceCol" prefWidth="104.0" text="Date of Last Serv" />
             <TableColumn fx:id="mileageCol" prefWidth="77.0" text="Mileage" />
+            <TableColumn fx:id="vehicleTCol" prefWidth="94.0" text="Vehicle Type" />
+            <TableColumn fx:id="warrantyCol" prefWidth="75.0" text="Warranty?" />
+            <TableColumn fx:id="nameAndAddCol" prefWidth="186.0" text="Warranty Name/Address" />
+            <TableColumn fx:id="vecIDCol" prefWidth="88.0" text="VehicleID" />
         </columns>
       </TableView>
+      <Button fx:id="addBtn" layoutX="22.0" layoutY="459.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
+      <Button fx:id="editBtn" layoutX="89.0" layoutY="459.0" mnemonicParsing="false" text="Edit" />
+      <Button fx:id="deleteBtn" layoutX="147.0" layoutY="459.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Delete" />
    </children>
 </AnchorPane>
