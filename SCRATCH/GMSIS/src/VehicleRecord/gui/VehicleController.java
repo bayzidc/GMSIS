@@ -5,6 +5,7 @@
  */
 package VehicleRecord.gui;
 
+import Authentication.sqlite;
 import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -47,7 +49,7 @@ import javax.swing.JOptionPane;
 public class VehicleController implements Initializable {
 
     ObservableList<String> vehicleBox = FXCollections.observableArrayList("Car","Van","Truck");
-    ObservableList<String> quickSelection = FXCollections.observableArrayList("Honda Jazz", "Ford Focus", "Audi A5", "Toyota Yaris", "Vauxhall Corsa");
+    ObservableList<String> quickSelection = FXCollections.observableArrayList();
     ObservableList<String> fuelT = FXCollections.observableArrayList("Petrol","Diesel");
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
     @FXML
@@ -83,6 +85,8 @@ public class VehicleController implements Initializable {
     @FXML
     private TextField id;
     @FXML
+    private DatePicker warExpiry;
+    @FXML
     private Button queryList;
     @FXML
     private Button backBtn;
@@ -98,6 +102,8 @@ public class VehicleController implements Initializable {
     private TextField searchVehicle;
     @FXML 
     private Button viewBtn;
+    @FXML
+    private ScrollBar scrollRight;
     @FXML private TableView<Vehicle> table;
     @FXML private TableColumn<Vehicle, String> regCol;
     @FXML private TableColumn<Vehicle, String> makeCol;
@@ -111,6 +117,7 @@ public class VehicleController implements Initializable {
     @FXML private TableColumn<Vehicle, String> vehicleTCol;
     @FXML private TableColumn<Vehicle, String> warrantyCol;
     @FXML private TableColumn<Vehicle, String> nameAndAddCol;
+    @FXML private TableColumn<Vehicle, String> warExpDateCol;
     @FXML private TableColumn<Vehicle, Integer> vecIDCol;
     
     ObservableList<Vehicle> data;
@@ -119,7 +126,7 @@ public class VehicleController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-    private void backButton(ActionEvent event) throws IOException
+    private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
         Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
@@ -131,13 +138,14 @@ public class VehicleController implements Initializable {
     }
     
     @FXML
-    private void viewButton(ActionEvent event) throws IOException
+    private void viewButton(ActionEvent event) throws IOException, ClassNotFoundException // method which allows user to show list of vehicles
     {
         buildData();
+        
     }
     
     @FXML
-    private void addVehicle(ActionEvent event) throws IOException, ClassNotFoundException
+    private void addVehicle(ActionEvent event) throws IOException, ClassNotFoundException // button method to add vehicle
     {
         createData();
         System.out.println("Vehicle Added to Database");
@@ -146,11 +154,55 @@ public class VehicleController implements Initializable {
         make.clear();
         model.clear();
         engSize.clear();
+        fuelType.setValue(null);
+        colour.clear();
+        motRenDate.setValue(null);
+        motRenDate.getEditor().setText(null);
+        lastService.setValue(null);
+        lastService.getEditor().setText(null);
+        mileage.clear();
+        vehicleChoice.setValue(null);
+        yesWarranty.setSelected(false);
+        noWarranty.setSelected(false);
+        nameAndAdd.clear();
+        warExpiry.setValue(null);
+        warExpiry.getEditor().setText(null);
+        id.clear();
+        
+    }
+    
+    @FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
+     {
+         showVecOnText();
+     }
+     @FXML
+     private void editButton(ActionEvent e)throws IOException, ClassNotFoundException
+     {
+        editVehicle();
+        System.out.println("Edited on db");
+        JOptionPane.showMessageDialog(null,"Updated");
+        buildData();
+        regNumber.clear();
+        make.clear();
+        model.clear();
+        engSize.clear();
+        fuelType.setValue(null);
         colour.clear();
         mileage.clear();
-    }
+        vehicleChoice.setValue(null);
+        motRenDate.setValue(null);
+        motRenDate.getEditor().setText(null);
+        lastService.setValue(null);
+        lastService.getEditor().setText(null);
+        yesWarranty.setSelected(false);
+        noWarranty.setSelected(false);
+        nameAndAdd.clear();
+        warExpiry.setValue(null);
+        warExpiry.getEditor().setText(null);
+        id.clear();
+     }
     @FXML
-     private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException
+     private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException // button method to delete vehicle
     {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
         int id = table.getSelectionModel().getSelectedItem().getVecID();
@@ -176,7 +228,6 @@ public class VehicleController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         vehicleChoice.setItems(vehicleBox);
-        quickSel.setItems(quickSelection);
         fuelType.setItems(fuelT);
         
         regCol.setCellValueFactory(
@@ -202,7 +253,9 @@ public class VehicleController implements Initializable {
     warrantyCol.setCellValueFactory(                
         new PropertyValueFactory<Vehicle,String>("Warranty"));
     nameAndAddCol.setCellValueFactory(
-        new PropertyValueFactory<Vehicle,String>("WarNameAndAdd"));        
+        new PropertyValueFactory<Vehicle,String>("WarNameAndAdd"));   
+    warExpDateCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,String> ("WarrantyExpDate"));
     vecIDCol.setCellValueFactory(
         new PropertyValueFactory<Vehicle,Integer>("VecID"));
     
@@ -218,7 +271,8 @@ public class VehicleController implements Initializable {
     }
     }    
     
-    public void buildData(){        
+    
+    public void buildData() throws ClassNotFoundException{        
     data = FXCollections.observableArrayList();
     Connection conn = null;
     try{      
@@ -242,6 +296,7 @@ public class VehicleController implements Initializable {
             vec.vehicleType.set(rs.getString("VehicleType"));
             vec.warranty.set(rs.getString("Warranty"));
             vec.warNameAndAdd.set(rs.getString("WarrantyNameAndAdd"));
+            vec.warrantyExpDate.set(rs.getString("WarrantyExpDate"));
             vec.vecID.set(rs.getInt("VehicleID"));
             data.add(vec);
             
@@ -275,11 +330,13 @@ public class VehicleController implements Initializable {
         table.setItems(data);
         rs.close();
         conn.close();
+        
     }
     catch(Exception e){
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
+    //fillQuickSelection();
 }   
     
      public void createData() throws ClassNotFoundException
@@ -291,10 +348,10 @@ public class VehicleController implements Initializable {
         {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into VehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into VehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
@@ -309,7 +366,7 @@ public class VehicleController implements Initializable {
             state.setString(10, (String) vehicleChoice.getValue());
             state.setString(11, warrantyChoice.toString());
             state.setString(12, nameAndAdd.getText());
-            
+            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
             state.execute();
             
             state.close();
@@ -327,30 +384,7 @@ public class VehicleController implements Initializable {
             
         }
     
-     @FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException
-     {
-         showVecOnText();
-     }
-     @FXML
-     private void editButton(ActionEvent e)throws IOException, ClassNotFoundException
-     {
-        editVehicle();
-        System.out.println("Edited on db");
-        JOptionPane.showMessageDialog(null,"Updated");
-        buildData();
-        regNumber.clear();
-        make.clear();
-        model.clear();
-        engSize.clear();
-        fuelType.setValue(null);
-        colour.clear();
-        mileage.clear();
-        vehicleChoice.setValue(null);
-        yesWarranty.setSelected(false);
-        noWarranty.setSelected(false);
-        nameAndAdd.clear();
-        id.clear();
-     }
+     
     private void showVecOnText()
     {
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
@@ -365,6 +399,7 @@ public class VehicleController implements Initializable {
         String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
         String war = table.getSelectionModel().getSelectedItem().getWarranty();
         String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
+        String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
         
         regNumber.setText(regN);
@@ -375,7 +410,10 @@ public class VehicleController implements Initializable {
         colour.setText(col);
         mileage.setText(String.valueOf(mil));
         vehicleChoice.setValue(vecType);
+        motRenDate.getEditor().setText(mot);
+        lastService.getEditor().setText(ls);
         nameAndAdd.setText(wNameAndAdd);
+        warExpiry.getEditor().setText(warDate);
         id.setText(String.valueOf(ID));
         
         
@@ -391,7 +429,7 @@ public class VehicleController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "UPDATE VehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=? WHERE VehicleID=?";
+            String sql = "UPDATE VehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE VehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
             state.setString(2,make.getText());
@@ -405,7 +443,8 @@ public class VehicleController implements Initializable {
             state.setString(10, (String) vehicleChoice.getValue());
             state.setString(11, warrantyChoice.toString());
             state.setString(12, nameAndAdd.getText());
-            state.setString(13, id.getText());
+            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
+            state.setString(14, id.getText());
 
             state.execute();
 
@@ -485,6 +524,36 @@ public class VehicleController implements Initializable {
         
     }
      
+     /*public void fillQuickSelection() throws ClassNotFoundException
+    {
+        Connection conn=null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String query = "Select Make AND Model from VehicleList";
+
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            
+            
+            while(rs.next())
+            {
+                quickSelection.add(rs.getString("Make"));
+                quickSelection.add(rs.getString("Model"));
+                quickSel.setItems(quickSelection);
+                
+            }
+
+            rs.close();
+            conn.close();
+        }
+        
+        catch(SQLException e)
+        {
+            
+        }
+    }*/
      
     @FXML
     private void checkBox1(MouseEvent e)
