@@ -5,29 +5,31 @@
  */
 package Authentication;
 import java.sql.*;
-/**
- *
- * @author User
- */
-public class sqlite{
 
-    /**
-     *
-     * @return
-     */
-    public static Connection Connector(){
-        try
-        {
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");      
-            return conn;
-        }
-        
-        catch(ClassNotFoundException | SQLException e){
-            return null;
-        }
+public class sqlite
+{
+  public static void main( String args[] )
+  {
+    Connection c = null;
+    Statement stmt = null;
+    try {
+      Class.forName("org.sqlite.JDBC");
+      c = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+      System.out.println("Opened database successfully");
+
+      stmt = c.createStatement();
+      String sql = "";
+      stmt.executeUpdate(sql);
+      stmt.close();
+      c.close();
+    } catch ( Exception e ) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+    System.out.println("Table created successfully");
+  }
+}
     
    
-        }
+        
     
-}

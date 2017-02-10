@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,6 +32,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
@@ -72,6 +74,8 @@ public class AdminController implements Initializable {
     @FXML private TableColumn<Home, String> surnameCol;
     private ObservableList<Home> data;
     private IntegerProperty index = new SimpleIntegerProperty();
+    
+    
 
     /**
      * Initializes the controller class.
@@ -138,6 +142,14 @@ public class AdminController implements Initializable {
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
         stageVehicle.show();
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        stageVehicle.setX(bounds.getMinX());
+        stageVehicle.setY(bounds.getMinY());
+        stageVehicle.setWidth(bounds.getWidth());
+        stageVehicle.setHeight(bounds.getHeight());
+        
      }
      
      @FXML

@@ -280,7 +280,7 @@ public class VehicleController implements Initializable {
         Class.forName("org.sqlite.JDBC");
         conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
         System.out.println("Opened Database Successfully");
-        String SQL = "Select * from VehicleList";            
+        String SQL = "Select * from vehicleList";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next()){
             Vehicle vec = new Vehicle();
@@ -297,7 +297,7 @@ public class VehicleController implements Initializable {
             vec.warranty.set(rs.getString("Warranty"));
             vec.warNameAndAdd.set(rs.getString("WarrantyNameAndAdd"));
             vec.warrantyExpDate.set(rs.getString("WarrantyExpDate"));
-            vec.vecID.set(rs.getInt("VehicleID"));
+            vec.vecID.set(rs.getInt("vehicleID"));
             data.add(vec);
             
             FilteredList<Vehicle> filteredData = new FilteredList<>(data, e->true);
@@ -351,7 +351,7 @@ public class VehicleController implements Initializable {
 
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into VehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
@@ -429,7 +429,7 @@ public class VehicleController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "UPDATE VehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE VehicleID=?";
+            String sql = "UPDATE vehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
             state.setString(2,make.getText());
@@ -471,7 +471,7 @@ public class VehicleController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             
             System.out.println("Opened Database Successfully");
-            String sql = "DELETE FROM VehicleList WHERE VehicleID= ?";
+            String sql = "DELETE FROM vehicleList WHERE vehicleID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, String.valueOf(ID));
             state.executeUpdate();
@@ -506,10 +506,10 @@ public class VehicleController implements Initializable {
             
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM VehicleList WHERE RegNumber= " + "'" + regNumber.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM vehicleList WHERE RegNumber= " + "'" + regNumber.getText() + "'");
             while(rs.next())
             {
-                 vecid = rs.getInt("VehicleID");
+                 vecid = rs.getInt("vehicleID");
             }
             rs.close();
             state.close();
