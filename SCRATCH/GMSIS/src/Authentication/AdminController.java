@@ -28,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -67,11 +68,14 @@ public class AdminController implements Initializable {
     private TextField Pass;
     @FXML
     private TextField newPass;
+    @FXML 
+    private CheckBox admin;
     @FXML private TableView<Home> table;
     @FXML private TableColumn<Home, String> passCol;
     @FXML private TableColumn<Home, String> IDCol;
     @FXML private TableColumn<Home, String> firstnameCol;
     @FXML private TableColumn<Home, String> surnameCol;
+    @FXML private TableColumn<Home, String> adminCol;
     private ObservableList<Home> data;
     private IntegerProperty index = new SimpleIntegerProperty();
     
@@ -94,6 +98,7 @@ public class AdminController implements Initializable {
         firstName.clear();
         surname.clear();
         newPass.clear();
+        admin.setSelected(false);
     }
      @FXML
      private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException
@@ -174,6 +179,8 @@ public class AdminController implements Initializable {
         new PropertyValueFactory<Home,String>("FirstName"));        
     surnameCol.setCellValueFactory(
         new PropertyValueFactory<Home,String>("Surname"));
+    adminCol.setCellValueFactory(
+        new PropertyValueFactory<Home,String>("Admin"));
     
     table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>(){
         @Override
@@ -260,6 +267,7 @@ public class AdminController implements Initializable {
             cm.ID.set(rs.getString("ID"));
             cm.firstName.set(rs.getString("FirstName"));
             cm.surname.set(rs.getString("Surname"));
+            cm.admin.set(rs.getString("Admin"));
             data.add(cm);                  
         }
         table.setItems(data);
@@ -285,12 +293,21 @@ public class AdminController implements Initializable {
             
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into Login(FirstName, Surname, Password) values(?,?,?)";
+            String sql = "insert into Login(FirstName, Surname, Password, Admin) values(?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
             state.setString(2,surname.getText());
             state.setString(3, newPass.getText());
+            
+            if(admin.isSelected())
+            {
+                state.setString(4, "true");
+            }
+            else
+            {
+                state.setString(4, "false");
+            }
             
             state.execute();
             
