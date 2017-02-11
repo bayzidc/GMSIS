@@ -101,7 +101,9 @@ public class VehicleController implements Initializable {
     @FXML
     private TextField searchVehicle;
     @FXML 
-    private Button viewBtn;
+    private Button queryParts;
+    @FXML
+    private Button clearBtn;
     @FXML
     private ScrollBar scrollRight;
     @FXML private TableView<Vehicle> table;
@@ -138,14 +140,30 @@ public class VehicleController implements Initializable {
     }
     
     @FXML
-    private void viewButton(ActionEvent event) throws IOException, ClassNotFoundException // method which allows user to show list of vehicles
+    private void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
     {
-        buildData();
-        
+        regNumber.clear();
+        make.clear();
+        model.clear();
+        engSize.clear();
+        fuelType.setValue(null);
+        colour.clear();
+        motRenDate.setValue(null);
+        motRenDate.getEditor().setText(null);
+        lastService.setValue(null);
+        lastService.getEditor().setText(null);
+        mileage.clear();
+        vehicleChoice.setValue(null);
+        yesWarranty.setSelected(false);
+        noWarranty.setSelected(false);
+        nameAndAdd.clear();
+        warExpiry.setValue(null);
+        warExpiry.getEditor().setText(null);
+        id.clear();
     }
     
     @FXML
-    private void addVehicle(ActionEvent event) throws IOException, ClassNotFoundException // button method to add vehicle
+    private void addVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
         createData();
         System.out.println("Vehicle Added to Database");
@@ -176,7 +194,7 @@ public class VehicleController implements Initializable {
          showVecOnText();
      }
      @FXML
-     private void editButton(ActionEvent e)throws IOException, ClassNotFoundException
+     private void editButton(ActionEvent e)throws IOException, ClassNotFoundException, SQLException
      {
         editVehicle();
         System.out.println("Edited on db");
@@ -202,7 +220,7 @@ public class VehicleController implements Initializable {
         id.clear();
      }
     @FXML
-     private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException // button method to delete vehicle
+     private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
     {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
         int id = table.getSelectionModel().getSelectedItem().getVecID();
@@ -263,7 +281,7 @@ public class VehicleController implements Initializable {
     
     
      try{
-        
+        buildData();
     }
     catch(Exception e)
     {
@@ -271,8 +289,9 @@ public class VehicleController implements Initializable {
     }
     }    
     
+
     
-    public void buildData() throws ClassNotFoundException{        
+    public void buildData() throws ClassNotFoundException, SQLException{        
     data = FXCollections.observableArrayList();
     Connection conn = null;
     try{      
@@ -336,8 +355,9 @@ public class VehicleController implements Initializable {
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
-    //fillQuickSelection();
-}   
+    fillQuickSelection();
+
+} 
     
      public void createData() throws ClassNotFoundException
     {
@@ -524,7 +544,7 @@ public class VehicleController implements Initializable {
         
     }
      
-     /*public void fillQuickSelection() throws ClassNotFoundException
+     public void fillQuickSelection() throws ClassNotFoundException
     {
         Connection conn=null;
         try
@@ -532,7 +552,7 @@ public class VehicleController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String query = "Select Make AND Model from VehicleList";
+            String query = "Select Make from vehicleList";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
             
@@ -540,7 +560,6 @@ public class VehicleController implements Initializable {
             while(rs.next())
             {
                 quickSelection.add(rs.getString("Make"));
-                quickSelection.add(rs.getString("Model"));
                 quickSel.setItems(quickSelection);
                 
             }
@@ -553,7 +572,11 @@ public class VehicleController implements Initializable {
         {
             
         }
-    }*/
+    }
+     private void fillTextQuickSel() throws SQLException, ClassNotFoundException
+     {
+        
+     }
      
     @FXML
     private void checkBox1(MouseEvent e)

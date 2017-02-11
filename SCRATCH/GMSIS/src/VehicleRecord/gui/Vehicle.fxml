@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -46,10 +45,10 @@
       <TextField fx:id="make" layoutX="83.0" layoutY="244.0" prefHeight="25.0" prefWidth="89.0" />
       <TextField fx:id="regNumber" layoutX="140.0" layoutY="218.0" prefHeight="25.0" prefWidth="81.0" />
       <ChoiceBox fx:id="quickSel" layoutX="107.0" layoutY="193.0" prefWidth="150.0" />
-      <TextArea fx:id="nameAndAdd" layoutX="213.0" layoutY="107.0" prefHeight="44.0" prefWidth="126.0" />
-      <Button fx:id="queryList" layoutX="227.0" layoutY="562.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="81.0" text="Query List" />
+      <TextArea fx:id="nameAndAdd" layoutX="213.0" layoutY="107.0" prefHeight="51.0" prefWidth="81.0" />
+      <Button fx:id="queryList" layoutX="378.0" layoutY="562.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="126.0" text="Query Bookings" />
       <Button fx:id="backBtn" layoutX="18.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <TableView fx:id="table" layoutX="343.0" layoutY="42.0" prefHeight="241.0" prefWidth="1235.0">
+      <TableView fx:id="table" layoutX="301.0" layoutY="39.0" prefHeight="241.0" prefWidth="1235.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="86.0" text="Reg Number" />
           <TableColumn fx:id="makeCol" prefWidth="70.0" text="Make" />
@@ -67,16 +66,16 @@
             <TableColumn fx:id="vecIDCol" prefWidth="91.0" text="VehicleID" />
         </columns>
       </TableView>
-      <Button fx:id="addBtn" layoutX="109.0" layoutY="524.0" mnemonicParsing="false" onAction="#addVehicle" text="Add" />
-      <Button fx:id="editBtn" layoutX="157.0" layoutY="524.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="49.0" text="Edit" />
-      <Button fx:id="deleteBtn" layoutX="221.0" layoutY="524.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="73.0" text="Delete" />
+      <Button fx:id="addBtn" layoutX="20.0" layoutY="524.0" mnemonicParsing="false" onAction="#addVehicle" prefHeight="25.0" prefWidth="81.0" text="Add Vehicle" />
+      <Button fx:id="editBtn" layoutX="110.0" layoutY="524.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="104.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="221.0" layoutY="524.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="96.0" text="Delete Vehicle" />
       <Button fx:id="updateBtn" layoutX="114.0" layoutY="491.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="67.0" text="Update" />
       <TextField fx:id="id" layoutX="74.0" layoutY="40.0" prefHeight="17.0" prefWidth="41.0" />
       <Label layoutX="14.0" layoutY="44.0" prefHeight="17.0" prefWidth="59.0" text="VehicleID:" />
       <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="557.0" prefHeight="35.0" prefWidth="198.0" promptText="Search Vehicle..." />
-      <Button fx:id="viewBtn" layoutX="15.0" layoutY="524.0" mnemonicParsing="false" onAction="#viewButton" prefHeight="25.0" prefWidth="89.0" text="View Vehicles" />
-      <ScrollBar fx:id="scrollRight" layoutX="544.0" layoutY="580.0" />
       <DatePicker fx:id="warExpiry" layoutX="134.0" layoutY="159.0" prefHeight="17.0" prefWidth="126.0" />
       <Label layoutX="14.0" layoutY="163.0" prefHeight="17.0" prefWidth="117.0" text="Warranty Expiry Date:" />
+      <Button fx:id="queryParts" layoutX="526.0" layoutY="562.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Query Parts" />
+      <Button fx:id="clearBtn" layoutX="189.0" layoutY="491.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="25.0" prefWidth="59.0" text="Clear" />
    </children>
 </AnchorPane>
