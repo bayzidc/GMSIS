@@ -45,6 +45,8 @@ import javax.swing.JOptionPane;
 public class AdminController implements Initializable {
 
     @FXML
+    private Button customerButton;
+    @FXML
     private Button createUser;
     @FXML
     private Button editUser;
@@ -68,25 +70,28 @@ public class AdminController implements Initializable {
     private TextField Pass;
     @FXML
     private TextField newPass;
-    @FXML 
+    @FXML
     private CheckBox admin;
-    @FXML private TableView<Home> table;
-    @FXML private TableColumn<Home, String> passCol;
-    @FXML private TableColumn<Home, String> IDCol;
-    @FXML private TableColumn<Home, String> firstnameCol;
-    @FXML private TableColumn<Home, String> surnameCol;
-    @FXML private TableColumn<Home, String> adminCol;
+    @FXML
+    private TableView<Home> table;
+    @FXML
+    private TableColumn<Home, String> passCol;
+    @FXML
+    private TableColumn<Home, String> IDCol;
+    @FXML
+    private TableColumn<Home, String> firstnameCol;
+    @FXML
+    private TableColumn<Home, String> surnameCol;
+    @FXML
+    private TableColumn<Home, String> adminCol;
     private ObservableList<Home> data;
     private IntegerProperty index = new SimpleIntegerProperty();
-    
-    
 
     /**
      * Initializes the controller class.
      */
     @FXML
-     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException
-    {
+    private void createButton(ActionEvent event) throws IOException, ClassNotFoundException {
         /*Parent new_User = FXMLLoader.load(getClass().getResource("NewUser.fxml"));
         Scene new_User_scene = new Scene(new_User);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -94,54 +99,51 @@ public class AdminController implements Initializable {
         stage.show();*/
         createData();
         buildData();
-        JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
+        JOptionPane.showMessageDialog(null, "Your unique User ID is " + getID());
         firstName.clear();
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
     }
-     @FXML
-     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException
-    {
+
+    @FXML
+    private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException {
         /*Parent del_User = FXMLLoader.load(getClass().getResource("DeleteUser.fxml"));
         Scene del_User_scene = new Scene(del_User);
         Stage delPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         delPage.setScene(del_User_scene);
         delPage.show();*/
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this user? (Yes or No) ");
-        if(confirmDelete.equalsIgnoreCase("Yes") && isDeleted())
-        {
-            
+        if (confirmDelete.equalsIgnoreCase("Yes") && isDeleted()) {
+
             String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
-            JOptionPane.showMessageDialog(null,"UserID: " + ID + " has been deleted"); 
+            JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
             buildData();
         }
-        
-        
+
     }
-     @FXML
-     private void editButton(ActionEvent event) throws IOException, ClassNotFoundException
-     {
+
+    @FXML
+    private void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
         /*Parent edit_User = FXMLLoader.load(getClass().getResource("EditUsers.fxml"));
         Scene edit_User_scene = new Scene(edit_User);
         Stage editPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         editPage.setScene(edit_User_scene);
         editPage.show();*/
         editUser();
-     }
-     @FXML
-     private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException
-     {
+    }
+
+    @FXML
+    private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent logoutPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
         Scene logout_Scene = new Scene(logoutPage);
         Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageLogout.setScene(logout_Scene);
         stageLogout.show();
-     }
-     
-     @FXML
-     private void vehicleBtn(ActionEvent event) throws IOException, ClassNotFoundException
-     {
+    }
+
+    @FXML
+    private void vehicleBtn(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
         Scene vehicle_Scene = new Scene(vehicle_Page);
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -154,77 +156,81 @@ public class AdminController implements Initializable {
         stageVehicle.setY(bounds.getMinY());
         stageVehicle.setWidth(bounds.getWidth());
         stageVehicle.setHeight(bounds.getHeight());
-        
-     }
-     
-     @FXML
-     private void partsButtn(ActionEvent event) throws IOException, ClassNotFoundException
-     {
+
+    }
+    
+    @FXML
+    private void customerButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent logoutPage = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        Scene logout_Scene = new Scene(logoutPage);
+        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageLogout.setScene(logout_Scene);
+        stageLogout.show();
+    }
+
+    @FXML
+    private void partsButtn(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
         Scene parts_Scene = new Scene(partsRecordPage);
         Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageParts.setScene(parts_Scene);
         stageParts.show();
-     }
-     
-     
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         passCol.setCellValueFactory(
-        new PropertyValueFactory<Home,String>("Password"));        
-    IDCol.setCellValueFactory(                
-        new PropertyValueFactory<Home,String>("ID"));
-    firstnameCol.setCellValueFactory(
-        new PropertyValueFactory<Home,String>("FirstName"));        
-    surnameCol.setCellValueFactory(
-        new PropertyValueFactory<Home,String>("Surname"));
-    adminCol.setCellValueFactory(
-        new PropertyValueFactory<Home,String>("Admin"));
-    
-    table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>(){
-        @Override
-        public void changed(ObservableValue<?> observable, Object oldValue, Object newValue){
-            index.set(data.indexOf(newValue));
-            System.out.println("Index on click is: " + data.indexOf(newValue));
-           
+                new PropertyValueFactory<Home, String>("Password"));
+        IDCol.setCellValueFactory(
+                new PropertyValueFactory<Home, String>("ID"));
+        firstnameCol.setCellValueFactory(
+                new PropertyValueFactory<Home, String>("FirstName"));
+        surnameCol.setCellValueFactory(
+                new PropertyValueFactory<Home, String>("Surname"));
+        adminCol.setCellValueFactory(
+                new PropertyValueFactory<Home, String>("Admin"));
+
+        table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                index.set(data.indexOf(newValue));
+                System.out.println("Index on click is: " + data.indexOf(newValue));
+
+            }
+
+        });
+        try {
+            buildData();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        
-    });
-    try{
-        buildData();
     }
-    catch(Exception e)
-    {
-        e.printStackTrace();
-    }
-}
 
     public void editUser() //print on text field
     {
         String ID = table.getSelectionModel().getSelectedItem().getID();
         String pass = table.getSelectionModel().getSelectedItem().getPassword();
-        
+
         id.setText(ID);
         oldPass.setText(pass);
     }
-        // TODO
-    
+    // TODO
+
     @FXML
     private void updatePass(ActionEvent event) throws IOException, ClassNotFoundException //update button
     {
         isEditForm();
-        JOptionPane.showMessageDialog(null,"Updated");
+        JOptionPane.showMessageDialog(null, "Updated");
         buildData();
         id.clear();
         oldPass.clear();
         Pass.clear();
     }
-     private void isEditForm() throws ClassNotFoundException 
-     {
-        
-        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
 
+    private void isEditForm() throws ClassNotFoundException {
+
+        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
 
         try {
@@ -236,7 +242,7 @@ public class AdminController implements Initializable {
             String sql = "UPDATE Login SET Password=? WHERE ID=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, Pass.getText());
-            state.setString(2,id.getText());
+            state.setString(2, id.getText());
 
             state.execute();
 
@@ -247,116 +253,104 @@ public class AdminController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-     
-     }
-    
-    public void buildData(){        
-    data = FXCollections.observableArrayList();
-    Connection conn = null;
-    try{      
-        
-        Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-        System.out.println("Opened Database Successfully");
-            
-        String SQL = "Select * from Login";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next()){
-            Home cm = new Home();
-            cm.password.set(rs.getString("Password"));
-            cm.ID.set(rs.getString("ID"));
-            cm.firstName.set(rs.getString("FirstName"));
-            cm.surname.set(rs.getString("Surname"));
-            cm.admin.set(rs.getString("Admin"));
-            data.add(cm);                  
+
+    }
+
+    public void buildData() {
+        data = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+
+            String SQL = "Select * from Login";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                Home cm = new Home();
+                cm.password.set(rs.getString("Password"));
+                cm.ID.set(rs.getString("ID"));
+                cm.firstName.set(rs.getString("FirstName"));
+                cm.surname.set(rs.getString("Surname"));
+                cm.admin.set(rs.getString("Admin"));
+                data.add(cm);
+            }
+            table.setItems(data);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
         }
-        table.setItems(data);
-        rs.close();
-        conn.close();
     }
-    catch(Exception e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }
-}   
-    public void createData() throws ClassNotFoundException
-    {
+
+    public void createData() throws ClassNotFoundException {
         //boolean submit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Password= " + "'" + newPass.getText() + "'");
         Connection conn = null;
-        
-        try
-        {
+
+        try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+
             System.out.println("Opened Database Successfully");
-            
+
             String sql = "insert into Login(FirstName, Surname, Password, Admin) values(?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
-            state.setString(2,surname.getText());
+            state.setString(2, surname.getText());
             state.setString(3, newPass.getText());
-            
-            if(admin.isSelected())
-            {
+
+            if (admin.isSelected()) {
                 state.setString(4, "true");
-            }
-            else
-            {
+            } else {
                 state.setString(4, "false");
             }
-            
+
             state.execute();
-            
+
             state.close();
             conn.close();
-            
+
             //submit=true;
-            
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         //return submit;       
-            
-        }
-   private String getID() throws ClassNotFoundException
-    {
-         Connection conn = null;
-        
-         String id = "";
-         
+
+    }
+
+    private String getID() throws ClassNotFoundException {
+        Connection conn = null;
+
+        String id = "";
+
         java.sql.Statement state = null;
-        try
-        {
+        try {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             conn.setAutoCommit(false);
-            
+
             state = conn.createStatement();
-            
+
             ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'");
-            while(rs.next())
-            {
-                 id = rs.getString("ID");
+            while (rs.next()) {
+                id = rs.getString("ID");
             }
             rs.close();
             state.close();
             conn.close();
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         return id;
-        
+
     }
-    
+
     /*public void deleteData()
     {   
         int i = index.get();
@@ -366,41 +360,34 @@ public class AdminController implements Initializable {
            table.getSelectionModel().clearSelection();
         }
     }*/
-
-    private boolean isDeleted() throws ClassNotFoundException
-    {
+    private boolean isDeleted() throws ClassNotFoundException {
         boolean userDeleted = false;
-        
+
         String ID = table.getSelectionModel().getSelectedItem().getID();
-        
+
         Connection conn = null;
-        
-        try
-        {
+
+        try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM Login WHERE ID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, ID);
             state.executeUpdate();
-            
+
             state.close();
             conn.close();
-            
+
             userDeleted = true;
-            
-        }
-        catch(SQLException e)
-        {
+
+        } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        return userDeleted;   
-            
-        }
-    
-    }
-  
+        return userDeleted;
 
+    }
+
+}

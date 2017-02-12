@@ -35,9 +35,7 @@ public class Vehicle {
    public SimpleStringProperty warNameAndAdd = new SimpleStringProperty();
    public SimpleStringProperty warrantyExpDate = new SimpleStringProperty();
    public SimpleIntegerProperty vecID = new SimpleIntegerProperty();
-   
-   
-   
+    
 
    
    public String getRegNumber() {
