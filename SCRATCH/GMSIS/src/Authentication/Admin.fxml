@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -14,26 +15,33 @@
          <font>
             <Font name="Bauhaus 93" size="20.0" />
          </font></Label>
-      <Button fx:id="createUser" layoutX="76.0" layoutY="256.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
+      <Button fx:id="createUser" layoutX="76.0" layoutY="279.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
       <Button fx:id="editUser" layoutX="42.0" layoutY="359.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="91.0" text="Edit User" />
       <Button fx:id="deleteUser" layoutX="42.0" layoutY="384.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="91.0" text="Delete User" />
       <Button fx:id="logout" layoutX="667.0" layoutY="9.0" mnemonicParsing="false" onAction="#logoutButton" prefHeight="25.0" prefWidth="61.0" text="Logout" />
       <Button fx:id="vehicleButton" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onAction="#vehicleBtn" prefHeight="25.0" prefWidth="107.0" text="Vehicle Record" />
-      <TableView fx:id="table" layoutX="240.0" layoutY="69.0" prefHeight="265.0" prefWidth="481.0">
+      <TableView fx:id="table" layoutX="240.0" layoutY="69.0" prefHeight="265.0" prefWidth="494.0">
         <columns>
-          <TableColumn fx:id="passCol" prefWidth="152.0" text="Password" />
-          <TableColumn fx:id="IDCol" text="ID" />
-            <TableColumn fx:id="firstnameCol" prefWidth="108.0" text="FirstName" />
-            <TableColumn fx:id="surnameCol" prefWidth="140.0" text="Surname" />
+          <TableColumn fx:id="passCol" prefWidth="146.0" text="Password" />
+          <TableColumn fx:id="IDCol" prefWidth="57.0" text="ID" />
+            <TableColumn fx:id="firstnameCol" prefWidth="115.0" text="FirstName" />
+            <TableColumn fx:id="surnameCol" prefWidth="97.0" text="Surname" />
+            <TableColumn fx:id="adminCol" prefWidth="82.0" text="Admin" />
         </columns>
       </TableView>
       <TextField fx:id="firstName" layoutX="47.0" layoutY="95.0" promptText="First Name..." />
-      <TextField fx:id="surname" layoutX="47.0" layoutY="150.0" promptText="Surname..." />
-      <TextField fx:id="newPass" layoutX="47.0" layoutY="202.0" promptText="New Password..." />
+      <TextField fx:id="surname" layoutX="47.0" layoutY="136.0" promptText="Surname..." />
+      <TextField fx:id="newPass" layoutX="47.0" layoutY="177.0" promptText="New Password..." />
       <Button fx:id="update" layoutX="420.0" layoutY="427.0" mnemonicParsing="false" onAction="#updatePass" text="Update" />
       <TextField fx:id="oldPass" editable="false" layoutX="240.0" layoutY="390.0" promptText="Old password" />
       <TextField fx:id="id" editable="false" layoutX="240.0" layoutY="347.0" promptText="ID" />
-      <TextField fx:id="Pass" layoutX="240.0" layoutY="427.0" promptText="New password" />
+
       <Button fx:id="partsButton" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" onAction="#partsButtn" text="Parts Record" />
+
+      <TextField fx:id="Pass" layoutX="240.0" layoutY="433.0" promptText="New password" />
+      <!--<Button fx:id="partsButton" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" text="Parts Record" />-->
+      <CheckBox fx:id="admin" layoutX="71.0" layoutY="229.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
+      <Button fx:id="customerButton" layoutX="146.0" layoutY="9.0" mnemonicParsing="false" onAction="#customerButton" prefHeight="25.0" prefWidth="101.0" text="Customer Page" />
+
    </children>
 </AnchorPane>

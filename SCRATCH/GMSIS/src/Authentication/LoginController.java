@@ -57,7 +57,7 @@ public class LoginController implements Initializable {
         Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
         
-        if(isValidLogin() && username.getText().equals("10000") && pass.getText().equals("pass1"))
+        if(isValidLogin() && isAdmin())
         {
             stage2.hide();           
             stage2.setScene(admin_Scene);
@@ -105,9 +105,8 @@ public class LoginController implements Initializable {
             {
                 if(rs.getString("ID") !=null && rs.getString("Password") !=null)
                         {
-                            String userID = rs.getString("ID");
-                            String password = rs.getString("Password");
                             loggedIn = true;
+                            break;
                         }
             }
             rs.close();
@@ -120,13 +119,43 @@ public class LoginController implements Initializable {
             System.exit(0);
         }
         return loggedIn;
-        
-            
             
             
         }
     
-    
+    public boolean isAdmin()
+    {
+        boolean admin = false;
+         Connection conn = null;
+        
+        java.sql.Statement state = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn.setAutoCommit(false);
+            
+            state = conn.createStatement();
+            
+            ResultSet rs = state.executeQuery("SELECT Admin FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+            while(rs.next())
+            {
+                if(rs.getString("Admin").equals("true"))
+                        {
+                            admin = true;
+                            break;
+                        }
+            }
+            rs.close();
+            state.close();
+            conn.close();
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+       return admin;
+    }
 
     /**
      * Initializes the controller class.

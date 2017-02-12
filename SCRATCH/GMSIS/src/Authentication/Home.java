@@ -19,6 +19,7 @@ public class Home {
    public SimpleStringProperty ID = new SimpleStringProperty();
    public SimpleStringProperty firstName = new SimpleStringProperty();
    public SimpleStringProperty surname = new SimpleStringProperty();
+   public SimpleStringProperty admin = new SimpleStringProperty();
 
    
    public String getPassword() {
@@ -35,6 +36,10 @@ public class Home {
 
    public String getSurname() {
       return surname.get();
+   }
+   
+   public String getAdmin() {
+      return admin.get();
    }
 
     
