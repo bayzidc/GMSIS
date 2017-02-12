@@ -21,6 +21,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -282,6 +284,49 @@ public class VehicleController implements Initializable {
     
      try{
         buildData();
+        quickSel.setOnAction(e ->{
+            
+                Connection conn = null;
+                PreparedStatement ps = null;
+                ResultSet rs = null;
+                try
+                {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                    System.out.println("Opened Database Successfully");
+                    String query = "select * from vehicleList where Make = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
+                    rs = ps.executeQuery();
+                    
+                    while(rs.next())
+                    {
+                        regNumber.setText(rs.getString("RegNumber"));
+                        make.setText(rs.getString("Make"));
+                        model.setText(rs.getString("Model"));
+                        engSize.setText(rs.getString("EngSize"));
+                        fuelType.setValue(rs.getString("FuelType"));
+                        colour.setText(rs.getString("Colour"));
+                        ((TextField) motRenDate.getEditor()).setText(rs.getString("MOTDate"));
+                        ((TextField) lastService.getEditor()).setText(rs.getString("LastServiceDate"));
+                        mileage.setText(rs.getString("Mileage"));   
+                        vehicleChoice.setValue(rs.getString("VehicleType"));
+                        nameAndAdd.setText(rs.getString("WarrantyNameAndAdd"));
+                        ((TextField) warExpiry.getEditor()).setText(rs.getString("WarrantyExpDate"));
+                        id.setText(rs.getString("vehicleID"));
+                    }
+                    
+                    conn.close();
+                    ps.close();
+                    rs.close();
+                }
+                
+                catch(Exception ex)
+                {
+                    
+                }
+            
+        });
     }
     catch(Exception e)
     {
@@ -356,7 +401,7 @@ public class VehicleController implements Initializable {
           System.out.println("Error on Building Data");            
     }
     fillQuickSelection();
-
+    
 } 
     
      public void createData() throws ClassNotFoundException
@@ -573,10 +618,7 @@ public class VehicleController implements Initializable {
             
         }
     }
-     private void fillTextQuickSel() throws SQLException, ClassNotFoundException
-     {
-        
-     }
+   
      
     @FXML
     private void checkBox1(MouseEvent e)
