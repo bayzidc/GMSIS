@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="859.0" prefWidth="1358.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.GuiController">
+<AnchorPane id="AnchorPane" prefHeight="779.0" prefWidth="1358.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.GuiController">
    <children>
       <BorderPane layoutX="-364.0" layoutY="-220.0" prefHeight="356.0" prefWidth="482.0" />
       <TableView fx:id="table" layoutX="358.0" layoutY="79.0" prefHeight="641.0" prefWidth="959.0">
@@ -23,13 +23,13 @@
             <TableColumn fx:id="customerType" prefWidth="150.0" text="Account Type" />
         </columns>
       </TableView>
-      <Label layoutX="389.0" layoutY="14.0" prefHeight="39.0" prefWidth="185.0" text="Customer Information " textFill="#0b64f2">
+      <Label layoutX="628.0" layoutY="14.0" prefHeight="39.0" prefWidth="185.0" text="Customer Information " textFill="#0b64f2">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="bookingButton" layoutX="482.0" layoutY="734.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Bookings" />
-      <Button fx:id="billsButton" layoutX="710.0" layoutY="734.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Bills" />
+      <Button fx:id="bookingButton" layoutX="132.0" layoutY="488.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Bookings" />
+      <Button fx:id="billsButton" layoutX="132.0" layoutY="543.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Bills" />
       <Button fx:id="addButton" layoutX="87.0" layoutY="354.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Add" />
       <Button fx:id="updateButton" layoutX="173.0" layoutY="354.0" mnemonicParsing="false" onAction="#buildData" prefHeight="25.0" prefWidth="73.0" text="Update" />
       <Button fx:id="deleteButton" layoutX="259.0" layoutY="354.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="73.0" text="Delete" />
