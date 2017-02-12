@@ -26,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -86,7 +87,12 @@ public class AdminController implements Initializable {
         stage.show();*/
         createData();
         buildData();
-        JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
+	    alert.setTitle("Information");
+	    alert.setHeaderText(null);
+            alert.setContentText("Your unique User ID is " + getID());
+            alert.showAndWait();
+        //JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
         firstName.clear();
         surname.clear();
         newPass.clear();
