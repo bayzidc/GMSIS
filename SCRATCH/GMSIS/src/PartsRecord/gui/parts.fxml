@@ -6,29 +6,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="630.0" prefWidth="622.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
    <children>
-      <Label layoutX="31.0" layoutY="71.0" text="Name :">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="31.0" layoutY="26.0" text="Records of Parts">
+      <Label layoutX="14.0" layoutY="90.0" text="Name:" />
+      <Label layoutX="14.0" layoutY="124.0" text="Description:" />
+      <Label layoutX="19.0" layoutY="160.0" text="IdNumber:" />
+      <Label layoutX="16.0" layoutY="29.0" text="Records Of Parts">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="31.0" layoutY="121.0" text="IdNumber :">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="31.0" layoutY="175.0" text="Description : " />
-      <TextField fx:id="name" layoutX="113.0" layoutY="67.0" />
-      <TextField fx:id="idNumber" layoutX="113.0" layoutY="116.0" />
-      <TextField fx:id="description" layoutX="113.0" layoutY="170.0" />
-      <Button fx:id="backButton" layoutX="39.0" layoutY="538.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <Button fx:id="trackPartsWithdraw" layoutX="105.0" layoutY="538.0" mnemonicParsing="false" text="Track Parts Withdrawal" />
-      <Button fx:id="trackPartsAddition" layoutX="280.0" layoutY="538.0" mnemonicParsing="false" text="Track New Added Parts " />
+      <TextField fx:id="name" layoutX="67.0" layoutY="85.0" />
+      <TextField fx:id="description" layoutX="91.0" layoutY="119.0" />
+      <TextField fx:id="idNumber" layoutX="91.0" layoutY="155.0" />
+      <Button fx:id="back" layoutX="42.0" layoutY="577.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
    </children>
 </AnchorPane>

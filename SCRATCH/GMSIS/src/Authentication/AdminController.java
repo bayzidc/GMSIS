@@ -58,7 +58,9 @@ public class AdminController implements Initializable {
     @FXML
     private Button vehicleButton;
     @FXML
-    private Button partsButton;
+    private Button partsButtonUsed;
+    @FXML
+    private Button partsButtonStock;
     @FXML
     private TextField firstName;
     @FXML
@@ -177,13 +179,24 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    private void partsButtn(ActionEvent event) throws IOException, ClassNotFoundException {
+    private void partsButtnUsed(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
         Scene parts_Scene = new Scene(partsRecordPage);
         Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageParts.setScene(parts_Scene);
         stageParts.show();
     }
+    
+    @FXML
+    private void partsButtnStock(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent partsStockPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        Scene partStock_Scene = new Scene(partsStockPage);
+        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageParts.setScene(partStock_Scene);
+        stageParts.show();
+    }
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
