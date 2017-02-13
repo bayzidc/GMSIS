@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="581.0" prefWidth="1016.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
+   <children>
+      <DatePicker fx:id="datePicked" layoutX="131.0" layoutY="326.0" prefHeight="25.0" prefWidth="116.0" />
+      <Label layoutX="16.0" layoutY="330.0" text="Scheduled  Date" />
+      <Button fx:id="book" layoutX="123.0" layoutY="485.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="66.0" text="Book" />
+      <Label layoutX="21.0" layoutY="381.0" text="Start Time" />
+      <Label layoutX="23.0" layoutY="416.0" text="End TIme" />
+      <TableView fx:id="table" layoutX="313.0" layoutY="48.0" prefHeight="359.0" prefWidth="690.0">
+        <columns>
+            <TableColumn fx:id="bookingIDCol" prefWidth="67.0" text="bookingID" />
+          <TableColumn fx:id="vehicleIDCol" prefWidth="71.0" text="vechicleID" />
+            <TableColumn fx:id="custIDCol" prefWidth="56.0" text="custID" />
+          <TableColumn fx:id="mechanicIDCol" prefWidth="76.0" text="MechanicID" />
+          <TableColumn fx:id="mileageCol" prefWidth="55.0" text="Mileage" />
+          <TableColumn fx:id="partsRequiredCol" prefWidth="142.0" text="Parts Required" />
+          <TableColumn fx:id="dateCol" prefWidth="102.0" text="Date" />
+          <TableColumn fx:id="durationCol" prefWidth="120.0" text="Duration in minutes" />
+        </columns>
+      </TableView>
+      <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="79.0" prefWidth="150.0" promptText="Select" />
+      <Label layoutX="22.0" layoutY="83.0" text="Mechanic" />
+      <TextField layoutX="765.0" layoutY="425.0" prefHeight="25.0" prefWidth="158.0" />
+      <Button layoutX="950.0" layoutY="425.0" mnemonicParsing="false" text="Search" />
+      <Label layoutX="22.0" layoutY="132.0" text="Parts required" />
+      <Group />
+      <Button fx:id="loadBookingButton" layoutX="313.0" layoutY="424.0" mnemonicParsing="false" onAction="#loadBookings" text="Load Bookings" />
+      <Button layoutX="466.0" layoutY="490.0" mnemonicParsing="false" text="Find Booking info" />
+      <TextField layoutX="313.0" layoutY="490.0" prefHeight="25.0" prefWidth="136.0" promptText="Enter vechicle ID" />
+      <ComboBox fx:id="partsCombo" layoutX="114.0" layoutY="128.0" onAction="#partsChanged" prefWidth="150.0" promptText="Select" />
+      <TextArea fx:id="selectedParts" editable="false" layoutX="23.0" layoutY="171.0" prefHeight="128.0" prefWidth="250.0" promptText="Selected Parts:" />
+      <Button fx:id="editButton" layoutX="439.0" layoutY="424.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="54.0" text="Edit" />
+      <Button fx:id="deleteButton" layoutX="504.0" layoutY="424.0" mnemonicParsing="false" onAction="#deleteBooking" text="Delete" />
+      <ComboBox fx:id="startTime" layoutX="114.0" layoutY="377.0" prefWidth="150.0" promptText="Select" />
+      <ComboBox fx:id="endTime" layoutX="114.0" layoutY="412.0" prefWidth="150.0" promptText="Select" />
+   </children>
+</AnchorPane>

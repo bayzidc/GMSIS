@@ -58,6 +58,8 @@ public class AdminController implements Initializable {
     @FXML
     private Button vehicleButton;
     @FXML
+    private Button repairButton;
+    @FXML
     private Button partsButtonUsed;
     @FXML
     private Button partsButtonStock;
@@ -178,6 +180,15 @@ public class AdminController implements Initializable {
         stageLogout.show();
     }
 
+    @FXML
+    private void repairButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent repairPage = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        Scene repair_Scene = new Scene(repairPage);
+        Stage stageRepair = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageRepair.setScene(repair_Scene);
+        stageRepair.show();
+    }
+    
     @FXML
     private void partsButtnUsed(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
