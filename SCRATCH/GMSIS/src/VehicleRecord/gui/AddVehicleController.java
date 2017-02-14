@@ -45,7 +45,7 @@ public class AddVehicleController implements Initializable {
     VehicleController cont = new VehicleController();
     ObservableList<String> vehicleBox = FXCollections.observableArrayList("Car","Van","Truck");
     ObservableList<String> quickSelection = FXCollections.observableArrayList();
-    ObservableList<Integer> custID = FXCollections.observableArrayList();
+    ObservableList<String> custN = FXCollections.observableArrayList();
     ObservableList<String> fuelT = FXCollections.observableArrayList("Petrol","Diesel");
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
     
@@ -270,6 +270,30 @@ public class AddVehicleController implements Initializable {
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
         
+        customerNames.setOnAction(e ->{
+                Connection conn = null;
+                PreparedStatement ps = null;
+                ResultSet rs = null;
+                try
+                {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                    System.out.println("Opened Database Successfully");
+                    String query = "select customer_fullname from customer, vehicleList where customer_fullname = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
+                    rs = ps.executeQuery();
+                    fillCustomerNames();
+                    conn.close();
+                    ps.close();
+                    rs.close();
+                }
+                
+                catch(Exception ex)
+                {
+                    
+                }
+        });
         quickSel.setOnAction(e ->{
             
                 Connection conn = null;
@@ -301,7 +325,7 @@ public class AddVehicleController implements Initializable {
                         ((TextField) warExpiry.getEditor()).setText(rs.getString("WarrantyExpDate"));
                         id.setText(rs.getString("vehicleID"));
                     }
-                    
+                    fillQuickSelection();
                     conn.close();
                     ps.close();
                     rs.close();
@@ -316,6 +340,35 @@ public class AddVehicleController implements Initializable {
         
     }  
     
+    public void fillCustomerNames() throws ClassNotFoundException
+    {
+        Connection conn = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String query = "Select customer_fullname from customer";
+
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            
+            
+            while(rs.next())
+            {
+                custN.add(rs.getString("customer_fullname"));
+                customerNames.setItems(custN);
+                
+            }
+
+            rs.close();
+            conn.close();
+        }
+        
+        catch(SQLException e)
+        {
+            
+        }
+    }
     public void fillQuickSelection() throws ClassNotFoundException
     {
         Connection conn=null;
