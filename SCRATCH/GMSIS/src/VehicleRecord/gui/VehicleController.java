@@ -6,6 +6,8 @@
 package VehicleRecord.gui;
 
 import Authentication.sqlite;
+import VehicleRecord.logic.CustBookingInfo;
+import VehicleRecord.logic.PartsInfo;
 import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +36,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -50,64 +54,19 @@ import javax.swing.JOptionPane;
  */
 public class VehicleController implements Initializable {
 
-    ObservableList<String> vehicleBox = FXCollections.observableArrayList("Car","Van","Truck");
-    ObservableList<String> quickSelection = FXCollections.observableArrayList();
-    ObservableList<String> fuelT = FXCollections.observableArrayList("Petrol","Diesel");
-    ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
-    @FXML
-    private ChoiceBox vehicleChoice;
-    @FXML
-    private CheckBox yesWarranty;
-    
-    @FXML
-    private CheckBox noWarranty;
-   
-    @FXML
-    private TextArea nameAndAdd;
-    @FXML
-    private ChoiceBox quickSel;
-    @FXML
-    private TextField regNumber;
-    @FXML
-    private TextField make;
-    @FXML
-    private TextField model;
-    @FXML
-    private TextField engSize;
-    @FXML
-    private ChoiceBox fuelType;
-    @FXML
-    private TextField colour;
-    @FXML
-    private DatePicker motRenDate;
-    @FXML
-    private DatePicker lastService;
-    @FXML
-    private TextField mileage;
-    @FXML
-    private TextField id;
-    @FXML
-    private DatePicker warExpiry;
-    @FXML
-    private Button queryList;
+
     @FXML
     private Button backBtn;
     @FXML
-    private Button addBtn;
+    private Button addEntryBtn;
     @FXML
     private Button editBtn;
     @FXML
     private Button deleteBtn;
     @FXML
-    private Button updateBtn;
-    @FXML
     private TextField searchVehicle;
-    @FXML 
-    private Button queryParts;
-    @FXML
-    private Button clearBtn;
-    @FXML
-    private ScrollBar scrollRight;
+    
+
     @FXML private TableView<Vehicle> table;
     @FXML private TableColumn<Vehicle, String> regCol;
     @FXML private TableColumn<Vehicle, String> makeCol;
@@ -124,11 +83,39 @@ public class VehicleController implements Initializable {
     @FXML private TableColumn<Vehicle, String> warExpDateCol;
     @FXML private TableColumn<Vehicle, Integer> vecIDCol;
     
+    @FXML private TableView<CustBookingInfo> custTable;
+    @FXML private TableColumn<CustBookingInfo, String> fullNameCol;
+    @FXML private TableColumn<CustBookingInfo, String> bookingDateCol;
+    
+    @FXML private TableView<PartsInfo> partsTable;
+    @FXML private TableColumn<PartsInfo, Integer> partIDCol;
+    @FXML private TableColumn<PartsInfo, String> partsUsedCol;
+
+    @FXML
+    private TabPane tabs;
+    
+    @FXML 
+    private Tab addVehicle;
+    @FXML 
+    private Tab viewRec;
     ObservableList<Vehicle> data;
+    ObservableList<CustBookingInfo> custData;
+    ObservableList<PartsInfo> partsData;
+    
    
     /**
      * Initializes the controller class.
      */
+    @FXML
+    private void addEntry(ActionEvent event) throws IOException
+    {
+        Parent addEntryPage = FXMLLoader.load(getClass().getResource("AddVehicle.fxml"));
+        Scene admin_Scene = new Scene(addEntryPage);
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage2.hide();           
+        stage2.setScene(admin_Scene);
+        stage2.show();
+    }
     @FXML
     private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
@@ -141,86 +128,15 @@ public class VehicleController implements Initializable {
         
     }
     
-    @FXML
-    private void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
-    {
-        regNumber.clear();
-        make.clear();
-        model.clear();
-        engSize.clear();
-        fuelType.setValue(null);
-        colour.clear();
-        motRenDate.setValue(null);
-        motRenDate.getEditor().setText(null);
-        lastService.setValue(null);
-        lastService.getEditor().setText(null);
-        mileage.clear();
-        vehicleChoice.setValue(null);
-        yesWarranty.setSelected(false);
-        noWarranty.setSelected(false);
-        nameAndAdd.clear();
-        warExpiry.setValue(null);
-        warExpiry.getEditor().setText(null);
-        id.clear();
-    }
+
+
+
     
-    @FXML
-    private void addVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
-    {
-        createData();
-        System.out.println("Vehicle Added to Database");
-        buildData();
-        regNumber.clear();
-        make.clear();
-        model.clear();
-        engSize.clear();
-        fuelType.setValue(null);
-        colour.clear();
-        motRenDate.setValue(null);
-        motRenDate.getEditor().setText(null);
-        lastService.setValue(null);
-        lastService.getEditor().setText(null);
-        mileage.clear();
-        vehicleChoice.setValue(null);
-        yesWarranty.setSelected(false);
-        noWarranty.setSelected(false);
-        nameAndAdd.clear();
-        warExpiry.setValue(null);
-        warExpiry.getEditor().setText(null);
-        id.clear();
-        
-    }
-    
-    @FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
+    /*@FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
      {
          showVecOnText();
      }
-     @FXML
-     private void editButton(ActionEvent e)throws IOException, ClassNotFoundException, SQLException
-     {
-        editVehicle();
-        System.out.println("Edited on db");
-        JOptionPane.showMessageDialog(null,"Updated");
-        buildData();
-        regNumber.clear();
-        make.clear();
-        model.clear();
-        engSize.clear();
-        fuelType.setValue(null);
-        colour.clear();
-        mileage.clear();
-        vehicleChoice.setValue(null);
-        motRenDate.setValue(null);
-        motRenDate.getEditor().setText(null);
-        lastService.setValue(null);
-        lastService.getEditor().setText(null);
-        yesWarranty.setSelected(false);
-        noWarranty.setSelected(false);
-        nameAndAdd.clear();
-        warExpiry.setValue(null);
-        warExpiry.getEditor().setText(null);
-        id.clear();
-     }
+   */
     @FXML
      private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
     {
@@ -247,9 +163,6 @@ public class VehicleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        vehicleChoice.setItems(vehicleBox);
-        fuelType.setItems(fuelT);
-        
         regCol.setCellValueFactory(
         new PropertyValueFactory<Vehicle,String>("RegNumber"));        
     makeCol.setCellValueFactory(                
@@ -279,12 +192,54 @@ public class VehicleController implements Initializable {
     vecIDCol.setCellValueFactory(
         new PropertyValueFactory<Vehicle,Integer>("VecID"));
     
+    fullNameCol.setCellValueFactory(                
+        new PropertyValueFactory<CustBookingInfo,String>("FullName"));
+    bookingDateCol.setCellValueFactory(
+        new PropertyValueFactory<CustBookingInfo,String> ("BookingDate"));
+    
+    
+    partIDCol.setCellValueFactory(
+        new PropertyValueFactory<PartsInfo,Integer> ("PartID"));
+    partsUsedCol.setCellValueFactory(
+        new PropertyValueFactory<PartsInfo,String>("PartsUsed"));
     
     
     
      try{
+         /*buildCustomerData();
+         customerID.setOnAction(e ->{
+             Connection conn = null;
+             PreparedStatement ps = null;
+             ResultSet rs = null;
+             try
+             {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                    System.out.println("Opened Database Successfully");
+                    String query = "select customer_fullname from customer,booking where customer.customer_id = booking.booking_id";
+                    
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1, (String) customerID.getSelectionModel().getSelectedItem());
+                    rs = ps.executeQuery();
+                    System.out.println("Success");
+                    
+                    while(rs.next())
+                    {
+                        fullN.setText(rs.getString("customer_fullname"));
+                    }
+                    
+                    conn.close();
+                    ps.close();
+                    rs.close();
+             }
+             
+             catch(Exception ex)
+             {
+                 
+             }
+         });*/
         buildData();
-        quickSel.setOnAction(e ->{
+        /*quickSel.setOnAction(e ->{
             
                 Connection conn = null;
                 PreparedStatement ps = null;
@@ -326,7 +281,7 @@ public class VehicleController implements Initializable {
                     
                 }
             
-        });
+        });*/
     }
     catch(Exception e)
     {
@@ -335,7 +290,37 @@ public class VehicleController implements Initializable {
     }    
     
 
-    
+    public void buildCustomerData() throws ClassNotFoundException, SQLException
+    {
+        custData = FXCollections.observableArrayList();
+        Connection conn = null;
+        
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_ID = booking.booking_id"; 
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            System.out.println("Success");
+            while(rs.next())
+            {
+                CustBookingInfo cust = new CustBookingInfo();
+                cust.fullName.set(rs.getString("customer_fullname"));
+                cust.bookingDate.set(rs.getString("scheduled_date"));
+                custData.add(cust);
+            }
+            custTable.setItems(custData);
+            rs.close();
+            conn.close();
+        }
+        
+        
+        catch(Exception e)
+        {
+        }
+        //fillCustomerID();
+    }
     public void buildData() throws ClassNotFoundException, SQLException{        
     data = FXCollections.observableArrayList();
     Connection conn = null;
@@ -400,57 +385,20 @@ public class VehicleController implements Initializable {
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
-    fillQuickSelection();
+    //fillQuickSelection();
     
 } 
     
-     public void createData() throws ClassNotFoundException
+    /*public void showCustDetails()
     {
+        String fullName = custTable.getSelectionModel().getSelectedItem().getFullName();
         
-        Connection conn = null;
-        
-        try
-        {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-            
-            String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            //String sql = "insert into Login(Username,Password) values(?,?)";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, regNumber.getText());
-            state.setString(2,make.getText());
-            state.setString(3, model.getText());
-            state.setString(4, engSize.getText());
-            state.setString(5, (String) fuelType.getValue());
-            state.setString(6, colour.getText());
-            state.setString(7, ((TextField) motRenDate.getEditor()).getText());
-            state.setString(8, ((TextField) lastService.getEditor()).getText());
-            state.setString(9, mileage.getText());
-            state.setString(10, (String) vehicleChoice.getValue());
-            state.setString(11, warrantyChoice.toString());
-            state.setString(12, nameAndAdd.getText());
-            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
-            state.execute();
-            
-            state.close();
-            conn.close();
-            
-            //submit=true;
-            
-        }
-        catch(SQLException e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        //return submit;       
-            
-        }
+        fullN.setText(fullName);
+    }*/
+     
     
      
-    private void showVecOnText()
+    /*private void showVecOnText()
     {
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
@@ -467,6 +415,7 @@ public class VehicleController implements Initializable {
         String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
         
+        
         regNumber.setText(regN);
         make.setText(vecMake);
         model.setText(vecModel);
@@ -482,45 +431,9 @@ public class VehicleController implements Initializable {
         id.setText(String.valueOf(ID));
         
         
-    }
+    }*/
      
-     private void editVehicle() throws ClassNotFoundException
-     {
-         Connection conn = null;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-
-            String sql = "UPDATE vehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE vehicleID=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, regNumber.getText());
-            state.setString(2,make.getText());
-            state.setString(3, model.getText());
-            state.setString(4, engSize.getText());
-            state.setString(5, (String) fuelType.getValue());
-            state.setString(6, colour.getText());
-            state.setString(7, ((TextField) motRenDate.getEditor()).getText());
-            state.setString(8, ((TextField) lastService.getEditor()).getText());
-            state.setString(9, mileage.getText());
-            state.setString(10, (String) vehicleChoice.getValue());
-            state.setString(11, warrantyChoice.toString());
-            state.setString(12, nameAndAdd.getText());
-            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
-            state.setString(14, id.getText());
-
-            state.execute();
-
-            state.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-     }
+     
      
      private boolean isVehicleDeleted() throws ClassNotFoundException
     {
@@ -557,7 +470,7 @@ public class VehicleController implements Initializable {
         }
     
     
-     private int getVehicleID() throws ClassNotFoundException
+    /* private int getVehicleID() throws ClassNotFoundException
     {
          Connection conn = null;
         
@@ -587,9 +500,37 @@ public class VehicleController implements Initializable {
         }
         return vecid;
         
-    }
+    }*/
      
-     public void fillQuickSelection() throws ClassNotFoundException
+     /*public void fillCustomerID() throws ClassNotFoundException
+     {
+         Connection conn = null;
+         try
+         {
+             
+         
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String query = "Select customer_id from customer";
+
+            ResultSet rs = conn.createStatement().executeQuery(query);
+            System.out.println("success");
+            while(rs.next())
+            {
+                custID.add(rs.getInt("customer_id"));
+                customerID.setItems(custID);
+                
+            }
+            rs.close();
+            conn.close();
+         }
+         catch(Exception e)
+         {
+             
+         }
+     }*/
+     /*public void fillQuickSelection() throws ClassNotFoundException
     {
         Connection conn=null;
         try
@@ -617,35 +558,8 @@ public class VehicleController implements Initializable {
         {
             
         }
-    }
+    }*/
    
      
-    @FXML
-    private void checkBox1(MouseEvent e)
-    {
-        warrantyChoice.add(yesWarranty.getText());
-    }
-    @FXML
-    private void checkBox2(MouseEvent e)
-    {
-        warrantyChoice.add(noWarranty.getText());
-    }
-    
-    @FXML
-    private void handleYesBox()
-    {
-        if(yesWarranty.isSelected())
-        {
-            noWarranty.setSelected(false); 
-        }
-    }
-    @FXML
-    private void handleNoBox()
-    {
-        if(noWarranty.isSelected())
-        {
-            yesWarranty.setSelected(false);
-        }
-    }
   
 }

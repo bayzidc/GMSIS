@@ -18,7 +18,15 @@ public class sqlite
       System.out.println("Opened database successfully");
 
       stmt = c.createStatement();
-      String sql = "";
+      String sql = "" +
+                   "" +
+                   ""+
+                   ""+
+                   ""+
+                   ""+
+                   ""+
+                   ""+
+                   "";
       stmt.executeUpdate(sql);
       stmt.close();
       c.close();
