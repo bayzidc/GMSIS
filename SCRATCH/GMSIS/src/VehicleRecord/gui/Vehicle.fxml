@@ -37,7 +37,7 @@
         </columns>
       </TableView>
       <Button fx:id="editBtn" layoutX="690.0" layoutY="106.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="690.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="690.0" layoutY="140.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
       <TextField fx:id="searchVehicle" layoutX="16.0" layoutY="347.0" prefHeight="25.0" prefWidth="223.0" promptText="Search Vehicle..." />
       <SplitPane dividerPositions="0.4444444444444444" layoutX="14.0" layoutY="68.0" prefHeight="244.0" prefWidth="667.0">
         <items>

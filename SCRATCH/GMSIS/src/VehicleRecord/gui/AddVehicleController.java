@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -179,7 +181,29 @@ public class AddVehicleController implements Initializable {
         warExpiry.getEditor().setText(null);
         id.clear();
     }
+    private void buildData() throws ClassNotFoundException
+    {
+        Connection conn = null;
+    try{      
+        
+        Class.forName("org.sqlite.JDBC");
+        conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+ 
+        String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";            
+        ResultSet rs = conn.createStatement().executeQuery(SQL);  
+        
+        rs.close();
+        conn.close();
+    }
     
+    catch(Exception e)
+    {
+        
+    }
+    
+    fillQuickSelection();
+    fillCustomerNames();
+    }
     
     private void createData() throws ClassNotFoundException
     {
@@ -270,7 +294,16 @@ public class AddVehicleController implements Initializable {
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
         
-        customerNames.setOnAction(e ->{
+        yesWarranty.setOnAction(e ->{
+            warrantyChoice.add(yesWarranty.getText());
+        });
+        
+        noWarranty.setOnAction(e ->{
+            warrantyChoice.add(noWarranty.getText());
+        });
+        try {
+            buildData();
+             customerNames.setOnAction(e ->{
                 Connection conn = null;
                 PreparedStatement ps = null;
                 ResultSet rs = null;
@@ -283,7 +316,6 @@ public class AddVehicleController implements Initializable {
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
-                    fillCustomerNames();
                     conn.close();
                     ps.close();
                     rs.close();
@@ -304,7 +336,7 @@ public class AddVehicleController implements Initializable {
                     Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                     System.out.println("Opened Database Successfully");
-                    String query = "select * from vehicleList where Make = ?";
+                    String query = "select * from vehicleList,customer where Make = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
@@ -324,8 +356,9 @@ public class AddVehicleController implements Initializable {
                         nameAndAdd.setText(rs.getString("WarrantyNameAndAdd"));
                         ((TextField) warExpiry.getEditor()).setText(rs.getString("WarrantyExpDate"));
                         id.setText(rs.getString("vehicleID"));
+                        customerNames.setValue(rs.getString("customer_fullname"));
                     }
-                    fillQuickSelection();
+    
                     conn.close();
                     ps.close();
                     rs.close();
@@ -337,8 +370,13 @@ public class AddVehicleController implements Initializable {
                 }
             
         });
-        
-    }  
+   
+        }
+        catch(Exception e)
+        {
+            
+        }
+    }
     
     public void fillCustomerNames() throws ClassNotFoundException
     {
@@ -347,7 +385,6 @@ public class AddVehicleController implements Initializable {
         {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
             String query = "Select customer_fullname from customer";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
@@ -376,7 +413,6 @@ public class AddVehicleController implements Initializable {
         {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
             String query = "Select Make from vehicleList";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
@@ -399,17 +435,6 @@ public class AddVehicleController implements Initializable {
         }
     }
    
-     
-    @FXML
-    private void checkBox1(MouseEvent e)
-    {
-        warrantyChoice.add(yesWarranty.getText());
-    }
-    @FXML
-    private void checkBox2(MouseEvent e)
-    {
-        warrantyChoice.add(noWarranty.getText());
-    }
     
     @FXML
     private void handleYesBox()

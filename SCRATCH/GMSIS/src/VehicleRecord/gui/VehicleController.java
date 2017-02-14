@@ -56,49 +56,43 @@ public class VehicleController implements Initializable {
 
 
     @FXML
-    private Button backBtn;
+    public Button backBtn;
     @FXML
-    private Button addEntryBtn;
+    public Button addEntryBtn;
     @FXML
-    private Button editBtn;
+    public Button editBtn;
     @FXML
-    private Button deleteBtn;
+    public Button deleteBtn;
     @FXML
-    private TextField searchVehicle;
+    public TextField searchVehicle;
     
 
     @FXML public TableView<Vehicle> table;
-    @FXML private TableColumn<Vehicle, String> regCol;
-    @FXML private TableColumn<Vehicle, String> makeCol;
-    @FXML private TableColumn<Vehicle, String> modelCol;
-    @FXML private TableColumn<Vehicle, Double> engSizeCol;
-    @FXML private TableColumn<Vehicle, String> fuelTypeCol;
-    @FXML private TableColumn<Vehicle, String> colourCol;
-    @FXML private TableColumn<Vehicle, String> motRenewalCol;
-    @FXML private TableColumn<Vehicle, String> lastServiceCol;
-    @FXML private TableColumn<Vehicle, Integer> mileageCol;
-    @FXML private TableColumn<Vehicle, String> vehicleTCol;
-    @FXML private TableColumn<Vehicle, String> warrantyCol;
-    @FXML private TableColumn<Vehicle, String> nameAndAddCol;
-    @FXML private TableColumn<Vehicle, String> warExpDateCol;
-    @FXML private TableColumn<Vehicle, Integer> vecIDCol;
-    @FXML private TableColumn<Vehicle, Integer> custIDCol;
+    @FXML public TableColumn<Vehicle, String> regCol;
+    @FXML public TableColumn<Vehicle, String> makeCol;
+    @FXML public TableColumn<Vehicle, String> modelCol;
+    @FXML public TableColumn<Vehicle, Double> engSizeCol;
+    @FXML public TableColumn<Vehicle, String> fuelTypeCol;
+    @FXML public TableColumn<Vehicle, String> colourCol;
+    @FXML public TableColumn<Vehicle, String> motRenewalCol;
+    @FXML public TableColumn<Vehicle, String> lastServiceCol;
+    @FXML public TableColumn<Vehicle, Integer> mileageCol;
+    @FXML public TableColumn<Vehicle, String> vehicleTCol;
+    @FXML public TableColumn<Vehicle, String> warrantyCol;
+    @FXML public TableColumn<Vehicle, String> nameAndAddCol;
+    @FXML public TableColumn<Vehicle, String> warExpDateCol;
+    @FXML public TableColumn<Vehicle, Integer> vecIDCol;
+    @FXML public TableColumn<Vehicle, Integer> custIDCol;
     
-    @FXML private TableView<CustBookingInfo> custTable;
-    @FXML private TableColumn<CustBookingInfo, String> fullNameCol;
-    @FXML private TableColumn<CustBookingInfo, String> bookingDateCol;
+    @FXML public TableView<CustBookingInfo> custTable;
+    @FXML public TableColumn<CustBookingInfo, String> fullNameCol;
+    @FXML public TableColumn<CustBookingInfo, String> bookingDateCol;
     
-    @FXML private TableView<PartsInfo> partsTable;
-    @FXML private TableColumn<PartsInfo, Integer> partIDCol;
-    @FXML private TableColumn<PartsInfo, String> partsUsedCol;
+    @FXML public TableView<PartsInfo> partsTable;
+    @FXML public TableColumn<PartsInfo, Integer> partIDCol;
+    @FXML public TableColumn<PartsInfo, String> partsUsedCol;
 
-    @FXML
-    private TabPane tabs;
-    
-    @FXML 
-    private Tab addVehicle;
-    @FXML 
-    private Tab viewRec;
+
     ObservableList<Vehicle> data;
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
@@ -108,7 +102,7 @@ public class VehicleController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-    private void addEntry(ActionEvent event) throws IOException
+    public void addEntry(ActionEvent event) throws IOException
     {
         Parent addEntryPage = FXMLLoader.load(getClass().getResource("AddVehicle.fxml"));
         Scene admin_Scene = new Scene(addEntryPage);
@@ -118,7 +112,7 @@ public class VehicleController implements Initializable {
         stage2.show();
     }
     @FXML
-    private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
+    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
         Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
@@ -133,7 +127,7 @@ public class VehicleController implements Initializable {
 
 
     
-    @FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
+    @FXML public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
      {
         showVecOnText();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddVehicle.fxml"));     
@@ -149,7 +143,7 @@ public class VehicleController implements Initializable {
      }
    
     @FXML
-     private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
+     public void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
     {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
         int id = table.getSelectionModel().getSelectedItem().getVecID();
@@ -403,16 +397,11 @@ public class VehicleController implements Initializable {
     
 } 
     
-    /*public void showCustDetails()
-    {
-        String fullName = custTable.getSelectionModel().getSelectedItem().getFullName();
-        
-        fullN.setText(fullName);
-    }*/
+    
      
     
      
-    void showVecOnText()
+    public void showVecOnText()
     {
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
@@ -433,7 +422,7 @@ public class VehicleController implements Initializable {
      
      
      
-     private boolean isVehicleDeleted() throws ClassNotFoundException
+     public boolean isVehicleDeleted() throws ClassNotFoundException
     {
         boolean vecDeleted = false;
         
