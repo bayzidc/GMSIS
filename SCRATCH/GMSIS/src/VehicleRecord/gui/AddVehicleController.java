@@ -52,50 +52,50 @@ public class AddVehicleController implements Initializable {
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
     
     @FXML 
-    private ChoiceBox customerNames;
+    public ChoiceBox customerNames;
     @FXML
-    private ChoiceBox vehicleChoice;
+    public ChoiceBox vehicleChoice;
     @FXML
-    private CheckBox yesWarranty;
+    public CheckBox yesWarranty;
     @FXML
-    private CheckBox noWarranty;
+    public CheckBox noWarranty;
     @FXML
-    private TextArea nameAndAdd;
+    public TextArea nameAndAdd;
     @FXML
-    private ChoiceBox quickSel;
+    public ChoiceBox quickSel;
     @FXML
-    private TextField regNumber;
+    public TextField regNumber;
     @FXML
-    private TextField make;
+    public TextField make;
     @FXML
-    private TextField model;
+    public TextField model;
     @FXML
-    private TextField engSize;
+    public TextField engSize;
     @FXML
-    private ChoiceBox fuelType;
+    public ChoiceBox fuelType;
     @FXML
-    private TextField colour;
+    public TextField colour;
     @FXML
-    private DatePicker motRenDate;
+    public DatePicker motRenDate;
     @FXML
-    private DatePicker lastService;
+    public DatePicker lastService;
     @FXML
-    private TextField mileage;
+    public TextField mileage;
     @FXML
-    private DatePicker warExpiry;
+    public DatePicker warExpiry;
     @FXML
-    private TextField id;
+    public TextField id;
     @FXML
-    private Button backToRec;
+    public Button backToRec;
     @FXML
-    private Button clearBtn;
+    public Button clearBtn;
     @FXML
-    private Button updateBtn;
+    public Button updateBtn;
     @FXML
-    private Button addEntry;
+    public Button addEntry;
     
     @FXML
-    private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
+    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
         Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
         Scene vec_Scene = new Scene(vecRecords);
@@ -106,7 +106,7 @@ public class AddVehicleController implements Initializable {
         
     }
     @FXML
-    private void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
+    public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
     {
         regNumber.clear();
         make.clear();
@@ -130,7 +130,7 @@ public class AddVehicleController implements Initializable {
     }
     
     @FXML
-    private void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
+    public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
         
         createData();
@@ -157,9 +157,13 @@ public class AddVehicleController implements Initializable {
     }
     
     @FXML
-    private void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
+    public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("Vehicle.fxml"));
+        VehicleController c = (VehicleController) loader.getController();
         editVehicle();
+        buildData();
         System.out.println("Edited on db");
         JOptionPane.showMessageDialog(null,"Updated");
         regNumber.clear();
@@ -181,7 +185,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.getEditor().setText(null);
         id.clear();
     }
-    private void buildData() throws ClassNotFoundException
+    public void buildData() throws ClassNotFoundException
     {
         Connection conn = null;
     try{      
@@ -205,7 +209,7 @@ public class AddVehicleController implements Initializable {
     fillCustomerNames();
     }
     
-    private void createData() throws ClassNotFoundException
+    public void createData() throws ClassNotFoundException
     {
         
         Connection conn = null;
@@ -250,7 +254,7 @@ public class AddVehicleController implements Initializable {
             
         }
     
-     private void editVehicle() throws ClassNotFoundException
+     public void editVehicle() throws ClassNotFoundException
      {
          Connection conn = null;
 
@@ -378,13 +382,12 @@ public class AddVehicleController implements Initializable {
         }
     }
     
-    public void showText() throws IOException
+   /* public void showText() throws IOException
     {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("Vehicle.fxml").openStream());    
-        VehicleController controller = (VehicleController) loader.getController();
-        controller.showVecOnText();
-    }
+        VehicleController c = (VehicleController) loader.getController();
+    }*/
     public void fillCustomerNames() throws ClassNotFoundException
     {
         Connection conn = null;

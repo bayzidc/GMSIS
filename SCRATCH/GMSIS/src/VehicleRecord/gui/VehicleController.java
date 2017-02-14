@@ -130,12 +130,37 @@ public class VehicleController implements Initializable {
     
     @FXML public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
      {
-        showVecOnText();
         Stage primaryStage = new Stage();
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());    
-         AddVehicleController controller = (AddVehicleController) loader.getController();
-        //Parent editUser = FXMLLoader.load(getClass().getResource("AddVehicle.fxml"));
+        AddVehicleController c = (AddVehicleController) loader.getController();
+        String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
+        String vecMake = table.getSelectionModel().getSelectedItem().getMake();
+        String vecModel = table.getSelectionModel().getSelectedItem().getModel();
+        double engine = table.getSelectionModel().getSelectedItem().getEngSize();
+        String ft = table.getSelectionModel().getSelectedItem().getFuelType();
+        String col = table.getSelectionModel().getSelectedItem().getColour();
+        String mot = table.getSelectionModel().getSelectedItem().getMotRenewal();
+        String ls = table.getSelectionModel().getSelectedItem().getLastService();
+        int mil = table.getSelectionModel().getSelectedItem().getMileage();
+        String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
+        String war = table.getSelectionModel().getSelectedItem().getWarranty();
+        String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
+        String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
+        int ID = table.getSelectionModel().getSelectedItem().getVecID();
+        //String cust = custTable.getSelectionModel().getSelectedItem().getFullName();
+        c.regNumber.setText(regN);
+        c.make.setText(vecMake);
+        c.model.setText(vecModel);
+        c.engSize.setText(String.valueOf(engine));
+        c.fuelType.setValue(ft);
+        c.colour.setText(col);
+        c.mileage.setText(String.valueOf(mil));
+        c.vehicleChoice.setValue(vecType);
+        c.nameAndAdd.setText(wNameAndAdd);
+        c.id.setText(String.valueOf(ID));
+        //c.customerNames.setValue(cust);
+        
         Scene edit_Scene = new Scene(root);       
         primaryStage.setScene(edit_Scene);
         primaryStage.show();
