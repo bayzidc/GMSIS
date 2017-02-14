@@ -44,6 +44,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
@@ -130,16 +131,14 @@ public class VehicleController implements Initializable {
     @FXML public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
      {
         showVecOnText();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddVehicle.fxml"));     
-
-         Parent root = (Parent)fxmlLoader.load();          
-         AddVehicleController controller = fxmlLoader.<AddVehicleController>getController();
+        Stage primaryStage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());    
+         AddVehicleController controller = (AddVehicleController) loader.getController();
         //Parent editUser = FXMLLoader.load(getClass().getResource("AddVehicle.fxml"));
-        Scene edit_Scene = new Scene(root);
-        Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        stage2.hide();           
-        stage2.setScene(edit_Scene);
-        stage2.show();
+        Scene edit_Scene = new Scene(root);       
+        primaryStage.setScene(edit_Scene);
+        primaryStage.show();
      }
    
     @FXML
@@ -213,38 +212,7 @@ public class VehicleController implements Initializable {
     
     
      try{
-         /*buildCustomerData();
-         customerID.setOnAction(e ->{
-             Connection conn = null;
-             PreparedStatement ps = null;
-             ResultSet rs = null;
-             try
-             {
-                    Class.forName("org.sqlite.JDBC");
-                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-                    System.out.println("Opened Database Successfully");
-                    String query = "select customer_fullname from customer,booking where customer.customer_id = booking.booking_id";
-                    
-                    ps = conn.prepareStatement(query);
-                    ps.setString(1, (String) customerID.getSelectionModel().getSelectedItem());
-                    rs = ps.executeQuery();
-                    System.out.println("Success");
-                    
-                    while(rs.next())
-                    {
-                        fullN.setText(rs.getString("customer_fullname"));
-                    }
-                    
-                    conn.close();
-                    ps.close();
-                    rs.close();
-             }
-             
-             catch(Exception ex)
-             {
-                 
-             }
-         });*/
+         buildCustomerData();
         buildData();
         /*quickSel.setOnAction(e ->{
             
@@ -326,7 +294,6 @@ public class VehicleController implements Initializable {
         catch(Exception e)
         {
         }
-        //fillCustomerID();
     }
     public void buildData() throws ClassNotFoundException, SQLException{        
     data = FXCollections.observableArrayList();
@@ -489,63 +456,7 @@ public class VehicleController implements Initializable {
         
     }*/
      
-     /*public void fillCustomerID() throws ClassNotFoundException
-     {
-         Connection conn = null;
-         try
-         {
-             
-         
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
-            String query = "Select customer_id from customer";
-
-            ResultSet rs = conn.createStatement().executeQuery(query);
-            System.out.println("success");
-            while(rs.next())
-            {
-                custID.add(rs.getInt("customer_id"));
-                customerID.setItems(custID);
-                
-            }
-            rs.close();
-            conn.close();
-         }
-         catch(Exception e)
-         {
-             
-         }
-     }*/
-     /*public void fillQuickSelection() throws ClassNotFoundException
-    {
-        Connection conn=null;
-        try
-        {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
-            String query = "Select Make from vehicleList";
-
-            ResultSet rs = conn.createStatement().executeQuery(query);
-            
-            
-            while(rs.next())
-            {
-                quickSelection.add(rs.getString("Make"));
-                quickSel.setItems(quickSelection);
-                
-            }
-
-            rs.close();
-            conn.close();
-        }
-        
-        catch(SQLException e)
-        {
-            
-        }
-    }*/
+    
    
      
  

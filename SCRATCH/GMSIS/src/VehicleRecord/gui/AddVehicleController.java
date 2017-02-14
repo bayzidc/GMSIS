@@ -378,6 +378,13 @@ public class AddVehicleController implements Initializable {
         }
     }
     
+    public void showText() throws IOException
+    {
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("Vehicle.fxml").openStream());    
+        VehicleController controller = (VehicleController) loader.getController();
+        controller.showVecOnText();
+    }
     public void fillCustomerNames() throws ClassNotFoundException
     {
         Connection conn = null;
