@@ -30,6 +30,7 @@ import CustomerAccount.logic.customerAccount;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -39,6 +40,8 @@ import javax.swing.JOptionPane;
  */
 public class GuiController implements Initializable {
 
+    @FXML
+    private Button clearButton;
     @FXML
     private Button addButton;
     @FXML
@@ -60,7 +63,7 @@ public class GuiController implements Initializable {
     @FXML
     private TextField emailText;
     @FXML
-    private TextField accTypeText;
+    private ChoiceBox accTypeText;
     @FXML
     private TableView<customerAccount> table;
     @FXML
@@ -78,6 +81,7 @@ public class GuiController implements Initializable {
     @FXML
     private TableColumn<customerAccount, String> customerType;
     private ObservableList<customerAccount> data;
+    public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
 
     /**
@@ -87,9 +91,49 @@ public class GuiController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             System.out.println("Running this. BUILD DATA");
+            accTypeText.setItems(FXCollections.observableArrayList("Business", "Private"));
+            accTypeText.getSelectionModel().selectFirst();
             buildData();
+
+            table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    try {
+                        if (table.getSelectionModel().getSelectedItem() != null) {
+                            Connection conn = null;
+                            ID = table.getSelectionModel().getSelectedItem().getCustomerID();
+                            Class.forName("org.sqlite.JDBC");
+                            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                            System.out.println("Opened Database Successfully");
+
+                            java.sql.Statement state = null;
+                            state = conn.createStatement();
+                            ResultSet rs = state.executeQuery("SELECT * FROM customer WHERE customer_id= " + "'" + ID + "'");
+                            while (rs.next()) {
+                                ID = rs.getInt("customer_id");
+                                fullNameText.setText(rs.getString("customer_fullname"));
+                                addressText.setText(rs.getString("customer_address"));
+                                postCodeText.setText(rs.getString("customer_postcode"));
+                                phoneText.setText(String.valueOf(rs.getInt("customer_phone")));
+                                emailText.setText(rs.getString("customer_email"));
+                                if (rs.getString("customer_type").equals("Business")) {
+                                    accTypeText.getSelectionModel().selectFirst();
+                                } else {
+                                    accTypeText.getSelectionModel().selectLast();
+                                }
+                            }
+                            state.close();
+                            conn.close();
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Here 1.");
+                        alertError();
+                    }
+                }
+            });
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Here 2.");
+            alertError();
         }
     }
 
@@ -109,11 +153,8 @@ public class GuiController implements Initializable {
                 buildData();
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("No user selected. Try again.");
-            alert.showAndWait();
+            System.out.println("Here 3.");
+            alertInf();
         }
     }
 
@@ -121,26 +162,19 @@ public class GuiController implements Initializable {
     private void updateButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("") || accTypeText.getText().equals("")) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-                alert.setTitle("Information");
-                alert.setHeaderText(null);
-                alert.setContentText("One or more fields are incomplete or incorrect.");
-                alert.showAndWait();
+            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+                alertInf();
             }
             String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to update this user? (Yes or No) ");
             if (confirmDelete.equalsIgnoreCase("Yes")) {
-                updateData();
-                int ID = table.getSelectionModel().getSelectedItem().getCustomerID(); //Gets ID 
+                updateData(); //Gets ID 
                 JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been updated");
                 buildData();
             }
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Please make sure all fields are completed and correct before proceding.");
-            alert.showAndWait();
+            System.out.println("Here 4.");
+            alertError();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
@@ -165,13 +199,10 @@ public class GuiController implements Initializable {
             conn.close();
 
             customerDeleted = true;
-
+            clearDetails();
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Something went wrong.");
-            alert.showAndWait();
+            alertInf();
+            System.out.println("Here 5.");
         }
         return customerDeleted;
 
@@ -194,33 +225,26 @@ public class GuiController implements Initializable {
             String sql = "UPDATE customer SET customer_fullname=?,customer_address=?,customer_postcode=?,customer_phone=?,customer_email=?,customer_type=? WHERE customer_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
             int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("") || accTypeText.getText().equals("")) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-                alert.setTitle("Information");
-                alert.setHeaderText(null);
-                alert.setContentText("One or more fields are incomplete or incorrect.");
-                alert.showAndWait();
+            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+                alertInf();
             } else {
                 state.setString(1, fullNameText.getText());
                 state.setString(2, addressText.getText());
                 state.setString(3, postCodeText.getText());
                 state.setInt(4, Integer.parseInt(phoneText.getText()));
                 state.setString(5, emailText.getText());
-                state.setString(6, accTypeText.getText());
+                state.setString(6, accTypeText.getSelectionModel().getSelectedItem().toString());
                 state.setInt(7, ID);
 
                 state.execute();
 
                 state.close();
                 conn.close();
-
+                clearDetails();
             }//submit=true;
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Something went wrong.");
-            alert.showAndWait();
+            alertInf();
+            System.out.println("Here 6.");
         }
 
     }
@@ -243,8 +267,8 @@ public class GuiController implements Initializable {
             rs.close();
             conn.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
+            alertError();
+            System.out.println("Here 7.");
         }
 
         customerID.setCellValueFactory(
@@ -276,35 +300,54 @@ public class GuiController implements Initializable {
             String sql = "insert into customer(customer_fullname, customer_address, customer_postcode, customer_phone, customer_email, customer_type) values(?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("") || accTypeText.getText().equals("")) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-                alert.setTitle("Information");
-                alert.setHeaderText(null);
-                alert.setContentText("One or more fields are incomplete or incorrect.");
-                alert.showAndWait();
+            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+                alertInf();
             } else {
                 state.setString(1, fullNameText.getText());
                 state.setString(2, addressText.getText());
                 state.setString(3, postCodeText.getText());
                 state.setInt(4, Integer.parseInt(phoneText.getText()));
                 state.setString(5, emailText.getText());
-                state.setString(6, accTypeText.getText());
+                state.setString(6, accTypeText.getSelectionModel().getSelectedItem().toString());
 
                 state.execute();
 
                 state.close();
                 conn.close();
-
+                clearDetails();
             }//submit=true;
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("One or more fields are incomplete or incorrect.");
-            alert.showAndWait();
+            alertInf();
+            System.out.println("Here 8.");
         }
         //return submit;       
 
+    }
+
+    @FXML
+    public void clearDetails() {
+        fullNameText.setText("");
+        addressText.setText("");
+        postCodeText.setText("");
+        phoneText.setText("");
+        emailText.setText("");
+        accTypeText.getSelectionModel().selectFirst();
+    }
+
+    public void alertInf() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("One or more fields are incomplete, incorrect or a user is not selected.");
+        alert.showAndWait();
+    }
+
+    public void alertError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText("Something went wrong.");
+        alert.showAndWait();
     }
 
 }
