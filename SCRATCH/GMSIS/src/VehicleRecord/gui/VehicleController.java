@@ -67,7 +67,7 @@ public class VehicleController implements Initializable {
     private TextField searchVehicle;
     
 
-    @FXML private TableView<Vehicle> table;
+    @FXML public TableView<Vehicle> table;
     @FXML private TableColumn<Vehicle, String> regCol;
     @FXML private TableColumn<Vehicle, String> makeCol;
     @FXML private TableColumn<Vehicle, String> modelCol;
@@ -82,6 +82,7 @@ public class VehicleController implements Initializable {
     @FXML private TableColumn<Vehicle, String> nameAndAddCol;
     @FXML private TableColumn<Vehicle, String> warExpDateCol;
     @FXML private TableColumn<Vehicle, Integer> vecIDCol;
+    @FXML private TableColumn<Vehicle, Integer> custIDCol;
     
     @FXML private TableView<CustBookingInfo> custTable;
     @FXML private TableColumn<CustBookingInfo, String> fullNameCol;
@@ -132,11 +133,21 @@ public class VehicleController implements Initializable {
 
 
     
-    /*@FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
+    @FXML void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
      {
-         showVecOnText();
+        showVecOnText();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddVehicle.fxml"));     
+
+         Parent root = (Parent)fxmlLoader.load();          
+         AddVehicleController controller = fxmlLoader.<AddVehicleController>getController();
+        //Parent editUser = FXMLLoader.load(getClass().getResource("AddVehicle.fxml"));
+        Scene edit_Scene = new Scene(root);
+        Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        stage2.hide();           
+        stage2.setScene(edit_Scene);
+        stage2.show();
      }
-   */
+   
     @FXML
      private void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
     {
@@ -191,6 +202,8 @@ public class VehicleController implements Initializable {
         new PropertyValueFactory<Vehicle,String> ("WarrantyExpDate"));
     vecIDCol.setCellValueFactory(
         new PropertyValueFactory<Vehicle,Integer>("VecID"));
+    custIDCol.setCellValueFactory(
+        new PropertyValueFactory<Vehicle,Integer>("CustID"));
     
     fullNameCol.setCellValueFactory(                
         new PropertyValueFactory<CustBookingInfo,String>("FullName"));
@@ -329,7 +342,7 @@ public class VehicleController implements Initializable {
         Class.forName("org.sqlite.JDBC");
         conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
         System.out.println("Opened Database Successfully");
-        String SQL = "Select * from vehicleList";            
+        String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next()){
             Vehicle vec = new Vehicle();
@@ -347,6 +360,7 @@ public class VehicleController implements Initializable {
             vec.warNameAndAdd.set(rs.getString("WarrantyNameAndAdd"));
             vec.warrantyExpDate.set(rs.getString("WarrantyExpDate"));
             vec.vecID.set(rs.getInt("vehicleID"));
+            vec.custID.set(rs.getInt("customer_id"));
             data.add(vec);
             
             FilteredList<Vehicle> filteredData = new FilteredList<>(data, e->true);
@@ -398,7 +412,7 @@ public class VehicleController implements Initializable {
      
     
      
-    /*private void showVecOnText()
+    void showVecOnText()
     {
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
@@ -414,24 +428,8 @@ public class VehicleController implements Initializable {
         String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
         String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
-        
-        
-        regNumber.setText(regN);
-        make.setText(vecMake);
-        model.setText(vecModel);
-        engSize.setText(String.valueOf(engine));
-        fuelType.setValue(ft);
-        colour.setText(col);
-        mileage.setText(String.valueOf(mil));
-        vehicleChoice.setValue(vecType);
-        motRenDate.getEditor().setText(mot);
-        lastService.getEditor().setText(ls);
-        nameAndAdd.setText(wNameAndAdd);
-        warExpiry.getEditor().setText(warDate);
-        id.setText(String.valueOf(ID));
-        
-        
-    }*/
+            
+    }
      
      
      
@@ -561,5 +559,6 @@ public class VehicleController implements Initializable {
     }*/
    
      
-  
+ 
+    
 }

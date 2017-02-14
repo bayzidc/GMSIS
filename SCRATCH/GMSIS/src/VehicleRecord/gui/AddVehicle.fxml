@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="534.0" prefWidth="630.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="VehicleRecord.gui.AddVehicleController">
+<AnchorPane id="AnchorPane" prefHeight="534.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
       <Label layoutX="222.0" prefHeight="47.0" prefWidth="162.0" text="VEHICLE ENTRY">
          <font>

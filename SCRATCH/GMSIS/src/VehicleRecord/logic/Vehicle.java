@@ -35,6 +35,7 @@ public class Vehicle {
    public SimpleStringProperty warNameAndAdd = new SimpleStringProperty();
    public SimpleStringProperty warrantyExpDate = new SimpleStringProperty();
    public SimpleIntegerProperty vecID = new SimpleIntegerProperty();
+   public SimpleIntegerProperty custID = new SimpleIntegerProperty();
     
 
    
@@ -93,4 +94,8 @@ public class Vehicle {
        return vecID.get();
    }
    
+   public int getCustID()
+   {
+       return custID.get();
+   }
 }
