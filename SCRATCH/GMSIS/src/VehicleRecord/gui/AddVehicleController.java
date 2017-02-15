@@ -120,6 +120,7 @@ public class AddVehicleController implements Initializable {
         lastService.getEditor().setText(null);
         mileage.clear();
         vehicleChoice.setValue(null);
+        quickSel.setValue(null);
         yesWarranty.setSelected(false);
         noWarranty.setSelected(false);
         nameAndAdd.clear();
@@ -132,9 +133,8 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
-        
         createData();
-        System.out.println("Vehicle Added to Database");
+        print("Vehicle has been added to the database");
         regNumber.clear();
         make.clear();
         model.clear();
@@ -159,9 +159,6 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
-        FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("Vehicle.fxml"));
-        VehicleController c = (VehicleController) loader.getController();
         editVehicle();
         buildData();
         System.out.println("Edited on db");
@@ -340,27 +337,17 @@ public class AddVehicleController implements Initializable {
                     Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                     System.out.println("Opened Database Successfully");
-                    String query = "select * from vehicleList,customer where Make = ?";
+                    String query = "select * from quickSelection where make = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
                     
                     while(rs.next())
                     {
-                        regNumber.setText(rs.getString("RegNumber"));
-                        make.setText(rs.getString("Make"));
-                        model.setText(rs.getString("Model"));
-                        engSize.setText(rs.getString("EngSize"));
-                        fuelType.setValue(rs.getString("FuelType"));
-                        colour.setText(rs.getString("Colour"));
-                        ((TextField) motRenDate.getEditor()).setText(rs.getString("MOTDate"));
-                        ((TextField) lastService.getEditor()).setText(rs.getString("LastServiceDate"));
-                        mileage.setText(rs.getString("Mileage"));   
-                        vehicleChoice.setValue(rs.getString("VehicleType"));
-                        nameAndAdd.setText(rs.getString("WarrantyNameAndAdd"));
-                        ((TextField) warExpiry.getEditor()).setText(rs.getString("WarrantyExpDate"));
-                        id.setText(rs.getString("vehicleID"));
-                        customerNames.setValue(rs.getString("customer_fullname"));
+                        make.setText(rs.getString("make"));
+                        model.setText(rs.getString("model"));
+                        engSize.setText(rs.getString("engSize"));
+                        fuelType.setValue(rs.getString("fuelType"));
                     }
     
                     conn.close();
@@ -382,12 +369,37 @@ public class AddVehicleController implements Initializable {
         }
     }
     
-   /* public void showText() throws IOException
+    private int getVehicleID() throws ClassNotFoundException
     {
-        FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("Vehicle.fxml").openStream());    
-        VehicleController c = (VehicleController) loader.getController();
-    }*/
+         Connection conn = null;
+        
+         int vecid=0;
+         
+        java.sql.Statement state = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn.setAutoCommit(false);
+            
+            state = conn.createStatement();
+            
+            ResultSet rs = state.executeQuery("SELECT * FROM vehicleList WHERE RegNumber= " + "'" + regNumber.getText() + "'");
+            while(rs.next())
+            {
+                 vecid = rs.getInt("vehicleID");
+            }
+            rs.close();
+            state.close();
+            conn.close();
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return vecid;
+        
+    }
     public void fillCustomerNames() throws ClassNotFoundException
     {
         Connection conn = null;
@@ -423,14 +435,14 @@ public class AddVehicleController implements Initializable {
         {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            String query = "Select Make from vehicleList";
+            String query = "Select make from quickSelection";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
             
             
             while(rs.next())
             {
-                quickSelection.add(rs.getString("Make"));
+                quickSelection.add(rs.getString("make"));
                 quickSel.setItems(quickSelection);
                 
             }
@@ -445,7 +457,23 @@ public class AddVehicleController implements Initializable {
         }
     }
    
+    public void checkTextFields()
+    {
+        if(vehicleChoice.getValue() == null && vehicleChoice.getValue().toString().isEmpty())
+        {
+            print("Please select vehicle type");
+        }
+        
+        /*if(yesWarranty.g == null && vehicleChoice.getValue().toString().isEmpty())
+        {
+            print("Please select vehicle type");
+        }*/
+    }
     
+    public void print(String message)
+    {
+        JOptionPane.showMessageDialog(null,message);
+    }
     @FXML
     private void handleYesBox()
     {

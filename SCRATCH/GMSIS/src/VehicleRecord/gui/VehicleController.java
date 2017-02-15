@@ -173,8 +173,11 @@ public class VehicleController implements Initializable {
         c.fuelType.setValue(ft);
         c.colour.setText(col);
         c.mileage.setText(String.valueOf(mil));
+        c.motRenDate.getEditor().setText(mot);
+        c.lastService.getEditor().setText(ls);
         c.vehicleChoice.setValue(vecType);
-        c.nameAndAdd.setText(wNameAndAdd);
+        c.nameAndAdd.setText(wNameAndAdd);  
+        c.warExpiry.getEditor().setText(warDate);
         c.id.setText(String.valueOf(ID));
         //c.customerNames.setValue(cust);
         stage2.hide();
