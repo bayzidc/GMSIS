@@ -242,6 +242,7 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
 
         try {
+            buildPartsData();
             buildCustomerData();
             buildData();
             /*quickSel.setOnAction(e ->{
@@ -292,6 +293,32 @@ public class VehicleController implements Initializable {
         }
     }
 
+    public void buildPartsData() throws ClassNotFoundException, SQLException
+    {
+        partsData = FXCollections.observableArrayList();
+        Connection conn = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehiclePartsUsed INNER JOIN vehicleList ON vehiclePartsUsed.parts_id = vehicleList.vehicleID";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while(rs.next())
+            {
+                PartsInfo parts = new PartsInfo();
+                parts.partID.set(rs.getInt("parts_id"));
+                parts.partsUsed.set(rs.getString("nameOfPart"));
+                partsData.add(parts);
+            }
+            partsTable.setItems(partsData);
+            conn.close();
+            rs.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error on building parts data");
+        }
+    }
     public void buildCustomerData() throws ClassNotFoundException, SQLException {
         custData = FXCollections.observableArrayList();
         Connection conn = null;
