@@ -127,6 +127,7 @@ public class VehicleController implements Initializable {
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
         stageVehicle.show();
+
     }
 
     @FXML
@@ -148,6 +149,8 @@ public class VehicleController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
         AddVehicleController c = (AddVehicleController) loader.getController();
+        Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
+        
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
         String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -174,7 +177,7 @@ public class VehicleController implements Initializable {
         c.nameAndAdd.setText(wNameAndAdd);
         c.id.setText(String.valueOf(ID));
         //c.customerNames.setValue(cust);
-
+        stage2.hide();
         Scene edit_Scene = new Scene(root);
         primaryStage.setScene(edit_Scene);
         primaryStage.show();
