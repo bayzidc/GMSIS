@@ -72,23 +72,23 @@ public class customerAccount {
         customerFullName.set(name);
     }
 
-    public void getCustomerAddress(String address) {
+    public void setCustomerAddress(String address) {
         customerAddress.set(address);
     }
 
-    public void getCustomerPostCode(String code) {
+    public void setCustomerPostCode(String code) {
         customerPostCode.set(code);
     }
 
-    public void getCustomerEmail(String email) {
+    public void setCustomerEmail(String email) {
         customerEmail.set(email);
     }
 
-    public void getCustomerType(String type) {
+    public void setCustomerType(String type) {
         customerType.set(type);
     }
 
-    public void getCustomerPhone(int number) {
+    public void setCustomerPhone(int number) {
         customerPhone.set(number);
     }
 
