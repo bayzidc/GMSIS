@@ -48,6 +48,7 @@
       <Label layoutX="29.0" layoutY="350.0" text="Acc type" />
       <ChoiceBox fx:id="accTypeText" layoutX="85.0" layoutY="346.0" prefHeight="25.0" prefWidth="245.0" />
       <Button fx:id="clearButton" layoutX="139.0" layoutY="117.0" mnemonicParsing="false" onAction="#clearDetails" prefHeight="25.0" prefWidth="142.0" text="Clear details" />
+      <Button fx:id="backButtton" layoutX="182.0" layoutY="53.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
    </children>
    <opaqueInsets>
       <Insets />
