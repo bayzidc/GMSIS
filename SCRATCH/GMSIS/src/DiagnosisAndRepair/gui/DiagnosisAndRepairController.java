@@ -66,6 +66,10 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML 
     private DatePicker datePicked;
     @FXML
+    private ComboBox<String> customerCombo;
+    @FXML
+    private ComboBox<String> vehicleCombo;
+    @FXML
     private ComboBox<String> mechanicCombo;
     @FXML
     private ComboBox<String> partsCombo;
@@ -97,6 +101,8 @@ public class DiagnosisAndRepairController implements Initializable {
     private TableColumn<DiagnosisAndRepairBooking, Integer> durationCol;
     
     private ObservableList<DiagnosisAndRepairBooking> data;
+    
+    ObservableList<String> custNames = FXCollections.observableArrayList();
     
     ObservableList<String> parts = FXCollections.observableArrayList();
     ObservableList<String> names = FXCollections.observableArrayList();
@@ -137,6 +143,7 @@ public class DiagnosisAndRepairController implements Initializable {
        fillEndTimeCombo(); 
     try
     {
+        fillCustomerCombo();
         fillMechanicCombo();
         fillPartsCombo();
         
@@ -150,6 +157,150 @@ public class DiagnosisAndRepairController implements Initializable {
     
     }    
     
+    private void fillCustomerCombo() throws ClassNotFoundException
+    {
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select customer_fullname from customer";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                custNames.add(rs.getString("customer_fullname"));    
+            }
+            customerCombo.setItems(custNames);
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+    }
+    
+    @FXML
+    private void findVehicle(ActionEvent event) throws ClassNotFoundException
+    {
+        fillVehicleCombo();
+    }
+    
+    private String findCustID(String custName) throws ClassNotFoundException
+    {
+        String custID = "";
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select customer_id from customer where customer_fullname='"+ custName +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                custID = rs.getString("customer_id");    
+            }
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return custID;
+    }
+    
+    private String findMechID(String mechName) throws ClassNotFoundException
+    {
+        String mechID = "";
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select mechanic_id from mechanic where fullname='"+ mechName +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                mechID = rs.getString("mechanic_id");    
+            }
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return mechID;
+    }
+    
+     private String findVehID(String vehReg) throws ClassNotFoundException
+    {
+        String vehRegID = "";
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select vehicleID from vehicleList where RegNumber='"+ vehReg +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                vehRegID = rs.getString("vehicleID");    
+            }
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return vehRegID;
+    }
+    
+    
+    private void fillVehicleCombo() throws ClassNotFoundException
+    {
+        String custID = findCustID(customerCombo.getValue());
+        
+        ObservableList<String> vehicleReg = FXCollections.observableArrayList();
+        
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select RegNumber from vehicleList where customerid='" + custID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                vehicleReg.add(rs.getString("RegNumber"));    
+            }
+            vehicleCombo.setItems(vehicleReg);
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+    }
+    
     private void fillMechanicCombo() throws ClassNotFoundException
     {
           Connection conn = null;
@@ -159,11 +310,11 @@ public class DiagnosisAndRepairController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
           
 
-            String SQL = "Select firstname, surname from mechanic";
+            String SQL = "Select fullname from mechanic";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
             {       
-                names.add(rs.getString("firstname")+" "+rs.getString("surname"));    
+                names.add(rs.getString("fullname"));    
             }
             mechanicCombo.setItems(names);
             
@@ -295,31 +446,29 @@ public class DiagnosisAndRepairController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             
-            String sql = "insert into booking(booking_id,vehicleID,customer_id,mechanic_id,scheduled_date,duration,partsRequired,mileage) values(?,?,?,?,?,?,?,?)";
+            String sql = "insert into booking(vehicleID,customer_id,mechanic_id,scheduled_date,duration,partsRequired,mileage) values(?,?,?,?,?,?,?)";
            
             PreparedStatement state = conn.prepareStatement(sql);
           
-            //state.setString(1, " ");
-           // state.setString(2, " ");
-           // state.setString(3, " ");
-           // state.setString(4, " ");
-           
+            state.setString(1, findVehID(vehicleCombo.getValue()));
+            state.setString(2, findCustID(customerCombo.getValue()));
+            state.setString(3, findMechID(mechanicCombo.getValue()));
               
-            state.setString(5, ((TextField)datePicked.getEditor()).getText());
+            state.setString(4, ((TextField)datePicked.getEditor()).getText());
             
             int duration = calculateDuration(startTime.getValue(),endTime.getValue());
            
-             state.setInt(6, duration);
-             state.setString(7, selectedParts.getText());
+             state.setInt(5, duration);
+             state.setString(6, selectedParts.getText());
              
-             /*String getMileage =  "Select Mileage from vehicleList where vehicleID='1'";
+             String getMileage =  "Select Mileage from vehicleList where vehicleID='"+ findVehID(vehicleCombo.getValue()) +"'";
              ResultSet rs = conn.createStatement().executeQuery(getMileage);
-             state.setString(8, rs.getString("Mileage"));
-             rs.close();*/
+             state.setString(7, rs.getString("Mileage"));
              
-            
+  
             state.execute();
             
+            rs.close();
             state.close();
             conn.close();
             
