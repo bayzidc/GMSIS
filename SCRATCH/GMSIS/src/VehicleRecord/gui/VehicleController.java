@@ -43,6 +43,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -63,6 +64,10 @@ public class VehicleController implements Initializable {
     public Button editBtn;
     @FXML
     public Button deleteBtn;
+    @FXML
+    public Button viewParts;
+    @FXML
+    public ImageView searchVecImg;
     @FXML
     public TextField searchVehicle;
 
@@ -165,6 +170,10 @@ public class VehicleController implements Initializable {
         String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
         String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
+        if(regN.isEmpty())
+        {
+            System.out.println("Unable to select row");
+        }
         //String cust = custTable.getSelectionModel().getSelectedItem().getFullName();
         c.regNumber.setText(regN);
         c.make.setText(vecMake);
@@ -191,8 +200,8 @@ public class VehicleController implements Initializable {
     {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
         int id = table.getSelectionModel().getSelectedItem().getVecID();
-        if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted()) {
-
+        if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec()) {
+            buildPartsData();
             JOptionPane.showMessageDialog(null, "VehicleID: " + id + " has been deleted.");
             buildData();
         } else if (id == 0) {
@@ -203,6 +212,20 @@ public class VehicleController implements Initializable {
 
     }
 
+    @FXML
+    public void viewPartsData(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
+    {
+        try
+        {
+            int id = table.getSelectionModel().getSelectedItem().getVecID();
+            buildPartsData();
+        }
+        
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Please select a row");
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -248,52 +271,10 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
 
         try {
-            buildPartsData();
             buildCustomerData();
             buildData();
-            /*quickSel.setOnAction(e ->{
-            
-                Connection conn = null;
-                PreparedStatement ps = null;
-                ResultSet rs = null;
-                try
-                {
-                    Class.forName("org.sqlite.JDBC");
-                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-                    System.out.println("Opened Database Successfully");
-                    String query = "select * from vehicleList where Make = ?";
-                    ps = conn.prepareStatement(query);
-                    ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
-                    rs = ps.executeQuery();
-                    
-                    while(rs.next())
-                    {
-                        regNumber.setText(rs.getString("RegNumber"));
-                        make.setText(rs.getString("Make"));
-                        model.setText(rs.getString("Model"));
-                        engSize.setText(rs.getString("EngSize"));
-                        fuelType.setValue(rs.getString("FuelType"));
-                        colour.setText(rs.getString("Colour"));
-                        ((TextField) motRenDate.getEditor()).setText(rs.getString("MOTDate"));
-                        ((TextField) lastService.getEditor()).setText(rs.getString("LastServiceDate"));
-                        mileage.setText(rs.getString("Mileage"));   
-                        vehicleChoice.setValue(rs.getString("VehicleType"));
-                        nameAndAdd.setText(rs.getString("WarrantyNameAndAdd"));
-                        ((TextField) warExpiry.getEditor()).setText(rs.getString("WarrantyExpDate"));
-                        id.setText(rs.getString("vehicleID"));
-                    }
-                    
-                    conn.close();
-                    ps.close();
-                    rs.close();
-                }
-                
-                catch(Exception ex)
-                {
-                    
-                }
-            
-        });*/
+ 
+  
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -307,7 +288,7 @@ public class VehicleController implements Initializable {
         {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehiclePartsUsed INNER JOIN vehicleList ON vehiclePartsUsed.parts_id = vehicleList.vehicleID";
+            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehiclePartsUsed INNER JOIN vehicleList ON vehiclePartsUsed.parts_id = vehicleList.partsid";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -333,7 +314,7 @@ public class VehicleController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_ID = booking.booking_id";
+            String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             System.out.println("Success");
             while (rs.next()) {
@@ -341,6 +322,11 @@ public class VehicleController implements Initializable {
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 custData.add(cust);
+            }
+            
+            if(!rs.next())
+            {
+                System.out.println("Does not exist on the database");
             }
             custTable.setItems(custData);
             rs.close();
@@ -357,7 +343,7 @@ public class VehicleController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";
+            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
                 Vehicle vec = new Vehicle();
@@ -460,6 +446,35 @@ public class VehicleController implements Initializable {
 
     }
 
+    public boolean deletePartofVec() throws ClassNotFoundException
+    {
+        boolean partDeleted = false;
+        int ID = table.getSelectionModel().getSelectedItem().getVecID();
+        Connection conn = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully");
+            String sql = "delete from vehiclePartsUsed where vehiclePartsUsed.parts_id=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            state.setString(1, String.valueOf(ID));
+            state.executeUpdate();
+
+            state.close();
+            conn.close();
+            partDeleted = true;
+
+    
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return partDeleted;
+    }
+    
+    
     /* private int getVehicleID() throws ClassNotFoundException
     {
          Connection conn = null;
@@ -491,4 +506,6 @@ public class VehicleController implements Initializable {
         return vecid;
         
     }*/
+
+
 }

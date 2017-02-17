@@ -133,6 +133,8 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
+        if(checkTextFields())
+        {
         createData();
         print("Vehicle has been added to the database");
         regNumber.clear();
@@ -153,6 +155,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.setValue(null);
         warExpiry.getEditor().setText(null);
         id.clear();
+        }
         
     }
     
@@ -313,7 +316,7 @@ public class AddVehicleController implements Initializable {
                     Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                     System.out.println("Opened Database Successfully");
-                    String query = "select customer_fullname from customer, vehicleList where customer_fullname = ?";
+                    String query = "select customer_fullname from customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
@@ -457,17 +460,21 @@ public class AddVehicleController implements Initializable {
         }
     }
    
-    public void checkTextFields()
+    public boolean checkTextFields()
     {
-        if(vehicleChoice.getValue() == null && vehicleChoice.getValue().toString().isEmpty())
+        boolean checked = true;
+        if(vehicleChoice.getValue() == "" || nameAndAdd.getText().equals("") || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue() == "" || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals("") || warExpiry.getEditor().getText().equals(""))
         {
-            print("Please select vehicle type");
+            checked = false;
+            JOptionPane.showMessageDialog(null,"Please complete all fields.");
         }
         
-        /*if(yesWarranty.g == null && vehicleChoice.getValue().toString().isEmpty())
+        if(customerNames.getValue() == "")
         {
-            print("Please select vehicle type");
-        }*/
+            checked = false;
+            JOptionPane.showMessageDialog(null, "Please specify a name for the vehicle.");
+        }
+        return checked;
     }
     
     public void print(String message)
