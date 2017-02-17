@@ -29,8 +29,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,6 +45,8 @@ import javax.swing.JOptionPane;
  */
 public class GuiController implements Initializable {
 
+    @FXML
+    private Button backButtton;
     @FXML
     private Button clearButton;
     @FXML
@@ -83,6 +90,7 @@ public class GuiController implements Initializable {
     private ObservableList<customerAccount> data;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
+    customerAccount acc = new customerAccount(0, "", "", "", 0, "", "");
 
     /**
      * Initializes the controller class.
@@ -105,7 +113,7 @@ public class GuiController implements Initializable {
                             Class.forName("org.sqlite.JDBC");
                             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                             System.out.println("Opened Database Successfully");
-
+                            String whichType = "";
                             java.sql.Statement state = null;
                             state = conn.createStatement();
                             ResultSet rs = state.executeQuery("SELECT * FROM customer WHERE customer_id= " + "'" + ID + "'");
@@ -118,10 +126,21 @@ public class GuiController implements Initializable {
                                 emailText.setText(rs.getString("customer_email"));
                                 if (rs.getString("customer_type").equals("Business")) {
                                     accTypeText.getSelectionModel().selectFirst();
+                                    whichType = "Business";
                                 } else {
                                     accTypeText.getSelectionModel().selectLast();
+                                    whichType = "Private";
                                 }
                             }
+                            acc.setCustomerID(ID);
+                            acc.setCustomerFullName(fullNameText.getText());
+                            acc.setCustomerAddress(addressText.getText());
+                            acc.setCustomerPostCode(postCodeText.getText());
+                            acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+                            acc.setCustomerEmail(emailText.getText());
+                            acc.setCustomerType(whichType);
+                            getCustomerDetails(acc);
+
                             state.close();
                             conn.close();
                         }
@@ -139,7 +158,13 @@ public class GuiController implements Initializable {
 
     @FXML
     private void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        createData();
+        acc.setCustomerFullName(fullNameText.getText());
+        acc.setCustomerAddress(addressText.getText());
+        acc.setCustomerPostCode(postCodeText.getText());
+        acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+        acc.setCustomerEmail(emailText.getText());
+        acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
+        createData(acc);
         buildData();
     }
 
@@ -147,7 +172,7 @@ public class GuiController implements Initializable {
     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this user? (Yes or No) ");
-            if (confirmDelete.equalsIgnoreCase("Yes") && isDeleted()) {
+            if (confirmDelete.equalsIgnoreCase("Yes") && isDeleted(acc)) {
                 int ID = table.getSelectionModel().getSelectedItem().getCustomerID(); //Gets ID 
                 JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
                 buildData();
@@ -167,7 +192,13 @@ public class GuiController implements Initializable {
             }
             String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to update this user? (Yes or No) ");
             if (confirmDelete.equalsIgnoreCase("Yes")) {
-                updateData(); //Gets ID 
+                acc.setCustomerFullName(fullNameText.getText());
+                acc.setCustomerAddress(addressText.getText());
+                acc.setCustomerPostCode(postCodeText.getText());
+                acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+                acc.setCustomerEmail(emailText.getText());
+                acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
+                updateData(acc); //Gets ID 
                 JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been updated");
                 buildData();
             }
@@ -178,10 +209,10 @@ public class GuiController implements Initializable {
         }
     }
 
-    private boolean isDeleted() throws ClassNotFoundException {
+    private boolean isDeleted(customerAccount acc) throws ClassNotFoundException {
         boolean customerDeleted = false;
 
-        int ID = table.getSelectionModel().getSelectedItem().getCustomerID();
+        ID = table.getSelectionModel().getSelectedItem().getCustomerID();
 
         Connection conn = null;
 
@@ -192,7 +223,7 @@ public class GuiController implements Initializable {
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM customer WHERE customer_id= ?";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setInt(1, ID);
+            state.setInt(1, acc.getCustomerID());
             state.executeUpdate();
 
             state.close();
@@ -209,7 +240,7 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    private void updateData() throws ClassNotFoundException {
+    private void updateData(customerAccount acc) throws ClassNotFoundException {
 
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
@@ -228,13 +259,13 @@ public class GuiController implements Initializable {
             if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
                 alertInf();
             } else {
-                state.setString(1, fullNameText.getText());
-                state.setString(2, addressText.getText());
-                state.setString(3, postCodeText.getText());
-                state.setInt(4, Integer.parseInt(phoneText.getText()));
-                state.setString(5, emailText.getText());
-                state.setString(6, accTypeText.getSelectionModel().getSelectedItem().toString());
-                state.setInt(7, ID);
+                state.setString(1, acc.getCustomerFullName());
+                state.setString(2, acc.getCustomerAddress());
+                state.setString(3, acc.getCustomerPostCode());
+                state.setInt(4, acc.getCustomerPhone());
+                state.setString(5, acc.getCustomerEmail());
+                state.setString(6, acc.getCustomerType());
+                state.setInt(7, acc.getCustomerID());
 
                 state.execute();
 
@@ -287,7 +318,7 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerType"));
     }
 
-    public void createData() throws ClassNotFoundException {
+    public void createData(customerAccount acc) throws ClassNotFoundException {
 
         Connection conn = null;
 
@@ -326,12 +357,22 @@ public class GuiController implements Initializable {
 
     @FXML
     public void clearDetails() {
-        fullNameText.setText("");
-        addressText.setText("");
-        postCodeText.setText("");
-        phoneText.setText("");
-        emailText.setText("");
+        fullNameText.clear();
+        addressText.clear();
+        postCodeText.clear();
+        phoneText.clear();
+        emailText.clear();
         accTypeText.getSelectionModel().selectFirst();
+    }
+
+    @FXML
+    public void backButton(ActionEvent event) throws IOException {
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        Scene admin_Scene = new Scene(adminUser);
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage2.hide();
+        stage2.setScene(admin_Scene);
+        stage2.show();
     }
 
     public void alertInf() {
@@ -348,6 +389,16 @@ public class GuiController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Something went wrong.");
         alert.showAndWait();
+    }
+
+    public void getCustomerDetails(customerAccount acc) {
+        System.out.println(acc.getCustomerID());
+        System.out.println(acc.getCustomerFullName());
+        System.out.println(acc.getCustomerAddress());
+        System.out.println(acc.getCustomerPostCode());
+        System.out.println(acc.getCustomerEmail());
+        System.out.println(acc.getCustomerPhone());
+        System.out.println(acc.getCustomerType());
     }
 
 }
