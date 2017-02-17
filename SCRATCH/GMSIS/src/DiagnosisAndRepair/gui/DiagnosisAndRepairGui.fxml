@@ -39,24 +39,25 @@
           <TableColumn fx:id="durationCol" prefWidth="120.0" text="Duration in minutes" />
         </columns>
       </TableView>
-      <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="133.0" prefWidth="150.0" promptText="Select" />
-      <Label layoutX="23.0" layoutY="137.0" text="Mechanic" />
+      <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="151.0" prefWidth="150.0" promptText="Select" />
+      <Label layoutX="24.0" layoutY="155.0" text="Mechanic" />
       <TextField layoutX="765.0" layoutY="425.0" prefHeight="25.0" prefWidth="158.0" />
       <Button layoutX="950.0" layoutY="425.0" mnemonicParsing="false" text="Search" />
-      <Label layoutX="22.0" layoutY="183.0" text="Parts required" />
+      <Label layoutX="22.0" layoutY="196.0" text="Parts required" />
       <Group />
       <Button fx:id="loadBookingButton" layoutX="313.0" layoutY="424.0" mnemonicParsing="false" onAction="#loadBookings" text="Load Bookings" />
       <Button layoutX="466.0" layoutY="490.0" mnemonicParsing="false" text="Find Booking info" />
       <TextField layoutX="313.0" layoutY="490.0" prefHeight="25.0" prefWidth="136.0" promptText="Enter vechicle ID" />
-      <ComboBox fx:id="partsCombo" layoutX="114.0" layoutY="179.0" onAction="#partsChanged" prefWidth="150.0" promptText="Select" />
-      <TextArea fx:id="selectedParts" editable="false" layoutX="23.0" layoutY="216.0" prefHeight="83.0" prefWidth="250.0" promptText="Selected Parts:" />
+      <ComboBox fx:id="partsCombo" layoutX="114.0" layoutY="192.0" onAction="#partsChanged" prefWidth="150.0" promptText="Select" />
+      <TextArea fx:id="selectedParts" editable="false" layoutX="23.0" layoutY="241.0" prefHeight="70.0" prefWidth="250.0" promptText="Selected Parts:" />
       <Button fx:id="editButton" layoutX="439.0" layoutY="424.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="54.0" text="Edit" />
       <Button fx:id="deleteButton" layoutX="504.0" layoutY="424.0" mnemonicParsing="false" onAction="#deleteBooking" text="Delete" />
       <ComboBox fx:id="startTime" layoutX="114.0" layoutY="377.0" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="endTime" layoutX="114.0" layoutY="412.0" prefWidth="150.0" promptText="Select" />
-      <ComboBox fx:id="customerCombo" layoutX="114.0" layoutY="42.0" onAction="#findVehicle" prefWidth="150.0" promptText="Select" />
-      <ComboBox fx:id="vehicleCombo" layoutX="114.0" layoutY="86.0" prefWidth="150.0" promptText="Select" />
-      <Label layoutX="22.0" layoutY="46.0" prefHeight="17.0" prefWidth="54.0" text="Customer" />
-      <Label layoutX="21.0" layoutY="90.0" text="Vehicle" />
+      <ComboBox fx:id="customerCombo" layoutX="114.0" layoutY="63.0" onAction="#findVehicle" prefWidth="150.0" promptText="Select" />
+      <ComboBox fx:id="vehicleCombo" layoutX="114.0" layoutY="107.0" prefWidth="150.0" promptText="Select" />
+      <Label layoutX="21.0" layoutY="67.0" prefHeight="17.0" prefWidth="54.0" text="Customer" />
+      <Label layoutX="21.0" layoutY="111.0" text="Vehicle" />
+      <Button fx:id="back" layoutX="29.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="50.0" text="Back" />
    </children>
 </AnchorPane>
