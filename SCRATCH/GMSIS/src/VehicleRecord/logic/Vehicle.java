@@ -36,9 +36,27 @@ public class Vehicle {
    public SimpleStringProperty warrantyExpDate = new SimpleStringProperty();
    public SimpleIntegerProperty vecID = new SimpleIntegerProperty();
    public SimpleIntegerProperty custID = new SimpleIntegerProperty();
+
     
 
-   
+   public Vehicle(String regNumber, String make, String model, double engSize, String fuelType, String colour, String motRenewal, String lastService, int mileage, String vehicleType, String warranty, String warNameAndAdd, String warrantyExpDate,int vecID,int custID)
+   {
+       this.regNumber = new SimpleStringProperty(regNumber);
+       this.make = new SimpleStringProperty(make);
+       this.model = new SimpleStringProperty(model);
+       this.engSize = new SimpleDoubleProperty(engSize);
+       this.fuelType = new SimpleStringProperty(fuelType);
+       this.colour = new SimpleStringProperty(colour);
+       this.motRenewal = new SimpleStringProperty(motRenewal);
+       this.lastService = new SimpleStringProperty(lastService);
+       this.mileage = new SimpleIntegerProperty(mileage);
+       this.vehicleType = new SimpleStringProperty(vehicleType);
+       this.warranty = new SimpleStringProperty(warranty);
+       this.warNameAndAdd = new SimpleStringProperty(warNameAndAdd);
+       this.warrantyExpDate = new SimpleStringProperty(warrantyExpDate);
+       this.vecID = new SimpleIntegerProperty(vecID);
+       this.custID = new SimpleIntegerProperty(custID);
+   }
    public String getRegNumber() {
       return regNumber.get();
    }
@@ -98,4 +116,65 @@ public class Vehicle {
    {
        return custID.get();
    }
+   
+   public void setRegNumber(String regN) {
+        regNumber.set(regN);
+   }
+
+   public void setMake(String carMake) {
+        make.set(carMake);
+   }
+
+   public void setModel(String carModel) {
+        model.set(carModel);
+   }
+
+   public void setEngSize(double engS) {
+      engSize.set(engS);
+   }
+   public void setFuelType(String fuelT) {
+      fuelType.set(fuelT);
+   }
+   public void setColour(String col) {
+      colour.set(col);
+   }
+   public void setMotRenewal(String motRen) {
+      motRenewal.set(motRen);
+   }
+   public void setLastService(String lastSer) {
+      lastService.set(lastSer);
+   }
+   public void setMileage(int mil) {
+      mileage.set(mil);
+   }
+   
+   public void setVehicleType(String vehicleT)
+   {
+       vehicleType.set(vehicleT);
+   }
+   
+   public void setWarranty(String war)
+   {
+       warranty.set(war);
+   }
+   
+   public void setWarNameAndAdd(String nameAndAdd)
+   {
+       warNameAndAdd.set(nameAndAdd);
+   }
+   
+   public void setWarrantyExpDate(String expDate)
+   {
+       warrantyExpDate.set(expDate);
+   }
+   public void setVecID(int vID)
+   {
+       vecID.set(vID);
+   }
+   
+   public void setCustID(int cID)
+   {
+       custID.set(cID);
+   }
+
 }

@@ -5,6 +5,7 @@
  */
 package VehicleRecord.gui;
 
+import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -24,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -93,7 +95,7 @@ public class AddVehicleController implements Initializable {
     public Button updateBtn;
     @FXML
     public Button addEntry;
-    
+    Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
     @FXML
     public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
@@ -135,8 +137,23 @@ public class AddVehicleController implements Initializable {
     {
         if(checkTextFields())
         {
-        createData();
-        print("Vehicle has been added to the database");
+            vec.setRegNumber(regNumber.getText());
+            vec.setColour(colour.getText());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType(fuelType.getValue().toString());
+            vec.setLastService(lastService.getEditor().getText());
+            vec.setMake(make.getText());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText());
+            vec.setMotRenewal(motRenDate.getEditor().getText());
+            vec.setVehicleType(vehicleChoice.getValue().toString());
+            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarranty(yesWarranty.getText());
+            vec.setWarranty(noWarranty.getText());
+            vec.setWarrantyExpDate(warExpiry.getEditor().getText());
+            
+        createData(vec);
+        alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + getCustomerName());
         regNumber.clear();
         make.clear();
         model.clear();
@@ -155,6 +172,8 @@ public class AddVehicleController implements Initializable {
         warExpiry.setValue(null);
         warExpiry.getEditor().setText(null);
         id.clear();
+        quickSel.setValue(null);
+        customerNames.setValue(null);
         }
         
     }
@@ -162,10 +181,24 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
+            vec.setRegNumber(regNumber.getText());
+            vec.setColour(colour.getText());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType(fuelType.getValue().toString());
+            vec.setLastService(lastService.getEditor().getText());
+            vec.setMake(make.getText());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText());
+            vec.setMotRenewal(motRenDate.getEditor().getText());
+            vec.setVehicleType(vehicleChoice.getValue().toString());
+            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarranty(yesWarranty.getText());
+            vec.setWarranty(noWarranty.getText());
+            vec.setWarrantyExpDate(warExpiry.getEditor().getText());
+        
         editVehicle();
-        buildData();
-        System.out.println("Edited on db");
-        JOptionPane.showMessageDialog(null,"Updated");
+        alertInf("Vehicle ID: " + getVehicleID() + "has been updated for " + getCustomerName());
+        
         regNumber.clear();
         make.clear();
         model.clear();
@@ -184,6 +217,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.setValue(null);
         warExpiry.getEditor().setText(null);
         id.clear();
+        customerNames.setValue(null);
     }
     public void buildData() throws ClassNotFoundException
     {
@@ -209,7 +243,7 @@ public class AddVehicleController implements Initializable {
     fillCustomerNames();
     }
     
-    public void createData() throws ClassNotFoundException
+    public void createData(Vehicle vec) throws ClassNotFoundException
     {
         
         Connection conn = null;
@@ -222,7 +256,6 @@ public class AddVehicleController implements Initializable {
             System.out.println("Opened Database Successfully");
             
             String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
             state.setString(2,make.getText());
@@ -267,19 +300,19 @@ public class AddVehicleController implements Initializable {
             String sql = "UPDATE vehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
-            state.setString(2,make.getText());
+            state.setString(2, make.getText());
             state.setString(3, model.getText());
-            state.setString(4, engSize.getText());
-            state.setString(5, (String) fuelType.getValue());
+            state.setDouble(4, Double.parseDouble(engSize.getText()));
+            state.setString(5, fuelType.getValue().toString());
             state.setString(6, colour.getText());
-            state.setString(7, ((TextField) motRenDate.getEditor()).getText());
-            state.setString(8, ((TextField) lastService.getEditor()).getText());
-            state.setString(9, mileage.getText());
-            state.setString(10, (String) vehicleChoice.getValue());
+            state.setString(7, motRenDate.getEditor().getText());
+            state.setString(8, lastService.getEditor().getText());
+            state.setInt(9, Integer.parseInt(mileage.getText()));
+            state.setString(10, vehicleChoice.getValue().toString());
             state.setString(11, warrantyChoice.toString());
             state.setString(12, nameAndAdd.getText());
-            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
-            state.setString(14, id.getText());
+            state.setString(13, warExpiry.getEditor().getText());
+            state.setInt(14, Integer.parseInt(id.getText()));
 
             state.execute();
 
@@ -403,6 +436,36 @@ public class AddVehicleController implements Initializable {
         return vecid;
         
     }
+    
+    private String getCustomerName() throws ClassNotFoundException
+    {
+        String name = "";
+        Connection conn = null;
+ 
+        java.sql.Statement state = null;
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn.setAutoCommit(false);
+            
+            state = conn.createStatement();
+            
+            ResultSet rs = state.executeQuery("SELECT customer_fullname FROM customer,vehicleList WHERE customer.customer_id = vehicleList.vehicleID");
+            while(rs.next())
+            {
+                 name = rs.getString("customer_fullname");
+            }
+            rs.close();
+            state.close();
+            conn.close();
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        return name;
+    }
     public void fillCustomerNames() throws ClassNotFoundException
     {
         Connection conn = null;
@@ -463,16 +526,16 @@ public class AddVehicleController implements Initializable {
     public boolean checkTextFields()
     {
         boolean checked = true;
-        if(vehicleChoice.getValue() == "" || nameAndAdd.getText().equals("") || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue() == "" || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals("") || warExpiry.getEditor().getText().equals(""))
+        if(vehicleChoice.getSelectionModel().isEmpty() || nameAndAdd.getText().equals("") || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals("") || warExpiry.getEditor().getText().equals(""))
         {
             checked = false;
-            JOptionPane.showMessageDialog(null,"Please complete all fields.");
+            alertInf("Please complete all fields.");
         }
         
-        if(customerNames.getValue() == "")
+        if(customerNames.getSelectionModel().isEmpty())
         {
             checked = false;
-            JOptionPane.showMessageDialog(null, "Please specify a name for the vehicle.");
+            alertInf("Please specify a name for the vehicle.");
         }
         return checked;
     }
@@ -496,6 +559,23 @@ public class AddVehicleController implements Initializable {
         {
             yesWarranty.setSelected(false);
         }
+    }
+    
+    
+     public void alertInf(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public void alertError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     
 }

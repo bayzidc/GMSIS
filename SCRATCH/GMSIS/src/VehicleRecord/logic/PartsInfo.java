@@ -25,4 +25,14 @@ public class PartsInfo {
    {
        return partsUsed.get();
    }
+   
+   public void setPartID(int pID)
+   {
+       partID.set(pID);
+   }
+   
+   public void setPartsUsed(String pUsed)
+   {
+       partsUsed.set(pUsed);
+   }
 }

@@ -24,5 +24,15 @@ public class CustBookingInfo {
        return bookingDate.get();
    }
            
+   public void setFullName(String fullN)
+   {
+       fullName.set(fullN);
+   }
+   
+   public void setBookingDate(String bDate)
+   {
+       bookingDate.set(bDate);
+   }
 }
+
 
