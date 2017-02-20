@@ -90,7 +90,7 @@ public class GuiController implements Initializable {
     private ObservableList<customerAccount> data;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
-    customerAccount acc = new customerAccount(0, "", "", "", 0, "", "");
+    public static customerAccount acc = new customerAccount(0, "", "", "", 0, "", "");
 
     /**
      * Initializes the controller class.
@@ -155,7 +155,8 @@ public class GuiController implements Initializable {
             alertError();
         }
     }
-
+    
+    
     @FXML
     private void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
         acc.setCustomerFullName(fullNameText.getText());
@@ -208,16 +209,23 @@ public class GuiController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
-    
-        @FXML
-    private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {      
-        Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
-        Scene parts_Scene = new Scene(bills);
-        Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        billstage.setScene(parts_Scene);
-        billstage.show();
+
+    @FXML
+    private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        try {
+            
+            Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
+            Scene parts_Scene = new Scene(bills);
+            Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            billstage.setScene(parts_Scene);
+            billstage.show();
+        } catch (Exception e) {
+            System.out.print("Exception caught.");
+            e.printStackTrace();
+        }
+
     }
-    
+
     private boolean isDeleted(customerAccount acc) throws ClassNotFoundException {
         boolean customerDeleted = false;
 

@@ -46,7 +46,7 @@ public class BillController implements Initializable {
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    
+    private customerAccount account = new customerAccount(0, "", "", "", 0, "", "");
     /**
      * Initializes the controller class.
      */
@@ -54,7 +54,9 @@ public class BillController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         buildData();
     }
-
+    
+    
+    
     @FXML
     public void backButton(ActionEvent event) throws IOException {
         Parent adminUser = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
@@ -69,12 +71,13 @@ public class BillController implements Initializable {
         data = FXCollections.observableArrayList();
         Connection conn = null;
         try {
-
+            int joe = GuiController.acc.getCustomerID();
+            System.out.println(GuiController.acc.getCustomerID());
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
 
-            String SQL = "Select * from bill";
+            String SQL = "Select * from bill WHERE customerID = " + joe;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
                 data.add(new bill(rs.getInt(3), rs.getInt(4)));
