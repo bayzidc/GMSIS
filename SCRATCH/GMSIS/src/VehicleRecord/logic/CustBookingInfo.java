@@ -15,6 +15,11 @@ public class CustBookingInfo {
    public SimpleStringProperty fullName = new SimpleStringProperty(); 
    public SimpleStringProperty bookingDate = new SimpleStringProperty();
    
+   public CustBookingInfo(String fName, String bDate)
+   {
+      this.fullName = new SimpleStringProperty(fName);
+      this.bookingDate = new SimpleStringProperty(bDate);
+   }
    public String getFullName(){
            return fullName.get();
 }

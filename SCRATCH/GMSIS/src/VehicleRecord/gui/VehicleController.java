@@ -123,8 +123,8 @@ public class VehicleController implements Initializable {
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
 
-    Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
-    CustBookingInfo cust = new CustBookingInfo();
+
+    
     /**
      * Initializes the controller class.
      */
@@ -302,7 +302,7 @@ public class VehicleController implements Initializable {
         {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock INNER JOIN vehicleList ON vehiclePartsStock.parts_id = vehicleList.vehicleID";
+            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehicleList where vehiclePartsStock.parts_id = vehicleList.vehicleID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -336,6 +336,7 @@ public class VehicleController implements Initializable {
   
             System.out.println("Success");
             while (rs.next()) {
+                CustBookingInfo cust = new CustBookingInfo("","");
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 custData.add(cust);
@@ -368,6 +369,7 @@ public class VehicleController implements Initializable {
             String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
+                Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
                 vec.regNumber.set(rs.getString("RegNumber"));
                 vec.make.set(rs.getString("Make"));
                 vec.model.set(rs.getString("Model"));
