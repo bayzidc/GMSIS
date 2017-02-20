@@ -71,7 +71,7 @@ public class DiagnosisAndRepairController implements Initializable {
     private ComboBox<String> endTime;
     
     @FXML
-    private TextArea selectedParts;
+    private ListView<String> selectedParts;
     
     @FXML 
     private TableView<DiagnosisAndRepairBooking> table;
@@ -96,12 +96,13 @@ public class DiagnosisAndRepairController implements Initializable {
     
     ObservableList<String> custNames = FXCollections.observableArrayList();
     ObservableList<String> vehicleReg = FXCollections.observableArrayList();
+    ObservableList<String> partsInView = FXCollections.observableArrayList();
     ObservableList<String> parts = FXCollections.observableArrayList();
     ObservableList<String> mechNames = FXCollections.observableArrayList();
     ObservableList<String> startTimeLs ;//FXCollections.observableArrayList();
     ObservableList<String> endTimeLs ; //FXCollections.observableArrayList();
     
-     ArrayList<String> listPart = null;
+    private String partsToString;
     
      DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking("","","","","",0,"",0);
      
@@ -128,9 +129,18 @@ public class DiagnosisAndRepairController implements Initializable {
         e.printStackTrace(); 
     }
    
-    
-    
+       
     }    
+    
+    @FXML
+    private void partsChanged(ActionEvent event) 
+    {
+        if(!partsInView.contains(partsCombo.getValue()) && partsInView.size()<10 && partsCombo.getValue()!=null)
+        {
+            partsInView.add(partsCombo.getValue());
+            selectedParts.setItems(partsInView);
+        }
+    }
     
     @FXML
     public void backButton(ActionEvent event) throws IOException 
@@ -175,7 +185,6 @@ public class DiagnosisAndRepairController implements Initializable {
         String custID = findCustID(customerCombo.getValue());
         
         vehicleReg.clear();
-        vehicleCombo.setItems(vehicleReg);
         
         Connection conn = null;
         try {
@@ -426,7 +435,7 @@ public class DiagnosisAndRepairController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
           
 
-            String SQL = "Select nameofPart from vehiclePartsStock";
+            String SQL = "Select nameofPart from vehiclePartsStock where stockLevelsOfParts >0";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
             {       
@@ -447,20 +456,121 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML 
     private void updateBooking(ActionEvent event) throws ClassNotFoundException
     {
+        if(!checkIfCompleted())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR); 
+	    alert.setTitle("Error");
+            alert.setHeaderText("Try again");
+            alert.setContentText("Complete all fields");
+            alert.showAndWait();
+            return;
+        }
         
+        obj.setBookingID(table.getSelectionModel().getSelectedItem().getBookingID());
+        obj.setCustName(customerCombo.getValue());
+        obj.setVehicleReg(vehicleCombo.getValue());
+        obj.setMechanicName(mechanicCombo.getValue());
+        obj.setDate(((TextField)datePicked.getEditor()).getText());
+        obj.setDuration(calculateDuration(startTime.getValue(),endTime.getValue()));
+        
+           for(int i=0; i<partsInView.size(); i++)
+             {  
+                        if(i==0)
+                        {
+                            partsToString = partsInView.get(i);
+                        }
+                        else
+                        {
+                            partsToString += ","+partsInView.get(i);
+                        }
+             }
+        obj.setPartsRequired(partsToString);
+        
+        updateData(obj);
+        buildBooking();
+        clearFields();
+    }
+    
+    private void updateData(DiagnosisAndRepairBooking obj) throws ClassNotFoundException
+    {
+         Connection conn = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");  
+
+            String sql = "UPDATE booking SET vehicleID=?,customer_id=?,mechanic_id=?,scheduled_date=?,duration=?,partsRequired=? WHERE booking_id=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+           
+                state.setString(1, findVehID(obj.getVehicleReg()));
+                state.setString(2, findCustID(obj.getCustName()));
+                state.setString(3, findMechID(obj.getMechanicName()));
+                state.setString(4, obj.getDate());
+                state.setInt(5, obj.getDuration());
+                state.setString(6, obj.getPartsRequired());
+                state.setString(7, obj.getBookingID());
+
+                state.execute();
+
+                state.close();
+                conn.close();
+                
+                clearFields();
+            }
+         catch (SQLException e) {
+            System.out.println("");
+        }
+
     }
     
     @FXML
     private void booking(ActionEvent event) throws IOException, ClassNotFoundException
     {
+        if(!checkIfCompleted())
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
+	    alert.setTitle("Error");
+            alert.setHeaderText("Try again");
+            alert.setContentText("Complete all fields");
+            alert.showAndWait();
+            return;
+        }
+        
         obj.setCustName(customerCombo.getValue());
         obj.setVehicleReg(vehicleCombo.getValue());
         obj.setMechanicName(mechanicCombo.getValue());
-       // obj.setPartsRequired(parts);
         obj.setDate(((TextField)datePicked.getEditor()).getText());
         obj.setDuration(calculateDuration(startTime.getValue(),endTime.getValue()));
+    
+             for(int i=0; i<partsInView.size(); i++)
+             {  
+                        if(i==0)
+                        {
+                            partsToString = partsInView.get(i);
+                        }
+                        else
+                        {
+                            partsToString += ","+partsInView.get(i);
+                        }
+             }
+        obj.setPartsRequired(partsToString);
         createBooking(obj);
         buildBooking();
+        clearFields();
+    }
+    
+    @FXML 
+    private void deleteParts(ActionEvent event)
+    {
+        String part = selectedParts.getSelectionModel().getSelectedItem();
+        
+        partsInView.remove(part);
+        selectedParts.setItems(partsInView);
+    }
+    
+    @FXML
+    private void clearAll(ActionEvent event)
+    {
         clearFields();
     }
     
@@ -472,25 +582,18 @@ public class DiagnosisAndRepairController implements Initializable {
         partsCombo.setValue(null);
         startTime.setValue(null);
         endTime.setValue(null);
-        selectedParts.clear();
+        partsInView.clear();
+        selectedParts.setItems(partsInView);
         ((TextField)datePicked.getEditor()).clear();
     }
     
-    @FXML 
-    private void partsChanged(ActionEvent event) throws IOException, ClassNotFoundException
-    {
-       String ls = "";
-        
-        if(!listPart.contains(partsCombo.getValue()) && listPart.size()<10)
+    private boolean checkIfCompleted()
+    {   
+        if(customerCombo.getValue()!=null && vehicleCombo.getValue()!=null && mechanicCombo.getValue()!=null && datePicked!=null && startTime.getValue()!=null && endTime.getValue()!=null)
         {
-            listPart.add(partsCombo.getValue());
+            return true;
         }
-        
-        for(String i: listPart)
-        {
-            ls = ls + i+", ";
-        }
-        selectedParts.setText(ls);
+        return false;
     }
     
     @FXML
@@ -506,13 +609,26 @@ public class DiagnosisAndRepairController implements Initializable {
         String reg = table.getSelectionModel().getSelectedItem().getVehicleReg();      
         String custName = table.getSelectionModel().getSelectedItem().getCustName();     
         String mechName = table.getSelectionModel().getSelectedItem().getMechanicName();     
-        //String parts = table.getSelectionModel().getSelectedItem().getVehicleReg();
+        
         String date = table.getSelectionModel().getSelectedItem().getDate();
         
+        String parts = table.getSelectionModel().getSelectedItem().getPartsRequired();
+        if(parts!=null)
+        {
+            partsInView.clear();
+
+            String[] pStr = parts.split(",");
+            for(String arr: pStr)
+            {
+                partsInView.add(arr);
+            }
+            selectedParts.setItems(partsInView);
+        }
         customerCombo.setValue(findComboVal(custNames,custName));
         mechanicCombo.setValue(findComboVal(mechNames,mechName));
         vehicleCombo.setValue(findComboVal(vehicleReg,reg));
-       // datePicked.((TextField)datePicked.getEditor()).getText();
+        partsCombo.setValue(null);    
+        datePicked.getEditor().setText(date);
     }
     
     private String findComboVal(ObservableList<String> list, String target)
@@ -532,6 +648,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this booking? (Yes or No) ");
         String id = table.getSelectionModel().getSelectedItem().getBookingID();
+        obj.setBookingID(id);
         if(confirmDelete.equalsIgnoreCase("Yes") && isBookingDeleted(obj))
         {            
             JOptionPane.showMessageDialog(null, "Booking ID " + id + " has been deleted."); 
@@ -542,8 +659,6 @@ public class DiagnosisAndRepairController implements Initializable {
     private boolean isBookingDeleted(DiagnosisAndRepairBooking obj) throws ClassNotFoundException
     {
         boolean bookingDeleted = false;
-        
-        String ID = table.getSelectionModel().getSelectedItem().getBookingID();
         
         Connection conn = null;
         
@@ -567,7 +682,6 @@ public class DiagnosisAndRepairController implements Initializable {
         catch(SQLException e)
         {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
         }
         return bookingDeleted;   
             
@@ -590,11 +704,9 @@ public class DiagnosisAndRepairController implements Initializable {
             state.setString(1, findVehID(obj.getVehicleReg()));
             state.setString(2, findCustID(obj.getCustName()));
             state.setString(3, findMechID(obj.getMechanicName()));
-              
             state.setString(4, obj.getDate());
-           
-             state.setInt(5, obj.getDuration());
-             state.setString(6, selectedParts.getText());
+            state.setInt(5, obj.getDuration());
+            state.setString(6, obj.getPartsRequired());
              
              String getMileage =  "Select Mileage from vehicleList where vehicleID='"+ findVehID(obj.getVehicleReg()) +"'";
              ResultSet rs = conn.createStatement().executeQuery(getMileage);
@@ -657,7 +769,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         
     }
-    catch(Exception e){
+    catch(SQLException e){
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
@@ -665,13 +777,13 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private void fillStartTimeCombo()
     {
-        startTimeLs = FXCollections.observableArrayList("09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30");
+        startTimeLs = FXCollections.observableArrayList("09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45");
         startTime.setItems(startTimeLs);
     }
     
     private void fillEndTimeCombo()
     {
-        endTimeLs = FXCollections.observableArrayList("09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00");
+        endTimeLs = FXCollections.observableArrayList("09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00");
         endTime.setItems(endTimeLs);
     }
     
