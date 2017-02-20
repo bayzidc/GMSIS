@@ -208,7 +208,16 @@ public class GuiController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
-
+    
+        @FXML
+    private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {      
+        Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
+        Scene parts_Scene = new Scene(bills);
+        Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        billstage.setScene(parts_Scene);
+        billstage.show();
+    }
+    
     private boolean isDeleted(customerAccount acc) throws ClassNotFoundException {
         boolean customerDeleted = false;
 
@@ -299,7 +308,6 @@ public class GuiController implements Initializable {
             conn.close();
         } catch (Exception e) {
             alertError();
-            System.out.println("Here 7.");
         }
 
         customerID.setCellValueFactory(

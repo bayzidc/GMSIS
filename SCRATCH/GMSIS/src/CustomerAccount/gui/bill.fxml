@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.BillController">
+   <children>
+      <AnchorPane layoutX="-126.0" layoutY="-44.0" prefHeight="589.0" prefWidth="660.0">
+         <children>
+            <TableView fx:id="table" layoutX="180.0" layoutY="150.0" prefHeight="392.0" prefWidth="480.0">
+              <columns>
+                <TableColumn fx:id="bookingID" prefWidth="240.0" text="bookingID" />
+                <TableColumn fx:id="cost" prefWidth="239.0" text="cost" />
+              </columns>
+            </TableView>
+            <Button fx:id="backButtton" layoutX="205.0" layoutY="85.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
