@@ -137,23 +137,9 @@ public class AddVehicleController implements Initializable {
     {
         if(checkTextFields())
         {
-            vec.setRegNumber(regNumber.getText());
-            vec.setColour(colour.getText());
-            vec.setEngSize(Double.parseDouble(engSize.getText()));
-            vec.setFuelType(fuelType.getValue().toString());
-            vec.setLastService(lastService.getEditor().getText());
-            vec.setMake(make.getText());
-            vec.setMileage(Integer.parseInt(mileage.getText()));
-            vec.setModel(model.getText());
-            vec.setMotRenewal(motRenDate.getEditor().getText());
-            vec.setVehicleType(vehicleChoice.getValue().toString());
-            vec.setWarNameAndAdd(nameAndAdd.getText());
-            vec.setWarranty(yesWarranty.getText());
-            vec.setWarranty(noWarranty.getText());
-            vec.setWarrantyExpDate(warExpiry.getEditor().getText());
-            
-        createData(vec);
+        createData();
         alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + getCustomerName());
+        buildData();
         regNumber.clear();
         make.clear();
         model.clear();
@@ -243,7 +229,7 @@ public class AddVehicleController implements Initializable {
     fillCustomerNames();
     }
     
-    public void createData(Vehicle vec) throws ClassNotFoundException
+    public void createData() throws ClassNotFoundException
     {
         
         Connection conn = null;
