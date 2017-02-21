@@ -140,7 +140,8 @@ public class GuiController implements Initializable {
                             acc.setCustomerEmail(emailText.getText());
                             acc.setCustomerType(whichType);
                             getCustomerDetails(acc);
-
+                            
+                            
                             state.close();
                             conn.close();
                         }

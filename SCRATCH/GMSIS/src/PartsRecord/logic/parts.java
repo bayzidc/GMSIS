@@ -56,7 +56,7 @@ public class parts {
     public double getCost() {
         return cost.get();
     }
-    public String getArrivedDate(String date){
+    public String getArrivedDate(){
         return arrivedDate.get();
     }
 

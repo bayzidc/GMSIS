@@ -37,6 +37,8 @@ import javafx.stage.Stage;
 public class BillController implements Initializable {
 
     @FXML
+    private Button testButton;
+    @FXML
     private Button backButtton;
     @FXML
     private TableView<bill> table;
@@ -46,7 +48,8 @@ public class BillController implements Initializable {
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    private customerAccount account = new customerAccount(0, "", "", "", 0, "", "");
+    public static bill showBill = new bill(1, 20);
+
     /**
      * Initializes the controller class.
      */
@@ -55,7 +58,11 @@ public class BillController implements Initializable {
         buildData();
     }
     
-    
+    @FXML
+    public void testButton(){
+        System.out.println("Testing this");
+        showBill.getPriceFromPart(PartsRecord.gui.PartStockController.showPart);
+    }
     
     @FXML
     public void backButton(ActionEvent event) throws IOException {

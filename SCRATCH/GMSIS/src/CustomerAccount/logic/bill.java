@@ -40,7 +40,7 @@ public class bill {
         return bookingID;
     }
 
-    public void getPriceFromPart(PartsRecord.logic.partsUsed part) {
+    public void getPriceFromPart(PartsRecord.logic.parts part) {
         totalCost.add(part.getCost());
     }
 
