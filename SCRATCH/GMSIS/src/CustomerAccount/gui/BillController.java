@@ -71,13 +71,12 @@ public class BillController implements Initializable {
         data = FXCollections.observableArrayList();
         Connection conn = null;
         try {
-            int joe = GuiController.acc.getCustomerID();
-            System.out.println(GuiController.acc.getCustomerID());
+            int getID = GuiController.acc.getCustomerID();
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
 
-            String SQL = "Select * from bill WHERE customerID = " + joe;
+            String SQL = "Select * from bill WHERE customerID = " + getID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
                 data.add(new bill(rs.getInt(3), rs.getInt(4)));

@@ -18,7 +18,7 @@ import javafx.beans.property.DoubleProperty;
  */
 public class parts {
     
-    public IntegerProperty partId;
+    public IntegerProperty partIDentify;
     public StringProperty partName;
     public StringProperty partDescription;
     public IntegerProperty partStockLevel;
@@ -27,7 +27,7 @@ public class parts {
    
     public parts(int partId, String partName, String partDescription,int partStockLevel, double cost, String arrivedDate) {
         
-        this.partId = new SimpleIntegerProperty(partId);
+        this.partIDentify = new SimpleIntegerProperty(partId);
         this.partName = new SimpleStringProperty(partName);
         this.partDescription = new SimpleStringProperty(partDescription);
         this.partStockLevel= new SimpleIntegerProperty(partStockLevel);
@@ -38,8 +38,8 @@ public class parts {
 
     }
 
-    public int getPartID() {
-        return partId.get();
+    public int getPartIDentify() {
+        return partIDentify.get();
     }
     public String getPartName() {
         return partName.get();
@@ -63,7 +63,7 @@ public class parts {
     
 
     public void setPartId(int number) {
-        partId.set(number);
+        partIDentify.set(number);
     }
     
     public void setPartName(String name) {
@@ -89,7 +89,7 @@ public class parts {
 
     //Property values
     public IntegerProperty partIDProperty() {
-        return partId;
+        return partIDentify;
     }
     
     public StringProperty partNameProperty() {

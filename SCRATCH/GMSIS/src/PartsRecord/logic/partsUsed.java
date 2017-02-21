@@ -17,28 +17,31 @@ import javafx.beans.property.StringProperty;
  * @author Fabiha
  */
 public class partsUsed {
+
     public IntegerProperty partId;
     public DoubleProperty cost;
     public StringProperty installDate;
     public StringProperty warrantyExpireDate;
     public StringProperty vehicleRegNo;
-    public StringProperty customerFullName ;
-   
-    public partsUsed(int partId, double cost,String installDate, String warrantyExpireDate,String vehicleRegNo, String customerFullName) {
+    public StringProperty customerFullName;
+
+    public partsUsed(int partId, double cost, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
         this.partId = new SimpleIntegerProperty(partId);
         this.cost = new SimpleDoubleProperty(cost);
         this.installDate = new SimpleStringProperty(installDate);
         this.warrantyExpireDate = new SimpleStringProperty(warrantyExpireDate);
-        this.vehicleRegNo= new SimpleStringProperty(vehicleRegNo);
+        this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
     }
 
     public int getPartID() {
         return partId.get();
     }
+
     public double getCost() {
         return cost.get();
     }
+
     public String getInstallDate() {
         return installDate.get();
     }
@@ -50,19 +53,19 @@ public class partsUsed {
     public String getVehicleRegNo() {
         return vehicleRegNo.get();
     }
-    
+
     public String getCustomerFullName() {
         return customerFullName.get();
     }
-    
+
     public void setPartId(int number) {
         partId.set(number);
     }
-    
+
     public void setCost(Double number) {
         cost.set(number);
     }
-    
+
     public void setInstallDate(String date) {
         installDate.set(date);
     }
@@ -70,24 +73,24 @@ public class partsUsed {
     public void setWarrantyExpireDate(String date) {
         warrantyExpireDate.set(date);
     }
-    
+
     public void setVehicleRegNo(String number) {
         vehicleRegNo.set(number);
     }
-    
+
     public void setcustomerFullName(String name) {
         customerFullName.set(name);
     }
-    
+
     //Property values
     public IntegerProperty partIDProperty() {
         return partId;
     }
-    
+
     public DoubleProperty costProperty() {
         return cost;
     }
-    
+
     public StringProperty installDateProperty() {
         return installDate;
     }
@@ -95,15 +98,13 @@ public class partsUsed {
     public StringProperty expireDateProperty() {
         return warrantyExpireDate;
     }
-    
-    public StringProperty vehRegNoProperty() {
-        return vehicleRegNo ;
-    }
-    
-    public StringProperty customerNameProperty() {
-        return customerFullName ;
-    }    
-    
-}
-    
 
+    public StringProperty vehRegNoProperty() {
+        return vehicleRegNo;
+    }
+
+    public StringProperty customerNameProperty() {
+        return customerFullName;
+    }
+
+}

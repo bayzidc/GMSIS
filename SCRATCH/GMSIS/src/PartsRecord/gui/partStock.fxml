@@ -26,13 +26,14 @@
       <TextField fx:id="stockLevels" layoutX="151.0" layoutY="176.0" />
       <TextField fx:id="cost" layoutX="151.0" layoutY="209.0" />
       <Label layoutX="19.0" layoutY="79.0" text="Parts ID:" />
-      <TableView fx:id="table" layoutX="475.0" layoutY="70.0" prefHeight="197.0" prefWidth="461.0">
+      <TableView fx:id="table" layoutX="417.0" layoutY="70.0" prefHeight="197.0" prefWidth="549.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="75.0" text="Parts ID" />
           <TableColumn fx:id="nameCol" prefWidth="107.0" text="Name Of Parts" />
             <TableColumn fx:id="descriptionCol" prefWidth="103.0" text="Description" />
             <TableColumn fx:id="stockLevelsCol" prefWidth="97.0" text="Stock Level" />
-            <TableColumn fx:id="costCol" prefWidth="75.0" text="Cost" />
+            <TableColumn fx:id="costCol" prefWidth="78.0" text="Cost" />
+            <TableColumn fx:id="arrivedStockDateCol" prefWidth="88.0" text="Date of arrival" />
         </columns>
       </TableView>
       <Button fx:id="back" layoutX="43.0" layoutY="644.0" mnemonicParsing="false" onAction="#backButton" text="Back" />

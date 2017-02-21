@@ -5,7 +5,9 @@
  */
 package CustomerAccount.logic;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -14,15 +16,15 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class bill {
 
-    public IntegerProperty totalCost;
+    public DoubleProperty totalCost;
     public IntegerProperty bookingID;
-    
+
     public bill(int ID, int costOfBill) {
-        this.totalCost = new SimpleIntegerProperty(costOfBill);
+        this.totalCost = new SimpleDoubleProperty(costOfBill);
         this.bookingID = new SimpleIntegerProperty(ID);
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return totalCost.get();
     }
 
@@ -30,12 +32,16 @@ public class bill {
         return bookingID.get();
     }
 
-    public IntegerProperty totalCost() {
+    public DoubleProperty totalCost() {
         return totalCost;
     }
 
     public IntegerProperty bookingID() {
         return bookingID;
     }
-   
+
+    public void getPriceFromPart(PartsRecord.logic.partsUsed part) {
+        totalCost.add(part.getCost());
+    }
+
 }

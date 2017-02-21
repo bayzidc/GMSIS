@@ -35,26 +35,26 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-
 /**
  * FXML Controller class
  *
  * @author Fabiha
  */
 public class PartStockController implements Initializable {
+
     @FXML
     private TextField idNumber;
     @FXML
     private TextField name;
     @FXML
-    private TextField description ;
+    private TextField description;
     @FXML
     private TextField stockLevels;
     @FXML
     private TextField cost;
     @FXML
     private TextField arrivedStockDate;
-    
+
     @FXML
     private TableView<parts> table;
     @FXML
@@ -64,7 +64,7 @@ public class PartStockController implements Initializable {
     @FXML
     private TableColumn<parts, String> descriptionCol;
     @FXML
-    private TableColumn<parts, Integer> stockLevelsCol ;
+    private TableColumn<parts, Integer> stockLevelsCol;
     @FXML
     private TableColumn<parts, Double> costCol;
     @FXML
@@ -81,29 +81,24 @@ public class PartStockController implements Initializable {
     private Button delete;
     ObservableList<parts> data;
     public int partID;
-    
-    
+
     @FXML
     private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
         Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage2.hide();           
+        stage2.hide();
         stage2.setScene(admin_Scene);
         stage2.show();
-        
+
     }
-    
-    public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
-    {
+
+    public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
         clearFields();
-      
+
     }
-      
-    
-    
-    
+
     @FXML
     public void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
         createData(); // Add the data collected from the fields to the database.
@@ -111,30 +106,28 @@ public class PartStockController implements Initializable {
         buildPartsStockData();  // Add the data from the database to the tableview.
         // Clear all the input fields.
         clearFields();
-        
+
     }
-    
+
     @FXML
     public void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-            if (idNumber.getText().equals("") || name.getText().equals("")||description.getText().equals("") || stockLevels.getText().equals("")|| cost.getText().equals("")) 
-            {
-                
+            if (idNumber.getText().equals("") || name.getText().equals("") || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
+
                 alertError("Please complete all the fields.");
-               
-            } 
-            else {
-                editData(); 
+
+            } else {
+                editData();
                 buildPartsStockData();
                 alertInformation("The database has been updated.");
-                
+
             }
         } catch (Exception e) {
-            
+
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
     }
-    
+
     @FXML
     public void editData() throws ClassNotFoundException {
         Connection conn = null;
@@ -149,12 +142,12 @@ public class PartStockController implements Initializable {
             String sql = "UPDATE vehiclePartsStock SET nameofPart=?,d=?,description=?,stockLevelsOfParts=?,cost=? WHERE parts_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
             // Binding the parameters.
-            state.setString(1,name.getText());
+            state.setString(1, name.getText());
             state.setString(2, description.getText());
             state.setInt(3, Integer.parseInt(stockLevels.getText()));
             state.setDouble(4, Double.parseDouble(cost.getText()));
             state.setInt(5, Integer.parseInt(idNumber.getText()));
-          
+
             state.execute();
 
             state.close();
@@ -165,11 +158,11 @@ public class PartStockController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-     }
-    
+    }
+
     @FXML
-    public void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {  
-        try { 
+    public void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
+        try {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
             alert.setHeaderText("");
@@ -181,29 +174,28 @@ public class PartStockController implements Initializable {
 
             Optional<ButtonType> result = alert.showAndWait();
 
-            int idSelected = table.getSelectionModel().getSelectedItem().getPartID();
+            int idSelected = table.getSelectionModel().getSelectedItem().getPartIDentify();
 
-            if (result.get() == buttonTypeYes && isPartsDeleted()){
-                
+            if (result.get() == buttonTypeYes && isPartsDeleted()) {
+
                 alertInformation("PartsID: " + idSelected + "has been deleted.");
-               
+
             }
-            if(idSelected == 0) {
-                
+            if (idSelected == 0) {
+
                 alertError("The Part does not exists.");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-         
+
         }
 
     }
-    
+
     private boolean isPartsDeleted() throws ClassNotFoundException {
         boolean partsDeleted = false;
 
-        int ID = table.getSelectionModel().getSelectedItem().getPartID();
+        int ID = table.getSelectionModel().getSelectedItem().getPartIDentify();
 
         Connection conn = null;
 
@@ -226,11 +218,9 @@ public class PartStockController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-          return partsDeleted;
+        return partsDeleted;
     }
-    
-    
-    
+
     // Filling data to the tableView From the database.
     public void buildPartsStockData() {
         data = FXCollections.observableArrayList();
@@ -248,24 +238,20 @@ public class PartStockController implements Initializable {
                 // get data from db and add to the Observable list
                 // Calling the constructor
                 // show getDouble()problem
-                
+
                 data.add(new parts(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
             }
-            
+
             table.setItems(data);
             rs.close();
             conn.close();
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data 2");
         }
-        
-        
-        
-        
+
     }
-    
+
     public void createData() throws ClassNotFoundException {
 
         Connection conn = null;
@@ -278,20 +264,18 @@ public class PartStockController implements Initializable {
 
             String sql = "insert into vehiclePartsStock(parts_id,nameofPart,description,stockLevelsOfParts,cost,arrivedStockDate) values(?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
-            if (idNumber.getText().equals("") || name.getText().equals("")||description.getText().equals("") || stockLevels.getText().equals("")|| cost.getText().equals("")) 
-            {
-                
+            if (idNumber.getText().equals("") || name.getText().equals("") || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
+
                 alertError("Please complete all the fields.");
-               
-            } 
-            else {
+
+            } else {
                 state.setString(1, idNumber.getText());
                 state.setString(2, name.getText());
                 state.setString(3, description.getText());
                 state.setString(4, stockLevels.getText());
                 state.setString(5, cost.getText());
-                state.setString(6,arrivedStockDate.getText());
-               
+                state.setString(6, arrivedStockDate.getText());
+
                 state.execute();
 
                 state.close();
@@ -305,18 +289,18 @@ public class PartStockController implements Initializable {
         //return submit;       
 
     }
-    
+
     public void clearFields() {
         idNumber.clear();
         name.clear();
         description.clear();
         stockLevels.clear();
         cost.clear();
-        
+
     }
-    
+
     public void alertInformation(String information) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION); 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(information);
@@ -324,15 +308,15 @@ public class PartStockController implements Initializable {
     }
 
     public void alertError(String error) {
-        Alert alert = new Alert(Alert.AlertType.ERROR); 
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(error);
         alert.showAndWait();
     }
-    
+
     public void alertConfirmation(String confirmation) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation.");
         alert.setHeaderText(null);
         alert.setContentText(confirmation);
@@ -346,10 +330,9 @@ public class PartStockController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // Set cell value factory to tableview
         // Example : Use the partsId property of our object 'parts' and get all the values of their partsId
-        
-        
+
         idCol.setCellValueFactory(
-                new PropertyValueFactory<>("partId"));
+                new PropertyValueFactory<>("partIDentify"));
         nameCol.setCellValueFactory(
                 new PropertyValueFactory<>("partName"));
         descriptionCol.setCellValueFactory(
@@ -358,7 +341,9 @@ public class PartStockController implements Initializable {
                 new PropertyValueFactory<>("partStockLevel"));
         costCol.setCellValueFactory(
                 new PropertyValueFactory<>("cost"));
-    try {
+        arrivedStockDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("arrivedDate"));
+        try {
             buildPartsStockData();
             // selectedItemProperty = gives you the item the user selected form the table.
             // add listner to your tableview selectedItemProperty
@@ -368,9 +353,9 @@ public class PartStockController implements Initializable {
                 @Override //This method will be called whenever user selected row
                 public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
                     try {   //Returns the currently selected item. Check whether item is selected.
-                        if (table.getSelectionModel().getSelectedItem() != null) { 
+                        if (table.getSelectionModel().getSelectedItem() != null) {
                             Connection conn = null;
-                            partID = table.getSelectionModel().getSelectedItem().getPartID(); // Get the partId of the row selected.
+                            partID = table.getSelectionModel().getSelectedItem().getPartIDentify(); // Get the partId of the row selected.
                             Class.forName("org.sqlite.JDBC");
                             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                             System.out.println("Opened Database Successfully");
@@ -386,8 +371,7 @@ public class PartStockController implements Initializable {
                                 description.setText(rs.getString("description"));
                                 stockLevels.setText(String.valueOf(rs.getInt("stockLevelsOfParts")));
                                 cost.setText(String.valueOf(rs.getDouble("cost")));
-                               
-               
+
                             }
                             state.close();
                             conn.close();
@@ -399,10 +383,8 @@ public class PartStockController implements Initializable {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            
-            
+
         }
     }
-        // TODO
-    }    
-    
+    // TODO
+}
