@@ -249,7 +249,7 @@ public class PartStockController implements Initializable {
                 // Calling the constructor
                 // show getDouble()problem
                 
-                data.add(new parts(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5)));
+                data.add(new parts(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
             }
             
             table.setItems(data);

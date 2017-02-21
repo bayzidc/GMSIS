@@ -25,13 +25,14 @@ public class parts {
     public DoubleProperty cost;
     public StringProperty arrivedDate;
    
-    public parts(int partId, String partName, String partDescription,int partStockLevel, double cost) {
+    public parts(int partId, String partName, String partDescription,int partStockLevel, double cost, String arrivedDate) {
         
         this.partId = new SimpleIntegerProperty(partId);
         this.partName = new SimpleStringProperty(partName);
         this.partDescription = new SimpleStringProperty(partDescription);
         this.partStockLevel= new SimpleIntegerProperty(partStockLevel);
         this.cost = new SimpleDoubleProperty(cost);
+        this.arrivedDate = new SimpleStringProperty(arrivedDate);
         
         
 
@@ -55,6 +56,9 @@ public class parts {
     public double getCost() {
         return cost.get();
     }
+    public String getArrivedDate(String date){
+        return arrivedDate.get();
+    }
 
     
 
@@ -73,9 +77,14 @@ public class parts {
     public void setPartStockLevel(int number) {
         partStockLevel.set(number);
     }
-    
-    public void setCost(Double number) {
+    public void setCost(double number) {
         cost.set(number);
+    }
+    
+ 
+    
+    public void setArrivedDate(String date) {
+        arrivedDate.set(date);
     }
 
     //Property values
@@ -97,5 +106,9 @@ public class parts {
     
     public DoubleProperty costProperty() {
         return cost;
+    }
+    
+    public StringProperty arrivedDateProperty(){
+        return arrivedDate;
     }
  }
