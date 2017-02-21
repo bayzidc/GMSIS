@@ -8,39 +8,37 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
+<AnchorPane id="AnchorPane" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
    <children>
-      <Label layoutX="14.0" layoutY="90.0" text="Part ID:" />
-      <Label layoutX="14.0" layoutY="124.0" text="Date Of Install:" />
-      <Label layoutX="14.0" layoutY="160.0" text="Warranty Expiry Date: " />
-      <Label layoutX="16.0" layoutY="29.0" text="Records Of Parts Used">
+      <Label layoutX="11.0" layoutY="90.0" text="Part ID:" />
+      <Label layoutX="12.0" layoutY="168.0" text="Date Of Install:" />
+      <Label layoutX="14.0" layoutY="208.0" text="Warranty Expiry Date: " />
+      <Label layoutX="12.0" layoutY="29.0" text="Records Of Parts Used">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="idNumber" layoutX="152.0" layoutY="85.0" prefHeight="27.0" prefWidth="167.0" />
-      <TextField fx:id="dateOfInstall" layoutX="152.0" layoutY="119.0" prefHeight="27.0" prefWidth="167.0" />
-      <TextField fx:id="dateOfWarrantyExpire" layoutX="152.0" layoutY="155.0" prefHeight="27.0" prefWidth="167.0" />
+      <TextField fx:id="idNumber" layoutX="194.0" layoutY="85.0" prefHeight="27.0" prefWidth="167.0" />
+      <TextField fx:id="cost" layoutX="194.0" layoutY="119.0" prefHeight="27.0" prefWidth="167.0" />
+      <TextField fx:id="dateOfInstall" layoutX="194.0" layoutY="163.0" prefHeight="27.0" prefWidth="167.0" />
       <Button fx:id="back" layoutX="34.0" layoutY="744.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <TableView fx:id="table" layoutX="14.0" layoutY="400.0" prefHeight="203.0" prefWidth="828.0">
+      <TableView fx:id="table" layoutX="14.0" layoutY="378.0" prefHeight="192.0" prefWidth="789.0">
         <columns>
-          <TableColumn fx:id="partsID" prefWidth="56.0" text="Parts ID" />
-          <TableColumn fx:id="installDate" prefWidth="98.0" text="Date Of Install" />
-            <TableColumn fx:id="WarrantyExpireDate" prefWidth="150.0" text="Warranty Expiry Date" />
+          <TableColumn fx:id="idCol" prefWidth="56.0" text="Parts ID" />
+          <TableColumn fx:id="costCol" prefWidth="98.0" text="Cost" />
+            <TableColumn fx:id="installDateCol" prefWidth="150.0" text="DateOfInstall" />
             <TableColumn minWidth="0.0" prefWidth="0.0" text="Column X" />
-            <TableColumn fx:id="customerId" prefWidth="107.0" text="Customer_ID" />
-            <TableColumn fx:id="vehicleId" prefWidth="126.0" text="Vehicle_ID" />
-            <TableColumn fx:id="bookingId" prefWidth="140.0" text="Booking_ID" />
-            <TableColumn fx:id="billingId" prefWidth="150.0" text="Bill_ID" />
+            <TableColumn fx:id="expireDateCol" prefWidth="148.0" text="DateOfWarrantyExpire" />
+            <TableColumn fx:id="registrationNoCol" prefWidth="197.0" text="VehicleRegistrationNumber" />
+            <TableColumn fx:id="customerNameCol" prefWidth="139.0" text="CustomerFullName" />
         </columns>
       </TableView>
-      <Label layoutX="12.0" layoutY="190.0" text="Customer_ID:" />
-      <Label layoutX="12.0" layoutY="227.0" text="Vehicle_ID:" />
-      <Label layoutX="10.0" layoutY="264.0" prefHeight="17.0" prefWidth="73.0" text="Booking_ID:" />
-      <Label layoutX="18.0" layoutY="296.0" text="Bill_ID" />
-      <TextField fx:id="customer_id" layoutX="152.0" layoutY="185.0" />
-      <TextField fx:id="vehicle_id" layoutX="152.0" layoutY="222.0" />
-      <TextField fx:id="booking_id" layoutX="152.0" layoutY="259.0" />
-      <TextField fx:id="bill_id" layoutX="152.0" layoutY="291.0" />
+      <TextField fx:id="dateOfWarrantyExpire" layoutX="194.0" layoutY="203.0" />
+      <Label layoutX="11.0" layoutY="124.0" text="Cost:" />
+      <Label layoutX="12.0" layoutY="250.0" text="Vehicle Registration Number:" />
+      <TextField fx:id="vehicleRegistrationNumber" layoutX="194.0" layoutY="245.0" />
+      <TextField fx:id="customerFullName" layoutX="194.0" layoutY="295.0" />
+      <Label layoutX="11.0" layoutY="300.0" text="Customer Full Name:" />
+      <Label layoutX="27.0" layoutY="342.0" text="Label" />
    </children>
 </AnchorPane>

@@ -6,9 +6,11 @@
 package PartsRecord.gui;
 
 import PartsRecord.logic.parts;
+import PartsRecord.logic.partsUsed;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.collections.FXCollections;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javafx.scene.control.Alert;
+import javafx.scene.control.cell.PropertyValueFactory;
+import java.sql.SQLException;
+import java.util.Optional;
+import javafx.scene.control.ButtonType;
+
 
 /**
  * FXML Controller class
@@ -32,48 +45,38 @@ public class PartsController implements Initializable {
     @FXML
     private TextField idNumber;
     @FXML
+    private TextField cost;
+    @FXML
     private TextField dateOfInstall;
     @FXML
     private TextField dateOfWarrantyExpire ;
     @FXML
-    private TextField customer_id;
+    private TextField vehicleRegistrationNumber;
     @FXML
-    private TextField vehicle_id;
-    @FXML
-    private TextField booking_id ;
-    @FXML
-    private TextField bill_id;
-    @FXML
-    private Button back;
-    @FXML
-    private TableView<parts> table;
-    @FXML
-    private TableColumn<parts, Integer> partsID;
-    @FXML
-    private TableColumn<parts, String> installDate;
-    @FXML
-    private TableColumn<parts, String> WarrantyExpireDate;
-    @FXML
-    private TableColumn<parts, Integer> vehicleId;
-    @FXML
-    private TableColumn<parts, Integer> customerId;
-    @FXML
-    private TableColumn<parts, Integer> billingId;
-    @FXML
-    private TableColumn<parts, Integer> bookingId;
-    
-   
-    
-    
-    
-    
-    
+    private TextField customerFullName;
     
 
     
     @FXML
-    private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
-    {
+    private TableView<partsUsed> table;
+    @FXML
+    private TableColumn<partsUsed, Integer> idCol;
+    @FXML
+    private TableColumn<partsUsed, Double> costCol; 
+    @FXML
+    private TableColumn<partsUsed, String> installDateCol;
+    @FXML
+    private TableColumn<partsUsed, String> expireDateCol;
+    @FXML
+    private TableColumn<partsUsed, String> registrationNoCol;
+    @FXML
+    private TableColumn<partsUsed, String> customerNameCol;
+    @FXML // Observable list to hold parts object.
+    ObservableList<partsUsed> data;
+    
+   @FXML
+    public void backButton(ActionEvent event) throws IOException, ClassNotFoundException // method which goes back to admin page
+    {   // When pressed the back button load the Admin.fxml file
         Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -82,6 +85,25 @@ public class PartsController implements Initializable {
         stage2.show();
         
     }
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
