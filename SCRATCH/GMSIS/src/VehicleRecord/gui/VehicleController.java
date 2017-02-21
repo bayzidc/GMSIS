@@ -123,6 +123,7 @@ public class VehicleController implements Initializable {
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
 
+  
 
     
     /**
@@ -213,7 +214,8 @@ public class VehicleController implements Initializable {
         int id = table.getSelectionModel().getSelectedItem().getVecID();
         if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec() && deleteBookingDate()) {
             JOptionPane.showMessageDialog(null, "VehicleID: " + id + " has been deleted.");
-            buildCustomerData();
+            buildCustomerName();
+            buildBookingdate();
             buildPartsData();
             buildData();
         }
@@ -283,8 +285,9 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
 
         try {
-
-            buildCustomerData();
+            
+            buildCustomerName();
+            buildBookingdate();
             buildData();
             
  
@@ -296,13 +299,14 @@ public class VehicleController implements Initializable {
 
     public void buildPartsData() throws ClassNotFoundException, SQLException
     {
+        int id = table.getSelectionModel().getSelectedItem().getVecID();
         partsData = FXCollections.observableArrayList();
         Connection conn = null;
         try
         {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehicleList where vehiclePartsStock.parts_id = vehicleList.vehicleID";
+            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehicleList where vehiclePartsStock.parts_id = vehicleList.partsid AND vehicleList.vehicleID = '" + id + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -323,15 +327,13 @@ public class VehicleController implements Initializable {
     public void buildCustomerData() throws ClassNotFoundException, SQLException {
         custData = FXCollections.observableArrayList();
         Connection conn = null;
-        Connection conn2 = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            conn2 = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
             //String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.b";
-            String SQL = "Select customer_fullname, scheduled_date from customer, booking, vehicleList where customer.customer_id = vehicleList.vehicleID";
+            String SQL = "Select customer_fullname, scheduled_date from customer, booking, vehicleList where customer.customer_id = vehicleList.customerid AND booking.booking_id = vehicleList.bookingid";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             System.out.println("Success");
@@ -356,6 +358,74 @@ public class VehicleController implements Initializable {
         }
     }
     
+    public void buildCustomerName() throws ClassNotFoundException, SQLException
+    {
+        custData = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select customer_fullname from customer,vehicleList where customer.customer_id = vehicleList.customerid";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+  
+            System.out.println("Success");
+            while (rs.next()) {
+                CustBookingInfo cust = new CustBookingInfo("","");
+                cust.fullName.set(rs.getString("customer_fullname"));
+                custData.add(cust);
+                if(rs.getString("customer_fullname").equals(""))
+               {
+                   alertInf("There are no customers in our system at the moment. Please go to the customer account section");
+               } 
+
+            }
+            
+            
+            custTable.setItems(custData);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError("Could not find customer name and booking date.");
+        }
+    }
+    
+    
+    public void buildBookingdate() throws ClassNotFoundException, SQLException
+    {
+        custData = FXCollections.observableArrayList();
+        Connection conn = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            //String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.b";
+            String SQL = "Select scheduled_date from booking, vehicleList where booking.booking_id = vehicleList.bookingid";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+  
+            System.out.println("Success");
+            while (rs.next()) {
+                CustBookingInfo cust = new CustBookingInfo("","");
+                cust.bookingDate.set(rs.getString("scheduled_date"));
+                custData.add(cust);
+                if(rs.getString("scheduled_date").equals(""))
+               {
+                   alertInf("There are no bookings made for any customers yet. Please do to the repair booking section.");
+               } 
+
+            }
+            
+            
+            custTable.setItems(custData);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError("Could not find customer name and booking date.");
+        }
+    
+    }
 
 
     public void buildData() throws ClassNotFoundException, SQLException {
@@ -366,7 +436,7 @@ public class VehicleController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";
+            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
                 Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
