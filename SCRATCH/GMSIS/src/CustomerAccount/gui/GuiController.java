@@ -140,10 +140,7 @@ public class GuiController implements Initializable {
                                     whichType = "Private";
                                 }
                             }
-                            ResultSet rs2 = state.executeQuery("SELECT * FROM vehicleList WHERE customerid= " + ID);
-                            while (rs2.next()) {
-                                acc.setCustomerVehReg(rs.getString("RegNumber"));
-                            }
+                            acc.setCustomerVehRegFromTable(table.getSelectionModel().getSelectedItem().getCustomerVehReg());
                             acc.setCustomerID(ID);
                             acc.setCustomerFullName(fullNameText.getText());
                             acc.setCustomerAddress(addressText.getText());
@@ -358,6 +355,7 @@ public class GuiController implements Initializable {
                 ResultSet rs2 = state.executeQuery("SELECT * FROM vehicleList WHERE customerid= " + acc.getCustomerID());
                 while (rs2.next()) {
                     acc.setCustomerVehReg(rs2.getString("RegNumber"));
+                    System.out.println("This is what will be passed to constructer: " + acc.getCustomerVehReg());
                 }
                 data.add(new customerAccount(acc.getCustomerID(), acc.getCustomerFullName(), acc.getCustomerAddress(), acc.getCustomerPostCode(), acc.getCustomerPhone(), acc.getCustomerEmail(), acc.getCustomerType(), acc.getCustomerVehReg()));
             }

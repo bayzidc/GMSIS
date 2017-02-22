@@ -97,6 +97,19 @@ public class customerAccount {
     }
 
     public void setCustomerVehReg(String reg) {
+        if (reg.equals("")) {
+            customerVehReg.set("");
+            return;
+        }
+        if (customerVehReg.get().isEmpty()) {
+            customerVehReg.set(reg);
+            return;
+        }
+        String updateString = customerVehReg.get() + ", " + reg;
+        customerVehReg.set(updateString);
+    }
+
+    public void setCustomerVehRegFromTable(String reg) {
         customerVehReg.set(reg);
     }
 
