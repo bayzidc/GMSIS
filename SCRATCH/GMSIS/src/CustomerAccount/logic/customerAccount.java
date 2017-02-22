@@ -10,7 +10,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 /**
  *
  * @author Joen
@@ -23,9 +22,10 @@ public class customerAccount {
     public StringProperty customerPostCode;
     public StringProperty customerEmail;
     public StringProperty customerType;
+    public StringProperty customerVehReg;
     public IntegerProperty customerPhone;
 
-    public customerAccount(int id, String fullname, String address, String postcode,int phone, String email, String type) {
+    public customerAccount(int id, String fullname, String address, String postcode, int phone, String email, String type, String vehReg) {
         this.customerID = new SimpleIntegerProperty(id);
         this.customerFullName = new SimpleStringProperty(fullname);
         this.customerAddress = new SimpleStringProperty(address);
@@ -33,7 +33,7 @@ public class customerAccount {
         this.customerEmail = new SimpleStringProperty(email);
         this.customerType = new SimpleStringProperty(type);
         this.customerPhone = new SimpleIntegerProperty(phone);
-
+        this.customerVehReg = new SimpleStringProperty(vehReg);
     }
 
     public int getCustomerID() {
@@ -64,6 +64,10 @@ public class customerAccount {
         return customerPhone.get();
     }
 
+    public String getCustomerVehReg() {
+        return customerVehReg.get();
+    }
+
     public void setCustomerID(int number) {
         customerID.set(number);
     }
@@ -90,6 +94,10 @@ public class customerAccount {
 
     public void setCustomerPhone(int number) {
         customerPhone.set(number);
+    }
+
+    public void setCustomerVehReg(String reg) {
+        customerVehReg.set(reg);
     }
 
     //Property values
@@ -119,5 +127,9 @@ public class customerAccount {
 
     public IntegerProperty customerPhoneProperty() {
         return customerPhone;
+    }
+
+    public StringProperty customerVehReg() {
+        return customerVehReg;
     }
 }

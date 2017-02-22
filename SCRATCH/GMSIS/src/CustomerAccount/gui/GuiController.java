@@ -88,6 +88,8 @@ public class GuiController implements Initializable {
     @FXML
     private TableColumn<customerAccount, String> customerPostCode;
     @FXML
+    private TableColumn<customerAccount, String> customerVehReg;
+    @FXML
     private TableColumn<customerAccount, Integer> customerPhone;
     @FXML
     private TableColumn<customerAccount, String> customerEmail;
@@ -96,7 +98,7 @@ public class GuiController implements Initializable {
     private ObservableList<customerAccount> data;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
-    public static customerAccount acc = new customerAccount(0, "", "", "", 0, "", "");
+    public static customerAccount acc = new customerAccount(0, "", "", "", 0, "", "", "");
 
     /**
      * Initializes the controller class.
@@ -138,6 +140,10 @@ public class GuiController implements Initializable {
                                     whichType = "Private";
                                 }
                             }
+                            ResultSet rs2 = state.executeQuery("SELECT * FROM vehicleList WHERE customerid= " + ID);
+                            while (rs2.next()) {
+                                acc.setCustomerVehReg(rs.getString("RegNumber"));
+                            }
                             acc.setCustomerID(ID);
                             acc.setCustomerFullName(fullNameText.getText());
                             acc.setCustomerAddress(addressText.getText());
@@ -150,6 +156,7 @@ public class GuiController implements Initializable {
                             conn.close();
                         }
                     } catch (Exception e) {
+                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
                         System.out.println("Here 1.");
                         alertError();
                     }
@@ -173,7 +180,7 @@ public class GuiController implements Initializable {
                     String newValLow = newValue2.toLowerCase();
                     if (customerAccount.getCustomerFullName().toLowerCase().contains(newValLow)) {
                         return true;
-                    } else if (customerAccount.getCustomerEmail().toLowerCase().contains(newValLow)) {
+                    } else if (customerAccount.getCustomerVehReg().toLowerCase().contains(newValLow)) {
                         return true;
                     }
 
@@ -338,12 +345,27 @@ public class GuiController implements Initializable {
             String SQL = "Select * from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new customerAccount(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getString(6), rs.getString(7)));
+                acc.setCustomerVehReg("");
+                acc.setCustomerID(rs.getInt(1));
+                acc.setCustomerFullName(rs.getString(2));
+                acc.setCustomerAddress(rs.getString(3));
+                acc.setCustomerPostCode(rs.getString(4));
+                acc.setCustomerPhone(rs.getInt(5));
+                acc.setCustomerEmail(rs.getString(6));
+                acc.setCustomerType(rs.getString(7));
+                java.sql.Statement state = null;
+                state = conn.createStatement();
+                ResultSet rs2 = state.executeQuery("SELECT * FROM vehicleList WHERE customerid= " + acc.getCustomerID());
+                while (rs2.next()) {
+                    acc.setCustomerVehReg(rs2.getString("RegNumber"));
+                }
+                data.add(new customerAccount(acc.getCustomerID(), acc.getCustomerFullName(), acc.getCustomerAddress(), acc.getCustomerPostCode(), acc.getCustomerPhone(), acc.getCustomerEmail(), acc.getCustomerType(), acc.getCustomerVehReg()));
             }
             table.setItems(data);
             rs.close();
             conn.close();
         } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             alertError();
         }
 
@@ -361,6 +383,8 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerEmail"));
         customerType.setCellValueFactory(
                 new PropertyValueFactory<>("customerType"));
+        customerVehReg.setCellValueFactory(
+                new PropertyValueFactory<>("customerVehReg"));
     }
 
     public void createData(customerAccount acc) throws ClassNotFoundException {
@@ -444,6 +468,7 @@ public class GuiController implements Initializable {
         System.out.println(acc.getCustomerEmail());
         System.out.println(acc.getCustomerPhone());
         System.out.println(acc.getCustomerType());
+        System.out.println(acc.getCustomerVehReg());
     }
 
 }
