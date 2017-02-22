@@ -41,7 +41,7 @@ public class bill {
     }
 
     public void getPriceFromPart(PartsRecord.logic.parts part) {
-        totalCost.add(part.getCost());
+        totalCost.set(totalCost.get() + part.cost.get());
     }
 
 }

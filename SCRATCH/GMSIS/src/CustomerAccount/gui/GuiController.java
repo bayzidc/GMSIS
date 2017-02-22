@@ -27,7 +27,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
+import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
+import java.util.function.Predicate;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -67,6 +71,8 @@ public class GuiController implements Initializable {
     private TextField postCodeText;
     @FXML
     private TextField phoneText;
+    @FXML
+    private TextField searchCustomer;
     @FXML
     private TextField emailText;
     @FXML
@@ -140,8 +146,6 @@ public class GuiController implements Initializable {
                             acc.setCustomerEmail(emailText.getText());
                             acc.setCustomerType(whichType);
                             getCustomerDetails(acc);
-                            
-                            
                             state.close();
                             conn.close();
                         }
@@ -156,8 +160,32 @@ public class GuiController implements Initializable {
             alertError();
         }
     }
-    
-    
+
+    @FXML
+    private void searchCustomer() {
+        FilteredList<customerAccount> filteredData = new FilteredList<>(data, e -> true);
+        searchCustomer.setOnKeyReleased(e -> {
+            searchCustomer.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
+                filteredData.setPredicate((Predicate<? super customerAccount>) customerAccount -> {
+                    if (newValue2 == null || newValue2.isEmpty()) {
+                        return true;
+                    }
+                    String newValLow = newValue2.toLowerCase();
+                    if (customerAccount.getCustomerFullName().toLowerCase().contains(newValLow)) {
+                        return true;
+                    } else if (customerAccount.getCustomerEmail().toLowerCase().contains(newValLow)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+                SortedList<customerAccount> sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(table.comparatorProperty());
+                table.setItems(sortedData);
+            });
+        });
+    }
+
     @FXML
     private void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
         acc.setCustomerFullName(fullNameText.getText());
@@ -214,7 +242,7 @@ public class GuiController implements Initializable {
     @FXML
     private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-            
+
             Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
             Scene parts_Scene = new Scene(bills);
             Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -57,13 +57,14 @@ public class BillController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         buildData();
     }
-    
+
     @FXML
-    public void testButton(){
+    public void testButton() {
         System.out.println("Testing this");
         showBill.getPriceFromPart(PartsRecord.gui.PartStockController.showPart);
+        System.out.println("Total cost is: " + showBill.getTotalCost());
     }
-    
+
     @FXML
     public void backButton(ActionEvent event) throws IOException {
         Parent adminUser = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
