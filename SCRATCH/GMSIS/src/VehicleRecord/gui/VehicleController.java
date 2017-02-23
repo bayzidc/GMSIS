@@ -9,6 +9,7 @@ import Authentication.sqlite;
 import VehicleRecord.logic.CustBookingInfo;
 import VehicleRecord.logic.PartsInfo;
 import VehicleRecord.logic.Vehicle;
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -71,7 +72,8 @@ public class VehicleController implements Initializable {
     public ImageView searchVecImg;
     @FXML
     public TextField searchVehicle;
-
+    @FXML
+    public JFXButton backButtn;
     @FXML
     public TableView<Vehicle> table;
     @FXML
@@ -214,10 +216,10 @@ public class VehicleController implements Initializable {
         int id = table.getSelectionModel().getSelectedItem().getVecID();
         if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec() && deleteBookingDate()) {
             JOptionPane.showMessageDialog(null, "VehicleID: " + id + " has been deleted.");
+            buildData();
             buildCustomerName();
             buildBookingdate();
             buildPartsData();
-            buildData();
         }
 
     }
@@ -231,7 +233,7 @@ public class VehicleController implements Initializable {
     {
         try
         {
-            int id = table.getSelectionModel().getSelectedItem().getVecID();
+            //int id = table.getSelectionModel().getSelectedItem().getVecID();
             buildPartsData();
         }
         
@@ -285,10 +287,10 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
 
         try {
-            
+           
+            buildData();
             buildCustomerName();
             buildBookingdate();
-            buildData();
             
  
   
@@ -306,7 +308,7 @@ public class VehicleController implements Initializable {
         {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            String SQL = "Select parts_id, nameOfPart from vehiclePartsStock, vehicleList where vehiclePartsStock.parts_id = vehicleList.partsid AND vehicleList.vehicleID = '" + id + "'";
+            String SQL = "Select parts_id, nameOfPart from vehiclePartsUsed, vehiclePartsStock, vehicleList where vehiclePartsStock.parts_id = vehiclePartsUsed.partsId AND  vehiclePartsUsed.vehicleID = vehicleList.vehicleID  AND vehicleList.vehicleID = '" + id + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -374,15 +376,9 @@ public class VehicleController implements Initializable {
             while (rs.next()) {
                 CustBookingInfo cust = new CustBookingInfo("","");
                 cust.fullName.set(rs.getString("customer_fullname"));
+                cust.bookingDate.set("");
                 custData.add(cust);
-                if(rs.getString("customer_fullname").equals(""))
-               {
-                   alertInf("There are no customers in our system at the moment. Please go to the customer account section");
-               } 
-
-            }
-            
-            
+            }      
             custTable.setItems(custData);
             rs.close();
             conn.close();
@@ -408,12 +404,10 @@ public class VehicleController implements Initializable {
             System.out.println("Success");
             while (rs.next()) {
                 CustBookingInfo cust = new CustBookingInfo("","");
+                cust.fullName.set("");
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 custData.add(cust);
-                if(rs.getString("scheduled_date").equals(""))
-               {
-                   alertInf("There are no bookings made for any customers yet. Please do to the repair booking section.");
-               } 
+                
 
             }
             

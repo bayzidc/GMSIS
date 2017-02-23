@@ -38,6 +38,16 @@ public class CustBookingInfo {
    {
        bookingDate.set(bDate);
    }
+   
+   public SimpleStringProperty fullNameProperty()
+   {
+       return fullName;
+   }
+   
+   public SimpleStringProperty bookingDateProperty()
+   {
+       return bookingDate;
+   }
 }
 
 
