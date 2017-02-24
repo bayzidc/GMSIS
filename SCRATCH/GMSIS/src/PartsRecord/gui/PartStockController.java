@@ -29,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -41,20 +42,15 @@ import javafx.stage.Stage;
  * @author Fabiha
  */
 public class PartStockController implements Initializable {
-
+    
     @FXML
-    private TextField idNumber;
-    @FXML
-    private TextField name;
+    private ComboBox<String> nameCombo;
     @FXML
     private TextField description;
     @FXML
     private TextField stockLevels;
     @FXML
     private TextField cost;
-    @FXML
-    private TextField arrivedStockDate;
-
     @FXML
     private TableView<parts> table;
     @FXML
@@ -68,20 +64,17 @@ public class PartStockController implements Initializable {
     @FXML
     private TableColumn<parts, Double> costCol;
     @FXML
-    private TableColumn<parts, String> arrivedStockDateCol;
-    @FXML
     private Button back;
     @FXML
     private Button add;
-    @FXML
-    private Button edit;
     @FXML
     private Button clear;
     @FXML
     private Button delete;
     ObservableList<parts> data;
     public int partID;
-    public static parts showPart = new parts(0, "", "", 0, 0, "");
+    public int stockLevel;
+    public static parts showPart = new parts(0, "", "", 0, 0.0); // an object of type parts.
 
     @FXML
     private void backButton(ActionEvent event) throws IOException // method which goes back to admin page
@@ -94,50 +87,95 @@ public class PartStockController implements Initializable {
         stage2.show();
 
     }
+    
+    
 
-    public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        clearFields();
-
-    }
+    
 
     @FXML
     public void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        createData(); // Add the data collected from the fields to the database.
-        System.out.println("Parts added to Database");
-        buildPartsStockData();  // Add the data from the database to the tableview.
-        // Clear all the input fields.
-        clearFields();
-
-    }
-
-    @FXML
-    public void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        try {
-            if (idNumber.getText().equals("") || name.getText().equals("") || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
-
-                alertError("Please complete all the fields.");
-
-            } else {
-                showPart.setPartId(Integer.parseInt(idNumber.getText()));
-                showPart.setPartName(name.getText());
-                showPart.setPartDescription(description.getText());
-                showPart.setPartStockLevel(Integer.parseInt(stockLevels.getText()));
-                showPart.setCost(Double.parseDouble(cost.getText()));
-                showPart.setArrivedDate(arrivedStockDate.getText());
-                editData(showPart);
-                buildPartsStockData();
-                alertInformation("The database has been updated.");
-
-            }
-        } catch (Exception e) {
-
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        showPart.setPartName(nameCombo.getValue());
+        showPart.setPartDescription(description.getText());
+        showPart.setPartStockLevel(Integer.parseInt(stockLevels.getText()));
+        showPart.setCost(Double.parseDouble(cost.getText()));
+        boolean checkName = checkNameAlreadyExist(showPart.getPartName());
+        if(checkName){
+           int value =findStockLevel(showPart.getPartName());
+           updateStockLevel(showPart, value);
+           System.out.println("The stock level is updated. ");
         }
+        else {
+            createData(showPart);
+        }
+        
+        buildPartsStockData();  // Add the data from the database to the tableview.
+        clearFields(); // Clear all the input fields.
     }
-
-    @FXML
-    public void editData(PartsRecord.logic.parts part) throws ClassNotFoundException {
+    
+    
+    public boolean checkNameAlreadyExist(String name) throws ClassNotFoundException 
+    {
+        boolean check = false;
         Connection conn = null;
+        try {
+            // Create a Java Connection to the database.
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully 44 ");
+            String query = "SELECT nameofPart from vehiclePartsStock WHERE nameofPart ='" + name + "'";
+            ResultSet rs = conn.createStatement().executeQuery(query);
+        
+            if(rs.next()){
+                check= true;
+            }
+            
+            rs.close();
+            conn.close();
+        }
+        catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.out.println("Error while checking.");
+            //throw new ClassNotFoundException();
+        }
+        return check;
+    }
+    
+    private int findStockLevel(String name) throws ClassNotFoundException
+    {
+        int stockLevel = 0;
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+          
+
+            String SQL = "Select stockLevelsOfParts from vehiclePartsStock where nameofPart='"+ name +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                stockLevel = rs.getInt("stockLevelsOfParts");    
+            }
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return stockLevel;
+    }
+    
+    public void updateStockLevel(parts showPart, int value)throws ClassNotFoundException {
+        Connection conn = null;
+        
+        System.out.println("The old stocklevel is " + value + ".");
+        int stockField = showPart.getPartStockLevel();
+        System.out.println("The stock should increase by " + stockField + ".");
+        int newStockLevel = value + stockField;
+        
 
         try {
             // Create a Java Connection to the database.
@@ -146,16 +184,11 @@ public class PartStockController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "UPDATE vehiclePartsStock SET nameofPart=?,description=?,stockLevelsOfParts=?,cost=?, arrivedStockDate=? WHERE parts_id=?";
+            String sql = "UPDATE vehiclePartsStock SET stockLevelsOfParts =? WHERE nameofPart =?";
             PreparedStatement state = conn.prepareStatement(sql);
             // Binding the parameters.
-            state.setString(1, part.getPartName());
-            state.setString(2, part.getPartDescription());
-            state.setInt(3, part.getPartStockLevel());
-            state.setDouble(4, part.getCost());
-            state.setString(5, part.getArrivedDate());
-            state.setInt(6, part.getPartIDentify());
-
+            state.setInt(1, newStockLevel);
+            state.setString(2,showPart.getPartName() );
             state.execute();
 
             state.close();
@@ -167,10 +200,16 @@ public class PartStockController implements Initializable {
             System.exit(0);
         }
     }
+        
+    
 
     @FXML
     public void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
         try {
+            if ( nameCombo.getValue()==null || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
+             alertError("Select a row in order to delete a part.");
+            }
+            else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
             alert.setHeaderText("");
@@ -186,7 +225,7 @@ public class PartStockController implements Initializable {
 
             if (result.get() == buttonTypeYes && isPartsDeleted(showPart)) {
 
-                alertInformation("PartsID: " + idSelected + "has been deleted.");
+                alertInformation("PartsID: " + idSelected + " has been deleted.");
 
             }
             if (idSelected == 0) {
@@ -194,14 +233,16 @@ public class PartStockController implements Initializable {
                 alertError("The Part does not exists.");
             }
             buildPartsStockData();
+            }
         } catch (Exception e) {
             System.out.println(e);
 
         }
 
     }
+    
 
-    private boolean isPartsDeleted(PartsRecord.logic.parts part) throws ClassNotFoundException {
+    private boolean isPartsDeleted(parts showPart) throws ClassNotFoundException {
         boolean partsDeleted = false;
 
         int ID = table.getSelectionModel().getSelectedItem().getPartIDentify();
@@ -215,7 +256,7 @@ public class PartStockController implements Initializable {
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM vehiclePartsStock WHERE parts_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setInt(1, part.getPartIDentify());
+            state.setInt(1, showPart.getPartIDentify());
             state.executeUpdate();
 
             state.close();
@@ -238,17 +279,22 @@ public class PartStockController implements Initializable {
 
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
+            System.out.println("Opened Database Successfully 2");
 
             String SQL = "Select * from vehiclePartsStock";
             // Execute query and store results in a resultSet
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                // get data from db and add to the Observable list
+                //  a ResultSet object that retrieves the results of your query,
+                // and executes a simple while loop, which retrieves and displays those results.
                 // Calling the constructor
-                // show getDouble()problem
-
-                data.add(new parts(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
+                showPart.setPartId(rs.getInt(1));
+                showPart.setPartName(rs.getString(2));
+                showPart.setPartDescription(rs.getString(3));
+                showPart.setPartStockLevel(rs.getInt(4));
+                showPart.setCost(rs.getDouble(5));
+                
+                data.add(new parts(showPart.getPartIDentify(), showPart.getPartName(), showPart.getPartDescription(), showPart.getPartStockLevel(), showPart.getCost()));
             }
 
             table.setItems(data);
@@ -256,34 +302,39 @@ public class PartStockController implements Initializable {
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error on Building Data 2");
+            System.out.println("Error on Building Data.");
         }
 
     }
-
-    public void createData() throws ClassNotFoundException {
+    
+    // add data to the database from the textfield.
+    public void createData(parts part) throws ClassNotFoundException {
 
         Connection conn = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened database successfully.");
-
-            String sql = "insert into vehiclePartsStock(nameofPart,description,stockLevelsOfParts,cost,arrivedStockDate) values(?,?,?,?,?)";
+            
+            System.out.println("Opened database successfully 1.");
+            System.out.println("Creating data.");
+            //query you have to write to insert your data
+            String sql = "insert into vehiclePartsStock(nameofPart,description,stockLevelsOfParts,cost) values(?,?,?,?)";
+            //The query is sent to the database and prepared there which means the SQL statement is "analysed".
             PreparedStatement state = conn.prepareStatement(sql);
-            if (name.getText().equals("") || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
+            
+            if (nameCombo.getValue()==null || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
 
                 alertError("Please complete all the fields.");
 
             } else {
-                state.setString(1, name.getText());
-                state.setString(2, description.getText());
-                state.setString(3, stockLevels.getText());
-                state.setString(4, cost.getText());
-                state.setString(5, arrivedStockDate.getText());
-
+                // the values are sent to the server
+                // use the appropriate state.setXX() methods to set the appropriate values for the parameters that you've defined.
+                // Then call state.executeUpdate() to execute the call to the database.
+                state.setString(1, part.getPartName());
+                state.setString(2, part.getPartDescription());
+                state.setInt(3, part.getPartStockLevel());
+                state.setDouble(4, part.getCost());
                 state.execute();
 
                 state.close();
@@ -292,19 +343,23 @@ public class PartStockController implements Initializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error on Building Data 3");
+            System.out.println("Error on Creating Data");
         }
-        //return submit;       
+            
+
+    }
+    
+    public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        clearFields();
 
     }
 
     public void clearFields() {
-        idNumber.clear();
-        name.clear();
+        nameCombo.setValue(null);
         description.clear();
         stockLevels.clear();
         cost.clear();
-        arrivedStockDate.clear();
+       
     }
 
     public void alertInformation(String information) {
@@ -317,7 +372,7 @@ public class PartStockController implements Initializable {
 
     public void alertError(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Information");
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(error);
         alert.showAndWait();
@@ -330,6 +385,8 @@ public class PartStockController implements Initializable {
         alert.setContentText(confirmation);
         alert.showAndWait();
     }
+    
+    
 
     /**
      * Initializes the controller class.
@@ -349,8 +406,11 @@ public class PartStockController implements Initializable {
                 new PropertyValueFactory<>("partStockLevel"));
         costCol.setCellValueFactory(
                 new PropertyValueFactory<>("cost"));
-        arrivedStockDateCol.setCellValueFactory(
-                new PropertyValueFactory<>("arrivedDate"));
+        //arrivedStockDateCol.setCellValueFactory(
+                //new PropertyValueFactory<>("arrivedDate"));
+        ObservableList<String> partsName = FXCollections.observableArrayList("Spark Plugs", "Prop Shaft", "Handbrake Cable","Bumper","Rims","HeadLights", "Tail Lights","Radiator", "Fender", "Roof Rack");
+        nameCombo.setItems(partsName);
+        
         try {
             buildPartsStockData();
             // selectedItemProperty = gives you the item the user selected form the table.
@@ -365,28 +425,29 @@ public class PartStockController implements Initializable {
                             Connection conn = null;
                             Class.forName("org.sqlite.JDBC");
                             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-                            System.out.println("Opened Database Successfully");
+                            System.out.println("Opened Database Successfully initial");
                             partID = table.getSelectionModel().getSelectedItem().getPartIDentify();
                             java.sql.Statement state = null;
                             state = conn.createStatement();
                             // Execute query and store results in a resultSet
                             ResultSet rs = state.executeQuery("SELECT * FROM vehiclePartsStock WHERE parts_id= " + "'" + partID + "'");
                             while (rs.next()) {
-                                // get data from db and add to the tableview.
-                                idNumber.setText(String.valueOf(rs.getInt("parts_id")));
-                                name.setText(rs.getString("nameofPart"));
+                                // get data from db and show it on the textFields.
+                                //idNumber.setText(String.valueOf(rs.getInt("parts_id")));
+                                partID = rs.getInt("parts_id");
+                                nameCombo.setValue(rs.getString("nameofPart"));
                                 description.setText(rs.getString("description"));
                                 stockLevels.setText(String.valueOf(rs.getInt("stockLevelsOfParts")));
                                 cost.setText(String.valueOf(rs.getDouble("cost")));
-                                arrivedStockDate.setText(rs.getString("arrivedStockDate"));
+                                
                             }
 
-                            showPart.setPartId(Integer.parseInt(idNumber.getText()));
-                            showPart.setPartName(name.getText());
+                            showPart.setPartId(partID);
+                            showPart.setPartName(nameCombo.getValue());
                             showPart.setPartDescription(description.getText());
                             showPart.setPartStockLevel(Integer.parseInt(stockLevels.getText()));
                             showPart.setCost(Double.parseDouble(cost.getText()));
-                            showPart.setArrivedDate(arrivedStockDate.getText());
+                            
 
                             state.close();
                             conn.close();
@@ -397,9 +458,10 @@ public class PartStockController implements Initializable {
                 }
             });
         } catch (Exception e) {
+            System.out.println("Error 1.");
             e.printStackTrace();
 
         }
     }
-    // TODO
+    
 }

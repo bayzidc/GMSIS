@@ -23,21 +23,21 @@ public class parts {
     public StringProperty partDescription;
     public IntegerProperty partStockLevel;
     public DoubleProperty cost;
-    public StringProperty arrivedDate;
+    //public StringProperty arrivedDate;
    
-    public parts(int partId, String partName, String partDescription,int partStockLevel, double cost, String arrivedDate) {
+    public parts(int partId,String partName, String partDescription,int partStockLevel, double cost) {
         
-        this.partIDentify = new SimpleIntegerProperty(partId);
+        this.partIDentify = new SimpleIntegerProperty(partId);// the initial values
         this.partName = new SimpleStringProperty(partName);
         this.partDescription = new SimpleStringProperty(partDescription);
         this.partStockLevel= new SimpleIntegerProperty(partStockLevel);
         this.cost = new SimpleDoubleProperty(cost);
-        this.arrivedDate = new SimpleStringProperty(arrivedDate);
+        //this.arrivedDate = new SimpleStringProperty(arrivedDate);
         
         
 
     }
-
+    // Return the 'partsid' value.
     public int getPartIDentify() {
         return partIDentify.get();
     }
@@ -56,12 +56,7 @@ public class parts {
     public double getCost() {
         return cost.get();
     }
-    public String getArrivedDate(){
-        return arrivedDate.get();
-    }
-
-    
-
+    // Set the 'partsId' value
     public void setPartId(int number) {
         partIDentify.set(number);
     }
@@ -80,14 +75,9 @@ public class parts {
     public void setCost(double number) {
         cost.set(number);
     }
-    
- 
-    
-    public void setArrivedDate(String date) {
-        arrivedDate.set(date);
-    }
 
     //Property values
+    // Returns the StringProperty object
     public IntegerProperty partIDProperty() {
         return partIDentify;
     }
@@ -108,7 +98,5 @@ public class parts {
         return cost;
     }
     
-    public StringProperty arrivedDateProperty(){
-        return arrivedDate;
-    }
+    
  }
