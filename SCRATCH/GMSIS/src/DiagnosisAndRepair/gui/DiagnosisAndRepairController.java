@@ -5,6 +5,7 @@
  */
 package DiagnosisAndRepair.gui;
 
+import Authentication.sqlite;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import Authentication.Home;
 import java.util.*;
@@ -186,9 +187,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select customer_fullname from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -217,10 +216,8 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
-
+            conn = (new sqlite().connect());
+            
             String SQL = "Select RegNumber from vehicleList where customerid='" + custID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next())
@@ -244,9 +241,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+           conn = (new sqlite().connect());
 
             String SQL = "Select customer_fullname from customer where customer_id='"+ custID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -271,9 +266,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select RegNumber from vehicleList where vehicleID='"+ vehID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -298,9 +291,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+           conn = (new sqlite().connect());
 
             String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -325,9 +316,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select customer_id from customer where customer_fullname='"+ custName +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -352,9 +341,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+           conn = (new sqlite().connect());
 
             String SQL = "Select mechanic_id from mechanic where fullname='"+ mechName +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -379,9 +366,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select vehicleID from vehicleList where RegNumber='"+ vehReg +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -407,9 +392,7 @@ public class DiagnosisAndRepairController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select RegNumber from vehicleList";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -433,9 +416,7 @@ public class DiagnosisAndRepairController implements Initializable {
           Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+            conn = (new sqlite().connect());
 
             String SQL = "Select fullname from mechanic";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -459,9 +440,7 @@ public class DiagnosisAndRepairController implements Initializable {
          Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-          
+           conn = (new sqlite().connect());
 
             String SQL = "Select nameofPart from vehiclePartsStock where stockLevelsOfParts >0";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -524,9 +503,7 @@ public class DiagnosisAndRepairController implements Initializable {
          Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");  
-
+            conn = (new sqlite().connect());
             String sql = "UPDATE booking SET vehicleID=?,customer_id=?,mechanic_id=?,scheduled_date=?,duration=?,partsRequired=? WHERE booking_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
            
@@ -692,9 +669,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+            conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM booking WHERE booking_id= ?";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -722,9 +697,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            
+            conn = (new sqlite().connect());
             String sql = "insert into booking(vehicleID,customer_id,mechanic_id,scheduled_date,duration,partsRequired,mileage) values(?,?,?,?,?,?,?)";
            
             PreparedStatement state = conn.prepareStatement(sql);
@@ -762,9 +735,7 @@ public class DiagnosisAndRepairController implements Initializable {
     Connection conn = null;
     try{      
         
-        Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-        
+        conn = (new sqlite().connect());
         String SQL = "Select * from booking";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
