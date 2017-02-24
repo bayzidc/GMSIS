@@ -8,33 +8,20 @@ import java.sql.*;
 
 public class sqlite
 {
-  public static void main( String args[] )
+  public Connection connect() throws ClassNotFoundException
   {
     Connection c = null;
-    Statement stmt = null;
-    try {
+
+    try 
+    {
       Class.forName("org.sqlite.JDBC");
       c = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-      System.out.println("Opened database successfully");
 
-      stmt = c.createStatement();
-      String sql = "" +
-                   "" +
-                   ""+
-                   ""+
-                   ""+
-                   ""+
-                   ""+
-                   ""+
-                   "";
-      stmt.executeUpdate(sql);
-      stmt.close();
-      c.close();
-    } catch ( Exception e ) {
+    } catch (SQLException e)
+    {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-      System.exit(0);
     }
-    System.out.println("Table created successfully");
+    return c;
   }
 }
     
