@@ -69,6 +69,8 @@ public class DiagnosisAndRepairController implements Initializable {
     private ComboBox<String> startTime;
     @FXML
     private ComboBox<String> endTime;
+    @FXML
+    private TextField searchField;
     
     @FXML
     private ListView<String> selectedParts;
@@ -131,6 +133,32 @@ public class DiagnosisAndRepairController implements Initializable {
    
        
     }    
+
+    
+    /*@FXML
+    private void searchFunc() {
+        FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(data, e -> true);
+        searchField.setOnKeyReleased(e -> {
+            searchField.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
+                filteredData.setPredicate((Predicate<? super DiagnosisAndRepairBooking>) DiagnosisAndRepairBooking -> {
+                    if (newValue2 == null || newValue2.isEmpty()) {
+                        return true;
+                    }
+                    String newValLow = newValue2.toLowerCase();
+                    if (DiagnosisAndRepairBooking.getCustName().toLowerCase().contains(newValLow)) {
+                        return true;
+                    } else if (DiagnosisAndRepairBooking.getVehicleReg().toLowerCase().contains(newValLow)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+                SortedList<DiagnosisAndRepairBooking> sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(table.comparatorProperty());
+                table.setItems(sortedData);
+            });
+        });
+    }*/
     
     @FXML
     private void partsChanged(ActionEvent event) 
@@ -744,6 +772,27 @@ public class DiagnosisAndRepairController implements Initializable {
             
             data.add(new DiagnosisAndRepairBooking(rs.getString(1), findVehReg(rs.getString(2)), findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5),rs.getInt(6),rs.getString(7),rs.getDouble(8)));
           
+            FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(data, e -> true);
+        searchField.setOnKeyReleased(e -> {
+            searchField.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
+                filteredData.setPredicate((Predicate<? super DiagnosisAndRepairBooking>) Booking -> {
+                    if (newValue2 == null || newValue2.isEmpty()) {
+                        return true;
+                    }
+                    String newValLow = newValue2.toLowerCase();
+                    if (Booking.getCustName().toLowerCase().contains(newValLow)) {
+                        return true;
+                    } else if (Booking.getVehicleReg().toLowerCase().contains(newValLow)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+                SortedList<DiagnosisAndRepairBooking> sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(table.comparatorProperty());
+                table.setItems(sortedData);
+            });
+        });
         }
         table.setItems(data);
         
