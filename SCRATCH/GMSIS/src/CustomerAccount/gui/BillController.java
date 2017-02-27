@@ -5,6 +5,7 @@
  */
 package CustomerAccount.gui;
 
+import static CustomerAccount.gui.GuiController.acc;
 import CustomerAccount.logic.bill;
 import CustomerAccount.logic.customerAccount;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,7 +40,7 @@ import javafx.stage.Stage;
 public class BillController implements Initializable {
 
     @FXML
-    private Button testButton;
+    private Button bookingButton;
     @FXML
     private Button backButtton;
     @FXML
@@ -45,10 +48,12 @@ public class BillController implements Initializable {
     @FXML
     private TableColumn<bill, Integer> bookingID;
     @FXML
+    private TableColumn<bill, Boolean> billStatus;
+    @FXML
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    public static bill showBill = new bill(1, 20);
+    public static bill showBill = new bill(0,0 , 20, true);
 
     /**
      * Initializes the controller class.
@@ -56,13 +61,48 @@ public class BillController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         buildData();
+        
+                    table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    try {
+                        if (table.getSelectionModel().getSelectedItem() != null) {
+                            int ID = table.getSelectionModel().getSelectedItem().getBillID();
+                            int bookingID = table.getSelectionModel().getSelectedItem().getBookingID();
+                            System.out.println("Booking id: " + bookingID);
+                            Connection conn = null;
+                            Class.forName("org.sqlite.JDBC");
+                            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                            System.out.println("Opened Database Successfully");
+                            java.sql.Statement state = null;
+                            state = conn.createStatement();
+                            ResultSet rs = state.executeQuery("SELECT * FROM bill WHERE bill_id= " + ID);
+                            while (rs.next()) {
+                                showBill.setBillID(rs.getInt(1));
+                                showBill.setBookingID(rs.getInt(3));
+                                showBill.setTotalCost(rs.getInt(4));
+                                showBill.setBillStatus(rs.getBoolean(5));
+                            }
+                            state.close();
+                            conn.close();
+                        }
+                    } catch (Exception e) {
+                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                        System.out.println("Here 1.");
+                        alertError();
+                    }
+                }
+            });
+        
     }
 
     @FXML
-    public void testButton() {
-        System.out.println("Testing this");
-        showBill.getPriceFromPart(PartsRecord.gui.PartStockController.showPart);
-        System.out.println("Total cost is: " + showBill.getTotalCost());
+    public void bookingButton(ActionEvent event) throws IOException {
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/checkBooking.fxml"));
+        Scene admin_Scene = new Scene(adminUser);
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage2.setScene(admin_Scene);
+        stage2.show();
     }
 
     @FXML
@@ -87,9 +127,10 @@ public class BillController implements Initializable {
             String SQL = "Select * from bill WHERE customerID = " + getID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new bill(rs.getInt(3), rs.getInt(4)));
+                data.add(new bill(rs.getInt(1),rs.getInt(3), rs.getInt(4), rs.getBoolean(5)));
+                System.out.println("Boolean is: " + rs.getBoolean(5));
             }
-
+            
             table.setItems(data);
             rs.close();
             conn.close();
@@ -101,6 +142,8 @@ public class BillController implements Initializable {
                 new PropertyValueFactory<>("bookingID"));
         cost.setCellValueFactory(
                 new PropertyValueFactory<>("totalCost"));
+        billStatus.setCellValueFactory(
+                new PropertyValueFactory<>("billStatus"));
     }
 
     public void alertError() {

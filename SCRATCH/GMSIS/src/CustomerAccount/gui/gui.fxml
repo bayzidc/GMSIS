@@ -31,7 +31,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="bookingButton" layoutX="132.0" layoutY="488.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Bookings" />
+      <Button fx:id="bookingButton" layoutX="132.0" layoutY="488.0" mnemonicParsing="false" onAction="#bookingButton" prefHeight="25.0" prefWidth="114.0" text="Bookings" />
       <Button fx:id="billsButton" layoutX="132.0" layoutY="543.0" mnemonicParsing="false" onAction="#billsButton" prefHeight="25.0" prefWidth="114.0" text="Bills" />
       <Button fx:id="addButton" layoutX="87.0" layoutY="400.0" mnemonicParsing="false" onAction="#addButton" prefHeight="25.0" prefWidth="73.0" text="Add" />
       <Button fx:id="updateButton" layoutX="173.0" layoutY="400.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="25.0" prefWidth="73.0" text="Update" />

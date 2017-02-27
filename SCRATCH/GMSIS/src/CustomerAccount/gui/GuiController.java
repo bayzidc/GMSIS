@@ -246,7 +246,6 @@ public class GuiController implements Initializable {
     @FXML
     private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-
             Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
             Scene parts_Scene = new Scene(bills);
             Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -256,7 +255,20 @@ public class GuiController implements Initializable {
             System.out.print("Exception caught.");
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    private void bookingButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        try {
+            Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/Booking.fxml"));
+            Scene parts_Scene = new Scene(bills);
+            Stage billstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            billstage.setScene(parts_Scene);
+            billstage.show();
+        } catch (Exception e) {
+            System.out.print("Exception caught.");
+            e.printStackTrace();
+        }
     }
 
     private boolean isDeleted(customerAccount acc) throws ClassNotFoundException {

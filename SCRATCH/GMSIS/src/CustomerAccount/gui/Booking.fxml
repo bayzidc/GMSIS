@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="874.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="CustomerAccount.gui.BookingController">
+   <children>
+      <TableView fx:id="table" layoutX="30.0" layoutY="134.0" prefHeight="388.0" prefWidth="802.0">
+        <columns>
+          <TableColumn fx:id="bookingID" prefWidth="75.0" text="bookingID" />
+          <TableColumn fx:id="vehicleID" prefWidth="94.0" text="vehicleID" />
+            <TableColumn fx:id="customerID" prefWidth="96.0" text="customerID" />
+            <TableColumn fx:id="mechanicName" prefWidth="79.0" text="mechanicID" />
+            <TableColumn fx:id="date" prefWidth="103.0" text="date" />
+            <TableColumn fx:id="duration" prefWidth="96.0" text="duration" />
+            <TableColumn fx:id="partsRequired" prefWidth="114.0" text="parts required" />
+            <TableColumn fx:id="mileage" prefWidth="144.0" text="mileage" />
+        </columns>
+      </TableView>
+      <Button fx:id="backButtton" layoutX="70.0" layoutY="66.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+   </children>
+</AnchorPane>
