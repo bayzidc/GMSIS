@@ -12,7 +12,7 @@ import javafx.beans.property.*;
  */
 public class DiagnosisAndRepairBooking {
   
-   private SimpleStringProperty bookingID;
+   private SimpleIntegerProperty bookingID;
    private SimpleStringProperty custName;
    private SimpleStringProperty vehicleReg;
    private SimpleStringProperty mechanicName;
@@ -20,10 +20,12 @@ public class DiagnosisAndRepairBooking {
    private SimpleDoubleProperty mileage;
    private SimpleStringProperty date;
    private SimpleIntegerProperty duration;
+   private SimpleStringProperty startTime;
+   private SimpleStringProperty endTime;
   
-   public DiagnosisAndRepairBooking(String id, String reg, String cName, String mName, String date, int duration, String parts, double mileage)
+   public DiagnosisAndRepairBooking(int id, String reg, String cName, String mName, String date, int duration, String parts, double mileage, String startTime, String endTime)
    {
-       this.bookingID = new SimpleStringProperty(id);
+       this.bookingID = new SimpleIntegerProperty(id);
        this.vehicleReg = new SimpleStringProperty(reg);
        this.custName = new SimpleStringProperty(cName); 
        this.mechanicName = new SimpleStringProperty(mName);
@@ -31,9 +33,12 @@ public class DiagnosisAndRepairBooking {
        this.duration = new SimpleIntegerProperty(duration);
        this.partsRequired = new SimpleStringProperty(parts);  
        this.mileage = new SimpleDoubleProperty(mileage);
+       this.startTime = new SimpleStringProperty(startTime);
+       this.endTime = new SimpleStringProperty(endTime);
    }
+
    
-   public String getBookingID()
+   public int getBookingID()
    {
        return bookingID.get();
    }
@@ -65,8 +70,17 @@ public class DiagnosisAndRepairBooking {
    {
        return duration.get();
    }
+   public String getStartTime()
+   {
+       return startTime.get();
+   }
+   public String getEndTime()
+   {
+       return endTime.get();
+   }
    
-   public void setBookingID(String id)
+   
+   public void setBookingID(int id)
    {
        bookingID.set(id);
    }
@@ -98,8 +112,16 @@ public class DiagnosisAndRepairBooking {
    {
        duration.set(time);
    }
+   public void setStartTime(String time)
+   {
+       startTime.set(time);
+   }
+   public void setEndTime(String time)
+   {
+       endTime.set(time);
+   }
    
-    public StringProperty getBookingIDProperty()
+    public IntegerProperty getBookingIDProperty()
    {
        return bookingID;
    }
@@ -130,5 +152,13 @@ public class DiagnosisAndRepairBooking {
    public IntegerProperty getDurationProperty()
    {
        return duration;
+   }
+   public StringProperty getStartTimeProperty()
+   {
+       return startTime;
+   }
+   public StringProperty getEndTimeProperty()
+   {
+       return endTime;
    }
 }

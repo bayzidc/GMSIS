@@ -20,28 +20,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="599.0" prefWidth="1172.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
+<AnchorPane id="AnchorPane" prefHeight="627.0" prefWidth="1202.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
    <children>
-      <DatePicker fx:id="datePicked" layoutX="131.0" layoutY="369.0" prefHeight="25.0" prefWidth="116.0" />
+      <DatePicker fx:id="datePicked" layoutX="131.0" layoutY="369.0" onAction="#fillStartTimeOnChange" prefHeight="25.0" prefWidth="116.0" />
       <Label layoutX="17.0" layoutY="373.0" text="Scheduled  Date" />
-      <Button fx:id="book" layoutX="98.0" layoutY="498.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="116.0" text="Submit Booking" />
+      <Button fx:id="book" layoutX="104.0" layoutY="515.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="116.0" text="Submit Booking" />
       <Label layoutX="23.0" layoutY="417.0" text="Start Time" />
       <Label layoutX="23.0" layoutY="454.0" text="End TIme" />
-      <TableView fx:id="table" layoutX="313.0" layoutY="48.0" prefHeight="359.0" prefWidth="829.0">
+      <TableView fx:id="table" layoutX="313.0" layoutY="48.0" prefHeight="359.0" prefWidth="876.0">
         <columns>
-            <TableColumn fx:id="bookingIDCol" prefWidth="64.0" text="bookingID" />
+            <TableColumn fx:id="bookingIDCol" prefWidth="64.0" text="BookingID" />
           <TableColumn fx:id="vehicleIDCol" prefWidth="100.0" text="Vechicle Reg" />
             <TableColumn fx:id="custIDCol" prefWidth="98.0" text="Customer Name" />
-          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="103.0" text="Mechanic Name" />
-          <TableColumn fx:id="mileageCol" minWidth="0.0" prefWidth="69.0" text="Mileage" />
-          <TableColumn fx:id="partsRequiredCol" prefWidth="157.0" text="Parts Required" />
-          <TableColumn fx:id="dateCol" prefWidth="111.0" text="Date" />
-          <TableColumn fx:id="durationCol" prefWidth="126.0" text="Duration in minutes" />
+          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="98.0" text="Mechanic Name" />
+          <TableColumn fx:id="mileageCol" minWidth="0.0" prefWidth="65.0" text="Mileage" />
+          <TableColumn fx:id="partsRequiredCol" minWidth="0.0" prefWidth="98.0" text="Parts Required" />
+          <TableColumn fx:id="dateCol" prefWidth="81.0" text="Date" />
+          <TableColumn fx:id="startTimeCol" minWidth="0.0" prefWidth="78.0" text="Start Time" />
+          <TableColumn fx:id="endTimeCol" minWidth="0.0" prefWidth="72.0" text="End Time" />
+          <TableColumn fx:id="durationCol" prefWidth="121.0" text="Duration in minutes" />
         </columns>
       </TableView>
-      <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="151.0" prefWidth="150.0" promptText="Select" />
+      <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="151.0" onAction="#resetDate" prefWidth="150.0" promptText="Select" />
       <Label layoutX="24.0" layoutY="155.0" text="Mechanic" />
-      <TextField fx:id="searchField" layoutX="898.0" layoutY="437.0" prefHeight="25.0" prefWidth="245.0" promptText="Search" />
+      <TextField fx:id="searchField" layoutX="898.0" layoutY="437.0" prefHeight="25.0" prefWidth="286.0" promptText="Search" />
       <Label layoutX="22.0" layoutY="196.0" text="Parts required" />
       <Group />
       <Button fx:id="loadBookingButton" layoutX="313.0" layoutY="424.0" mnemonicParsing="false" onAction="#loadBookings" text="Load Bookings" />
@@ -50,16 +52,18 @@
       <ComboBox fx:id="partsCombo" layoutX="114.0" layoutY="192.0" onAction="#partsChanged" prefWidth="150.0" promptText="Select" />
       <Button fx:id="editButton" layoutX="540.0" layoutY="424.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="54.0" text="Edit" />
       <Button fx:id="deleteButton" layoutX="482.0" layoutY="424.0" mnemonicParsing="false" onAction="#deleteBooking" text="Delete" />
-      <ComboBox fx:id="startTime" layoutX="114.0" layoutY="412.0" prefWidth="150.0" promptText="Select" />
-      <ComboBox fx:id="endTime" layoutX="114.0" layoutY="450.0" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="customerCombo" layoutX="114.0" layoutY="63.0" onAction="#findVehicleOnChange" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="vehicleCombo" layoutX="114.0" layoutY="107.0" prefWidth="150.0" promptText="Select" />
       <Label layoutX="21.0" layoutY="67.0" prefHeight="17.0" prefWidth="54.0" text="Customer" />
       <Label layoutX="21.0" layoutY="111.0" text="Vehicle" />
       <Button fx:id="back" layoutX="29.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="50.0" text="Back" />
-      <Button fx:id="update" layoutX="67.0" layoutY="551.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="25.0" prefWidth="75.0" text="Update" />
+      <Button fx:id="update" layoutX="60.0" layoutY="563.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="25.0" prefWidth="75.0" text="Update" />
       <ListView fx:id="selectedParts" layoutX="117.0" layoutY="228.0" prefHeight="128.0" prefWidth="144.0" />
-      <Button fx:id="deleteParts" layoutX="23.0" layoutY="280.0" mnemonicParsing="false" onAction="#deleteParts" text="Delete Part" />
-      <Button fx:id="clear" layoutX="168.0" layoutY="551.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="25.0" prefWidth="75.0" text="Clear All" />
+      <Button fx:id="deleteParts" layoutX="20.0" layoutY="314.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="25.0" prefWidth="83.0" text="Delete Part" />
+      <Button fx:id="clear" layoutX="172.0" layoutY="563.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="25.0" prefWidth="75.0" text="Clear All" />
+      <ComboBox fx:id="startTime" layoutX="114.0" layoutY="412.0" onAction="#fillEndTimeCombo" prefWidth="150.0" promptText="Select" />
+      <ComboBox fx:id="endTime" layoutX="114.0" layoutY="450.0" prefWidth="150.0" promptText="Select" />
+      <Button fx:id="addAnotherPart" layoutX="20.0" layoutY="280.0" mnemonicParsing="false" onAction="#addAnotherPart" text="Add another" />
+      <Label layoutX="11.0" layoutY="244.0" prefHeight="25.0" prefWidth="100.0" text="Select from the list" />
    </children>
 </AnchorPane>
