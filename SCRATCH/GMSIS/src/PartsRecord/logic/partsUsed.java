@@ -18,28 +18,34 @@ import javafx.beans.property.StringProperty;
  */
 public class partsUsed {
 
-    public IntegerProperty partId;
+    public StringProperty partName;
     public DoubleProperty cost;
+    public IntegerProperty quantity;
     public StringProperty installDate;
     public StringProperty warrantyExpireDate;
     public StringProperty vehicleRegNo;
     public StringProperty customerFullName;
 
-    public partsUsed(int partId, double cost, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
-        this.partId = new SimpleIntegerProperty(partId);
+    public partsUsed(String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
+        this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
+        this.quantity = new SimpleIntegerProperty(quantity);
         this.installDate = new SimpleStringProperty(installDate);
         this.warrantyExpireDate = new SimpleStringProperty(warrantyExpireDate);
         this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
     }
 
-    public int getPartID() {
-        return partId.get();
+    public String getPartName() {
+        return partName.get();
     }
 
     public double getCost() {
         return cost.get();
+    }
+    
+    public int getQuantity() {
+        return quantity.get();
     }
 
     public String getInstallDate() {
@@ -58,12 +64,16 @@ public class partsUsed {
         return customerFullName.get();
     }
 
-    public void setPartId(int number) {
-        partId.set(number);
+    public void setPartName(String name) {
+        partName.set(name);
     }
 
     public void setCost(Double number) {
         cost.set(number);
+    }
+    
+    public void setQuantity(int number) {
+        quantity.set(number);
     }
 
     public void setInstallDate(String date) {
@@ -83,12 +93,16 @@ public class partsUsed {
     }
 
     //Property values
-    public IntegerProperty partIDProperty() {
-        return partId;
+    public StringProperty partNameProperty() {
+        return partName;
     }
 
     public DoubleProperty costProperty() {
         return cost;
+    }
+    
+    public IntegerProperty quantityProperty() {
+        return quantity;
     }
 
     public StringProperty installDateProperty() {

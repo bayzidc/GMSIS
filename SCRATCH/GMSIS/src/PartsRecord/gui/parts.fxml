@@ -12,41 +12,38 @@
 
 <AnchorPane id="AnchorPane" fx:id="clearButton" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
    <children>
-      <Label layoutX="11.0" layoutY="90.0" text="Part ID:" />
-      <Label layoutX="12.0" layoutY="168.0" text="Date Of Install:" />
-      <Label layoutX="14.0" layoutY="208.0" text="Warranty Expiry Date: " />
-      <Label layoutX="12.0" layoutY="29.0" text="Records Of Parts Used">
+      <Label layoutX="9.0" layoutY="85.0" text="Part Name:" />
+      <Label layoutX="12.0" layoutY="162.0" text="Date Of Install:" />
+      <Label layoutX="17.0" layoutY="20.0" text="Records Of Parts Used">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="idNumber" layoutX="194.0" layoutY="85.0" prefHeight="27.0" prefWidth="167.0" />
-      <TextField fx:id="cost" layoutX="194.0" layoutY="119.0" prefHeight="27.0" prefWidth="167.0" />
-      <Button fx:id="back" layoutX="20.0" layoutY="698.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <TableView fx:id="table" layoutX="14.0" layoutY="378.0" prefHeight="192.0" prefWidth="789.0">
+      <Button fx:id="back" layoutX="19.0" layoutY="752.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+      <TableView fx:id="table" layoutX="14.0" layoutY="433.0" prefHeight="201.0" prefWidth="716.0">
         <columns>
-          <TableColumn fx:id="idCol" prefWidth="56.0" text="Parts ID" />
-          <TableColumn fx:id="costCol" prefWidth="98.0" text="Cost" />
-            <TableColumn fx:id="installDateCol" prefWidth="150.0" text="DateOfInstall" />
+          <TableColumn fx:id="nameCol" prefWidth="87.0" text="Part Name" />
+          <TableColumn fx:id="costCol" prefWidth="67.0" text="Cost" />
             <TableColumn minWidth="0.0" prefWidth="0.0" text="Column X" />
-            <TableColumn fx:id="expireDateCol" prefWidth="148.0" text="DateOfWarrantyExpire" />
-            <TableColumn fx:id="registrationNoCol" prefWidth="197.0" text="VehicleRegistrationNumber" />
-            <TableColumn fx:id="customerNameCol" prefWidth="139.0" text="CustomerFullName" />
+            <TableColumn fx:id="quantityCol" prefWidth="75.0" text="Quantity" />
+            <TableColumn fx:id="installDateCol" prefWidth="115.0" text="DateOfInstall" />
+            <TableColumn fx:id="expireDateCol" prefWidth="144.0" text="DateOfWarrantyExpire" />
+            <TableColumn fx:id="registrationNoCol" minWidth="0.0" prefWidth="96.0" text="VehRegNo" />
+            <TableColumn fx:id="customerNameCol" prefWidth="128.0" text="CustomerName" />
         </columns>
       </TableView>
-      <Label layoutX="11.0" layoutY="124.0" text="Cost:" />
-      <Label layoutX="12.0" layoutY="250.0" text="Vehicle Registration Number:" />
-      <TextField fx:id="vehicleRegNumber" layoutX="194.0" layoutY="245.0" />
-      <TextField fx:id="customerFullName" layoutX="194.0" layoutY="295.0" />
-      <Label layoutX="11.0" layoutY="300.0" text="Customer Full Name:" />
-      <DatePicker fx:id="dateOfInstall" layoutX="194.0" layoutY="163.0" prefHeight="27.0" prefWidth="167.0" />
-      <Button fx:id="addParts" layoutX="18.0" layoutY="640.0" mnemonicParsing="false" text="Add parts" />
-      <Button fx:id="editParts" layoutX="114.0" layoutY="640.0" mnemonicParsing="false" text="Edit parts" />
-      <Button fx:id="deleteParts" layoutX="207.0" layoutY="640.0" mnemonicParsing="false" text="Delete Parts" />
-      <TextField fx:id="searchParts" layoutX="614.0" layoutY="640.0" promptText="Search for parts" />
-      <Button fx:id="withdrawButton" layoutX="481.0" layoutY="296.0" mnemonicParsing="false" text="InstallParts" />
-      <DatePicker fx:id="dateOfWarrantyExpire" layoutX="193.0" layoutY="203.0" prefHeight="27.0" prefWidth="167.0" />
-      <Button fx:id="clear" layoutX="402.0" layoutY="296.0" mnemonicParsing="false" text="Clear" />
-      <ComboBox layoutX="443.0" layoutY="640.0" prefWidth="150.0" />
+      <Label layoutX="12.0" layoutY="201.0" text="Vehicle Registration Number:" />
+      <Label layoutX="14.0" layoutY="242.0" text="Customer Full Name:" />
+      <DatePicker fx:id="dateOfInstall" layoutX="194.0" layoutY="157.0" prefHeight="27.0" prefWidth="195.0" promptText="dd/mm/yyyy" />
+      <Button fx:id="installParts" layoutX="12.0" layoutY="336.0" mnemonicParsing="false" onAction="#installButton" text="Install parts" />
+      <Button fx:id="editParts" layoutX="115.0" layoutY="336.0" mnemonicParsing="false" text="Edit parts" />
+      <Button layoutX="208.0" layoutY="336.0" mnemonicParsing="false" onAction="#deleteButton" text="Delete Parts" />
+      <TextField fx:id="searchParts" layoutX="11.0" layoutY="651.0" prefHeight="27.0" prefWidth="583.0" promptText="Search for parts by either vehicle registration number or customer surname and firstname" />
+      <Button fx:id="clear" layoutX="319.0" layoutY="336.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
+      <Label layoutX="12.0" layoutY="126.0" text="Quantity : " />
+      <TextField fx:id="quantity" layoutX="194.0" layoutY="121.0" prefHeight="27.0" prefWidth="195.0" />
+      <ComboBox fx:id="vehicleRegCombo" layoutX="194.0" layoutY="196.0" prefHeight="27.0" prefWidth="195.0" promptText="Select Reg No" />
+      <ComboBox fx:id="customerNameCombo" layoutX="194.0" layoutY="237.0" prefHeight="27.0" prefWidth="195.0" promptText="Select Customer Name" />
+      <ComboBox fx:id="partNameCombo" layoutX="194.0" layoutY="80.0" prefHeight="27.0" prefWidth="195.0" promptText="Select Name" />
    </children>
 </AnchorPane>

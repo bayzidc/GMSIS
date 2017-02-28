@@ -203,73 +203,7 @@ public class PartStockController implements Initializable {
         
     
 
-    @FXML
-    public void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
-        try {
-            if ( nameCombo.getValue()==null || description.getText().equals("") || stockLevels.getText().equals("") || cost.getText().equals("")) {
-             alertError("Select a row in order to delete a part.");
-            }
-            else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("");
-            alert.setContentText("Are you sure you want to delete the parts?");
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No");
-
-            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-            Optional<ButtonType> result = alert.showAndWait();
-
-            int idSelected = table.getSelectionModel().getSelectedItem().getPartIDentify();
-
-            if (result.get() == buttonTypeYes && isPartsDeleted(showPart)) {
-
-                alertInformation("PartsID: " + idSelected + " has been deleted.");
-
-            }
-            if (idSelected == 0) {
-
-                alertError("The Part does not exists.");
-            }
-            buildPartsStockData();
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-
-        }
-
-    }
     
-
-    private boolean isPartsDeleted(parts showPart) throws ClassNotFoundException {
-        boolean partsDeleted = false;
-
-        int ID = table.getSelectionModel().getSelectedItem().getPartIDentify();
-
-        Connection conn = null;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-            String sql = "DELETE FROM vehiclePartsStock WHERE parts_id=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setInt(1, showPart.getPartIDentify());
-            state.executeUpdate();
-
-            state.close();
-            conn.close();
-
-            partsDeleted = true;
-            clearFields();
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return partsDeleted;
-    }
 
     // Filling data to the tableView From the database.
     public void buildPartsStockData() {

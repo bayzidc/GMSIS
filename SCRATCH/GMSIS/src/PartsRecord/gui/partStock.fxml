@@ -11,7 +11,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartStockController">
    <children>
-      <Label layoutX="472.0" layoutY="28.0" text="Records Of Parts Stock">
+      <Label layoutX="451.0" layoutY="70.0" text="Records Of Parts Stock">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -24,7 +24,7 @@
       <TextField fx:id="description" layoutX="151.0" layoutY="141.0" />
       <TextField fx:id="stockLevels" layoutX="151.0" layoutY="176.0" />
       <TextField fx:id="cost" layoutX="151.0" layoutY="209.0" />
-      <TableView fx:id="table" layoutX="342.0" layoutY="103.0" prefHeight="222.0" prefWidth="460.0">
+      <TableView fx:id="table" layoutX="370.0" layoutY="103.0" prefHeight="222.0" prefWidth="460.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="75.0" text="Parts ID" />
           <TableColumn fx:id="nameCol" prefWidth="107.0" text="Name Of Parts" />
@@ -33,10 +33,9 @@
             <TableColumn fx:id="costCol" prefWidth="77.0" text="Cost" />
         </columns>
       </TableView>
-      <Button fx:id="back" layoutX="43.0" layoutY="644.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
-      <Button fx:id="delete" layoutX="104.0" layoutY="286.0" mnemonicParsing="false" onAction="#deleteButton" text="Delete Parts" />
+      <Button fx:id="back" layoutX="11.0" layoutY="720.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <Button fx:id="add" layoutX="13.0" layoutY="286.0" mnemonicParsing="false" onAction="#addButton" text="Add Parts" />
-      <Button fx:id="clear" layoutX="216.0" layoutY="286.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
+      <Button fx:id="clear" layoutX="109.0" layoutY="286.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <ComboBox fx:id="nameCombo" layoutX="151.0" layoutY="108.0" prefWidth="150.0" promptText="Select Name" />
    </children>
 </AnchorPane>
