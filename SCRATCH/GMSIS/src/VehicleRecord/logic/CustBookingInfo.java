@@ -14,11 +14,13 @@ import javafx.beans.property.SimpleStringProperty;
 public class CustBookingInfo {
    public SimpleStringProperty fullName = new SimpleStringProperty(); 
    public SimpleStringProperty bookingDate = new SimpleStringProperty();
+   public SimpleStringProperty regNumber = new SimpleStringProperty();
    
-   public CustBookingInfo(String fName, String bDate)
+   public CustBookingInfo(String fName, String bDate, String reg)
    {
       this.fullName = new SimpleStringProperty(fName);
       this.bookingDate = new SimpleStringProperty(bDate);
+      this.regNumber = new SimpleStringProperty(reg);
    }
    public String getFullName(){
            return fullName.get();
@@ -29,6 +31,10 @@ public class CustBookingInfo {
        return bookingDate.get();
    }
            
+   public String getRegNumber()
+   {
+       return regNumber.get();
+   }
    public void setFullName(String fullN)
    {
        fullName.set(fullN);
@@ -39,6 +45,10 @@ public class CustBookingInfo {
        bookingDate.set(bDate);
    }
    
+   public void setRegNumber(String reg)
+   {
+       regNumber.set(reg);
+   }
    public SimpleStringProperty fullNameProperty()
    {
        return fullName;
@@ -47,6 +57,11 @@ public class CustBookingInfo {
    public SimpleStringProperty bookingDateProperty()
    {
        return bookingDate;
+   }
+   
+   public SimpleStringProperty regNumberProperty()
+   {
+       return regNumber;
    }
 }
 

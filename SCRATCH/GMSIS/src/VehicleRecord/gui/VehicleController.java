@@ -115,6 +115,8 @@ public class VehicleController implements Initializable {
     public TableColumn<CustBookingInfo, String> fullNameCol;
     @FXML
     public TableColumn<CustBookingInfo, String> bookingDateCol;
+    @FXML 
+    public TableColumn<CustBookingInfo, String> regNCol;
 
     @FXML
     public TableView<PartsInfo> partsTable;
@@ -134,7 +136,12 @@ public class VehicleController implements Initializable {
      */
     @FXML
     public void addEntry(ActionEvent event) throws IOException {
-        Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        Parent vehicle_Page = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
+        AddVehicleController c = (AddVehicleController) loader.getController();
+        //Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+        c.updateBtn.setVisible(false);
+        c.addEntry.setVisible(true);
         Scene vehicle_Scene = new Scene(vehicle_Page);
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
@@ -178,7 +185,8 @@ public class VehicleController implements Initializable {
         Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
         AddVehicleController c = (AddVehicleController) loader.getController();
         Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        
+        c.addEntry.setVisible(false);
+        c.updateBtn.setVisible(true);
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
         String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -193,6 +201,7 @@ public class VehicleController implements Initializable {
         String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
         String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
+        int cust = table.getSelectionModel().getSelectedItem().getCustID();
         if(regN.isEmpty())
         {
             alertInf("One or more rows have a missing value in the row");
@@ -210,6 +219,7 @@ public class VehicleController implements Initializable {
         c.nameAndAdd.setText(wNameAndAdd);  
         c.warExpiry.getEditor().setText(warDate);
         c.id.setText(String.valueOf(ID));
+        c.custID.setText(String.valueOf(cust));
         //c.customerNames.setValue(cust);
         stage2.hide();
         Scene edit_Scene = new Scene(root);
@@ -294,6 +304,8 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<CustBookingInfo, String>("FullName"));
         bookingDateCol.setCellValueFactory(
                 new PropertyValueFactory<CustBookingInfo, String>("BookingDate"));
+        regNCol.setCellValueFactory(
+        new PropertyValueFactory<CustBookingInfo, String> ("RegNumber"));
 
         partIDCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("PartID"));
@@ -346,14 +358,15 @@ public class VehicleController implements Initializable {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             //String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.b";
-            String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.customer_id";
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber from customer, booking, vehicleList where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             System.out.println("Success");
             while (rs.next()) {
-                CustBookingInfo cust = new CustBookingInfo("","");
+                CustBookingInfo cust = new CustBookingInfo("","","");
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
+                cust.regNumber.set(rs.getString("RegNumber"));
                 custData.add(cust);
 
                 if(rs.getString("customer_fullname").equals(""))

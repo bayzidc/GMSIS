@@ -89,6 +89,8 @@ public class AddVehicleController implements Initializable {
     @FXML
     public TextField id;
     @FXML
+    public TextField custID;
+    @FXML
     public Button backToRec;
     @FXML
     public Button clearBtn;
@@ -139,6 +141,10 @@ public class AddVehicleController implements Initializable {
         if(checkTextFields())
         {
         createData();
+        /*if(checkIfVehicleAlreadyExists())
+        {
+            alertInf("Vehicle ID already exists");
+        }*/
         alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + getCustomerName());
         buildData();
         regNumber.clear();
@@ -205,6 +211,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.getEditor().setText(null);
         id.clear();
         customerNames.setValue(null);
+        custID.clear();
     }
     public void buildData() throws ClassNotFoundException
     {
@@ -240,7 +247,7 @@ public class AddVehicleController implements Initializable {
 
             System.out.println("Opened Database Successfully");
             
-            String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate,customerid ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, regNumber.getText());
             state.setString(2,make.getText());
@@ -255,6 +262,7 @@ public class AddVehicleController implements Initializable {
             state.setString(11, warrantyChoice.toString());
             state.setString(12, nameAndAdd.getText());
             state.setString(13, ((TextField) warExpiry.getEditor()).getText());
+            state.setString(14, custID.getText());
             state.execute();
             
             state.close();
@@ -271,6 +279,39 @@ public class AddVehicleController implements Initializable {
         //return submit;       
             
         }
+    
+    public boolean checkIfVehicleAlreadyExists() throws ClassNotFoundException, SQLException
+    {
+         int count = 0;
+         Connection conn = null;
+  PreparedStatement stmt = null;
+  ResultSet rset = null;
+  try {
+      conn = (new sqlite().connect());
+    stmt = conn.prepareStatement(
+        "SELECT Count(vehicleID) from vehicleList WHERE RegNumber=?");
+    stmt.setString(1, regNumber.getText());
+    rset = stmt.executeQuery();
+    if (rset.next())
+      count = rset.getInt(1);
+    return count > 0;
+  } finally {
+    if(rset != null) {
+      try {
+        rset.close();
+      } catch(SQLException e) {
+        e.printStackTrace();
+      }
+    }        
+    if(stmt != null) {
+      try {
+        stmt.close();
+      } catch(SQLException e) {
+        e.printStackTrace();
+      }
+    }        
+  }    
+}
     
      public void editVehicle() throws ClassNotFoundException
      {
@@ -315,13 +356,31 @@ public class AddVehicleController implements Initializable {
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
         id.setEditable(false);
+        custID.setEditable(false);
         yesWarranty.setOnAction(e ->{
             warrantyChoice.add(yesWarranty.getText());
+            if(yesWarranty.isSelected())
+        {
+            noWarranty.setSelected(false); 
+            nameAndAdd.setVisible(true);
+            warExpiry.setVisible(true);
+            nameAndAdd.clear();
+            warExpiry.setValue(null);
+        }
         });
         
         noWarranty.setOnAction(e ->{
             warrantyChoice.add(noWarranty.getText());
+            nameAndAdd.clear();
+            nameAndAdd.setVisible(false);
+            warExpiry.setVisible(false);
+            if(noWarranty.isSelected())
+        {
+            yesWarranty.setSelected(false);
+        }
         });
+        
+
         try {
             buildData();
              customerNames.setOnAction(e ->{
@@ -332,10 +391,14 @@ public class AddVehicleController implements Initializable {
                 {
                     conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
-                    String query = "select customer_fullname from customer where customer_fullname = ?";
+                    String query = "select customer_id, customer_fullname from customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
+                    while(rs.next())
+                    {
+                        custID.setText(String.valueOf(rs.getInt("customer_id")));
+                    }
                     conn.close();
                     ps.close();
                     rs.close();

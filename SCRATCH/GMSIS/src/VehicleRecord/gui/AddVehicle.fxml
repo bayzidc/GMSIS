@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -20,8 +19,8 @@
       </Label>
       <Label layoutX="21.0" layoutY="47.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
       <TextField fx:id="id" layoutX="85.0" layoutY="43.0" prefHeight="26.0" prefWidth="28.0" />
-      <Label layoutX="152.0" layoutY="47.0" prefHeight="17.0" prefWidth="95.0" text="Customer Name:" />
-      <ChoiceBox fx:id="customerNames" layoutX="247.0" layoutY="44.0" prefWidth="150.0" />
+      <Label layoutX="206.0" layoutY="48.0" prefHeight="17.0" prefWidth="95.0" text="Customer Name:" />
+      <ChoiceBox fx:id="customerNames" layoutX="309.0" layoutY="43.0" prefWidth="150.0" />
       <Label layoutX="21.0" layoutY="85.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type:" />
       <Label layoutX="21.0" layoutY="116.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty:" />
       <Label layoutX="21.0" layoutY="137.0" prefHeight="17.0" prefWidth="140.0" text="Warranty Name/Address:" />
@@ -42,7 +41,7 @@
       <DatePicker fx:id="warExpiry" layoutX="146.0" layoutY="181.0" prefHeight="17.0" prefWidth="107.0" />
       <ChoiceBox fx:id="quickSel" layoutX="112.0" layoutY="213.0" prefHeight="25.0" prefWidth="95.0" />
       <StringTextField fx:id="regNumber" layoutX="114.0" layoutY="243.0" prefHeight="17.0" prefWidth="95.0" />
-      <LettersTextField fx:id="make" layoutX="61.0" layoutY="273.0" prefHeight="17.0" prefWidth="95.0"/>
+      <LettersTextField fx:id="make" layoutX="61.0" layoutY="273.0" prefHeight="17.0" prefWidth="95.0" />
       <LettersTextField fx:id="model" layoutX="65.0" layoutY="305.0" prefHeight="25.0" prefWidth="140.0" />
       <NumberTextField fx:id="engSize" layoutX="85.0" layoutY="336.0" prefHeight="25.0" prefWidth="39.0" />
       <ChoiceBox fx:id="fuelType" layoutX="77.0" layoutY="364.0" prefHeight="25.0" prefWidth="128.0" />
@@ -54,6 +53,8 @@
       <Button fx:id="updateBtn" layoutX="468.0" layoutY="468.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="26.0" prefWidth="73.0" text="Update" />
       <Button fx:id="clearBtn" layoutX="271.0" layoutY="469.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <Label layoutX="20.0" layoutY="402.0" prefHeight="25.0" prefWidth="70.0" text="Colour:" />
-      <LettersTextField fx:id="colour" layoutX="67.0" layoutY="402.0"  prefHeight="17.0" prefWidth="95.0"/>
+      <LettersTextField fx:id="colour" layoutX="67.0" layoutY="402.0" prefHeight="17.0" prefWidth="95.0" />
+      <TextField fx:id="custID" layoutX="172.0" layoutY="44.0" prefHeight="17.0" prefWidth="28.0" />
+      <Label layoutX="121.0" layoutY="47.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
    </children>
 </AnchorPane>
