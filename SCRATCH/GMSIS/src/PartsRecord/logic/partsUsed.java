@@ -18,7 +18,7 @@ import javafx.beans.property.StringProperty;
  */
 public class partsUsed {
     
-    public IntegerProperty rowID;
+    public IntegerProperty usedID;
     public StringProperty partName;
     public DoubleProperty cost;
     public IntegerProperty quantity;
@@ -26,8 +26,10 @@ public class partsUsed {
     public StringProperty warrantyExpireDate;
     public StringProperty vehicleRegNo;
     public StringProperty customerFullName;
+    public IntegerProperty bookingID;
 
-    public partsUsed(int row,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
+    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID) {
+        this.usedID = new SimpleIntegerProperty(usedID);
         this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
         this.quantity = new SimpleIntegerProperty(quantity);
@@ -35,7 +37,12 @@ public class partsUsed {
         this.warrantyExpireDate = new SimpleStringProperty(warrantyExpireDate);
         this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
-        this.rowID = new SimpleIntegerProperty(row);
+        this.bookingID = new SimpleIntegerProperty(bookingID);
+        
+    }
+    
+    public int getUsedID(){
+        return usedID.get();
     }
 
     public String getPartName() {
@@ -44,10 +51,6 @@ public class partsUsed {
 
     public double getCost() {
         return cost.get();
-    }
-    
-    public int getRowID(){
-        return rowID.get();
     }
     
     public int getQuantity() {
@@ -69,6 +72,10 @@ public class partsUsed {
     public String getCustomerFullName() {
         return customerFullName.get();
     }
+    
+    public int getBookingID() {
+        return bookingID.get();
+    }
 
     public void setPartName(String name) {
         partName.set(name);
@@ -82,8 +89,8 @@ public class partsUsed {
         quantity.set(number);
     }
     
-    public void setRowID(int number){
-        rowID.set(number);
+    public void setUsedID(int number){
+        usedID.set(number);
     }
     
     public void setInstallDate(String date) {
@@ -101,8 +108,20 @@ public class partsUsed {
     public void setcustomerFullName(String name) {
         customerFullName.set(name);
     }
+    
+    public void setBookingID(int number) {
+        bookingID.set(number);
+    }
 
     //Property values
+    public IntegerProperty usedIDProperty() {
+        return usedID;
+    }
+    
+    public IntegerProperty quantityProperty() {
+        return quantity;
+    }
+    
     public StringProperty partNameProperty() {
         return partName;
     }
@@ -111,8 +130,8 @@ public class partsUsed {
         return cost;
     }
     
-    public IntegerProperty quantityProperty() {
-        return quantity;
+    public IntegerProperty bookingIDProperty() {
+        return bookingID;
     }
 
     public StringProperty installDateProperty() {
