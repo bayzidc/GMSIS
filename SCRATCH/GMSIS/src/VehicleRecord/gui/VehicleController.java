@@ -247,7 +247,7 @@ public class VehicleController implements Initializable {
     {
         try
         {
-            //int id = table.getSelectionModel().getSelectedItem().getVecID();
+            int id = table.getSelectionModel().getSelectedItem().getVecID();
             buildPartsData();
         }
         
@@ -320,7 +320,7 @@ public class VehicleController implements Initializable {
         {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "Select vehiclePartsUsed.partsId, name from vehiclePartsUsed, vehicleList where vehicleList.partsid = vehiclePartsUsed.partsId";
+            String SQL = "Select vehiclePartsUsed.partsId, name from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -494,7 +494,7 @@ public class VehicleController implements Initializable {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             //String sql = "delete from vehiclePartsStock where vehiclePartsStock.parts_id; delete from vehicleList where vehicleList.partsid;";
-            String sql ="delete from vehiclePartsUsed where vehiclePartsUsed.partsId";
+            String sql ="delete from vehiclePartsUsed where vehiclePartsUsed.vehicleID";
             PreparedStatement state = conn.prepareStatement(sql);
             //state.setString(1, String.valueOf(getPartID()));
             //state.setString(2, String.valueOf(getVehiclePartID()));
