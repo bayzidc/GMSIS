@@ -16,14 +16,13 @@ public class DiagnosisAndRepairBooking {
    private SimpleStringProperty custName;
    private SimpleStringProperty vehicleReg;
    private SimpleStringProperty mechanicName;
-   private SimpleStringProperty partsRequired;
    private SimpleDoubleProperty mileage;
    private SimpleStringProperty date;
    private SimpleIntegerProperty duration;
    private SimpleStringProperty startTime;
    private SimpleStringProperty endTime;
   
-   public DiagnosisAndRepairBooking(int id, String reg, String cName, String mName, String date, int duration, String parts, double mileage, String startTime, String endTime)
+   public DiagnosisAndRepairBooking(int id, String reg, String cName, String mName, String date, int duration, double mileage, String startTime, String endTime)
    {
        this.bookingID = new SimpleIntegerProperty(id);
        this.vehicleReg = new SimpleStringProperty(reg);
@@ -31,7 +30,6 @@ public class DiagnosisAndRepairBooking {
        this.mechanicName = new SimpleStringProperty(mName);
        this.date = new SimpleStringProperty(date);
        this.duration = new SimpleIntegerProperty(duration);
-       this.partsRequired = new SimpleStringProperty(parts);  
        this.mileage = new SimpleDoubleProperty(mileage);
        this.startTime = new SimpleStringProperty(startTime);
        this.endTime = new SimpleStringProperty(endTime);
@@ -53,10 +51,6 @@ public class DiagnosisAndRepairBooking {
    public String getMechanicName()
    {
        return mechanicName.get();
-   }
-   public String getPartsRequired()
-   {
-       return partsRequired.get();
    }
    public double getMileage()
    {
@@ -96,10 +90,6 @@ public class DiagnosisAndRepairBooking {
    {
        mechanicName.set(mName);
    }
-   public void setPartsRequired(String parts)
-   {
-       partsRequired.set(parts);
-   }
    public void setMileage(double mile)
    {
        mileage.set(mile);
@@ -136,10 +126,6 @@ public class DiagnosisAndRepairBooking {
    public StringProperty getMechanicNameProperty()
    {
        return mechanicName;
-   }
-   public StringProperty getPartsRequiredProperty()
-   {
-       return partsRequired;
    }
    public DoubleProperty getMileageProperty()
    {
