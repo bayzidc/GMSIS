@@ -63,7 +63,7 @@ public class CheckBookingController implements Initializable {
 
     @FXML
     private ObservableList<DiagnosisAndRepairBooking> data;
-    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking("", "", "", "", "", 0, "", 0);
+    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking(0, "", "", "", "", 0, "", 0,"","");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -96,7 +96,7 @@ public class CheckBookingController implements Initializable {
             String SQL = "Select * from booking WHERE booking_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new DiagnosisAndRepairBooking(String.valueOf(rs.getInt(1)), String.valueOf(rs.getInt(2)), String.valueOf(rs.getInt(3)), String.valueOf(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getInt(8)));
+ data.add(new DiagnosisAndRepairBooking(rs.getInt(1), String.valueOf(rs.getInt(2)), String.valueOf(rs.getInt(3)), String.valueOf(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getInt(8),rs.getString(9),rs.getString(10)));
             }
 
             bookingID.setCellValueFactory(
