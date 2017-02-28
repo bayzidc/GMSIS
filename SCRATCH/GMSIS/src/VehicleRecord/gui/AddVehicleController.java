@@ -5,6 +5,7 @@
  */
 package VehicleRecord.gui;
 
+import Authentication.sqlite;
 import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.net.URL;
@@ -183,7 +184,7 @@ public class AddVehicleController implements Initializable {
             vec.setWarrantyExpDate(warExpiry.getEditor().getText());
         
         editVehicle();
-        alertInf("Vehicle ID: " + getVehicleID() + "has been updated for " + getCustomerName());
+        alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + getCustomerName());
         
         regNumber.clear();
         make.clear();
@@ -210,8 +211,7 @@ public class AddVehicleController implements Initializable {
         Connection conn = null;
     try{      
         
-        Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+        conn = (new sqlite().connect());
  
         String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.vehicleID = customer.customer_id";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
@@ -236,8 +236,7 @@ public class AddVehicleController implements Initializable {
         
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
 
             System.out.println("Opened Database Successfully");
             
@@ -278,8 +277,7 @@ public class AddVehicleController implements Initializable {
          Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
 
             System.out.println("Opened Database Successfully");
 
@@ -316,7 +314,7 @@ public class AddVehicleController implements Initializable {
         // TODO
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
-        
+        id.setEditable(false);
         yesWarranty.setOnAction(e ->{
             warrantyChoice.add(yesWarranty.getText());
         });
@@ -332,8 +330,7 @@ public class AddVehicleController implements Initializable {
                 ResultSet rs = null;
                 try
                 {
-                    Class.forName("org.sqlite.JDBC");
-                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                    conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
                     String query = "select customer_fullname from customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
@@ -356,8 +353,7 @@ public class AddVehicleController implements Initializable {
                 ResultSet rs = null;
                 try
                 {
-                    Class.forName("org.sqlite.JDBC");
-                    conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                    conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
                     String query = "select * from quickSelection where make = ?";
                     ps = conn.prepareStatement(query);
@@ -400,7 +396,7 @@ public class AddVehicleController implements Initializable {
         java.sql.Statement state = null;
         try
         {
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             conn.setAutoCommit(false);
             
             state = conn.createStatement();
@@ -431,7 +427,7 @@ public class AddVehicleController implements Initializable {
         java.sql.Statement state = null;
         try
         {
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             conn.setAutoCommit(false);
             
             state = conn.createStatement();
@@ -457,8 +453,7 @@ public class AddVehicleController implements Initializable {
         Connection conn = null;
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             String query = "Select customer_fullname from customer";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
@@ -485,8 +480,7 @@ public class AddVehicleController implements Initializable {
         Connection conn=null;
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             String query = "Select make from quickSelection";
 
             ResultSet rs = conn.createStatement().executeQuery(query);

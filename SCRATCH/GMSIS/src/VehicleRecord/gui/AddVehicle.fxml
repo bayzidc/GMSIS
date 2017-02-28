@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import VehicleRecord.logic.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="534.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
@@ -37,22 +38,22 @@
       <ChoiceBox fx:id="vehicleChoice" layoutX="99.0" layoutY="81.0" prefWidth="150.0" />
       <CheckBox fx:id="yesWarranty" layoutX="102.0" layoutY="116.0" mnemonicParsing="false" onAction="#handleYesBox" text="Yes" />
       <CheckBox fx:id="noWarranty" layoutX="186.0" layoutY="116.0" mnemonicParsing="false" onAction="#handleNoBox" text="No" />
-      <TextArea fx:id="nameAndAdd" layoutX="164.0" layoutY="136.0" prefHeight="26.0" prefWidth="107.0" />
+      <WarrantyTextField fx:id="nameAndAdd" layoutX="164.0" layoutY="136.0" prefHeight="26.0" prefWidth="107.0" />
       <DatePicker fx:id="warExpiry" layoutX="146.0" layoutY="181.0" prefHeight="17.0" prefWidth="107.0" />
       <ChoiceBox fx:id="quickSel" layoutX="112.0" layoutY="213.0" prefHeight="25.0" prefWidth="95.0" />
-      <TextField fx:id="regNumber" layoutX="114.0" layoutY="243.0" prefHeight="17.0" prefWidth="95.0" />
-      <TextField fx:id="make" layoutX="61.0" layoutY="273.0" />
-      <TextField fx:id="model" layoutX="65.0" layoutY="305.0" prefHeight="25.0" prefWidth="140.0" />
-      <TextField fx:id="engSize" layoutX="85.0" layoutY="336.0" prefHeight="25.0" prefWidth="39.0" />
+      <StringTextField fx:id="regNumber" layoutX="114.0" layoutY="243.0" prefHeight="17.0" prefWidth="95.0" />
+      <LettersTextField fx:id="make" layoutX="61.0" layoutY="273.0" prefHeight="17.0" prefWidth="95.0"/>
+      <LettersTextField fx:id="model" layoutX="65.0" layoutY="305.0" prefHeight="25.0" prefWidth="140.0" />
+      <NumberTextField fx:id="engSize" layoutX="85.0" layoutY="336.0" prefHeight="25.0" prefWidth="39.0" />
       <ChoiceBox fx:id="fuelType" layoutX="77.0" layoutY="364.0" prefHeight="25.0" prefWidth="128.0" />
       <DatePicker fx:id="motRenDate" layoutX="135.0" layoutY="429.0" prefHeight="17.0" prefWidth="117.0" />
       <DatePicker fx:id="lastService" layoutX="135.0" layoutY="455.0" prefHeight="25.0" prefWidth="117.0" />
-      <TextField fx:id="mileage" layoutX="121.0" layoutY="481.0" prefHeight="26.0" prefWidth="57.0" />
+      <NumberTextField fx:id="mileage" layoutX="121.0" layoutY="481.0" prefHeight="26.0" prefWidth="57.0" />
       <Button fx:id="backToRec" layoutX="20.0" layoutY="11.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="117.0" text="Back to Records" />
       <Button fx:id="addEntry" layoutX="332.0" layoutY="468.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="26.0" prefWidth="117.0" text="Add Vehicle Entry" />
       <Button fx:id="updateBtn" layoutX="468.0" layoutY="468.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="26.0" prefWidth="73.0" text="Update" />
       <Button fx:id="clearBtn" layoutX="271.0" layoutY="469.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <Label layoutX="20.0" layoutY="402.0" prefHeight="25.0" prefWidth="70.0" text="Colour:" />
-      <TextField fx:id="colour" layoutX="67.0" layoutY="402.0" />
+      <LettersTextField fx:id="colour" layoutX="67.0" layoutY="402.0"  prefHeight="17.0" prefWidth="95.0"/>
    </children>
 </AnchorPane>

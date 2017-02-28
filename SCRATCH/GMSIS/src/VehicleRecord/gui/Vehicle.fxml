@@ -19,7 +19,6 @@
             <Font name="Bauhaus 93" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="backBtn" layoutX="153.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButton" text="Back" textFill="#141414" />
       <TableView fx:id="table" fixedCellSize="0.0" layoutX="16.0" layoutY="384.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="1202.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
@@ -68,12 +67,17 @@
       </SplitPane>
       <Button fx:id="addEntryBtn" layoutX="690.0" layoutY="68.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
       <Button fx:id="viewParts" layoutX="690.0" layoutY="178.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
-      <ImageView fitHeight="54.0" fitWidth="118.0" layoutX="249.0" layoutY="327.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="searchVecImg" fitHeight="54.0" fitWidth="118.0" layoutX="249.0" layoutY="327.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />
          </image>
       </ImageView>
       <JFXButton fx:id="backButtn" buttonType="RAISED" layoutX="16.0" layoutY="14.0" onAction="#backButton" prefHeight="35.0" prefWidth="86.0" ripplerFill="#39b0f5" style="-fx-background-color: #000000;" text="Back" textFill="#eeebeb" />
+      <ImageView fx:id="refeshImg" fitHeight="25.0" fitWidth="35.0" layoutX="128.0" layoutY="19.0" onMousePressed="#refreshButton" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/refresh.png" />
+         </image>
+      </ImageView>
       
 
    </children>
