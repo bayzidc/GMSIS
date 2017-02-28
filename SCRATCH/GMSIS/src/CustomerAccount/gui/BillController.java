@@ -53,7 +53,7 @@ public class BillController implements Initializable {
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    public static bill showBill = new bill(0,0 , 20, true);
+    public static bill showBill = new bill(0,0 , 0, false);
 
     /**
      * Initializes the controller class.

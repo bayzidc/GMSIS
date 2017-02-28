@@ -17,7 +17,8 @@ import javafx.beans.property.StringProperty;
  * @author Fabiha
  */
 public class partsUsed {
-
+    
+    public IntegerProperty rowID;
     public StringProperty partName;
     public DoubleProperty cost;
     public IntegerProperty quantity;
@@ -26,7 +27,7 @@ public class partsUsed {
     public StringProperty vehicleRegNo;
     public StringProperty customerFullName;
 
-    public partsUsed(String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
+    public partsUsed(int row,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName) {
         this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
         this.quantity = new SimpleIntegerProperty(quantity);
@@ -34,6 +35,7 @@ public class partsUsed {
         this.warrantyExpireDate = new SimpleStringProperty(warrantyExpireDate);
         this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
+        this.rowID = new SimpleIntegerProperty(row);
     }
 
     public String getPartName() {
@@ -42,6 +44,10 @@ public class partsUsed {
 
     public double getCost() {
         return cost.get();
+    }
+    
+    public int getRowID(){
+        return rowID.get();
     }
     
     public int getQuantity() {
@@ -75,7 +81,11 @@ public class partsUsed {
     public void setQuantity(int number) {
         quantity.set(number);
     }
-
+    
+    public void setRowID(int number){
+        rowID.set(number);
+    }
+    
     public void setInstallDate(String date) {
         installDate.set(date);
     }

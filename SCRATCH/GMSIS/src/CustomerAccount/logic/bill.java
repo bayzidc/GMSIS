@@ -70,4 +70,8 @@ public class bill {
         return bookingID;
     }
 
+    public void addCostToBill(bill Bill, PartsRecord.logic.partsUsed part, int quantity) {
+        Bill.totalCost.set(totalCost.get()+(quantity*part.getCost()));
+    }
+
 }
