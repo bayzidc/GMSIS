@@ -63,7 +63,7 @@ public class BookingController implements Initializable {
 
     @FXML
     private ObservableList<DiagnosisAndRepairBooking> data;
-    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking(0, "", "", "", "", 0, "", 0,"","");
+    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking(0, "", "", "", "", 0, 0, "", "");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -92,11 +92,12 @@ public class BookingController implements Initializable {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
-            
+
             String SQL = "Select * from booking WHERE customer_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new DiagnosisAndRepairBooking(rs.getInt(1), String.valueOf(rs.getInt(2)), String.valueOf(rs.getInt(3)), String.valueOf(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getString(7), rs.getInt(8),rs.getString(9),rs.getString(10)));
+                data.add(new DiagnosisAndRepairBooking(rs.getInt(1), String.valueOf(rs.getInt(2)), String.valueOf(rs.getInt(3)), String.valueOf(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)));
+
             }
 
             bookingID.setCellValueFactory(
