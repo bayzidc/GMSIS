@@ -240,7 +240,7 @@ public class VehicleController implements Initializable {
         String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
         int id = table.getSelectionModel().getSelectedItem().getVecID();
         if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec()) {
-            JOptionPane.showMessageDialog(null, "VehicleID: " + id + " has been deleted.");
+            alertInf("VehicleID: " + id + " has been deleted.");
             buildData();
             buildCustomerData();
             buildParts();

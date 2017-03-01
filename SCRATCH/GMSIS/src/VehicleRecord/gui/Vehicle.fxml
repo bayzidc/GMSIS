@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="bookingDate" prefHeight="690.0" prefWidth="1236.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
+<AnchorPane id="AnchorPane" prefHeight="690.0" prefWidth="1236.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
-      <Label layoutX="378.0" layoutY="9.0" prefHeight="35.0" prefWidth="148.0" text="Vehicle Record">
+      <Label layoutX="378.0" layoutY="9.0" prefHeight="50.0" prefWidth="261.0" text="Vehicle Record">
          <font>
-            <Font name="Bauhaus 93" size="20.0" />
+            <Font name="Bauhaus 93" size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table" fixedCellSize="0.0" layoutX="16.0" layoutY="384.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="1202.0">
+      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="422.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="1202.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
           <TableColumn fx:id="makeCol" prefWidth="55.0" text="Make" />
@@ -38,10 +38,10 @@
             <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
         </columns>
       </TableView>
-      <Button fx:id="editBtn" layoutX="690.0" layoutY="106.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="690.0" layoutY="140.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
-      <TextField fx:id="searchVehicle" layoutX="14.0" layoutY="345.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
-      <SplitPane dividerPositions="0.4444444444444444" layoutX="14.0" layoutY="68.0" prefHeight="244.0" prefWidth="667.0">
+      <Button fx:id="editBtn" layoutX="690.0" layoutY="125.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="690.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
+      <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="378.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
+      <SplitPane dividerPositions="0.4444444444444444" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="667.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="0.0">
                <children>
@@ -66,19 +66,29 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="addEntryBtn" layoutX="690.0" layoutY="68.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="690.0" layoutY="178.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
-      <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="addEntryBtn" layoutX="690.0" layoutY="93.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
+      <Button fx:id="viewParts" layoutX="690.0" layoutY="190.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="371.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="backButtn" buttonType="RAISED" layoutX="16.0" layoutY="14.0" onAction="#backButton" prefHeight="35.0" prefWidth="86.0" ripplerFill="#39b0f5" style="-fx-background-color: #000000;" text="Back" textFill="#eeebeb" />
-      <ImageView fx:id="refeshImg" fitHeight="25.0" fitWidth="35.0" layoutX="128.0" layoutY="19.0" onMousePressed="#refreshButton" pickOnBounds="true" preserveRatio="true">
+      <JFXButton fx:id="backButtn" buttonType="RAISED" layoutX="16.0" layoutY="14.0" onAction="#backButton" prefHeight="25.0" prefWidth="72.0" ripplerFill="#39b0f5" style="-fx-background-color: #000000;" text="Back" textFill="#eeebeb" />
+      <ImageView fx:id="refeshImg" fitHeight="25.0" fitWidth="35.0" layoutX="116.0" layoutY="14.0" onMousePressed="#refreshButton" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/refresh.png" />
          </image>
       </ImageView>
+      <ImageView fitHeight="242.0" fitWidth="366.0" layoutX="813.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/vehicle.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="19.0" layoutY="338.0" prefHeight="40.0" prefWidth="218.0" text="Vehicle List" underline="true">
+         <font>
+            <Font name="Bauhaus 93" size="24.0" />
+         </font>
+      </Label>
       
 
    </children>
