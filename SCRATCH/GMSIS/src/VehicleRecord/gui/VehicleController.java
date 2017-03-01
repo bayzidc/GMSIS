@@ -242,8 +242,8 @@ public class VehicleController implements Initializable {
         if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec()) {
             JOptionPane.showMessageDialog(null, "VehicleID: " + id + " has been deleted.");
             buildData();
-            //buildCustomerData();
-            buildPartsData();
+            buildCustomerData();
+            buildParts();
         }
 
     }
@@ -258,7 +258,15 @@ public class VehicleController implements Initializable {
         try
         {
             int id = table.getSelectionModel().getSelectedItem().getVecID();
-            buildPartsData();
+            if(!checkIfPartExists())
+            {
+                alertInf("There are no parts used for this vehicle");
+            }
+            else
+            {
+                buildParts();
+            }
+            
         }
         
         catch(Exception e)
@@ -324,7 +332,7 @@ public class VehicleController implements Initializable {
         }
     }
 
-    public void buildPartsData() throws ClassNotFoundException, SQLException
+    public void buildParts()
     {
         partsData = FXCollections.observableArrayList();
         Connection conn = null;
@@ -350,6 +358,60 @@ public class VehicleController implements Initializable {
             alertError("Error on building parts data");
         }
     }
+    public boolean buildPartsData() throws ClassNotFoundException, SQLException
+    {
+        boolean buildParts = false;
+        partsData = FXCollections.observableArrayList();
+        Connection conn = null;
+        try
+        {
+            conn = (new sqlite().connect());
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select vehiclePartsUsed.partsId, name from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            conn.close();
+            rs.close();
+            buildParts = true;
+        }
+        catch(Exception e)
+        {
+            alertError("Error on building parts data");
+        }
+        return buildParts;
+    }
+    
+    public boolean checkIfPartExists() throws ClassNotFoundException, SQLException
+    {
+        int id = table.getSelectionModel().getSelectedItem().getVecID();
+         int count = 0;
+         Connection conn = null;
+         PreparedStatement stmt = null;
+         ResultSet rset = null;
+         try {
+              conn = (new sqlite().connect());
+              stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsId) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=?");
+    stmt.setString(1, String.valueOf(id));
+    rset = stmt.executeQuery();
+    if (rset.next())
+      count = rset.getInt(1);
+    return count > 0;
+  } finally {
+    if(rset != null) {
+      try {
+        rset.close();
+      } catch(SQLException e) {
+        e.printStackTrace();
+      }
+    }        
+    if(stmt != null) {
+      try {
+        stmt.close();
+      } catch(SQLException e) {
+        e.printStackTrace();
+      }
+    }        
+  }    
+}
     public void buildCustomerData() throws ClassNotFoundException, SQLException {
         custData = FXCollections.observableArrayList();
         Connection conn = null;

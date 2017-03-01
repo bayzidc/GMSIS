@@ -145,7 +145,7 @@ public class AddVehicleController implements Initializable {
         {
             alertInf("Vehicle ID already exists");
         }*/
-        alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + getCustomerName());
+        alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
         buildData();
         regNumber.clear();
         make.clear();
@@ -188,9 +188,10 @@ public class AddVehicleController implements Initializable {
             vec.setWarranty(yesWarranty.getText());
             vec.setWarranty(noWarranty.getText());
             vec.setWarrantyExpDate(warExpiry.getEditor().getText());
-        
+        if(checkTextFields())
+        {
         editVehicle();
-        alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + getCustomerName());
+        alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + customerNames.getSelectionModel().getSelectedItem());
         
         regNumber.clear();
         make.clear();
@@ -212,6 +213,7 @@ public class AddVehicleController implements Initializable {
         id.clear();
         customerNames.setValue(null);
         custID.clear();
+        }
     }
     public void buildData() throws ClassNotFoundException
     {
@@ -579,6 +581,11 @@ public class AddVehicleController implements Initializable {
         {
             checked = false;
             alertInf("Please specify a name for the vehicle.");
+        }
+        
+        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
+        {
+            alertInf("Please select if the vehicle is under warranty or not.");
         }
         return checked;
     }

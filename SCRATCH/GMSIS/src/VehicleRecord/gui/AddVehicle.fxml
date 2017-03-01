@@ -19,8 +19,8 @@
       </Label>
       <Label layoutX="21.0" layoutY="47.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
       <TextField fx:id="id" layoutX="85.0" layoutY="43.0" prefHeight="26.0" prefWidth="28.0" />
-      <Label layoutX="206.0" layoutY="48.0" prefHeight="17.0" prefWidth="95.0" text="Customer Name:" />
-      <ChoiceBox fx:id="customerNames" layoutX="309.0" layoutY="43.0" prefWidth="150.0" />
+      <Label layoutX="303.0" layoutY="47.0" prefHeight="17.0" prefWidth="95.0" text="Customer Name:" />
+      <ChoiceBox fx:id="customerNames" layoutX="397.0" layoutY="44.0" prefWidth="150.0" />
       <Label layoutX="21.0" layoutY="85.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type:" />
       <Label layoutX="21.0" layoutY="116.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty:" />
       <Label layoutX="21.0" layoutY="137.0" prefHeight="17.0" prefWidth="140.0" text="Warranty Name/Address:" />
@@ -49,12 +49,12 @@
       <DatePicker fx:id="lastService" layoutX="135.0" layoutY="455.0" prefHeight="25.0" prefWidth="117.0" />
       <NumberTextField fx:id="mileage" layoutX="121.0" layoutY="481.0" prefHeight="26.0" prefWidth="57.0" />
       <Button fx:id="backToRec" layoutX="20.0" layoutY="11.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="117.0" text="Back to Records" />
-      <Button fx:id="addEntry" layoutX="332.0" layoutY="468.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="26.0" prefWidth="117.0" text="Add Vehicle Entry" />
-      <Button fx:id="updateBtn" layoutX="468.0" layoutY="468.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="26.0" prefWidth="73.0" text="Update" />
-      <Button fx:id="clearBtn" layoutX="271.0" layoutY="469.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
+      <Button fx:id="clearBtn" layoutX="272.0" layoutY="483.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <Label layoutX="20.0" layoutY="402.0" prefHeight="25.0" prefWidth="70.0" text="Colour:" />
       <LettersTextField fx:id="colour" layoutX="67.0" layoutY="402.0" prefHeight="17.0" prefWidth="95.0" />
-      <TextField fx:id="custID" layoutX="172.0" layoutY="44.0" prefHeight="17.0" prefWidth="28.0" />
-      <Label layoutX="121.0" layoutY="47.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
+      <TextField fx:id="custID" layoutX="265.0" layoutY="44.0" prefHeight="17.0" prefWidth="28.0" />
+      <Label layoutX="222.0" layoutY="48.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
+      <Button fx:id="updateBtn" layoutX="325.0" layoutY="483.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="26.0" prefWidth="95.0" text="Make Changes" />
+      <Button fx:id="addEntry" layoutX="430.0" layoutY="482.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="26.0" prefWidth="117.0" text="Add Vehicle Entry" />
    </children>
 </AnchorPane>
