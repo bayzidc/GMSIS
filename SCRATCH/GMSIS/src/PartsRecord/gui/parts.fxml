@@ -36,9 +36,9 @@
       <Label layoutX="12.0" layoutY="201.0" text="BookingID :" />
       <DatePicker fx:id="dateOfInstall" layoutX="194.0" layoutY="157.0" prefHeight="27.0" prefWidth="195.0" promptText="dd/mm/yyyy" />
       <Button fx:id="installParts" layoutX="12.0" layoutY="336.0" mnemonicParsing="false" onAction="#installButton" text="Install parts" />
-      <Button fx:id="editParts" layoutX="115.0" layoutY="336.0" mnemonicParsing="false" text="Edit parts" />
+      <Button fx:id="editParts" layoutX="115.0" layoutY="336.0" mnemonicParsing="false" onAction="#editButton" text="Edit parts" />
       <Button layoutX="208.0" layoutY="336.0" mnemonicParsing="false" onAction="#deleteButton" text="Delete Parts" />
-      <TextField fx:id="searchParts" layoutX="11.0" layoutY="651.0" prefHeight="27.0" prefWidth="583.0" promptText="Search for parts by either vehicle registration number or customer surname and firstname" />
+      <TextField fx:id="searchField" layoutX="11.0" layoutY="651.0" prefHeight="27.0" prefWidth="583.0" promptText="Search for parts by either vehicle registration number or customer surname and firstname" />
       <Button fx:id="clear" layoutX="319.0" layoutY="336.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <Label layoutX="12.0" layoutY="126.0" text="Quantity : " />
       <TextField fx:id="quantity" layoutX="194.0" layoutY="121.0" prefHeight="27.0" prefWidth="195.0" />
