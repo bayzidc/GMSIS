@@ -58,6 +58,7 @@ import javax.swing.JOptionPane;
  */
 public class VehicleController implements Initializable {
 
+    //Declaring FXML buttons, images, tables, tablecolumns etc.
     @FXML
     public Button backBtn;
     @FXML
@@ -125,155 +126,12 @@ public class VehicleController implements Initializable {
     @FXML
     public TableColumn<PartsInfo, String> partsUsedCol;
 
+    //Declaring observable lists to be manipulated later on.
     ObservableList<Vehicle> data;
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
 
 
-    
-    /**
-     * Initializes the controller class.
-     */
-    @FXML
-    public void addEntry(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        Parent vehicle_Page = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
-        AddVehicleController c = (AddVehicleController) loader.getController();
-        //Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
-        c.updateBtn.setVisible(false);
-        c.addEntry.setVisible(true);
-        Scene vehicle_Scene = new Scene(vehicle_Page);
-        Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageVehicle.setScene(vehicle_Scene);
-        stageVehicle.show();
-
-    }
-
-    @FXML
-    public void refreshButton(MouseEvent event)
-    {
-        try
-        {
-            buildData();
-            buildCustomerData();
-        }
-        
-        catch(Exception e)
-        {
-            alertError("Some data is missing from parts of our system. Please try again later.");
-        }
-    }
-    @FXML
-    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
-    {
-        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
-        Scene admin_Scene = new Scene(adminUser);
-        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage2.hide();
-        stage2.setScene(admin_Scene);
-        stage2.show();
-
-    }
-
-    @FXML
-    public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfield
-    {
-        try
-        {
-        Stage primaryStage = new Stage();
-        FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
-        AddVehicleController c = (AddVehicleController) loader.getController();
-        Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
-        c.addEntry.setVisible(false);
-        c.updateBtn.setVisible(true);
-        String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
-        String vecMake = table.getSelectionModel().getSelectedItem().getMake();
-        String vecModel = table.getSelectionModel().getSelectedItem().getModel();
-        double engine = table.getSelectionModel().getSelectedItem().getEngSize();
-        String ft = table.getSelectionModel().getSelectedItem().getFuelType();
-        String col = table.getSelectionModel().getSelectedItem().getColour();
-        String mot = table.getSelectionModel().getSelectedItem().getMotRenewal();
-        String ls = table.getSelectionModel().getSelectedItem().getLastService();
-        int mil = table.getSelectionModel().getSelectedItem().getMileage();
-        String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
-        String war = table.getSelectionModel().getSelectedItem().getWarranty();
-        String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
-        String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
-        int ID = table.getSelectionModel().getSelectedItem().getVecID();
-        int cust = table.getSelectionModel().getSelectedItem().getCustID();
-        if(regN.isEmpty())
-        {
-            alertInf("One or more rows have a missing value in the row");
-        }
-        c.regNumber.setText(regN);
-        c.make.setText(vecMake);
-        c.model.setText(vecModel);
-        c.engSize.setText(String.valueOf(engine));
-        c.fuelType.setValue(ft);
-        c.colour.setText(col);
-        c.mileage.setText(String.valueOf(mil));
-        c.motRenDate.getEditor().setText(mot);
-        c.lastService.getEditor().setText(ls);
-        c.vehicleChoice.setValue(vecType);
-        c.nameAndAdd.setText(wNameAndAdd);  
-        c.warExpiry.getEditor().setText(warDate);
-        c.id.setText(String.valueOf(ID));
-        c.custID.setText(String.valueOf(cust));
-        //c.customerNames.setValue(cust);
-        stage2.hide();
-        Scene edit_Scene = new Scene(root);
-        primaryStage.setScene(edit_Scene);
-        primaryStage.show();
-    }
-        
-        catch(Exception ex)
-        {
-            alertInf("Please select a row to edit a vehicle.");
-        }
-    }
-    @FXML
-    public void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
-    {
-        try
-        {
-        String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
-        int id = table.getSelectionModel().getSelectedItem().getVecID();
-        if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec()) {
-            alertInf("VehicleID: " + id + " has been deleted.");
-            buildData();
-            buildCustomerData();
-            buildParts();
-        }
-
-    }
-        catch(Exception e)
-        {
-            alertInf("Please select a row to delete a vehicle.");
-        }
-    }
-    @FXML
-    public void viewPartsData(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
-    {
-        try
-        {
-            int id = table.getSelectionModel().getSelectedItem().getVecID();
-            if(!checkIfPartExists())
-            {
-                alertInf("There are no parts used for this vehicle");
-            }
-            else
-            {
-                buildParts();
-            }
-            
-        }
-        
-        catch(Exception e)
-        {
-            alertInf( "Please select a row to view the part used for that vehicle.");
-        }
-    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -320,15 +178,164 @@ public class VehicleController implements Initializable {
         partsUsedCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
 
-        try {
-           
+        try 
+        {   
             buildData();
             buildCustomerData();
-            
- 
-  
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             e.printStackTrace();
+        }
+    }
+    
+    //Method which allows the user to press a button to refresh the data shown on the page
+    @FXML
+    public void refreshButton(MouseEvent event)
+    {
+        try
+        {
+            buildData();
+            buildCustomerData();
+        }
+        
+        catch(Exception e)
+        {
+            alertError("Some data is missing from parts of our system. Please try again later.");
+        }
+    }
+    
+    //Method which allows the user to go back to the admin page
+    @FXML
+    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
+    {
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        Scene admin_Scene = new Scene(adminUser);
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage2.hide();
+        stage2.setScene(admin_Scene);
+        stage2.show();
+
+    }
+
+    //Method which directs the user to another fxml to add a vehicle
+    @FXML
+    public void addEntry(ActionEvent event) throws IOException 
+    {
+        FXMLLoader loader = new FXMLLoader();
+        Parent vehicle_Page = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
+        AddVehicleController c = (AddVehicleController) loader.getController();
+        c.updateBtn.setVisible(false);
+        c.addEntry.setVisible(true);
+        Scene vehicle_Scene = new Scene(vehicle_Page);
+        Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageVehicle.setScene(vehicle_Scene);
+        stageVehicle.show();
+
+    }
+    
+    //Method which allows the user to direct to another fxml to edit their vehicle once the appropriate row has been selected
+    @FXML
+    public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfields
+    {
+        try
+        {
+            Stage primaryStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("AddVehicle.fxml").openStream());
+            AddVehicleController c = (AddVehicleController) loader.getController();
+            Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            c.addEntry.setVisible(false);
+            c.updateBtn.setVisible(true);
+            String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
+            String vecMake = table.getSelectionModel().getSelectedItem().getMake();
+            String vecModel = table.getSelectionModel().getSelectedItem().getModel();
+            double engine = table.getSelectionModel().getSelectedItem().getEngSize();
+            String ft = table.getSelectionModel().getSelectedItem().getFuelType();
+            String col = table.getSelectionModel().getSelectedItem().getColour();
+            String mot = table.getSelectionModel().getSelectedItem().getMotRenewal();
+            String ls = table.getSelectionModel().getSelectedItem().getLastService();
+            int mil = table.getSelectionModel().getSelectedItem().getMileage();
+            String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
+            String war = table.getSelectionModel().getSelectedItem().getWarranty();
+            String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
+            String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
+            int ID = table.getSelectionModel().getSelectedItem().getVecID();
+            int cust = table.getSelectionModel().getSelectedItem().getCustID();
+            if(regN.isEmpty())
+            {
+                alertInf("One or more rows have a missing value in the row");
+            }
+            c.regNumber.setText(regN);
+            c.make.setText(vecMake);
+            c.model.setText(vecModel);
+            c.engSize.setText(String.valueOf(engine));
+            c.fuelType.setValue(ft);
+            c.colour.setText(col);
+            c.mileage.setText(String.valueOf(mil));
+            c.motRenDate.getEditor().setText(mot);
+            c.lastService.getEditor().setText(ls);
+            c.vehicleChoice.setValue(vecType);
+            c.nameAndAdd.setText(wNameAndAdd);  
+            c.warExpiry.getEditor().setText(warDate);
+            c.id.setText(String.valueOf(ID));
+            c.custID.setText(String.valueOf(cust));
+            stage2.hide();
+            Scene edit_Scene = new Scene(root);
+            primaryStage.setScene(edit_Scene);
+            primaryStage.show();
+        }
+        
+        catch(Exception ex)
+        {
+            alertInf("Please select a row to edit a vehicle.");
+        }
+    }
+    
+    //Method which allows the user to delete a vehicle once the appropriate row has been selected
+    @FXML
+    public void deleteVehicle(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to delete vehicle
+    {
+        try
+        {
+            String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
+            int id = table.getSelectionModel().getSelectedItem().getVecID();
+            if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec())
+            {
+                alertInf("VehicleID: " + id + " has been deleted.");
+                buildData();
+                buildCustomerData();
+                buildParts();
+            }
+
+        }
+        catch(Exception e)
+        {
+            alertInf("Please select a row to delete a vehicle.");
+        }
+    }
+    
+    //Method which allows the user to view the parts used once the appropriate row has been selected
+    @FXML
+    public void viewPartsData(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
+    {
+        try
+        {
+            int id = table.getSelectionModel().getSelectedItem().getVecID();
+            if(!checkIfPartExists())
+            {
+                alertInf("There are no parts used for this vehicle");
+            }
+            else
+            {
+                buildParts();
+            }
+            
+        }
+        
+        catch(Exception e)
+        {
+            alertInf( "Please select a row to view the part used for that vehicle.");
         }
     }
 
@@ -355,76 +362,69 @@ public class VehicleController implements Initializable {
         }
         catch(Exception e)
         {
-            alertError("Error on building parts data");
+            alertError("Error on building parts data. Please try again later.");
         }
-    }
-    public boolean buildPartsData() throws ClassNotFoundException, SQLException
-    {
-        boolean buildParts = false;
-        partsData = FXCollections.observableArrayList();
-        Connection conn = null;
-        try
-        {
-            conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
-            String SQL = "Select vehiclePartsUsed.partsId, name from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            conn.close();
-            rs.close();
-            buildParts = true;
-        }
-        catch(Exception e)
-        {
-            alertError("Error on building parts data");
-        }
-        return buildParts;
     }
     
+    //Method which checks in the database if any parts exist for a vehicle
     public boolean checkIfPartExists() throws ClassNotFoundException, SQLException
     {
-        int id = table.getSelectionModel().getSelectedItem().getVecID();
+         int id = table.getSelectionModel().getSelectedItem().getVecID();
          int count = 0;
          Connection conn = null;
          PreparedStatement stmt = null;
          ResultSet rset = null;
-         try {
-              conn = (new sqlite().connect());
-              stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsId) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=?");
-    stmt.setString(1, String.valueOf(id));
-    rset = stmt.executeQuery();
-    if (rset.next())
-      count = rset.getInt(1);
-    return count > 0;
-  } finally {
-    if(rset != null) {
-      try {
-        rset.close();
-      } catch(SQLException e) {
-        e.printStackTrace();
-      }
-    }        
-    if(stmt != null) {
-      try {
-        stmt.close();
-      } catch(SQLException e) {
-        e.printStackTrace();
-      }
-    }        
-  }    
-}
-    public void buildCustomerData() throws ClassNotFoundException, SQLException {
+         try 
+         {
+             conn = (new sqlite().connect());
+             stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsId) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=?");
+             stmt.setString(1, String.valueOf(id));
+             rset = stmt.executeQuery();
+             if (rset.next())
+               count = rset.getInt(1);
+             return count > 0;
+         } 
+         finally 
+         {
+             if(rset != null) 
+             {
+                 try 
+                 {
+                     rset.close();
+                 } 
+                 catch(SQLException e)
+                 {
+                     e.printStackTrace();
+                 }
+             }        
+             if(stmt != null) 
+             {
+                 try 
+                 {
+                     stmt.close();
+                 } 
+                 
+                 catch(SQLException e) 
+                 {
+                     e.printStackTrace();
+                 }
+             }        
+        }    
+    }
+    
+    //Method which loads the customers name, registration number and scheduled booking date from the database
+    public void buildCustomerData() throws ClassNotFoundException, SQLException 
+    {
         custData = FXCollections.observableArrayList();
         Connection conn = null;
 
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
-            //String SQL = "Select customer_fullname, scheduled_date from customer, booking where customer.customer_id = booking.b";
             String SQL = "Select customer_fullname, scheduled_date, RegNumber from customer, booking, vehicleList where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
-            System.out.println("Success");
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 CustBookingInfo cust = new CustBookingInfo("","","");
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
@@ -432,9 +432,9 @@ public class VehicleController implements Initializable {
                 custData.add(cust);
 
                 if(rs.getString("customer_fullname").equals(""))
-               {
+                {
                    alertInf("There are no customers in our system at the moment. Please go to the customer services section");
-               } 
+                } 
                 
                 if(rs.getString("scheduled_date").equals(""))
                 {
@@ -447,21 +447,27 @@ public class VehicleController implements Initializable {
             custTable.setItems(custData);
             rs.close();
             conn.close();
-        } catch (Exception e) {
-            alertError("Could not find customer name and booking date.");
+        }
+        catch (Exception e) 
+        {
+            alertError("Error on building customer data. Please try again later.");
         }
     }
     
-    public void buildData() throws ClassNotFoundException, SQLException {
+    //Method which loads up all the vehicle details for a customer from the database
+    public void buildData() throws ClassNotFoundException, SQLException 
+    {
         data = FXCollections.observableArrayList();
         Connection conn = null;
-        try {
+        try 
+        {
 
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
                 vec.regNumber.set(rs.getString("RegNumber"));
                 vec.make.set(rs.getString("Make"));
@@ -506,14 +512,17 @@ public class VehicleController implements Initializable {
             rs.close();
             conn.close();
 
-        } catch (Exception e) {
+        } 
+        catch (Exception e)
+        {
             e.printStackTrace();
-            alertError("Error on Building Data");
+            alertError("Error on building vehicle data. Please try again later.");
         }
 
     }
 
-    public void showVecOnText() {
+    //
+    /*public void showVecOnText() {
         String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
         String vecMake = table.getSelectionModel().getSelectedItem().getMake();
         String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -529,16 +538,19 @@ public class VehicleController implements Initializable {
         String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
 
-    }
+    }*/
 
-    public boolean isVehicleDeleted() throws ClassNotFoundException {
+    //Method which deletes the vehicle from the database where the appropriate vehicle ID is specified
+    public boolean isVehicleDeleted() throws ClassNotFoundException 
+    {
         boolean vecDeleted = false;
 
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
 
         Connection conn = null;
 
-        try {
+        try 
+        {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM vehicleList WHERE vehicleID= ?";
@@ -551,7 +563,10 @@ public class VehicleController implements Initializable {
 
             vecDeleted = true;
 
-        } catch (SQLException e) {
+        } 
+        
+        catch (SQLException e) 
+        {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
@@ -559,20 +574,19 @@ public class VehicleController implements Initializable {
 
     }
 
+    //Method which deletes the parts used on the vehicle from the database once the vehicle is deleted
     public boolean deletePartofVec() throws ClassNotFoundException
     {
         boolean partDeleted = false;
         int ID = table.getSelectionModel().getSelectedItem().getVecID();
         Connection conn = null;
 
-        try {
+        try 
+        {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            //String sql = "delete from vehiclePartsStock where vehiclePartsStock.parts_id; delete from vehicleList where vehicleList.partsid;";
             String sql ="delete from vehiclePartsUsed where vehiclePartsUsed.vehicleID";
             PreparedStatement state = conn.prepareStatement(sql);
-            //state.setString(1, String.valueOf(getPartID()));
-            //state.setString(2, String.valueOf(getVehiclePartID()));
             state.executeUpdate();
 
             state.close();
@@ -580,14 +594,16 @@ public class VehicleController implements Initializable {
             partDeleted = true;
 
     
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         return partDeleted;
     }
     
-    
+    //Method which returns the part ID from the database
     private int getPartID() throws ClassNotFoundException
     {
         int partID = 0;
@@ -618,6 +634,7 @@ public class VehicleController implements Initializable {
         return partID;
     }
     
+    //Method which returns the part ID used on the vehicle
     private int getVehiclePartID() throws ClassNotFoundException
     {
         int vecPartID = 0;
@@ -647,6 +664,8 @@ public class VehicleController implements Initializable {
         }
         return vecPartID;
     }
+    
+    //Method which returns the booking ID from the database
     private int getBookingID() throws ClassNotFoundException
     {
         int bookID = 0;
@@ -676,6 +695,8 @@ public class VehicleController implements Initializable {
         }
         return bookID;
     }
+    
+    //Method which removes the booking associated with a vehicle in the database
     public boolean deleteBookingDate() throws ClassNotFoundException
     {
         boolean bookingDeleted = false;
@@ -697,7 +718,7 @@ public class VehicleController implements Initializable {
         
         catch(Exception e)
         {
-            
+            alertError("Error on deleting booking data. Please try again later.");
         }
         return bookingDeleted;
     }

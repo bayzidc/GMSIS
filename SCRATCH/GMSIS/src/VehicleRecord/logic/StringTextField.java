@@ -21,7 +21,7 @@ public class StringTextField extends TextField{
     @Override
     public void replaceText(int i, int i1, String string)
     {
-        if(string.matches("[a-zA-Z]") || string.matches("[0-9]") || string.isEmpty())
+        if(string.matches("[a-zA-Z]") || string.matches("[0-9]") || string.matches("[ ]") || string.isEmpty())
         {
             super.replaceText(i,i1,string);
         }
