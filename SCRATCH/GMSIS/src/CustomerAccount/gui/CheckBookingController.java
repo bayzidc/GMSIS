@@ -57,7 +57,9 @@ public class CheckBookingController implements Initializable {
     @FXML
     private TableColumn<DiagnosisAndRepairBooking, Integer> duration;
     @FXML
-    private TableColumn<DiagnosisAndRepairBooking, String> partsRequired;
+    private TableColumn<DiagnosisAndRepairBooking, String> startTime;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, String> endTime;
     @FXML
     private TableColumn<DiagnosisAndRepairBooking, Integer> mileage;
 
@@ -111,10 +113,12 @@ public class CheckBookingController implements Initializable {
                     new PropertyValueFactory<>("date"));
             duration.setCellValueFactory(
                     new PropertyValueFactory<>("duration"));
-            partsRequired.setCellValueFactory(
-                    new PropertyValueFactory<>("partsRequired"));
             mileage.setCellValueFactory(
                     new PropertyValueFactory<>("mileage"));
+            startTime.setCellValueFactory(
+                    new PropertyValueFactory<>("startTime"));
+            endTime.setCellValueFactory(
+                    new PropertyValueFactory<>("endTime"));
 
             table.setItems(data);
             rs.close();

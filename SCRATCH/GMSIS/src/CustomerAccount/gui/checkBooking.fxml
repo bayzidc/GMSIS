@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="613.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.CheckBookingController">
+<AnchorPane id="AnchorPane" prefHeight="657.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.CheckBookingController">
    <children>
-      <TableView fx:id="table" layoutX="50.0" layoutY="183.0" prefHeight="394.0" prefWidth="758.0">
+      <TableView fx:id="table" layoutX="50.0" layoutY="183.0" prefHeight="394.0" prefWidth="858.0">
         <columns>
           <TableColumn fx:id="bookingID" prefWidth="75.0" text="bookingID" />
           <TableColumn fx:id="vehicleID" prefWidth="90.0" text="vehicleID" />
@@ -15,8 +15,9 @@
             <TableColumn fx:id="mechanicName" prefWidth="100.0" text="mechanicID" />
             <TableColumn fx:id="date" prefWidth="90.0" text="date" />
             <TableColumn fx:id="duration" prefWidth="85.0" text="duration" />
-            <TableColumn fx:id="partsRequired" prefWidth="119.0" text="parts required" />
             <TableColumn fx:id="mileage" prefWidth="103.0" text="mileage" />
+            <TableColumn fx:id="startTime" prefWidth="90.2000732421875" text="start time" />
+            <TableColumn fx:id="endTime" prefWidth="128.0" text="end time" />
         </columns>
       </TableView>
       <Button fx:id="backButtton" layoutX="50.0" layoutY="51.0" mnemonicParsing="false" onAction="#backButton" text="back" />
