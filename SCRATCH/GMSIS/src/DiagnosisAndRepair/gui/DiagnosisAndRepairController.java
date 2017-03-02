@@ -492,7 +492,6 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         
-        obj.setBookingID(table.getSelectionModel().getSelectedItem().getBookingID());
         obj.setCustName(customerCombo.getValue());
         obj.setVehicleReg(vehicleCombo.getValue());
         obj.setMechanicName(mechanicCombo.getValue());
@@ -593,6 +592,7 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private void editBooking(ActionEvent event) throws ClassNotFoundException
     {     
+        obj.setBookingID(table.getSelectionModel().getSelectedItem().getBookingID());
         String reg = table.getSelectionModel().getSelectedItem().getVehicleReg();      
         String custName = table.getSelectionModel().getSelectedItem().getCustName();     
         String mechName = table.getSelectionModel().getSelectedItem().getMechanicName();     
@@ -604,11 +604,10 @@ public class DiagnosisAndRepairController implements Initializable {
         mechanicCombo.setValue(findComboVal(mechNames,mechName));
         vehicleCombo.setValue(findComboVal(vehicleReg,reg));  
         datePicked.getEditor().setText(date);
+        book.setVisible(false);
         fillStartTimeCombo(); 
         startTime.setValue(findComboVal(startTimeLs,sTime));
-        endTime.setValue(findComboVal(endTimeLs,eTime));
-        
-        book.setVisible(false);
+        endTime.setValue(findComboVal(endTimeLs,eTime));  
     }
     
     private String findComboVal(ObservableList<String> list, String target)
@@ -754,7 +753,7 @@ public class DiagnosisAndRepairController implements Initializable {
         while(rs.next())
         {
             
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(8), rs.getString(9), rs.getString(10)) );
+            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );
           
             FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
@@ -817,6 +816,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private void fillStartTimeCombo() throws ClassNotFoundException
     {   
+        
         if (mechanicCombo.getValue()==null)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR); 
@@ -828,6 +828,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
         
          ObservableList<String> temp = FXCollections.observableArrayList(startTimeLs);
+      
         
          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
          String date = ((TextField)datePicked.getEditor()).getText();
@@ -836,8 +837,7 @@ public class DiagnosisAndRepairController implements Initializable {
          if(checkSaturday(localDate))
          {
              int index = temp.indexOf("12:00");
-             int s = temp.size();
-             for(int i=index; i<s; i++)
+             for(int i=index; i<temp.size(); i++)
              {
                 temp.remove(index); //remove after 12 saturday
              }
@@ -847,25 +847,43 @@ public class DiagnosisAndRepairController implements Initializable {
     try{      
         conn = (new sqlite().connect());
       
-        String SQL = "Select startTime, endTime from Date where date='"+((TextField)datePicked.getEditor()).getText()+ "' and mechanic_id='"+findMechID(mechanicCombo.getValue())+"'";            
+        String SQL = "Select startTime, endTime ,booking_id from booking where scheduled_date='"+((TextField)datePicked.getEditor()).getText()+ "' and mechanic_id='"+findMechID(mechanicCombo.getValue())+"' ORDER BY startTime ASC";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
         {
             
+            if(!book.isVisible() && rs.getInt("booking_id")==obj.getBookingID())
+            {
+                if(!rs.next())
+                {
+                    break;
+                }
+                rs.next();
+            }
+            
             int i = temp.indexOf(rs.getString("startTime"));
             int j = temp.indexOf(rs.getString("endTime"));
-            
-            if(j == -1)
+            System.out.println(i+"  "+j);
+            if(j == -1) //17:30
             {
-                temp.remove(temp.size()-1); //reached latest time
+                j=temp.size(); //reached latest time
             }
-            
-            for(int z=0; z<j-i; z++)
-            {
-                temp.remove(i); //removes taken time slot
-            }
+                for(int z=0; z<j-i; z++)
+                {
+                    System.out.println(temp.get(i));
+                    temp.remove(i); //removes taken time slot    
+                }   
         }  
+        if(temp.isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION); 
+	    alert.setTitle("Booking");
+            alert.setHeaderText("Time slots fully booked");
+            alert.setContentText("Choose another date");
+            alert.showAndWait();
+        }
         startTime.setItems(temp);
+        
     }
     catch(SQLException e){
           e.printStackTrace();
@@ -886,7 +904,7 @@ public class DiagnosisAndRepairController implements Initializable {
     try{      
         conn = (new sqlite().connect());
       
-        String SQL = "Select startTime from Date where date='"+((TextField)datePicked.getEditor()).getText()+ "' and mechanic_id='"+findMechID(mechanicCombo.getValue())+"' and startTime>'"+start+"'";            
+        String SQL = "Select startTime from booking where scheduled_date='"+((TextField)datePicked.getEditor()).getText()+ "' and mechanic_id='"+findMechID(mechanicCombo.getValue())+"' and startTime>'"+start+"'";            
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
         {             
@@ -910,7 +928,11 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private void fillComboEndTimes(String start, String closestTimeString)
     {
-             
+        if(start==null)
+        {
+            return;
+        }
+        
             ObservableList<String> temp = FXCollections.observableArrayList();
              
             int i = endTimeLs.indexOf(start);
