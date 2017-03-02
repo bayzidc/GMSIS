@@ -5,8 +5,10 @@
  */
 package PartsRecord.logic;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,8 +29,9 @@ public class partsUsed {
     public StringProperty vehicleRegNo;
     public StringProperty customerFullName;
     public IntegerProperty bookingID;
+    public BooleanProperty addedBill;
 
-    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID) {
+    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID, boolean checkBill) {
         this.usedID = new SimpleIntegerProperty(usedID);
         this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
@@ -38,7 +41,7 @@ public class partsUsed {
         this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
         this.bookingID = new SimpleIntegerProperty(bookingID);
-        
+        this.addedBill = new SimpleBooleanProperty(checkBill);
     }
     
     public int getUsedID(){
@@ -51,6 +54,10 @@ public class partsUsed {
 
     public double getCost() {
         return cost.get();
+    }
+    
+    public boolean getAddedBill(){
+        return addedBill.get();
     }
     
     public int getQuantity() {
@@ -91,6 +98,10 @@ public class partsUsed {
     
     public void setUsedID(int number){
         usedID.set(number);
+    }
+    
+    public void setAddedBill(boolean check){
+        addedBill.set(check);
     }
     
     public void setInstallDate(String date) {
