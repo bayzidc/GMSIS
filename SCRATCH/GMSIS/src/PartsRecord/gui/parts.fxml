@@ -45,5 +45,12 @@
       <ComboBox fx:id="bookingIdCombo" layoutX="194.0" layoutY="196.0" prefHeight="27.0" prefWidth="195.0" promptText="Select ID" />
       <ComboBox fx:id="partNameCombo" layoutX="194.0" layoutY="80.0" prefHeight="27.0" prefWidth="195.0" promptText="Select Name" />
       <Button fx:id="addBill" layoutX="380.0" layoutY="336.0" mnemonicParsing="false" onAction="#addBill" text="Add to Bill" />
+      <TableView fx:id="custInfoTable" layoutX="500.0" layoutY="70.0" prefHeight="201.0" prefWidth="383.0">
+        <columns>
+          <TableColumn fx:id="fullCustomerNameCol" prefWidth="128.0" text="Customer Name" />
+          <TableColumn fx:id="regNoCol" prefWidth="121.0" text="VehRegNo" />
+            <TableColumn fx:id="bookingDateCol" prefWidth="133.0" text="BookingDate" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

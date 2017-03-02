@@ -37,6 +37,7 @@ import java.util.Optional;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import PartsRecord.logic.partsUsed;
+import PartsRecord.logic.vehicleCustomerInfo;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -50,8 +51,11 @@ import javafx.scene.control.ComboBox;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.DateCell;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -107,6 +111,20 @@ public class PartsController implements Initializable {
     public int usedPartID;
     public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0);
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
+    
+    @FXML
+    public TableView<vehicleCustomerInfo> custInfoTable;
+    @FXML
+    public TableColumn<vehicleCustomerInfo, String> fullCustomerNameCol;
+    @FXML
+    public TableColumn<vehicleCustomerInfo, String> bookingDateCol;
+    @FXML 
+    public TableColumn<vehicleCustomerInfo, String> regNoCol;
+    
+    public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("","","");
+
+    ObservableList<vehicleCustomerInfo> customerData;
+    
     
 
     @FXML
@@ -495,8 +513,9 @@ public class PartsController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.out.println(" Error in editButton.");
         } 
-}
-   
+ }
+     
+    
 
     public void clearFields() {
         partNameCombo.setValue(null);
@@ -848,6 +867,22 @@ public class PartsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
+        {
+            @Override
+            public void updateItem(LocalDate item, boolean empty)
+            {
+                super.updateItem(item, empty);
+
+                if(item.isBefore(LocalDate.now())) 
+                {
+                    setStyle("-fx-background-color: #fcbabf;");
+                    Platform.runLater(() -> setDisable(true));                 
+                }
+            }
+        };
+            dateOfInstall.setDayCellFactory(dayCellFactory);
 
         ObservableList<String> namesCombo = FXCollections.observableArrayList("Spark Plugs", "Prop Shaft", "Handbrake Cable", "Bumper", "Rims", "HeadLights", "Tail Lights", "Radiator", "Fender", "Roof Rack");
         partNameCombo.setItems(namesCombo);
