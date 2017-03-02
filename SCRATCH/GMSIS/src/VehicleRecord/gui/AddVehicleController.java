@@ -600,7 +600,7 @@ public class AddVehicleController implements Initializable {
         
         catch(SQLException e)
         {
-            
+            alertError("Error on loading vehicles for quick selection.");
         }
     }
    

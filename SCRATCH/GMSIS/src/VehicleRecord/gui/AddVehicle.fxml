@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import VehicleRecord.logic.*?>
+
+
 <AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="638.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
       <Label layoutX="244.0" prefHeight="66.0" prefWidth="162.0" text="Vehicle Entry">

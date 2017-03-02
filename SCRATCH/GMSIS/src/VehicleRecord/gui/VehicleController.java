@@ -300,7 +300,7 @@ public class VehicleController implements Initializable {
         {
             String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
             int id = table.getSelectionModel().getSelectedItem().getVecID();
-            if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec())
+            if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec() && deleteBookingDate())
             {
                 alertInf("VehicleID: " + id + " has been deleted.");
                 buildData();
@@ -431,7 +431,7 @@ public class VehicleController implements Initializable {
                 cust.regNumber.set(rs.getString("RegNumber"));
                 custData.add(cust);
 
-                if(rs.getString("customer_fullname").equals(""))
+                if(rs.getString("customer_fullname").equals("") && rs.getString("scheduled_date").equals(""))
                 {
                    alertInf("There are no customers in our system at the moment. Please go to the customer services section");
                 } 
@@ -699,15 +699,16 @@ public class VehicleController implements Initializable {
     //Method which removes the booking associated with a vehicle in the database
     public boolean deleteBookingDate() throws ClassNotFoundException
     {
+        int id = table.getSelectionModel().getSelectedItem().getVecID();
         boolean bookingDeleted = false;
         Connection conn = null;
         
         try
         {
             conn = (new sqlite().connect());
-            String sql = "delete from booking where booking.booking_id=? ";
+            String sql = "delete from booking where booking.vehicleID=? ";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, String.valueOf(getBookingID()));
+            state.setString(1, String.valueOf(id));
             state.executeUpdate();
             
             state.close();
