@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="354.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="354.0" prefWidth="600.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.LoginController">
    <children>
-      <Label fx:id="titleID" alignment="CENTER" layoutX="178.0" layoutY="33.0" prefHeight="75.0" prefWidth="245.0" text="Welcome to GMSIS" textFill="#0768eb">
+      <Label fx:id="titleID" alignment="CENTER" layoutX="178.0" layoutY="33.0" prefHeight="75.0" prefWidth="245.0" text="Welcome to GMSIS" textFill="#171717">
          <font>
-            <Font name="System Bold" size="18.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
       <TextField fx:id="username" layoutX="189.0" layoutY="132.0" prefHeight="33.0" prefWidth="223.0" promptText="User ID..." />
       <PasswordField fx:id="pass" layoutX="189.0" layoutY="188.0" prefHeight="33.0" prefWidth="223.0" promptText="Password..." />
-      <Button fx:id="loginBtn" layoutX="263.0" layoutY="254.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="75.0" text="Login" />
+      <Button fx:id="loginBtn" layoutX="263.0" layoutY="233.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="75.0" text="Login" />
+      <Hyperlink fx:id="forgotPass" layoutX="254.0" layoutY="287.0" prefHeight="24.0" prefWidth="137.0" text="Forgot Password?" textFill="#252323" />
    </children>
 </AnchorPane>

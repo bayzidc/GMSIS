@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,11 +22,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -44,7 +45,8 @@ public class LoginController implements Initializable {
     private Button loginBtn;
     @FXML
     private Button newBtn;
-
+    @FXML
+    private Hyperlink forgotPass;
     @FXML 
     private void loginButton(ActionEvent event) throws IOException
     {
@@ -78,12 +80,10 @@ public class LoginController implements Initializable {
             Alert alert = new Alert(AlertType.ERROR); // Pop up box
 	    alert.setTitle("Error");
 	    alert.setHeaderText("Invalid Username or password.");
-          //alert.setContentText("Try");
             alert.showAndWait();
-            //JOptionPane.showMessageDialog(null,"Sorry,Invalid Username or password.");
         }
     }
-           
+   
     public boolean isValidLogin()
     {
         boolean loggedIn = false;
@@ -163,6 +163,17 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        forgotPass.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            username.clear();
+            pass.clear();
+            Alert alert = new Alert(AlertType.INFORMATION); // Pop up box
+	    alert.setTitle("Information");
+	    alert.setHeaderText("If you have forgotten your password, please contact an administrator so that they can change your password.");
+            alert.showAndWait();
+    }
+});
     }    
     
 }
