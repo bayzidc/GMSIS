@@ -20,32 +20,33 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="627.0" prefWidth="1202.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
+<AnchorPane id="AnchorPane" prefHeight="646.0" prefWidth="1273.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
    <children>
       <DatePicker fx:id="datePicked" layoutX="135.0" layoutY="215.0" onAction="#fillStartTimeOnChange" prefHeight="25.0" prefWidth="116.0" />
       <Label layoutX="23.0" layoutY="219.0" text="Scheduled  Date" />
       <Button fx:id="book" layoutX="99.0" layoutY="473.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="116.0" text="Submit Booking" />
       <Label layoutX="21.0" layoutY="290.0" text="Start Time" />
       <Label layoutX="23.0" layoutY="343.0" text="End TIme" />
-      <TableView fx:id="table" layoutX="313.0" layoutY="48.0" prefHeight="359.0" prefWidth="876.0">
+      <TableView fx:id="table" layoutX="313.0" layoutY="48.0" prefHeight="359.0" prefWidth="946.0">
         <columns>
             <TableColumn fx:id="bookingIDCol" prefWidth="64.0" text="BookingID" />
-          <TableColumn fx:id="vehicleIDCol" prefWidth="100.0" text="Vechicle Reg" />
-            <TableColumn fx:id="custIDCol" prefWidth="98.0" text="Customer Name" />
-          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="98.0" text="Mechanic Name" />
-          <TableColumn fx:id="mileageCol" minWidth="0.0" text="Mileage" />
-          <TableColumn fx:id="dateCol" prefWidth="121.0" text="Date" />
-          <TableColumn fx:id="startTimeCol" minWidth="0.0" prefWidth="101.0" text="Start Time" />
-          <TableColumn fx:id="endTimeCol" minWidth="0.0" prefWidth="93.0" text="End Time" />
-          <TableColumn fx:id="durationCol" prefWidth="120.0" text="Duration in minutes" />
+          <TableColumn fx:id="vehicleIDCol" prefWidth="76.0" text="Vechicle Reg" />
+          <TableColumn fx:id="makeCol" prefWidth="54.0" text="Make" />
+            <TableColumn fx:id="custIDCol" prefWidth="99.0" text="Customer Name" />
+          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="115.0" text="Mechanic Name" />
+          <TableColumn fx:id="mileageCol" minWidth="0.0" prefWidth="67.0" text="Mileage" />
+          <TableColumn fx:id="dateCol" prefWidth="109.0" text="Date" />
+          <TableColumn fx:id="startTimeCol" minWidth="0.0" prefWidth="111.0" text="Start Time" />
+          <TableColumn fx:id="endTimeCol" minWidth="0.0" prefWidth="98.0" text="End Time" />
+          <TableColumn fx:id="durationCol" prefWidth="182.0" text="Duration in minutes" />
         </columns>
       </TableView>
       <ComboBox fx:id="mechanicCombo" layoutX="114.0" layoutY="151.0" onAction="#resetDate" prefWidth="150.0" promptText="Select" />
       <Label layoutX="24.0" layoutY="155.0" text="Mechanic" />
-      <TextField fx:id="searchField" layoutX="902.0" layoutY="425.0" prefHeight="25.0" prefWidth="286.0" promptText="Search" />
+      <TextField fx:id="searchField" layoutX="902.0" layoutY="425.0" prefHeight="25.0" prefWidth="358.0" promptText="Search" />
       <Group />
-      <Button layoutX="687.0" layoutY="425.0" mnemonicParsing="false" text="Find Booking" />
-      <TextField layoutX="533.0" layoutY="424.0" prefHeight="25.0" prefWidth="136.0" promptText="Enter vechicle reg" />
+      <Button layoutX="687.0" layoutY="425.0" mnemonicParsing="false" text="Find Next Booking Date" />
+      <TextField layoutX="529.0" layoutY="425.0" prefHeight="25.0" prefWidth="136.0" promptText="Enter vechicle reg" />
       <Button fx:id="editButton" layoutX="381.0" layoutY="425.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="54.0" text="Edit" />
       <Button fx:id="deleteButton" layoutX="313.0" layoutY="424.0" mnemonicParsing="false" onAction="#deleteBooking" text="Delete" />
       <ComboBox fx:id="customerCombo" layoutX="114.0" layoutY="63.0" onAction="#findVehicleOnChange" prefWidth="150.0" promptText="Select" />
@@ -57,5 +58,12 @@
       <Button fx:id="clear" layoutX="170.0" layoutY="538.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="25.0" prefWidth="75.0" text="Clear All" />
       <ComboBox fx:id="startTime" layoutX="114.0" layoutY="286.0" onAction="#fillEndTimeCombo" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="endTime" layoutX="114.0" layoutY="339.0" prefWidth="150.0" promptText="Select" />
+      <TableView fx:id="NBtable" layoutX="475.0" layoutY="492.0" prefHeight="107.0" prefWidth="425.0">
+        <columns>
+          <TableColumn prefWidth="138.0" text="Customer Name" />
+          <TableColumn prefWidth="129.0" text="Vehicle Reg" />
+          <TableColumn prefWidth="157.0" text="Next booking date" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

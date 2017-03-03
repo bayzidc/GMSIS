@@ -64,6 +64,7 @@ import javafx.util.StringConverter;
 import java.util.Calendar;
 import java.util.Date;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 /**
  * FXML Controller class
  *
@@ -98,6 +99,8 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML 
     private TableColumn<DiagnosisAndRepairBooking, String> vehicleIDCol;
     @FXML 
+    private TableColumn<DiagnosisAndRepairBooking, String> makeCol;
+    @FXML 
     private TableColumn<DiagnosisAndRepairBooking, String> mechanicIDCol;
     @FXML 
     private TableColumn<DiagnosisAndRepairBooking, Double> mileageCol;
@@ -122,7 +125,7 @@ public class DiagnosisAndRepairController implements Initializable {
     //private ObservableList<String> times = FXCollections.observableArrayList("09:00 to 09:30","09:30 to 10:00","10:00 to 10:30","10:30 to 11:00","11:00 to 11:30","11:30 to 12:00","12:00 to 12:30","12:30 to 13:00","13:00 to 13:30","13:30 to 14:00","14:00 to 14:30","14:30 to 15:00","15:00 to 15:30","15:30 to 16:00","16:00 to 16:30","16:30 to 17:00");
     
 
-    private DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking(0,"","","","",0,0,"","");
+    private DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","");
      
     /**
      * Initializes the controller class.
@@ -131,7 +134,6 @@ public class DiagnosisAndRepairController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
-         
         
         Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
         {
@@ -753,7 +755,9 @@ public class DiagnosisAndRepairController implements Initializable {
         while(rs.next())
         {
             
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );
+            String make = findMake(rs.getString(2),conn);
+         
+            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );
           
             FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
@@ -766,6 +770,9 @@ public class DiagnosisAndRepairController implements Initializable {
                     if (Booking.getCustName().toLowerCase().contains(newValLow)) {
                         return true;
                     } else if (Booking.getVehicleReg().toLowerCase().contains(newValLow)) {
+                        return true;
+                    }
+                    else if (Booking.getMake().toLowerCase().contains(newValLow)) {
                         return true;
                     }
 
@@ -786,6 +793,8 @@ public class DiagnosisAndRepairController implements Initializable {
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("bookingID"));         
     vehicleIDCol.setCellValueFactory(                
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("vehicleReg"));
+    makeCol.setCellValueFactory(
+        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("make"));
     custIDCol.setCellValueFactory(
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("custName"));
     mechanicIDCol.setCellValueFactory(
@@ -807,6 +816,29 @@ public class DiagnosisAndRepairController implements Initializable {
           System.out.println("Error on Building Data");            
     }
     }
+    
+    private String findMake(String vehID, Connection conn)
+    {
+        String make = "";
+  
+        try {
+
+            String SQL = "Select Make from vehicleList where vehicleID='"+ vehID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {       
+                make = rs.getString("Make");    
+            }
+            
+            rs.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return make;
+    }
+    
     
     @FXML
     private void fillStartTimeOnChange(ActionEvent event) throws ClassNotFoundException
@@ -971,6 +1003,16 @@ public class DiagnosisAndRepairController implements Initializable {
             }
              
         endTime.setItems(temp);
+    }
+    
+    private String nextDate(String date)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");     
+        LocalDate dateToday = LocalDate.now();
+        LocalDate dateTemp = LocalDate.parse(date,formatter);
+        int daysBetween = (int)ChronoUnit.DAYS.between(dateToday, dateTemp); 
+        
+        return  "";
     }
     
     private int calculateDuration(String sTime, String eTime)

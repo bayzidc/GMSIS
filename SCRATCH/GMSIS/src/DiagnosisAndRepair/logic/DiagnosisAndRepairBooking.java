@@ -15,6 +15,7 @@ public class DiagnosisAndRepairBooking {
    private SimpleIntegerProperty bookingID;
    private SimpleStringProperty custName;
    private SimpleStringProperty vehicleReg;
+   private SimpleStringProperty make;
    private SimpleStringProperty mechanicName;
    private SimpleDoubleProperty mileage;
    private SimpleStringProperty date;
@@ -22,10 +23,11 @@ public class DiagnosisAndRepairBooking {
    private SimpleStringProperty startTime;
    private SimpleStringProperty endTime;
   
-   public DiagnosisAndRepairBooking(int id, String reg, String cName, String mName, String date, int duration, double mileage, String startTime, String endTime)
+   public DiagnosisAndRepairBooking(int id, String reg, String make, String cName, String mName, String date, int duration, double mileage, String startTime, String endTime)
    {
        this.bookingID = new SimpleIntegerProperty(id);
        this.vehicleReg = new SimpleStringProperty(reg);
+       this.make = new SimpleStringProperty(make);
        this.custName = new SimpleStringProperty(cName); 
        this.mechanicName = new SimpleStringProperty(mName);
        this.date = new SimpleStringProperty(date);
@@ -47,6 +49,10 @@ public class DiagnosisAndRepairBooking {
    public String getVehicleReg()
    {
        return vehicleReg.get();
+   }
+   public String getMake()
+   {
+       return make.get();
    }
    public String getMechanicName()
    {
@@ -86,6 +92,10 @@ public class DiagnosisAndRepairBooking {
    {
        vehicleReg.set(reg);
    }
+   public void setMake(String m)
+   {
+       make.set(m);
+   }
    public void setMechanicName(String mName)
    {
        mechanicName.set(mName);
@@ -122,6 +132,10 @@ public class DiagnosisAndRepairBooking {
    public StringProperty getVehicleRegProperty()
    {
        return vehicleReg;
+   }
+   public StringProperty getMakeProperty()
+   {
+       return make;
    }
    public StringProperty getMechanicNameProperty()
    {
