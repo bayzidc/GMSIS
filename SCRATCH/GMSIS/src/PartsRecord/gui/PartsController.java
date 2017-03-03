@@ -214,18 +214,48 @@ public class PartsController implements Initializable {
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
+            System.out.println("error in addingBILL TRUE");
+        }
+    }
+    
+    
+    
+    public void settleBills(int ID, boolean value) throws ClassNotFoundException {
+        try {
+            Connection conn = null;
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully");
+
+            String sql = "UPDATE bill SET settled=? WHERE vehicleID=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            state.setBoolean(1, value);
+            state.setInt(2, ID);
+
+            state.execute();
+
+            state.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.out.println("error in settling bills");
         }
     }
 
     @FXML
     public void addBill() throws ClassNotFoundException {
-        //int customer_id = Integer.parseInt(findCustomerID(table.getSelectionModel().getSelectedItem().getCustomerFullName()));
+        int bookingID = table.getSelectionModel().getSelectedItem().getBookingID(); 
+        int vehicleID = findVehicleID(table.getSelectionModel().getSelectedItem().getBookingID());
+        int customerID = findCustomerID(table.getSelectionModel().getSelectedItem().getBookingID());
         try {
             System.out.println("This is value of boolean: " + part.getAddedBill());
             if (part.getAddedBill() == false) {
                 changeAddedBillTrue(part);
                 BillController.showBill.addCostToBill(BillController.showBill, part, part.getQuantity());
                 Double totalCost = BillController.showBill.getTotalCost();
+                System.out.println("The total cost is: " + totalCost);
                 Connection conn = null;
 
                 Class.forName("org.sqlite.JDBC");
@@ -233,12 +263,15 @@ public class PartsController implements Initializable {
 
                 System.out.println("Creating data.");
 
-                String sql = "insert into bill(customerID, bookingID, totalCost, settled) values(?,?,?,?)";
+                String sql = "insert into bill(customerID, bookingID,vehicleID, totalCost, settled) values(?,?,?,?,?)";
                 PreparedStatement state = conn.prepareStatement(sql);
-                //state.setInt(1, customer_id);
-                state.setInt(2, 1);
-                state.setDouble(3, totalCost);
-                state.setBoolean(4, false);
+                state.setInt(1, customerID);
+                state.setInt(2, bookingID);
+                state.setInt(3, vehicleID);
+                //System.out.println("I am here up");
+                state.setDouble(4, totalCost);
+                //System.out.println("I am here down");
+                state.setBoolean(5, false);
                 BillController.showBill.setTotalCost(0);
                 state.execute();
 
@@ -249,9 +282,43 @@ public class PartsController implements Initializable {
             else alertInformation("Already added to Bill.");
         } //submit=true;
         catch (Exception e) {
-            alertInformation("Error.");
+            alertInformation("Error in adding BILL.");
             System.out.println("Here 8.");
         }
+        String warrantyExists = checkIfWarrantyExists(vehicleID);
+        if(warrantyExists.equals("Yes")){
+            settleBills(vehicleID, true);
+        }
+        else if(warrantyExists.equals("No")){
+           settleBills(vehicleID, false); 
+        }
+    }
+    
+    
+    
+    public String checkIfWarrantyExists(int vehicleID) throws ClassNotFoundException{
+        String checkWarranty= "";
+
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            String SQL = "Select Warranty from vehicleList where vehicleID ='" + vehicleID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                checkWarranty = rs.getString("Warranty");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error in checking Warranty");
+        }
+        return checkWarranty;
     }
 
     public void installButton() throws IOException, ClassNotFoundException {
