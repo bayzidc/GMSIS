@@ -136,6 +136,50 @@ public class PartsController implements Initializable {
         stage2.show();
 
     }
+    
+    public void buildCustomerData() throws ClassNotFoundException, SQLException {
+        customerData = FXCollections.observableArrayList();
+        Connection conn = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC"); 
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber from customer, booking, vehicleList where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+  
+            while (rs.next()) {
+                
+                custVehicle.setCustomerName(rs.getString("customer_fullname"));
+                custVehicle.setRegNumber(rs.getString("RegNumber"));
+                custVehicle.setBookingDate(rs.getString("scheduled_date"));
+                
+                customerData.add(custVehicle);
+
+                if(custVehicle.getCustomerName().equals(""))
+               {
+                   alertInformation("There are no customers in our system.");
+               } 
+                
+                if(custVehicle.getBookingDate().equals(""))
+                {
+                    alertInformation("There are no bookings available for this customers");
+                }
+                
+                if(custVehicle.getRegNumber().equals("")){
+                    alertInformation("Vehicle registration number is missing in our database.");
+                }
+
+            }
+            
+            
+            custInfoTable.setItems(customerData);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError("Error in building customer Data.");
+        }
+    }
 
     public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
         clearFields();
@@ -919,8 +963,15 @@ public class PartsController implements Initializable {
                 new PropertyValueFactory<>("customerFullName"));
         bookingIdCol.setCellValueFactory(
                 new PropertyValueFactory<>("bookingID"));
+        regNoCol.setCellValueFactory(
+                new PropertyValueFactory<>("vehicleregNo"));
+        fullCustomerNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("customerName"));
+        bookingDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("bookingDate"));
         try {
             buildPartsUsedData();
+            buildCustomerData();
 
             // selectedItemProperty = gives you the item the user selected form the table.
             // add listner to your tableview selectedItemProperty
