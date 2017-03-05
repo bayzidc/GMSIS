@@ -48,8 +48,8 @@
       <Label layoutX="24.0" layoutY="264.0" text="Mechanic" />
       <TextField fx:id="searchField" layoutX="313.0" layoutY="52.0" onKeyReleased="#searchFunc" prefHeight="25.0" prefWidth="335.0" promptText="Search by customer name, vehicle registration or make" />
       <Group />
-      <Button fx:id="editButton" layoutX="1172.0" layoutY="463.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="87.0" text="Edit" />
-      <Button fx:id="deleteButton" layoutX="1067.0" layoutY="463.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="87.0" text="Delete" />
+      <Button fx:id="editButton" layoutX="1150.0" layoutY="247.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="109.0" text="Edit" />
+      <Button fx:id="deleteButton" layoutX="1015.0" layoutY="247.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="109.0" text="Delete" />
       <ComboBox fx:id="customerCombo" layoutX="116.0" layoutY="95.0" onAction="#findVehicleOnChange" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="vehicleCombo" layoutX="116.0" layoutY="148.0" prefHeight="25.0" prefWidth="150.0" promptText="Select" />
       <Label layoutX="22.0" layoutY="99.0" prefHeight="17.0" prefWidth="54.0" text="Customer" />
@@ -74,11 +74,11 @@
       </Label>
       <CheckBox fx:id="pBooking" layoutX="313.0" layoutY="584.0" mnemonicParsing="false" onAction="#filterByPast" text="All past bookings" visible="false" />
       <CheckBox fx:id="fBooking" layoutX="313.0" layoutY="562.0" mnemonicParsing="false" onAction="#filterByFuture" text="All future bookings + today" visible="false" />
-      <Separator layoutX="18.0" layoutY="238.0" prefHeight="1.0" prefWidth="249.0" />
+      <Separator layoutX="21.0" layoutY="198.0" prefHeight="1.0" prefWidth="244.0" />
       <CheckBox fx:id="allBooking" layoutX="313.0" layoutY="610.0" mnemonicParsing="false" onAction="#showAllBooking" text="Show all bookings" visible="false" />
-      <Label layoutX="19.0" layoutY="200.0" text="Current Mileage" />
-      <TextField fx:id="mileage" layoutX="117.0" layoutY="196.0" />
-      <TableView fx:id="table2" layoutX="397.0" layoutY="292.0" prefHeight="159.0" prefWidth="727.0">
+      <Label layoutX="21.0" layoutY="221.0" text="Current Mileage" />
+      <TextField fx:id="mileage" layoutX="117.0" layoutY="217.0" />
+      <TableView fx:id="table2" layoutX="397.0" layoutY="292.0" prefHeight="176.0" prefWidth="727.0">
          <columns>
             <TableColumn fx:id="vehicleIDCol1" prefWidth="88.0" text="Vechicle Reg" />
             <TableColumn fx:id="custIDCol1" prefWidth="112.0" text="Customer Name" />
@@ -95,6 +95,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="viewAll" layoutX="313.0" layoutY="248.0" mnemonicParsing="false" onAction="#viewAll" text="View all bookings" />
+      <Button fx:id="viewAll" layoutX="313.0" layoutY="248.0" mnemonicParsing="false" onAction="#viewAll" prefHeight="25.0" prefWidth="122.0" text="View all bookings" />
    </children>
 </AnchorPane>

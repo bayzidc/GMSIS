@@ -238,8 +238,8 @@ public class DiagnosisAndRepairController implements Initializable {
         
         fillCustomerCombo();
         fillMechanicCombo();
+        //buildBooking();
         buildBooking();
-        findNextDate();
     }
         catch(ClassNotFoundException e)
     {
@@ -860,7 +860,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     
-    private void buildBooking() throws ClassNotFoundException
+   /* private void buildBooking() throws ClassNotFoundException
     {
         bToday.setSelected(false);
         bMonth.setSelected(false);
@@ -895,7 +895,7 @@ public class DiagnosisAndRepairController implements Initializable {
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
-    }
+    }*/
     
     private String findMake(String vehID, Connection conn)
     {
@@ -1122,7 +1122,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     
-    private void findNextDate() throws ClassNotFoundException
+    private void buildBooking() throws ClassNotFoundException
     {
         int size = fillVehID();
         
@@ -1165,8 +1165,7 @@ public class DiagnosisAndRepairController implements Initializable {
                       if(daysBetween < daysDiff)
                       {
                           daysDiff = daysBetween;
-                          
-                          // vID = vehID.get(0);
+                         
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
                            custID=rs.getString("customer_id");
