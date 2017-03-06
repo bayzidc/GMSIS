@@ -96,6 +96,8 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private TextField mileage;
     @FXML
+    private CheckBox bHour;
+    @FXML
     private CheckBox bToday;
     @FXML
     private CheckBox bMonth;
@@ -105,6 +107,8 @@ public class DiagnosisAndRepairController implements Initializable {
     private CheckBox fBooking;
     @FXML
     private CheckBox allBooking;
+    @FXML
+    private CheckBox allBooking2;
     
     @FXML 
     private TableView<DiagnosisAndRepairBooking> table;
@@ -150,6 +154,9 @@ public class DiagnosisAndRepairController implements Initializable {
     private TableColumn<DiagnosisAndRepairBooking, String> endTimeCol1;
     
     private ObservableList<DiagnosisAndRepairBooking> data2;
+    
+    private ObservableList<DiagnosisAndRepairBooking> tempData = FXCollections.observableArrayList();
+     private ObservableList<DiagnosisAndRepairBooking> tempData2 = FXCollections.observableArrayList();
     
     ObservableList<Integer> vehID = FXCollections.observableArrayList();
     private ObservableList<String> custNames = FXCollections.observableArrayList();
@@ -259,7 +266,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private LocalDate getBankHoliday(String item)
     {    
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         if(item.equals("gFriday"))
         {
             return LocalDate.parse("14/04/2017",formatter);
@@ -735,7 +742,7 @@ public class DiagnosisAndRepairController implements Initializable {
         String mech = findMechID(obj.getBookingID())+": "+mechName;
         mechanicCombo.setValue(findComboVal(mechNames,mech));
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(date, formatter);
       
         datePicked.setValue(localDate); 
@@ -939,7 +946,7 @@ public class DiagnosisAndRepairController implements Initializable {
          ObservableList<String> temp = FXCollections.observableArrayList(startTimeLs);
       
         
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
          String date = ((TextField)datePicked.getEditor()).getText();
          LocalDate localDate = LocalDate.parse(date, formatter);
          formatter.format(localDate);
@@ -1060,7 +1067,7 @@ public class DiagnosisAndRepairController implements Initializable {
             //if there is no start time after the selected start time
             if(j == -1)
             {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     String date = ((TextField)datePicked.getEditor()).getText();
                     LocalDate localDate = LocalDate.parse(date, formatter);
                     formatter.format(localDate);
@@ -1127,6 +1134,7 @@ public class DiagnosisAndRepairController implements Initializable {
         int size = fillVehID();
         
         data = FXCollections.observableArrayList();
+        tempData.clear();
         
         try 
         {
@@ -1154,10 +1162,11 @@ public class DiagnosisAndRepairController implements Initializable {
             {       
                 date = rs.getString("scheduled_date");   
                 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");     
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");     
                 LocalDate dateToday = LocalDate.now();
                 LocalDate dateTemp = LocalDate.parse(date,formatter);
         
+                
                 if(dateToday.isBefore(dateTemp) || dateToday.equals(dateTemp))
                 {
                       int daysBetween = (int)ChronoUnit.DAYS.between(dateToday, dateTemp); 
@@ -1182,21 +1191,29 @@ public class DiagnosisAndRepairController implements Initializable {
             rs.close();
             conn.close();
             
-            
+         
             data.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), findMechName(mechID), nextDate, duration, mileage, startTime, endTime));
     } //end for loop
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error");
         }  
+        tempData.addAll(data);
         table.setItems(data);
        
     }
     
     @FXML
-    private void viewAll(ActionEvent event) throws ClassNotFoundException
+    private void viewAllVehicleBooking(ActionEvent event) throws ClassNotFoundException
     {
+        buildBookingForTable2();
+    }
+    
+    private void buildBookingForTable2() throws ClassNotFoundException
+    {
+        allBooking2.setSelected(true);
         data2 = FXCollections.observableArrayList();
+        tempData2.clear();
         
         String vReg = table.getSelectionModel().getSelectedItem().getVehicleReg();
         String vID = findVehID(vReg);
@@ -1232,7 +1249,7 @@ public class DiagnosisAndRepairController implements Initializable {
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
-        
+        tempData2.addAll(data2);
         table2.setItems(data2);
     }
     
@@ -1265,10 +1282,15 @@ public class DiagnosisAndRepairController implements Initializable {
         });
     }
     
+     @FXML
+    private void filterByHour() throws ClassNotFoundException
+    {
+        //datetime
+    }
     
     @FXML
     private void filterByToday() throws ClassNotFoundException
-    {/*
+    {
         if(!bToday.isSelected())
         {
             return;
@@ -1280,39 +1302,27 @@ public class DiagnosisAndRepairController implements Initializable {
         allBooking.setSelected(false);
         
         
-        data = FXCollections.observableArrayList();
-        
-    Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        data = FXCollections.observableArrayList(tempData);
+     
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String today = LocalDate.now().format(formatter);
-
-        String SQL = "Select * from booking where scheduled_date='"+today+"'";    //only today        
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next())
+        
+        for(int i=0; i<data.size(); i++)
         {
-            String make = findMake(rs.getString(2),conn);
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );      
+            if(!today.equals(data.get(i).getDate()))
+            {
+                data.remove(i);
+                i--;  
+            }
+           
         }
-        table.setItems(data);
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }*/
+       table.setItems(data);
     } 
 
     @FXML
     private void filterByMonth() throws ClassNotFoundException
     {
-       /* if(!bMonth.isSelected())
+        if(!bMonth.isSelected())
         {
             return;
         }
@@ -1321,97 +1331,52 @@ public class DiagnosisAndRepairController implements Initializable {
         pBooking.setSelected(false);
         fBooking.setSelected(false);
         allBooking.setSelected(false);
-        
-        
-        data = FXCollections.observableArrayList();
-        
-    Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
+          
+        data = FXCollections.observableArrayList(tempData);
         
         LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = now.format(formatter);
         String[] dateNow = date.split("/");
-
-        String SQL = "Select * from booking";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next())
+        
+        for(int i=0; i<data.size(); i++)
         {
-            String[] tempDate = rs.getString("scheduled_date").split("/");
-            if(dateNow[1].equals(tempDate[1]) && dateNow[2].equals(tempDate[2])) //same month and year
+            String[] tempDate = data.get(i).getDate().split("/");
+            if(!dateNow[1].equals(tempDate[1]) || !dateNow[2].equals(tempDate[2])) //same month or different year
             {
-                String make = findMake(rs.getString(2),conn);
-                data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );      
+                data.remove(i);
+                i--;
             }
         }
-        table.setItems(data);
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }*/
+        table.setItems(data); 
     }
     
     @FXML
     private void filterByPast() throws ClassNotFoundException
     {
-        if(!pBooking.isSelected())
+       if(!pBooking.isSelected())
         {
             return;
         }
         
-        bMonth.setSelected(false);
-        bToday.setSelected(false);
         fBooking.setSelected(false);
-        allBooking.setSelected(false);
+        allBooking2.setSelected(false);
         
-        int id = obj.getBookingID();
-        String vID = findVehID(obj.getVehicleReg());
-        
-           data2 = FXCollections.observableArrayList();
-           
-    Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
-        
+        data2 = FXCollections.observableArrayList(tempData2);
+     
         LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        String SQL = "Select * from booking where vehicleID='"+vID+"'";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next())
+        for(int i=0; i<data2.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(rs.getString("scheduled_date"),formatter);
-            if(now.isAfter(tempDate)) //past dates
+            LocalDate tempDate = LocalDate.parse(data2.get(i).getDate(),formatter);
+            if(now.isBefore(tempDate)) //past dates
             {
-                if(rs.getInt("booking_id")==id)
-                {
-                    if(!rs.next())
-                    {
-                        break;
-                    }
-                }
-                String make = findMake(rs.getString(2),conn);
-                data2.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );      
+                data2.remove(i);
+                i--;
             }
         }
         table2.setItems(data2);
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }
     }
     
     @FXML
@@ -1421,53 +1386,24 @@ public class DiagnosisAndRepairController implements Initializable {
         {
             return;
         }
-        
-        bMonth.setSelected(false);
-        pBooking.setSelected(false);
         bToday.setSelected(false);
-        allBooking.setSelected(false);
+        allBooking2.setSelected(false);
         
-        int id = obj.getBookingID();
-        String vID = findVehID(obj.getVehicleReg());
-        
-        data2 = FXCollections.observableArrayList();
-        
-    Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
-        
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        data2 = FXCollections.observableArrayList(tempData2);
 
-        String SQL = "Select * from booking where vehicleID='"+vID+"'";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next())
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for(int i=0; i<data2.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(rs.getString("scheduled_date"),formatter);
-            if(now.isBefore(tempDate) || tempDate.equals(now)) //future dates
+            LocalDate tempDate = LocalDate.parse(data2.get(i).getDate(),formatter);
+            if(now.isAfter(tempDate)) //past dates
             {
-                if(rs.getInt("booking_id")==id)
-                {
-                    if(!rs.next())
-                    {
-                        break;
-                    }
-                }
-                String make = findMake(rs.getString(2),conn);
-                data2.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );      
+                data2.remove(i);
+                i--;
             }
         }
-        table2.setItems(data2);
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }
+        table2.setItems(data2);    
     }
     
     @FXML
@@ -1484,6 +1420,20 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         
         buildBooking();
+    }
+    
+    @FXML
+    private void showAllBooking2() throws ClassNotFoundException
+    {
+        if(!allBooking2.isSelected())
+        {
+            return;
+        }
+        
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        
+        buildBookingForTable2();
     }
     
     private int calculateDuration(String sTime, String eTime)
