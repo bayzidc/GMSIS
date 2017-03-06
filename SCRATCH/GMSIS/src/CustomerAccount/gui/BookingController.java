@@ -65,7 +65,7 @@ public class BookingController implements Initializable {
 
     @FXML
     private ObservableList<DiagnosisAndRepairBooking> data;
-    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking(0, "", "", "", "", 0, 0, "", "");
+    public static DiagnosisAndRepair.logic.DiagnosisAndRepairBooking repair = new DiagnosisAndRepairBooking(0, "", "", "", "", "", 0, 0, "", "");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -98,7 +98,7 @@ public class BookingController implements Initializable {
             String SQL = "Select * from booking WHERE customer_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new DiagnosisAndRepairBooking(rs.getInt(1), String.valueOf(rs.getInt(2)), String.valueOf(rs.getInt(3)), String.valueOf(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)));
+                data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), findCustomerName(rs.getInt(3)), findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)));
 
             }
 
@@ -129,6 +129,72 @@ public class BookingController implements Initializable {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
 
+    }
+
+    private String findCustomerName(int customerID) throws ClassNotFoundException {
+        String customerName = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select customer_fullname from customer where customer_id='" + customerID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                customerName = rs.getString("customer_fullname");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return customerName;
+    }
+
+    private String findMechanicName(int mechanicID) throws ClassNotFoundException {
+        String mechanicName = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select fullname from mechanic where mechanic_id='" + mechanicID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                mechanicName = rs.getString("fullname");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return mechanicName;
+    }
+
+    private String findVehicleReg(int vehicleReg) throws ClassNotFoundException {
+        String vehicleRegIS = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select RegNumber from vehicleList where vehicleID='" + vehicleReg + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                vehicleRegIS = rs.getString("RegNumber");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return vehicleRegIS;
     }
 
     public void alertError() {

@@ -14,8 +14,8 @@
             <Button fx:id="bookingButton" layoutX="776.0" layoutY="241.0" mnemonicParsing="false" onAction="#bookingButton" text="Check" />
             <TableView fx:id="table" layoutX="374.0" layoutY="288.0" prefHeight="415.0" prefWidth="704.0">
               <columns>
-                <TableColumn fx:id="bookingID" prefWidth="240.0" text="bookingID" />
-                <TableColumn fx:id="cost" prefWidth="239.0" text="cost" />
+                <TableColumn fx:id="bookingID" prefWidth="240.0" text="Customer" />
+                <TableColumn fx:id="cost" prefWidth="239.0" text="Cost" />
                   <TableColumn fx:id="billStatus" prefWidth="224.0" text="Settled?" />
               </columns>
             </TableView>

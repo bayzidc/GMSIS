@@ -13,6 +13,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -53,7 +54,7 @@ public class BillController implements Initializable {
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    public static bill showBill = new bill(0,0 , 0, false);
+    public static bill showBill = new bill(0,"" , 0, false);
 
     /**
      * Initializes the controller class.
@@ -68,7 +69,7 @@ public class BillController implements Initializable {
                     try {
                         if (table.getSelectionModel().getSelectedItem() != null) {
                             int ID = table.getSelectionModel().getSelectedItem().getBillID();
-                            int bookingID = table.getSelectionModel().getSelectedItem().getBookingID();
+                            String CustomerName = table.getSelectionModel().getSelectedItem().getBookingID();
                             System.out.println("Booking id: " + bookingID);
                             Connection conn = null;
                             Class.forName("org.sqlite.JDBC");
@@ -79,7 +80,7 @@ public class BillController implements Initializable {
                             ResultSet rs = state.executeQuery("SELECT * FROM bill WHERE bill_id= " + ID);
                             while (rs.next()) {
                                 showBill.setBillID(rs.getInt(1));
-                                showBill.setBookingID(rs.getInt(3));
+                                showBill.setBookingID(findCustomerName(rs.getInt(3)));
                                 showBill.setTotalCost(rs.getInt(4));
                                 showBill.setBillStatus(rs.getBoolean(5));
                             }
@@ -127,7 +128,7 @@ public class BillController implements Initializable {
             String SQL = "Select * from bill WHERE customerID = " + getID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new bill(rs.getInt(1),rs.getInt(3), rs.getInt(4), rs.getBoolean(5)));
+                data.add(new bill(rs.getInt(1),findCustomerName(rs.getInt(2)), rs.getInt(4), rs.getBoolean(5)));
                 System.out.println("Boolean is: " + rs.getBoolean(5));
             }
             
@@ -146,6 +147,28 @@ public class BillController implements Initializable {
                 new PropertyValueFactory<>("billStatus"));
     }
 
+        private String findCustomerName(int customerID) throws ClassNotFoundException {
+        String customerName = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select customer_fullname from customer where customer_id='" + customerID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                customerName = rs.getString("customer_fullname");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return customerName;
+    }
+    
     public void alertError() {
         Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
         alert.setTitle("Information");

@@ -11,6 +11,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -20,12 +22,12 @@ public class bill {
 
     public IntegerProperty billID;
     public DoubleProperty totalCost;
-    public IntegerProperty bookingID;
+    public StringProperty bookingID;
     public BooleanProperty billStatus;
 
-    public bill(int billID, int bookingID, int costOfBill, boolean isSettled) {
+    public bill(int billID, String bookingID, int costOfBill, boolean isSettled) {
         this.totalCost = new SimpleDoubleProperty(costOfBill);
-        this.bookingID = new SimpleIntegerProperty(bookingID);
+        this.bookingID = new SimpleStringProperty(bookingID);
         this.billStatus = new SimpleBooleanProperty(isSettled);
         this.billID = new SimpleIntegerProperty(billID);
     }
@@ -38,7 +40,7 @@ public class bill {
         return billStatus.get();
     }
 
-    public int getBookingID() {
+    public String getBookingID() {
         return bookingID.get();
     }
 
@@ -54,7 +56,7 @@ public class bill {
         totalCost.set(cost);
     }
 
-    public void setBookingID(int ID) {
+    public void setBookingID(String ID) {
         bookingID.set(ID);
     }
 
@@ -66,7 +68,7 @@ public class bill {
         return totalCost;
     }
 
-    public IntegerProperty bookingID() {
+    public StringProperty bookingID() {
         return bookingID;
     }
 
