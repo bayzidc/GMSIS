@@ -51,7 +51,7 @@ import javax.swing.*;
 
 import java.time.DayOfWeek;
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.*;
 
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -1141,6 +1141,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         String nextDate="";
         int bookingID=0;
+        String vReg="";
         String custID="";
         String mechID="";
         String startTime="";
@@ -1151,30 +1152,19 @@ public class DiagnosisAndRepairController implements Initializable {
     for(int i=0; i<size; i++)
     {    
         int vID = vehID.get(i);
-        int daysDiff=10000;
-        String date = "";
-  
+ 
          Connection conn = (new sqlite().connect());
 
             String SQL = "Select * from booking where vehicleID='"+ vID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) 
-            {       
-                date = rs.getString("scheduled_date");   
+            
+            String date = rs.getString("scheduled_date");   
+            String dt = date +" "+rs.getString("startTime");
                 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");     
-                LocalDate dateToday = LocalDate.now();
-                LocalDate dateTemp = LocalDate.parse(date,formatter);
-        
-                
-                if(dateToday.isBefore(dateTemp) || dateToday.equals(dateTemp))
-                {
-                      int daysBetween = (int)ChronoUnit.DAYS.between(dateToday, dateTemp); 
-                      
-                      if(daysBetween < daysDiff)
-                      {
-                          daysDiff = daysBetween;
-                         
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");     
+            LocalDateTime dateTemp = LocalDateTime.parse(dt,formatter);
+            LocalDateTime nextDT = dateTemp;
+     
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
                            custID=rs.getString("customer_id");
@@ -1182,16 +1172,35 @@ public class DiagnosisAndRepairController implements Initializable {
                            startTime=rs.getString("startTime");
                            endTime=rs.getString("endTime");
                            mileage = rs.getDouble("mileage");
-                           duration = rs.getInt("duration");
-                      }
-                }    
+                           duration = rs.getInt("duration");   
+            rs.next();
+            
+            while (rs.next()) 
+            {          
+                LocalDateTime dateToday = LocalDateTime.now();
+                 
+                date = rs.getString("scheduled_date");   
+                dt = date +" "+rs.getString("startTime");      
+                dateTemp = LocalDateTime.parse(dt,formatter);
+                
+                if(dateToday.isAfter(nextDT) || nextDT.isAfter(dateTemp))
+                {
+                           nextDT = dateTemp;
+                           nextDate=date;
+                           bookingID=rs.getInt("booking_id");
+                           custID=rs.getString("customer_id");
+                           mechID=rs.getString("mechanic_id");
+                           startTime=rs.getString("startTime");
+                           endTime=rs.getString("endTime");
+                           mileage = rs.getDouble("mileage");
+                           duration = rs.getInt("duration");                 
+                }      
             }
             String make = findMake(Integer.toString(vID),conn);
             
             rs.close();
             conn.close();
-            
-         
+
             data.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), findMechName(mechID), nextDate, duration, mileage, startTime, endTime));
     } //end for loop
         } catch (SQLException e) {
@@ -1342,7 +1351,7 @@ public class DiagnosisAndRepairController implements Initializable {
         for(int i=0; i<data.size(); i++)
         {
             String[] tempDate = data.get(i).getDate().split("/");
-            if(!dateNow[1].equals(tempDate[1]) || !dateNow[2].equals(tempDate[2])) //same month or different year
+            if(!dateNow[1].equals(tempDate[1]) || !dateNow[2].equals(tempDate[2])) //different month or different year
             {
                 data.remove(i);
                 i--;
@@ -1387,6 +1396,7 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         bToday.setSelected(false);
+        pBooking.setSelected(false);
         allBooking2.setSelected(false);
         
         data2 = FXCollections.observableArrayList(tempData2);
