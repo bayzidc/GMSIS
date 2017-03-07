@@ -615,7 +615,7 @@ public class DiagnosisAndRepairController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            String sql = "UPDATE booking SET vehicleID=?,customer_id=?,mechanic_id=?,scheduled_date=?,duration=?,startTime=?,endTime=?,mileage WHERE booking_id=?";
+            String sql = "UPDATE booking SET vehicleID=?,customer_id=?,mechanic_id=?,scheduled_date=?,duration=?,startTime=?,endTime=?,mileage=? WHERE booking_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
            
                 state.setString(1, findVehID(obj.getVehicleReg()));
@@ -856,8 +856,6 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private void exitEdit(ActionEvent event) throws ClassNotFoundException  
     {
-        customerCombo.getEditor().setEditable(true);
-        vehicleCombo.getEditor().setEditable(true);
         update.setVisible(false);
         book.setVisible(true);
         exitEditB.setVisible(false); 
@@ -1135,10 +1133,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         data = FXCollections.observableArrayList();
         tempData.clear();
-        
-        try 
-        {
-        
+  
         String nextDate="";
         int bookingID=0;
         String vReg="";
@@ -1149,6 +1144,9 @@ public class DiagnosisAndRepairController implements Initializable {
         double mileage = 0;
         int duration = 0;
         
+        try 
+        {
+    
     for(int i=0; i<size; i++)
     {    
         int vID = vehID.get(i);
@@ -1182,9 +1180,9 @@ public class DiagnosisAndRepairController implements Initializable {
                 date = rs.getString("scheduled_date");   
                 dt = date +" "+rs.getString("startTime");      
                 dateTemp = LocalDateTime.parse(dt,formatter);
-                
-                if(dateToday.isAfter(nextDT) || nextDT.isAfter(dateTemp))
-                {
+                alertInfo(null,nextDT+" after "+dateTemp);
+                if(dateToday.isAfter(nextDT) || (nextDT.isAfter(dateTemp) && dateToday.isBefore(dateTemp)))
+                {alertInfo(null,"changed to "+dateTemp);
                            nextDT = dateTemp;
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
@@ -1294,7 +1292,39 @@ public class DiagnosisAndRepairController implements Initializable {
      @FXML
     private void filterByHour() throws ClassNotFoundException
     {
-        //datetime
+         if(!bHour.isSelected())
+        {
+            return;
+        }
+        
+         
+        bToday.setSelected(false);
+        bMonth.setSelected(false);
+        allBooking.setSelected(false);
+        
+        
+        data = FXCollections.observableArrayList(tempData);
+     
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"); 
+        LocalDateTime today = LocalDateTime.now();
+        
+        String dateTimeTemp = "";
+        
+        for(int i=0; i<data.size(); i++)
+        {
+            dateTimeTemp = data.get(i).getDate() +" "+data.get(i).getStartTime();
+            LocalDateTime dateTemp = LocalDateTime.parse(dateTimeTemp ,formatter);
+        
+            int minutes = (int)ChronoUnit.MINUTES.between(today, dateTemp);
+            
+            if(minutes > 60)
+            {
+                data.remove(i);
+                i--;  
+            }
+           
+        }
+       table.setItems(data);
     }
     
     @FXML
@@ -1305,9 +1335,8 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         
+        bHour.setSelected(false);
         bMonth.setSelected(false);
-        pBooking.setSelected(false);
-        fBooking.setSelected(false);
         allBooking.setSelected(false);
         
         
@@ -1336,9 +1365,8 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         
+        bHour.setSelected(false);
         bToday.setSelected(false);
-        pBooking.setSelected(false);
-        fBooking.setSelected(false);
         allBooking.setSelected(false);
           
         data = FXCollections.observableArrayList(tempData);
@@ -1395,7 +1423,7 @@ public class DiagnosisAndRepairController implements Initializable {
         {
             return;
         }
-        bToday.setSelected(false);
+   
         pBooking.setSelected(false);
         allBooking2.setSelected(false);
         
@@ -1407,7 +1435,7 @@ public class DiagnosisAndRepairController implements Initializable {
         for(int i=0; i<data2.size(); i++)
         {
             LocalDate tempDate = LocalDate.parse(data2.get(i).getDate(),formatter);
-            if(now.isAfter(tempDate)) //past dates
+            if(now.isAfter(tempDate) || !now.equals(tempDate)) //past dates
             {
                 data2.remove(i);
                 i--;
@@ -1424,10 +1452,10 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         
+        bHour.setSelected(false);
         bToday.setSelected(false); 
         bMonth.setSelected(false);
-        pBooking.setSelected(false);
-        fBooking.setSelected(false);
+
         
         buildBooking();
     }
@@ -1444,6 +1472,56 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         
         buildBookingForTable2();
+    }
+    
+    private int getMechanicHoursWorked(int bookingID) throws ClassNotFoundException
+    {
+        int hour = 0;
+        
+         Connection conn = null;
+        try {
+
+           conn = (new sqlite().connect());
+
+            String SQL = "Select duration from booking where booking_id='"+ bookingID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                hour = rs.getInt("duration") / 60;    
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        
+        return hour;
+    }
+    
+    private double getMechanicHourlyRate(int bookingID) throws ClassNotFoundException
+    {
+        double rate = 0;
+        
+         Connection conn = null;
+        try {
+
+           conn = (new sqlite().connect());
+
+            String SQL = "Select hourlyRate from mechanic,booking where booking.mechanic_id=mechanic.mechanic_id and booking.booking_id='"+ bookingID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                rate = rs.getDouble("hourlyRate");    
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        
+        return rate;
     }
     
     private int calculateDuration(String sTime, String eTime)
