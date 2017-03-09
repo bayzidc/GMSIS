@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="511.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="511.0" prefWidth="742.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
    <children>
-      <Label layoutX="276.0" layoutY="29.0" prefHeight="36.0" prefWidth="133.0" text="Admin Page">
+      <Label layoutX="305.0" layoutY="30.0" prefHeight="36.0" prefWidth="133.0" text="User Records">
          <font>
             <Font name="Bauhaus 93" size="20.0" />
          </font></Label>
       <Button fx:id="createUser" layoutX="76.0" layoutY="279.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
-      <Button fx:id="editUser" layoutX="42.0" layoutY="359.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="91.0" text="Edit User" />
-      <Button fx:id="deleteUser" layoutX="42.0" layoutY="384.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="91.0" text="Delete User" />
-      <Button fx:id="logout" layoutX="667.0" layoutY="9.0" mnemonicParsing="false" onAction="#logoutButton" prefHeight="25.0" prefWidth="61.0" text="Logout" />
-      <Button fx:id="vehicleButton" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#vehicleBtn" prefHeight="25.0" prefWidth="107.0" text="Vehicle Record" />
+      <Button fx:id="editUser" layoutX="76.0" layoutY="315.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="91.0" text="Edit User" />
+      <Button fx:id="deleteUser" layoutX="76.0" layoutY="347.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="91.0" text="Delete User" />
       <TableView fx:id="table" layoutX="240.0" layoutY="69.0" prefHeight="265.0" prefWidth="494.0">
         <columns>
           <TableColumn fx:id="passCol" prefWidth="146.0" text="Password" />
@@ -40,14 +37,45 @@
       <TextField fx:id="oldPass" editable="false" layoutX="240.0" layoutY="390.0" promptText="Old password" />
       <TextField fx:id="id" editable="false" layoutX="240.0" layoutY="347.0" promptText="ID" />
 
-      <Button fx:id="partsButtonUsed" layoutX="10.0" layoutY="47.0" mnemonicParsing="false" onAction="#partsButtnUsed" prefHeight="17.0" prefWidth="114.0" text="Used Parts Record" />
-
       <TextField fx:id="Pass" layoutX="240.0" layoutY="433.0" promptText="New password" />
  
       <CheckBox fx:id="admin" layoutX="71.0" layoutY="229.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
-      <Button fx:id="customerButton" layoutX="130.0" layoutY="9.0" mnemonicParsing="false" onAction="#customerButton" prefHeight="25.0" prefWidth="101.0" text="Customer Page" />
-      <Button fx:id="partsButtonStock" layoutX="135.0" layoutY="47.0" mnemonicParsing="false" onAction="#partsButtnStock" text="Parts Stock" />
-      <Button fx:id="repairButton" layoutX="252.0" layoutY="9.0" mnemonicParsing="false" onAction="#repairButton" text="Repair booking" />
+      <MenuBar fx:id="menu" layoutY="1.0" prefHeight="25.0" prefWidth="742.0">
+         <menus>
+            <Menu fx:id="users" mnemonicParsing="false" text="Users">
+               <items>
+                  <MenuItem fx:id="user" mnemonicParsing="false" onAction="#users" text="User Records" />
+               </items>
+            </Menu>
+            <Menu fx:id="customerAcc" mnemonicParsing="false" text="Customer Account">
+               <items>
+                  <MenuItem fx:id="customers" mnemonicParsing="false" onAction="#cus" text="Customers" />
+               </items>
+            </Menu>
+            <Menu fx:id="vecRecord" mnemonicParsing="false" text="Vehicle Record">
+               <items>
+                  <MenuItem fx:id="records" mnemonicParsing="false" onAction="#vehicleRecord" text="Vehicle Records" />
+                  <MenuItem fx:id="vecEntry" mnemonicParsing="false" onAction="#vehicleEntry" text="Vehicle Entry" />
+               </items>
+            </Menu>
+            <Menu fx:id="diagAndRep" mnemonicParsing="false" text="Diagnosis &amp; Repair Booking">
+               <items>
+                  <MenuItem fx:id="booking" mnemonicParsing="false" onAction="#diag" text="Bookings" />
+               </items>
+            </Menu>
+            <Menu fx:id="partsRecord" mnemonicParsing="false" text="Parts Record">
+               <items>
+                  <MenuItem fx:id="partsUsed" mnemonicParsing="false" onAction="#pUsed" text="Parts Used" />
+                  <MenuItem fx:id="partsStock" mnemonicParsing="false" onAction="#pStock" text="Parts Stock" />
+               </items>
+            </Menu>
+            <Menu fx:id="log" mnemonicParsing="false" text="Logout">
+               <items>
+                  <MenuItem fx:id="home" mnemonicParsing="false" onAction="#logout" text="Logout" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
 
    </children>
 </AnchorPane>

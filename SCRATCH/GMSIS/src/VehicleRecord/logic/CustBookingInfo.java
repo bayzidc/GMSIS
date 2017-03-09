@@ -15,6 +15,7 @@ public class CustBookingInfo {
    public SimpleStringProperty fullName = new SimpleStringProperty(); 
    public SimpleStringProperty bookingDate = new SimpleStringProperty();
    public SimpleStringProperty regNumber = new SimpleStringProperty();
+  
    
    public CustBookingInfo(String fName, String bDate, String reg)
    {

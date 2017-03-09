@@ -209,7 +209,7 @@ public class VehicleController implements Initializable {
     @FXML
     public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
-        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/Common/gui/common.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage2.hide();
@@ -497,6 +497,10 @@ public class VehicleController implements Initializable {
                             if (vehicle.getRegNumber().toLowerCase().contains(newValLow)) {
                                 return true;
                             } else if (vehicle.getMake().toLowerCase().contains(newValLow)) {
+                                return true;
+                            }
+                            
+                            else if (vehicle.getVehicleType().toLowerCase().contains(newValLow)) {
                                 return true;
                             }
 
