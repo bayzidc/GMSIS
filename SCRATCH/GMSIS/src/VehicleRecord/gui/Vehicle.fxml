@@ -41,15 +41,16 @@
       <Button fx:id="editBtn" layoutX="690.0" layoutY="125.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
       <Button fx:id="deleteBtn" layoutX="690.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
       <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="378.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
-      <SplitPane dividerPositions="0.4444444444444444" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="667.0">
+      <SplitPane dividerPositions="0.5473684210526316" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="667.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="0.0">
                <children>
-                  <TableView fx:id="custTable" layoutX="-57.0" layoutY="-17.0" prefHeight="242.0" prefWidth="338.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-45.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="custTable" layoutX="-57.0" layoutY="-17.0" prefHeight="242.0" prefWidth="355.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-62.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="fullNameCol" prefWidth="86.99996948242188" text="FullName" />
-                        <TableColumn fx:id="regNCol" prefWidth="107.0" text="RegNo." />
-                        <TableColumn fx:id="bookingDateCol" prefWidth="100.0" text="Scheduled Date" />
+                        <TableColumn fx:id="regNCol" prefWidth="75.0" text="RegNo." />
+                        <TableColumn fx:id="bookingDateCol" prefWidth="103.99996948242188" text="Scheduled Date" />
+                        <TableColumn fx:id="totalCostCol" prefWidth="94.0" text="TotalCost (£)" />
                     </columns>
                   </TableView>
                </children>
@@ -58,8 +59,8 @@
                <children>
                   <TableView fx:id="partsTable" prefHeight="242.0" prefWidth="366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="partIDCol" prefWidth="184.0" text="PartID" />
-                      <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="181.0" text="Parts Used" />
+                      <TableColumn fx:id="partIDCol" minWidth="0.0" prefWidth="96.0" text="PartID" />
+                      <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="201.0" text="Parts Used" />
                     </columns>
                   </TableView>
                </children>

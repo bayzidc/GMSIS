@@ -118,6 +118,8 @@ public class VehicleController implements Initializable {
     public TableColumn<CustBookingInfo, String> bookingDateCol;
     @FXML 
     public TableColumn<CustBookingInfo, String> regNCol;
+    @FXML
+    public TableColumn<CustBookingInfo, Double> totalCostCol;
 
     @FXML
     public TableView<PartsInfo> partsTable;
@@ -172,6 +174,8 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<CustBookingInfo, String>("BookingDate"));
         regNCol.setCellValueFactory(
         new PropertyValueFactory<CustBookingInfo, String> ("RegNumber"));
+        totalCostCol.setCellValueFactory(
+        new PropertyValueFactory<CustBookingInfo, Double> ("TotalCost"));
 
         partIDCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("PartID"));
@@ -420,18 +424,19 @@ public class VehicleController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber from customer, booking, vehicleList where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id";
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id AND customer.customer_id = bill.customerID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) 
             {
-                CustBookingInfo cust = new CustBookingInfo("","","");
+                CustBookingInfo cust = new CustBookingInfo("","","",0.0);
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 cust.regNumber.set(rs.getString("RegNumber"));
+                cust.totalCost.set(rs.getDouble("totalCost"));
                 custData.add(cust);
 
-                if(rs.getString("customer_fullname").equals("") && rs.getString("scheduled_date").equals(""))
+                if(rs.getString("customer_fullname").equals(""))
                 {
                    alertInf("There are no customers in our system at the moment. Please go to the customer services section");
                 } 
@@ -441,9 +446,7 @@ public class VehicleController implements Initializable {
                     alertInf("There are no bookings available for some customers. Please go to the repair booking section.");
                 }
 
-            }
-            
-            
+            }           
             custTable.setItems(custData);
             rs.close();
             conn.close();

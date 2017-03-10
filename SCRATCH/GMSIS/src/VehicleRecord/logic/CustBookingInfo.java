@@ -5,6 +5,7 @@
  */
 package VehicleRecord.logic;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -15,13 +16,15 @@ public class CustBookingInfo {
    public SimpleStringProperty fullName = new SimpleStringProperty(); 
    public SimpleStringProperty bookingDate = new SimpleStringProperty();
    public SimpleStringProperty regNumber = new SimpleStringProperty();
+   public SimpleDoubleProperty totalCost = new SimpleDoubleProperty();
   
    
-   public CustBookingInfo(String fName, String bDate, String reg)
+   public CustBookingInfo(String fName, String bDate, String reg, double tCost)
    {
       this.fullName = new SimpleStringProperty(fName);
       this.bookingDate = new SimpleStringProperty(bDate);
       this.regNumber = new SimpleStringProperty(reg);
+      this.totalCost = new SimpleDoubleProperty(tCost);
    }
    public String getFullName(){
            return fullName.get();
@@ -35,6 +38,11 @@ public class CustBookingInfo {
    public String getRegNumber()
    {
        return regNumber.get();
+   }
+   
+   public double getTotalCost()
+   {
+       return totalCost.get();
    }
    public void setFullName(String fullN)
    {
@@ -50,6 +58,10 @@ public class CustBookingInfo {
    {
        regNumber.set(reg);
    }
+   public void setTotalCost(double tC)
+   {
+       totalCost.set(tC);
+   }
    public SimpleStringProperty fullNameProperty()
    {
        return fullName;
@@ -63,6 +75,11 @@ public class CustBookingInfo {
    public SimpleStringProperty regNumberProperty()
    {
        return regNumber;
+   }
+   
+   public SimpleDoubleProperty totalCostProperty()
+   {
+       return totalCost;
    }
 }
 
