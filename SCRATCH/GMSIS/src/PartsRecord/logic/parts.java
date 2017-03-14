@@ -23,20 +23,17 @@ public class parts {
     public StringProperty partDescription;
     public IntegerProperty partStockLevel;
     public DoubleProperty cost;
-    //public StringProperty arrivedDate;
+   
    
     public parts(int partId,String partName, String partDescription,int partStockLevel, double cost) {
         
-        this.partIDentify = new SimpleIntegerProperty(partId);// the initial values
+        this.partIDentify = new SimpleIntegerProperty(partId);
         this.partName = new SimpleStringProperty(partName);
         this.partDescription = new SimpleStringProperty(partDescription);
         this.partStockLevel= new SimpleIntegerProperty(partStockLevel);
         this.cost = new SimpleDoubleProperty(cost);
-        //this.arrivedDate = new SimpleStringProperty(arrivedDate);
-        
-        
-
     }
+    
     // Return the 'partsid' value.
     public int getPartIDentify() {
         return partIDentify.get();
