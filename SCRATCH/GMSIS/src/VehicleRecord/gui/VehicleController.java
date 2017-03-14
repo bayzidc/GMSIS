@@ -127,6 +127,8 @@ public class VehicleController implements Initializable {
     public TableColumn<PartsInfo, Integer> partIDCol;
     @FXML
     public TableColumn<PartsInfo, String> partsUsedCol;
+    @FXML
+    public TableColumn<PartsInfo, Integer> quantityCol;
 
     //Declaring observable lists to be manipulated later on.
     ObservableList<Vehicle> data;
@@ -181,6 +183,8 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, Integer>("PartID"));
         partsUsedCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, String>("PartsUsed"));
+        quantityCol.setCellValueFactory(
+                new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
         try 
         {   
@@ -359,13 +363,14 @@ public class VehicleController implements Initializable {
         {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "Select vehiclePartsUsed.partsId, name from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
+            String SQL = "Select vehiclePartsUsed.partsId, name, quantity from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
                 PartsInfo parts = new PartsInfo();
                 parts.partID.set(rs.getInt("partsId"));
                 parts.partsUsed.set(rs.getString("name"));
+                parts.quantity.set(rs.getInt("quantity"));
                 partsData.add(parts);
             }
             partsTable.setItems(partsData);
@@ -535,25 +540,6 @@ public class VehicleController implements Initializable {
         }
 
     }
-
-    //
-    /*public void showVecOnText() {
-        String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
-        String vecMake = table.getSelectionModel().getSelectedItem().getMake();
-        String vecModel = table.getSelectionModel().getSelectedItem().getModel();
-        double engine = table.getSelectionModel().getSelectedItem().getEngSize();
-        String ft = table.getSelectionModel().getSelectedItem().getFuelType();
-        String col = table.getSelectionModel().getSelectedItem().getColour();
-        String mot = table.getSelectionModel().getSelectedItem().getMotRenewal();
-        String ls = table.getSelectionModel().getSelectedItem().getLastService();
-        int mil = table.getSelectionModel().getSelectedItem().getMileage();
-        String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
-        String war = table.getSelectionModel().getSelectedItem().getWarranty();
-        String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
-        String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
-        int ID = table.getSelectionModel().getSelectedItem().getVecID();
-
-    }*/
 
     //Method which deletes the vehicle from the database where the appropriate vehicle ID is specified
     public boolean isVehicleDeleted() throws ClassNotFoundException 

@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="400.0" prefWidth="563.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="common.gui.CommonController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="629.0" prefWidth="1100.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="common.gui.CommonController">
    <children>
-      <Label layoutX="271.0" layoutY="27.0" prefHeight="61.0" prefWidth="118.0" text="Admin">
+      <Label layoutX="522.0" layoutY="25.0" prefHeight="61.0" prefWidth="118.0" text="Admin">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <MenuBar fx:id="menu" prefHeight="27.0" prefWidth="600.0">
+      <MenuBar fx:id="menu" prefHeight="22.0" prefWidth="1100.0">
         <menus>
           <Menu fx:id="users" mnemonicParsing="false" text="Users">
             <items>

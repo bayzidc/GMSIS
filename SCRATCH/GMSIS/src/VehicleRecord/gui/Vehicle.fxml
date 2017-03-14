@@ -38,37 +38,38 @@
             <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
         </columns>
       </TableView>
-      <Button fx:id="editBtn" layoutX="690.0" layoutY="125.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="690.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
+      <Button fx:id="editBtn" layoutX="811.0" layoutY="134.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="811.0" layoutY="178.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
       <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="378.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
-      <SplitPane dividerPositions="0.5473684210526316" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="667.0">
+      <SplitPane dividerPositions="0.5038363171355499" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="784.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="0.0">
                <children>
                   <TableView fx:id="custTable" layoutX="-57.0" layoutY="-17.0" prefHeight="242.0" prefWidth="355.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-62.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="fullNameCol" prefWidth="86.99996948242188" text="FullName" />
-                        <TableColumn fx:id="regNCol" prefWidth="75.0" text="RegNo." />
-                        <TableColumn fx:id="bookingDateCol" prefWidth="103.99996948242188" text="Scheduled Date" />
-                        <TableColumn fx:id="totalCostCol" prefWidth="94.0" text="TotalCost (£)" />
+                      <TableColumn fx:id="fullNameCol" prefWidth="111.99996948242188" text="FullName" />
+                        <TableColumn fx:id="regNCol" prefWidth="82.0" text="RegNo." />
+                        <TableColumn fx:id="bookingDateCol" prefWidth="104.99996948242188" text="Scheduled Date" />
+                        <TableColumn fx:id="totalCostCol" prefWidth="96.0" text="TotalCost (£)" />
                     </columns>
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="217.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="403.0">
                <children>
-                  <TableView fx:id="partsTable" prefHeight="242.0" prefWidth="366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="partsTable" prefHeight="242.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-111.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="partIDCol" minWidth="0.0" prefWidth="96.0" text="PartID" />
-                      <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="201.0" text="Parts Used" />
+                      <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="214.0" text="Parts Used" />
+                        <TableColumn fx:id="quantityCol" prefWidth="76.0" text="Quantity" />
                     </columns>
                   </TableView>
                </children>
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="addEntryBtn" layoutX="690.0" layoutY="93.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="690.0" layoutY="190.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <Button fx:id="addEntryBtn" layoutX="811.0" layoutY="95.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
+      <Button fx:id="viewParts" layoutX="811.0" layoutY="215.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
       <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="371.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />
@@ -80,7 +81,7 @@
             <Image url="@image/refresh.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="242.0" fitWidth="366.0" layoutX="813.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="336.0" fitWidth="298.0" layoutX="924.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/vehicle.jpg" />
          </image>

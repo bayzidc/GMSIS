@@ -13,8 +13,9 @@ import javafx.beans.property.SimpleStringProperty;
  * @author User
  */
 public class PartsInfo {
-    public SimpleIntegerProperty partID = new SimpleIntegerProperty();
+   public SimpleIntegerProperty partID = new SimpleIntegerProperty();
    public SimpleStringProperty partsUsed = new SimpleStringProperty();
+   public SimpleIntegerProperty quantity = new SimpleIntegerProperty();
    
    public int getPartID()
    {
@@ -26,6 +27,11 @@ public class PartsInfo {
        return partsUsed.get();
    }
    
+   public int getQuantity()
+   {
+       return quantity.get();
+   }
+   
    public void setPartID(int pID)
    {
        partID.set(pID);
@@ -34,5 +40,10 @@ public class PartsInfo {
    public void setPartsUsed(String pUsed)
    {
        partsUsed.set(pUsed);
+   }
+   
+   public void setQuantity(int quan)
+   {
+       quantity.set(quan);
    }
 }
