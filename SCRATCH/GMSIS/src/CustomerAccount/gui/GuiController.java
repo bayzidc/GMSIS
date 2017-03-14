@@ -191,15 +191,19 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    private void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        acc.setCustomerFullName(fullNameText.getText());
-        acc.setCustomerAddress(addressText.getText());
-        acc.setCustomerPostCode(postCodeText.getText());
-        acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
-        acc.setCustomerEmail(emailText.getText());
-        acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
-        createData(acc);
-        buildData();
+    private void addButton(ActionEvent event) throws IOException, ClassNotFoundException, NumberFormatException {
+        try {
+            acc.setCustomerFullName(fullNameText.getText());
+            acc.setCustomerAddress(addressText.getText());
+            acc.setCustomerPostCode(postCodeText.getText());
+            acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+            acc.setCustomerEmail(emailText.getText());
+            acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
+            createData(acc);
+            buildData();
+        } catch (Exception e) {
+            alertInf();
+        }
     }
 
     @FXML
@@ -400,8 +404,8 @@ public class GuiController implements Initializable {
 
             String sql = "insert into customer(customer_fullname, customer_address, customer_postcode, customer_phone, customer_email, customer_type) values(?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
-            int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+            int check = String.valueOf(phoneText.getText()).length();
+            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 6 || emailText.getText().equals("")) {
                 alertInf();
             } else {
                 state.setString(1, fullNameText.getText());
