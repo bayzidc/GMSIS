@@ -191,7 +191,8 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    private void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
+    private void addButton(ActionEvent event) throws IOException, ClassNotFoundException, NumberFormatException {
+        try{
         acc.setCustomerFullName(fullNameText.getText());
         acc.setCustomerAddress(addressText.getText());
         acc.setCustomerPostCode(postCodeText.getText());
@@ -200,6 +201,11 @@ public class GuiController implements Initializable {
         acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
         createData(acc);
         buildData();
+        }
+        catch(Exception e){
+            alertInf();
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -397,7 +403,7 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerVehReg"));
     }
 
-    public void createData(customerAccount acc) throws ClassNotFoundException {
+    public void createData(customerAccount acc) throws NumberFormatException {
 
         Connection conn = null;
 
@@ -446,7 +452,8 @@ public class GuiController implements Initializable {
 
     @FXML
     public void backButton(ActionEvent event) throws IOException {
-        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage2.hide();

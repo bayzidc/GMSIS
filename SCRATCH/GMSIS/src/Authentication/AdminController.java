@@ -170,8 +170,8 @@ public class AdminController implements Initializable {
       
     @FXML
     private void customerButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent logoutPage = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
-        Scene logout_Scene = new Scene(logoutPage);
+        Parent root = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        Scene logout_Scene = new Scene(root);
         Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageLogout.setScene(logout_Scene);
         stageLogout.show();
