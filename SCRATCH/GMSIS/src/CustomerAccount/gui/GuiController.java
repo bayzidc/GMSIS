@@ -5,6 +5,7 @@
  */
 package CustomerAccount.gui;
 
+import Authentication.sqlite;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -117,9 +118,8 @@ public class GuiController implements Initializable {
                     try {
                         if (table.getSelectionModel().getSelectedItem() != null) {
                             Connection conn = null;
+                            conn = (new sqlite().connect());
                             ID = table.getSelectionModel().getSelectedItem().getCustomerID();
-                            Class.forName("org.sqlite.JDBC");
-                            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                             System.out.println("Opened Database Successfully");
                             String whichType = "";
                             java.sql.Statement state = null;
@@ -279,9 +279,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
+            conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM customer WHERE customer_id= ?";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -308,9 +306,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
+            conn = (new sqlite().connect());
             int ID = table.getSelectionModel().getSelectedItem().getCustomerID();
 
             System.out.println("Opened Database Successfully");
@@ -347,10 +343,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
-
+            conn = (new sqlite().connect());
             String SQL = "Select * from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
@@ -402,9 +395,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
+            conn = (new sqlite().connect());
             System.out.println("Creating data.");
 
             String sql = "insert into customer(customer_fullname, customer_address, customer_postcode, customer_phone, customer_email, customer_type) values(?,?,?,?,?,?)";
