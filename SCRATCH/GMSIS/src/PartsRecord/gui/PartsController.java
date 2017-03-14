@@ -128,7 +128,7 @@ public class PartsController implements Initializable {
     @FXML
     public void backButton(ActionEvent event) throws IOException, ClassNotFoundException // method which goes back to admin page
     {   // When pressed the back button load the Admin.fxml file
-        Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
+        Parent adminUser = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage2.hide();
