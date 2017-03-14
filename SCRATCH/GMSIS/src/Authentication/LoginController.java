@@ -34,7 +34,8 @@ import javafx.stage.Stage;
  * @author User
  */
 public class LoginController implements Initializable {
-
+    
+    public static boolean isAdmin = false;
     @FXML
     private Label titleID;
     @FXML
@@ -65,6 +66,7 @@ public class LoginController implements Initializable {
             stage2.hide();           
             stage2.setScene(admin_Scene);
             stage2.show();
+            isAdmin = true;
         }
         
         else if(isValidLogin())

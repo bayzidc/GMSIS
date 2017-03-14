@@ -128,13 +128,21 @@ public class PartsController implements Initializable {
     @FXML
     public void backButton(ActionEvent event) throws IOException, ClassNotFoundException // method which goes back to admin page
     {   // When pressed the back button load the Admin.fxml file
-        Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
-        Scene admin_Scene = new Scene(adminUser);
-        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage2.hide();
-        stage2.setScene(admin_Scene);
-        stage2.show();
-
+        if (Authentication.LoginController.isAdmin) {
+            Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
+            Scene admin_Scene = new Scene(adminUser);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();
+            stage2.setScene(admin_Scene);
+            stage2.show();
+        } else {
+            Parent adminUser = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
+            Scene admin_Scene = new Scene(adminUser);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();
+            stage2.setScene(admin_Scene);
+            stage2.show();
+        }
     }
     
     public void buildCustomerData() throws ClassNotFoundException, SQLException {
