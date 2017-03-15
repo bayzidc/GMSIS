@@ -336,7 +336,7 @@ public class DiagnosisAndRepairController implements Initializable {
         e.printStackTrace(); 
     }
     
-    alertInfo(null,""+Authentication.LoginController.isAdmin);
+    
         if(!Authentication.LoginController.isAdmin)
         {
             users.setVisible(false);
