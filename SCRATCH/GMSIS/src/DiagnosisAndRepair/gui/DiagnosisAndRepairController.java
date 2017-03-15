@@ -336,6 +336,7 @@ public class DiagnosisAndRepairController implements Initializable {
         e.printStackTrace(); 
     }
     
+    alertInfo(null,""+Authentication.LoginController.isAdmin);
         if(!Authentication.LoginController.isAdmin)
         {
             users.setVisible(false);
@@ -348,7 +349,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
         pane.getChildren().setAll(rootPane);
-      
+        Authentication.LoginController.isAdmin = false;
     }
     
     @FXML 

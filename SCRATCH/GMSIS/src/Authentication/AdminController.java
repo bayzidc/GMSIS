@@ -105,6 +105,7 @@ public class AdminController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
         pane.getChildren().setAll(rootPane);
+        Authentication.LoginController.isAdmin = false;
       
     }
     
