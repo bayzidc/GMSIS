@@ -15,14 +15,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="690.0" prefWidth="1236.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="692.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
       <Label layoutX="375.0" layoutY="39.0" prefHeight="50.0" prefWidth="261.0" text="Vehicle Record">
          <font>
             <Font name="Bauhaus 93" size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="422.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="1202.0">
+      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="422.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="1291.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
           <TableColumn fx:id="makeCol" prefWidth="55.0" text="Make" />
@@ -39,6 +39,7 @@
             <TableColumn fx:id="warExpDateCol" prefWidth="112.0" text="Warranty ExpDate" />
             <TableColumn fx:id="vecIDCol" prefWidth="64.0" text="VehicleID" />
             <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
+            <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
         </columns>
       </TableView>
       <Button fx:id="editBtn" layoutX="811.0" layoutY="134.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />

@@ -13,7 +13,6 @@ import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,8 +23,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,24 +31,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
@@ -113,6 +102,8 @@ public class VehicleController implements Initializable {
     public TableColumn<Vehicle, Integer> vecIDCol;
     @FXML
     public TableColumn<Vehicle, Integer> custIDCol;
+    @FXML
+    public TableColumn<Vehicle, String> custNameCol;
 
     @FXML
     public TableView<CustBookingInfo> custTable;
@@ -206,6 +197,8 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<Vehicle, Integer>("VecID"));
         custIDCol.setCellValueFactory(
                 new PropertyValueFactory<Vehicle, Integer>("CustID"));
+        custNameCol.setCellValueFactory(
+                new PropertyValueFactory<Vehicle, String>("CustName"));
 
         fullNameCol.setCellValueFactory(
                 new PropertyValueFactory<CustBookingInfo, String>("FullName"));
@@ -347,6 +340,7 @@ public class VehicleController implements Initializable {
         AddVehicleController c = (AddVehicleController) loader.getController();
         c.updateBtn.setVisible(false);
         c.addEntry.setVisible(true);
+        c.customerNames.setDisable(false);
         Scene vehicle_Scene = new Scene(vehicle_Page);
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
@@ -382,6 +376,7 @@ public class VehicleController implements Initializable {
             String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
             int ID = table.getSelectionModel().getSelectedItem().getVecID();
             int cust = table.getSelectionModel().getSelectedItem().getCustID();
+            String cName = table.getSelectionModel().getSelectedItem().getCustName();
             if(regN.isEmpty())
             {
                 alertInf("One or more rows have a missing value in the row");
@@ -400,6 +395,8 @@ public class VehicleController implements Initializable {
             c.warExpiry.getEditor().setText(warDate);
             c.id.setText(String.valueOf(ID));
             c.custID.setText(String.valueOf(cust));
+            c.customerNames.setValue(cName);
+            c.customerNames.setDisable(true);
             stage2.hide();
             Scene edit_Scene = new Scene(root);
             primaryStage.setScene(edit_Scene);
@@ -584,11 +581,11 @@ public class VehicleController implements Initializable {
 
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id from vehicleList, customer where vehicleList.customerid = customer.customer_id";
+            String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id, customer_fullname from vehicleList, customer where vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
             {
-                Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
+                Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0,"");
                 vec.regNumber.set(rs.getString("RegNumber"));
                 vec.make.set(rs.getString("Make"));
                 vec.model.set(rs.getString("Model"));
@@ -604,6 +601,7 @@ public class VehicleController implements Initializable {
                 vec.warrantyExpDate.set(rs.getString("WarrantyExpDate"));
                 vec.vecID.set(rs.getInt("vehicleID"));
                 vec.custID.set(rs.getInt("customer_id"));
+                vec.custName.set(rs.getString("customer_fullname"));
                 data.add(vec);
 
                 FilteredList<Vehicle> filteredData = new FilteredList<>(data, e -> true);

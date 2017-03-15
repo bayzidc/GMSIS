@@ -36,10 +36,11 @@ public class Vehicle {
    public SimpleStringProperty warrantyExpDate = new SimpleStringProperty();
    public SimpleIntegerProperty vecID = new SimpleIntegerProperty();
    public SimpleIntegerProperty custID = new SimpleIntegerProperty();
+   public SimpleStringProperty custName = new SimpleStringProperty();
 
     
 
-   public Vehicle(String regNumber, String make, String model, double engSize, String fuelType, String colour, String motRenewal, String lastService, int mileage, String vehicleType, String warranty, String warNameAndAdd, String warrantyExpDate,int vecID,int custID)
+   public Vehicle(String regNumber, String make, String model, double engSize, String fuelType, String colour, String motRenewal, String lastService, int mileage, String vehicleType, String warranty, String warNameAndAdd, String warrantyExpDate,int vecID,int custID, String cName)
    {
        this.regNumber = new SimpleStringProperty(regNumber);
        this.make = new SimpleStringProperty(make);
@@ -56,6 +57,7 @@ public class Vehicle {
        this.warrantyExpDate = new SimpleStringProperty(warrantyExpDate);
        this.vecID = new SimpleIntegerProperty(vecID);
        this.custID = new SimpleIntegerProperty(custID);
+       this.custName = new SimpleStringProperty(cName);
    }
    public String getRegNumber() {
       return regNumber.get();
@@ -117,6 +119,10 @@ public class Vehicle {
        return custID.get();
    }
    
+   public String getCustName()
+   {
+       return custName.get();
+   }
    public void setRegNumber(String regN) {
         regNumber.set(regN);
    }
@@ -176,5 +182,11 @@ public class Vehicle {
    {
        custID.set(cID);
    }
+   
+   public void setCustName(String cN)
+   {
+       custName.set(cN);
+   }
+           
 
 }

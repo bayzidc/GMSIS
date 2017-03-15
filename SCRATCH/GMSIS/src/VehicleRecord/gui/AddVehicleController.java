@@ -106,7 +106,7 @@ public class AddVehicleController implements Initializable {
     public Button addEntry;
     
     //Creating a vehicle object to be used later on
-    Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0);
+    Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0,"");
    
     
      @Override
@@ -154,13 +154,14 @@ public class AddVehicleController implements Initializable {
                 {
                     conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
-                    String query = "select customer_id, customer_fullname from customer where customer_fullname = ?";
+                    String query = "select vehicleID, customer_id, customer_fullname from vehicleList,customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
                     while(rs.next())
                     {
                         custID.setText(String.valueOf(rs.getInt("customer_id")));
+                        id.setText(String.valueOf(rs.getInt("vehicleID")));
                     }
                     conn.close();
                     ps.close();
@@ -250,6 +251,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.getEditor().setText(null);
         id.clear();
         customerNames.setValue(null);
+        custID.clear();
     }
     
     // Method which allows the user to add a vehicle for a specified customer.
@@ -289,6 +291,8 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
+        if(checkTextFields())
+        {
         vec.setRegNumber(regNumber.getText());
         vec.setColour(colour.getText());
         vec.setEngSize(Double.parseDouble(engSize.getText()));
@@ -303,8 +307,7 @@ public class AddVehicleController implements Initializable {
         vec.setWarranty(yesWarranty.getText());
         vec.setWarranty(noWarranty.getText());
         vec.setWarrantyExpDate(warExpiry.getEditor().getText());
-        if(checkTextFields())
-        {
+        
             editVehicle();
             alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + customerNames.getSelectionModel().getSelectedItem());
 
@@ -625,7 +628,7 @@ public class AddVehicleController implements Initializable {
             alertInf("Please enter the name and address for the warranty.");
         }
         
-        if(!(yesWarranty.isSelected() || noWarranty.isSelected()) && nameAndAdd.getText().equals(""))
+        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
         {
             alertInf("Please select if the vehicle is under warranty or not.");
         }
