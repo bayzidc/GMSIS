@@ -37,6 +37,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -47,6 +50,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -129,6 +133,39 @@ public class VehicleController implements Initializable {
     public TableColumn<PartsInfo, String> partsUsedCol;
     @FXML
     public TableColumn<PartsInfo, Integer> quantityCol;
+    
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private MenuBar menu;
+    @FXML
+    private Menu users;
+    @FXML
+    private MenuItem user;
+    @FXML
+    private Menu customerAcc;
+    @FXML
+    private MenuItem customers;
+    @FXML
+    private Menu vecRecord;
+    @FXML
+    private MenuItem records;
+    @FXML
+    private MenuItem vecEntry;
+    @FXML
+    private Menu diagAndRep;
+    @FXML
+    private MenuItem booking;
+    @FXML
+    private Menu partsRecord;
+    @FXML
+    private MenuItem partsStock;
+    @FXML
+    private MenuItem partsUsed;
+    @FXML
+    private Menu logout;
+    @FXML
+    private MenuItem home;
 
     //Declaring observable lists to be manipulated later on.
     ObservableList<Vehicle> data;
@@ -186,11 +223,20 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
+        
+        alertInf(""+Authentication.LoginController.isAdmin);
+        if(!Authentication.LoginController.isAdmin)
+        {
+            users.setVisible(false);
+        }
+        
         try 
         {   
             buildData();
             buildCustomerData();
         } 
+        
+        
         catch (Exception e) 
         {
             e.printStackTrace();
@@ -211,6 +257,64 @@ public class VehicleController implements Initializable {
         {
             alertError("Some data is missing from parts of our system. Please try again later.");
         }
+    }
+    
+    
+    @FXML 
+    private void logout(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void users(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void cus(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML
+    private void vehicleRecord(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML
+    private void vehicleEntry(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void diag(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void pStock(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void pUsed(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
     
     //Method which allows the user to go back to the admin page
