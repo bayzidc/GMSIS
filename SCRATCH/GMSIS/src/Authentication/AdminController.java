@@ -34,6 +34,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -45,6 +46,8 @@ import javax.swing.JOptionPane;
  */
 public class AdminController implements Initializable {
 
+    @FXML
+    private AnchorPane pane;
     @FXML
     private Button customerButton;
     @FXML
@@ -95,6 +98,67 @@ public class AdminController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    
+    
+    @FXML 
+    private void logout(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
+        pane.getChildren().setAll(rootPane);
+      
+    }
+    
+    @FXML 
+    private void users(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void cus(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML
+    private void vehicleRecord(ActionEvent event) throws IOException
+    {
+          AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+          pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML
+    private void vehicleEntry(ActionEvent event) throws IOException
+    {
+         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+         pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void diag(ActionEvent event) throws IOException
+    {
+         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void pStock(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML 
+    private void pUsed(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    
     @FXML
     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException {
         /*Parent new_User = FXMLLoader.load(getClass().getResource("NewUser.fxml"));

@@ -75,7 +75,7 @@ public class CommonController implements Initializable {
     @FXML 
     private void users(ActionEvent event) throws IOException
     {
-        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/admin.fxml"));
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         pane.getChildren().setAll(rootPane);
     }
     
@@ -104,6 +104,7 @@ public class CommonController implements Initializable {
     private void diag(ActionEvent event) throws IOException
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        
         pane.getChildren().setAll(rootPane);
     }
     

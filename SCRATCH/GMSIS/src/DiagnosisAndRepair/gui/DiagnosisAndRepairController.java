@@ -336,65 +336,69 @@ public class DiagnosisAndRepairController implements Initializable {
         e.printStackTrace(); 
     }
     
+        if(!Authentication.LoginController.isAdmin)
+        {
+            users.setVisible(false);
+        }
     
     }    
 
     @FXML 
     private void logout(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
-        //pane.getChildren().setAll(rootPane);
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
+        pane.getChildren().setAll(rootPane);
       
     }
     
     @FXML 
     private void users(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/admin.fxml"));
-       // pane.getChildren().setAll(rootPane);
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
     
     @FXML 
     private void cus(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
-       // pane.getChildren().setAll(rootPane);
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
     
     @FXML
     private void vehicleRecord(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
-        //pane.getChildren().setAll(rootPane);
+          AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+          pane.getChildren().setAll(rootPane);
     }
     
     @FXML
     private void vehicleEntry(ActionEvent event) throws IOException
     {
-       // AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
-        //pane.getChildren().setAll(rootPane);
+         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+         pane.getChildren().setAll(rootPane);
     }
     
     @FXML 
     private void diag(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
         
-       // pane.getChildren().setAll(rootPane);
+        pane.getChildren().setAll(rootPane);
     }
     
     @FXML 
     private void pStock(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
-        //pane.getChildren().setAll(rootPane);
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
     
     @FXML 
     private void pUsed(ActionEvent event) throws IOException
     {
-        //AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
-        //pane.getChildren().setAll(rootPane);
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
     
     

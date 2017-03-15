@@ -75,7 +75,7 @@ public class CustomerController implements Initializable {
     @FXML 
     private void users(ActionEvent event) throws IOException
     {
-        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/admin.fxml"));
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         pane.getChildren().setAll(rootPane);
     }
     
