@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="646.0" prefWidth="1286.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="669.0" prefWidth="1326.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
    <children>
        
        <MenuBar fx:id="menu" prefHeight="27.0" prefWidth="600.0">
@@ -64,31 +64,31 @@
       </MenuBar>
        
        
-      <DatePicker fx:id="datePicked" layoutX="154.0" layoutY="321.0" onAction="#fillStartTimeOnChange" prefHeight="25.0" prefWidth="116.0" />
+      <DatePicker fx:id="datePicked" editable="false" layoutX="154.0" layoutY="321.0" onAction="#fillStartTimeOnChange" prefHeight="25.0" prefWidth="116.0" promptText="dd/mm/yyyy" />
       <Label layoutX="27.0" layoutY="325.0" text="Scheduled  Date" />
       <Button fx:id="book" layoutX="46.0" layoutY="555.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="116.0" text="Submit Booking" />
       <Label layoutX="27.0" layoutY="384.0" text="Start Time" />
       <Label layoutX="29.0" layoutY="434.0" text="End Time" />
-      <TableView fx:id="table" layoutX="315.0" layoutY="99.0" prefHeight="189.0" prefWidth="946.0">
+      <TableView fx:id="table" layoutX="315.0" layoutY="99.0" prefHeight="308.0" prefWidth="978.0">
         <columns>
             <TableColumn fx:id="bookingIDCol" prefWidth="64.0" text="BookingID" /> 
-            <TableColumn fx:id="custIDCol" prefWidth="112.0" text="Customer Name" />
-          <TableColumn fx:id="vehicleIDCol" prefWidth="88.0" text="Vechicle Reg" />
-          <TableColumn fx:id="makeCol" prefWidth="84.0" text="Make" />
-          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="106.0" text="Mechanic Name" />
-          <TableColumn fx:id="mileageCol" minWidth="0.0" prefWidth="71.0" text="Mileage" />
-          <TableColumn fx:id="dateCol" prefWidth="119.0" text="Next Booking Date" />
-          <TableColumn fx:id="startTimeCol" minWidth="0.0" prefWidth="95.0" text="Start Time" />
-          <TableColumn fx:id="endTimeCol" minWidth="0.0" prefWidth="86.0" text="End Time" />
-          <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="118.0" text="Duration (minutes)" />
+            <TableColumn fx:id="custIDCol" prefWidth="123.0" text="Customer Name" />
+          <TableColumn fx:id="vehicleIDCol" prefWidth="101.0" text="Vechicle Reg" />
+          <TableColumn fx:id="makeCol" prefWidth="90.0" text="Make" />
+          <TableColumn fx:id="mechanicIDCol" minWidth="3.0" prefWidth="123.0" text="Mechanic Name" />
+          <TableColumn fx:id="mileageCol" minWidth="0.0" prefWidth="77.0" text="Mileage" />
+          <TableColumn fx:id="dateCol" prefWidth="88.0" text="Date" />
+          <TableColumn fx:id="startTimeCol" minWidth="0.0" prefWidth="96.0" text="Start Time" />
+          <TableColumn fx:id="endTimeCol" minWidth="0.0" prefWidth="95.0" text="End Time" />
+          <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="120.0" text="Duration (minutes)" />
         </columns>
       </TableView>
       <ComboBox fx:id="mechanicCombo" layoutX="116.0" layoutY="260.0" onAction="#resetDate" prefWidth="150.0" promptText="Select" />
       <Label layoutX="24.0" layoutY="264.0" text="Mechanic" />
       <TextField fx:id="searchField" layoutX="315.0" layoutY="63.0" onKeyReleased="#searchFunc" prefHeight="25.0" prefWidth="335.0" promptText="Search by customer name, vehicle registration or make" />
       <Group />
-      <Button fx:id="editButton" layoutX="982.0" layoutY="296.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="136.0" text="Edit" />
-      <Button fx:id="deleteButton" layoutX="1125.0" layoutY="295.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="136.0" text="Delete" />
+      <Button fx:id="editButton" layoutX="521.0" layoutY="412.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="199.0" text="Edit" />
+      <Button fx:id="deleteButton" layoutX="315.0" layoutY="412.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="199.0" text="Delete" />
       <ComboBox fx:id="customerCombo" layoutX="115.0" layoutY="99.0" onAction="#findVehicleOnChange" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="vehicleCombo" layoutX="116.0" layoutY="148.0" prefHeight="25.0" prefWidth="150.0" promptText="Select" />
       <Label layoutX="21.0" layoutY="103.0" prefHeight="17.0" prefWidth="54.0" text="Customer" />
@@ -99,46 +99,28 @@
       <ComboBox fx:id="startTime" layoutX="116.0" layoutY="380.0" onAction="#fillEndTimeCombo" prefWidth="150.0" promptText="Select" />
       <ComboBox fx:id="endTime" layoutX="116.0" layoutY="430.0" prefWidth="150.0" promptText="Select" />
       <Button fx:id="exitEditB" layoutX="116.0" layoutY="512.0" mnemonicParsing="false" onAction="#exitEdit" text="Exit edit mode" />
-      <Label layoutX="685.0" layoutY="63.0" text="Next booking information" textFill="#0d0d0d">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <CheckBox fx:id="bToday" layoutX="549.0" layoutY="300.0" mnemonicParsing="false" onAction="#filterByToday" text="Today" />
-      <CheckBox fx:id="bMonth" layoutX="665.0" layoutY="300.0" mnemonicParsing="false" onAction="#filterByMonth" text="This Month" />
-      <CheckBox fx:id="pBooking" layoutX="338.0" layoutY="580.0" mnemonicParsing="false" onAction="#filterByPast" text="Past bookings" />
-      <CheckBox fx:id="fBooking" layoutX="462.0" layoutY="580.0" mnemonicParsing="false" onAction="#filterByFuture" text="Future bookings + today" />
+      <CheckBox fx:id="bToday" layoutX="1071.0" layoutY="504.0" mnemonicParsing="false" onAction="#filterByToday" text="Today" />
+      <CheckBox fx:id="bMonth" layoutX="1071.0" layoutY="550.0" mnemonicParsing="false" onAction="#filterByMonth" text="This Month" />
+      <CheckBox fx:id="pBooking" layoutX="923.0" layoutY="505.0" mnemonicParsing="false" onAction="#filterByPast" text="Past bookings" />
+      <CheckBox fx:id="fBooking" layoutX="923.0" layoutY="549.0" mnemonicParsing="false" onAction="#filterByFuture" text="Future bookings" />
       <Separator layoutX="21.0" layoutY="198.0" prefHeight="1.0" prefWidth="244.0" />
-      <CheckBox fx:id="allBooking" layoutX="813.0" layoutY="300.0" mnemonicParsing="false" onAction="#showAllBooking" text="Show all" />
+      <CheckBox fx:id="allBooking" layoutX="817.0" layoutY="460.0" mnemonicParsing="false" onAction="#showAllBooking" text="Show all" />
       <Label layoutX="21.0" layoutY="221.0" text="Current Mileage" />
       <TextField fx:id="mileage" layoutX="116.0" layoutY="217.0" prefHeight="25.0" prefWidth="150.0" />
-      <TableView fx:id="table2" layoutX="315.0" layoutY="412.0" prefHeight="155.0" prefWidth="575.0">
-         <columns>
-             <TableColumn fx:id="vehicleIDCol1" prefWidth="83.0" text="Vechicle Reg" />
-            <TableColumn fx:id="mechanicIDCol1" minWidth="3.0" prefWidth="99.0" text="Mechanic Name" />
-            <TableColumn fx:id="mileageCol1" minWidth="0.0" prefWidth="63.0" text="Mileage" />
-            <TableColumn fx:id="dateCol1" prefWidth="73.0" text="Date" />
-            <TableColumn fx:id="startTimeCol1" minWidth="0.0" prefWidth="72.0" text="Start Time" />
-            <TableColumn fx:id="endTimeCol1" minWidth="0.0" prefWidth="64.0" text="End Time" />
-            <TableColumn fx:id="durationCol1" minWidth="4.0" prefWidth="120.0" text="Duration (minutes)" />
-            
-         </columns>
-      </TableView>
-      <Label layoutX="445.0" layoutY="380.0" text="All past and future booking information">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <CheckBox fx:id="bHour" layoutX="407.0" layoutY="300.0" mnemonicParsing="false" onAction="#filterByHour" text="Next Hour" />
-      <CheckBox fx:id="allBooking2" layoutX="639.0" layoutY="580.0" mnemonicParsing="false" onAction="#showAllBooking2" text="Show all" />
-      <TableView fx:id="partsTable" layoutX="908.0" layoutY="412.0" prefHeight="155.0" prefWidth="350.0">
+      <CheckBox fx:id="bHour" layoutX="1071.0" layoutY="460.0" mnemonicParsing="false" onAction="#filterByHour" text="Next Hour" />
+      <TableView fx:id="partsTable" layoutX="315.0" layoutY="477.0" prefHeight="130.0" prefWidth="405.0">
         <columns>
-          <TableColumn fx:id="partCol" prefWidth="129.0" text="Parts Name" />
-          <TableColumn fx:id="quanCol" prefWidth="82.0" text="Quantity" />
-          <TableColumn fx:id="expiryCol" prefWidth="138.0" text="Warranty Expiry Date" />
+          <TableColumn fx:id="partCol" prefWidth="162.0" text="Parts Name" />
+          <TableColumn fx:id="quanCol" prefWidth="85.0" text="Quantity" />
+          <TableColumn fx:id="expiryCol" prefWidth="157.0" text="Warranty Expiry Date" />
         </columns>
       </TableView>
-      <Button fx:id="editButton2" layoutX="754.0" layoutY="576.0" mnemonicParsing="false" onAction="#editBooking2" prefHeight="25.0" prefWidth="136.0" text="Edit" />
-      <Button fx:id="partsButton" layoutX="1015.0" layoutY="576.0" mnemonicParsing="false" onAction="#buildPartsInfo" text="View parts information" />
+      <Button fx:id="partsButton" layoutX="439.0" layoutY="613.0" mnemonicParsing="false" onAction="#buildPartsInfo" text="View parts information" />
+      <CheckBox fx:id="nBooking" layoutX="921.0" layoutY="459.0" mnemonicParsing="false" onAction="#filterByNextBooking" text="Next bookings" />
+      <Label layoutX="923.0" layoutY="415.0" prefHeight="20.0" prefWidth="137.0" text="Filter the above table">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -110,8 +110,7 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private MenuItem home;
     
-    
-    private boolean admin;
+
     @FXML
     private Button book;
     @FXML
@@ -141,17 +140,16 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private CheckBox bMonth;
     @FXML
+    private CheckBox nBooking;
+    @FXML
     private CheckBox pBooking;
     @FXML
     private CheckBox fBooking;
     @FXML
     private CheckBox allBooking;
-    @FXML
-    private CheckBox allBooking2;
+
     
-    private int bookingID;
-    private String reg;
-    
+
     @FXML 
     private TableView<DiagnosisAndRepairBooking> table;
     @FXML 
@@ -178,27 +176,9 @@ public class DiagnosisAndRepairController implements Initializable {
     private ObservableList<DiagnosisAndRepairBooking> data;
     
     
-    @FXML 
-    private TableView<DiagnosisAndRepairBooking> table2;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> vehicleIDCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> mechanicIDCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> mileageCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> dateCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, Integer> durationCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> startTimeCol1;
-    @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, String> endTimeCol1;
-    
-    private ObservableList<DiagnosisAndRepairBooking> data2;
+
     
     private ObservableList<DiagnosisAndRepairBooking> tempData = FXCollections.observableArrayList();
-     private ObservableList<DiagnosisAndRepairBooking> tempData2 = FXCollections.observableArrayList();
     
      
     @FXML 
@@ -217,8 +197,8 @@ public class DiagnosisAndRepairController implements Initializable {
     private ObservableList<String> custNames = FXCollections.observableArrayList();
     private ObservableList<String> vehicleReg = FXCollections.observableArrayList();
     private ObservableList<String> mechNames = FXCollections.observableArrayList();
-    private ObservableList<String> startTimeLs = FXCollections.observableArrayList("09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00","17:15");
-    private ObservableList<String> endTimeLs = FXCollections.observableArrayList("09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00","17:15","17:30");
+    private ObservableList<String> startTimeLs = FXCollections.observableArrayList("09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00");
+    private ObservableList<String> endTimeLs = FXCollections.observableArrayList("09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30");
 
     
     //private ObservableList<String> times = FXCollections.observableArrayList("09:00 to 09:30","09:30 to 10:00","10:00 to 10:30","10:30 to 11:00","11:00 to 11:30","11:30 to 12:00","12:00 to 12:30","12:30 to 13:00","13:00 to 13:30","13:30 to 14:00","14:00 to 14:30","14:30 to 15:00","15:00 to 15:30","15:30 to 16:00","16:00 to 16:30","16:30 to 17:00");
@@ -258,22 +238,6 @@ public class DiagnosisAndRepairController implements Initializable {
     endTimeCol.setCellValueFactory(
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("endTime"));
     
-    
-    vehicleIDCol1.setCellValueFactory(                
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("vehicleReg"));
-    mechanicIDCol1.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("mechanicName"));   
-     mileageCol1.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("mileage")); 
-    dateCol1.setCellValueFactory(                
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("date"));
-    durationCol1.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,Integer>("duration"));
-    startTimeCol1.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("startTime"));  
-    endTimeCol1.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,String>("endTime"));
-        
    
     partCol.setCellValueFactory(                
         new PropertyValueFactory<PartsInfo,String>("partName"));
@@ -300,27 +264,6 @@ public class DiagnosisAndRepairController implements Initializable {
         };
         datePicked.setDayCellFactory(dayCellFactory);
         
-           
-        table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-                @Override
-                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                    try {
-                        if (table.getSelectionModel().getSelectedItem() != null)
-                        {
-                            reg = table.getSelectionModel().getSelectedItem().getVehicleReg();
-        
-                           bookingID = table.getSelectionModel().getSelectedItem().getBookingID();
-                           buildBookingForTable2(bookingID,reg);
-                        }
-                    } catch (Exception e) {
-                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                        System.out.println("Here 1.");
-                      
-                    }
-                }
-            });
-        
-        
         
         
     try
@@ -328,7 +271,6 @@ public class DiagnosisAndRepairController implements Initializable {
         
         fillCustomerCombo();
         fillMechanicCombo();
-        //buildBooking();
         buildBooking();
     }
         catch(ClassNotFoundException e)
@@ -759,13 +701,13 @@ public class DiagnosisAndRepairController implements Initializable {
         
         updateData(obj,custArr,mechArr);
         buildBooking();
-        buildBookingForTable2(bookingID,reg);
         fillCustomerCombo();
         clearFields();
         book.setVisible(true);
         exitEditB.setVisible(false);
         update.setVisible(false);
-        
+        customerCombo.setDisable(true);
+        vehicleCombo.setDisable(true);
         addMechanicBill(obj.getBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(custArr[0]),Integer.parseInt(mechArr[0]));
     }
     
@@ -850,8 +792,9 @@ public class DiagnosisAndRepairController implements Initializable {
         vehicleReg.clear();
         vehicleCombo.setValue(null);
         datePicked.setValue(null);
-        startTime.setValue(null);
-        endTime.setValue(null);
+        ObservableList<String> tempClear = FXCollections.observableArrayList();
+        startTime.setItems(tempClear);
+        endTime.setItems(tempClear);
         mechanicCombo.setValue(null);
         datePicked.setValue(null);
         mileage.clear();
@@ -914,64 +857,6 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.setText(Double.toString(mAge));
     }
 
-    @FXML
-    private void editBooking2(ActionEvent event) throws ClassNotFoundException
-    {   
-        int id;
-        try
-        {
-            id = table2.getSelectionModel().getSelectedItem().getBookingID();
-        }
-        catch(Exception e)
-        {
-            alertError(null,"Select a row first");
-            return;
-        }
-        
-        customerCombo.setDisable(true);
-        vehicleCombo.setDisable(true);
-        mechanicCombo.setDisable(true);
-        startTime.setDisable(true); 
-        endTime.setDisable(true);
-        
-        datePicked.setDisable(true);
-        update.setVisible(true);
-        book.setVisible(false);
-        exitEditB.setVisible(true);
-        
-        obj.setBookingID(id);
-        String reg = table2.getSelectionModel().getSelectedItem().getVehicleReg();      
-        String custName = table2.getSelectionModel().getSelectedItem().getCustName();     
-        String mechName = table2.getSelectionModel().getSelectedItem().getMechanicName();     
-        String date = table2.getSelectionModel().getSelectedItem().getDate();
-        String sTime = table2.getSelectionModel().getSelectedItem().getStartTime();     
-        String eTime = table2.getSelectionModel().getSelectedItem().getEndTime();
-        double mAge = table2.getSelectionModel().getSelectedItem().getMileage();
-        
-        String cust = findCustID(reg)+": "+custName;
-        System.out.println(cust);
-        customerCombo.setValue(findComboVal(custNames,cust));  
-        String mech = findMechID(obj.getBookingID())+": "+mechName;
-        mechanicCombo.setValue(findComboVal(mechNames,mech));
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate localDate = LocalDate.parse(date, formatter);
-      
-        datePicked.setValue(localDate); 
-        
-      
-        vehicleCombo.setValue(findComboVal(vehicleReg,reg));  
-        
-        
-        startTime.setValue(findComboVal(startTimeLs,sTime));
-       
-        
-        
-        endTime.setValue(findComboVal(endTimeLs,eTime));
-
-        mileage.setText(Double.toString(mAge));
-        
-    }
     
     private String findComboVal(ObservableList<String> list, String target)
     {
@@ -1078,21 +963,26 @@ public class DiagnosisAndRepairController implements Initializable {
         update.setVisible(false);
         book.setVisible(true);
         exitEditB.setVisible(false); 
+        customerCombo.setDisable(true);
+        vehicleCombo.setDisable(true);
         fillCustomerCombo(); 
         clearFields();
         
     }
     
     
-   /* private void buildBooking() throws ClassNotFoundException
+    private void buildBooking() throws ClassNotFoundException
     {
+        bHour.setSelected(false);
         bToday.setSelected(false);
         bMonth.setSelected(false);
         pBooking.setSelected(false);
         fBooking.setSelected(false);
+        nBooking.setSelected(false);
         allBooking.setSelected(true);
         
         data = FXCollections.observableArrayList();
+        tempData.clear();
         
     Connection conn = null;
     try{      
@@ -1109,6 +999,7 @@ public class DiagnosisAndRepairController implements Initializable {
           
             
         }
+        tempData.addAll(data);
         table.setItems(data);
         
         rs.close();
@@ -1119,7 +1010,7 @@ public class DiagnosisAndRepairController implements Initializable {
           e.printStackTrace();
           System.out.println("Error on Building Data");            
     }
-    }*/
+    }
     
     private String findMake(String vehID, Connection conn)
     {
@@ -1345,13 +1236,27 @@ public class DiagnosisAndRepairController implements Initializable {
         return vehID.size();
     }
     
-    
-    private void buildBooking() throws ClassNotFoundException
+    @FXML
+    private void filterByNextBooking() throws ClassNotFoundException
     {
+        if(!nBooking.isSelected())
+        {
+            return;
+        }
+        
+        bHour.setSelected(false); 
+        bToday.setSelected(false);
+        bMonth.setSelected(false);
+        allBooking.setSelected(false);
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        
+        
+        
         int size = fillVehID();
         
         data = FXCollections.observableArrayList();
-        tempData.clear();
+        //tempData.clear();
   
         String nextDate="";
         int bookingID=0;
@@ -1427,55 +1332,11 @@ public class DiagnosisAndRepairController implements Initializable {
             e.printStackTrace();
             System.out.println("Error");
         }  
-        tempData.addAll(data);
+       // tempData.addAll(data);
         table.setItems(data);
        
     }
     
-    
-    private void buildBookingForTable2(int bID, String reg) throws ClassNotFoundException
-    {
-        allBooking2.setSelected(true);
-        data2 = FXCollections.observableArrayList();
-        tempData2.clear();
-        
-        String vReg = reg;
-        int vID = findVehID(vReg);
-        
-        int id = bID;
-                   
-    Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
-        
-        String SQL = "select * from booking where vehicleID='"+vID+"'";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        while(rs.next())
-        {     
-            if(rs.getInt("booking_id")==id)
-            {
-                if(!rs.next())
-                {
-                    break;
-                }     
-            }
-         
-            String make = findMake(rs.getString(2),conn);
-            data2.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), rs.getDouble(7), rs.getString(8), rs.getString(9)) );
-        }
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
-    }
-        tempData2.addAll(data2);
-        table2.setItems(data2);
-    }
     
     @FXML
     private void buildPartsInfo(ActionEvent event) throws ClassNotFoundException
@@ -1484,15 +1345,13 @@ public class DiagnosisAndRepairController implements Initializable {
         data3 = FXCollections.observableArrayList();
         
         int id;
-        if(table.getSelectionModel().getSelectedItem() != null && table2.getSelectionModel().getSelectedItem() == null)
+        if(table.getSelectionModel().getSelectedItem() == null)
         {
-            id = table.getSelectionModel().getSelectedItem().getBookingID();
+            alertError(null,"Please select a row");
+            return;
         }
-        else 
-        {
-            table.getSelectionModel().clearSelection();
-            id = table2.getSelectionModel().getSelectedItem().getBookingID();   
-        }
+        
+        id = table.getSelectionModel().getSelectedItem().getBookingID();
         
         Connection conn = null;
     try{      
@@ -1649,7 +1508,9 @@ public class DiagnosisAndRepairController implements Initializable {
         bToday.setSelected(false);
         bMonth.setSelected(false);
         allBooking.setSelected(false);
-        
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        nBooking.setSelected(false);
         
         data = FXCollections.observableArrayList(tempData);
      
@@ -1665,7 +1526,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
             int minutes = (int)ChronoUnit.MINUTES.between(today, dateTemp);
             
-            if(minutes > 60)
+            if(minutes > 60 || minutes<0)
             {
                 data.remove(i);
                 i--;  
@@ -1686,6 +1547,9 @@ public class DiagnosisAndRepairController implements Initializable {
         bHour.setSelected(false);
         bMonth.setSelected(false);
         allBooking.setSelected(false);
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        nBooking.setSelected(false);
         
         
         data = FXCollections.observableArrayList(tempData);
@@ -1716,6 +1580,9 @@ public class DiagnosisAndRepairController implements Initializable {
         bHour.setSelected(false);
         bToday.setSelected(false);
         allBooking.setSelected(false);
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        nBooking.setSelected(false);
           
         data = FXCollections.observableArrayList(tempData);
         
@@ -1744,24 +1611,29 @@ public class DiagnosisAndRepairController implements Initializable {
             return;
         }
         
+         bHour.setSelected(false);
+        bToday.setSelected(false);
+        allBooking.setSelected(false);
+        bMonth.setSelected(false);
         fBooking.setSelected(false);
-        allBooking2.setSelected(false);
+        nBooking.setSelected(false);
         
-        data2 = FXCollections.observableArrayList(tempData2);
-     
+        data = FXCollections.observableArrayList(tempData);
+     alertInfo(data.size()+"",null);
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for(int i=0; i<data2.size(); i++)
+        for(int i=0; i<data.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(data2.get(i).getDate(),formatter);
+            LocalDate tempDate = LocalDate.parse(data.get(i).getDate(),formatter);
             if(now.isBefore(tempDate)) //past dates
             {
-                data2.remove(i);
+                data.remove(i);
                 i--;
+                alertInfo(null,null);
             }
         }
-        table2.setItems(data2);
+        table.setItems(data);
     }
     
     @FXML
@@ -1773,23 +1645,27 @@ public class DiagnosisAndRepairController implements Initializable {
         }
    
         pBooking.setSelected(false);
-        allBooking2.setSelected(false);
+        bHour.setSelected(false);
+        bToday.setSelected(false);
+        allBooking.setSelected(false);
+        bMonth.setSelected(false);
+        nBooking.setSelected(false);
         
-        data2 = FXCollections.observableArrayList(tempData2);
+        data = FXCollections.observableArrayList(tempData);
 
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for(int i=0; i<data2.size(); i++)
+        for(int i=0; i<data.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(data2.get(i).getDate(),formatter);
+            LocalDate tempDate = LocalDate.parse(data.get(i).getDate(),formatter);
             if(now.isAfter(tempDate) || !now.equals(tempDate)) //past dates
             {
-                data2.remove(i);
+                data.remove(i);
                 i--;
             }
         }
-        table2.setItems(data2);    
+        table.setItems(data);    
     }
     
     @FXML
@@ -1803,24 +1679,14 @@ public class DiagnosisAndRepairController implements Initializable {
         bHour.setSelected(false);
         bToday.setSelected(false); 
         bMonth.setSelected(false);
+        pBooking.setSelected(false);
+        fBooking.setSelected(false);
+        nBooking.setSelected(false);
 
         
         buildBooking();
     }
     
-    @FXML
-    private void showAllBooking2() throws ClassNotFoundException
-    {
-        if(!allBooking2.isSelected())
-        {
-            return;
-        }
-        
-        pBooking.setSelected(false);
-        fBooking.setSelected(false);
-        
-        buildBookingForTable2(bookingID,reg);
-    }
     
     private int getMechanicHoursWorked(int bookingID) throws ClassNotFoundException
     {
