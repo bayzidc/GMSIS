@@ -154,7 +154,7 @@ public class AddVehicleController implements Initializable {
                 {
                     conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
-                    String query = "select vehicleID, customer_id, customer_fullname from vehicleList,customer where customer_fullname = ?";
+                    String query = "select vehicleID, customer_id, customer_fullname from vehicleList,customer where customer_fullname = ? AND customer.customer_id = vehicleList.customerid";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();

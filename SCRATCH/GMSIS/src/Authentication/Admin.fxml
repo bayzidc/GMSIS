@@ -33,7 +33,7 @@
       <TextField fx:id="firstName" layoutX="47.0" layoutY="95.0" promptText="First Name..." />
       <TextField fx:id="surname" layoutX="47.0" layoutY="136.0" promptText="Surname..." />
       <TextField fx:id="newPass" layoutX="47.0" layoutY="177.0" promptText="New Password..." />
-      <Button fx:id="update" layoutX="420.0" layoutY="427.0" mnemonicParsing="false" onAction="#updatePass" text="Update" />
+      <Button fx:id="update" layoutX="420.0" layoutY="427.0" mnemonicParsing="false" onAction="#updatePass" prefHeight="25.0" prefWidth="119.0" text="Update Details" />
       <TextField fx:id="oldPass" editable="false" layoutX="240.0" layoutY="390.0" promptText="Old password" />
       <TextField fx:id="id" editable="false" layoutX="240.0" layoutY="347.0" promptText="ID" />
 

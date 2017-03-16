@@ -10,7 +10,6 @@
 <?import javafx.scene.text.Font?>
 <?import VehicleRecord.logic.*?>
 
-
 <AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="638.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
       <Label layoutX="244.0" prefHeight="66.0" prefWidth="162.0" text="Vehicle Entry">
@@ -20,7 +19,7 @@
       </Label>
       <Label layoutX="21.0" layoutY="102.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
       <TextField fx:id="id" layoutX="93.0" layoutY="98.0" prefHeight="26.0" prefWidth="28.0" />
-      <Label layoutX="303.0" layoutY="102.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
+      <Label layoutX="292.0" layoutY="103.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
       <ChoiceBox fx:id="customerNames" layoutX="414.0" layoutY="98.0" prefWidth="150.0" />
       <Label layoutX="24.0" layoutY="152.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type: *" />
       <Label layoutX="293.0" layoutY="152.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty: *" />
@@ -39,7 +38,7 @@
       <CheckBox fx:id="yesWarranty" layoutX="368.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleYesBox" text="Yes" />
       <CheckBox fx:id="noWarranty" layoutX="416.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleNoBox" text="No" />
       <DatePicker fx:id="warExpiry" layoutX="435.0" layoutY="278.0" prefHeight="17.0" prefWidth="107.0" />
-      <ChoiceBox fx:id="quickSel" layoutX="113.0" layoutY="180.0" prefHeight="25.0" prefWidth="140.0" />
+      <ChoiceBox fx:id="quickSel" layoutX="113.0" layoutY="180.0" prefHeight="10.0" prefWidth="140.0" />
       <StringTextField fx:id="regNumber" layoutX="127.0" layoutY="226.0" prefHeight="17.0" prefWidth="95.0" />
       <LettersTextField fx:id="make" layoutX="74.0" layoutY="269.0" prefHeight="25.0" prefWidth="150.0" />
       <LettersTextField fx:id="model" layoutX="74.0" layoutY="308.0" prefHeight="26.0" prefWidth="150.0" />

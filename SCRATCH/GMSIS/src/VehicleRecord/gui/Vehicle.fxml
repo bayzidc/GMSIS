@@ -15,14 +15,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="692.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="743.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
       <Label layoutX="375.0" layoutY="39.0" prefHeight="50.0" prefWidth="261.0" text="Vehicle Record">
          <font>
             <Font name="Bauhaus 93" size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="422.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="1291.0">
+      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="487.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="1291.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
           <TableColumn fx:id="makeCol" prefWidth="55.0" text="Make" />
@@ -42,10 +42,10 @@
             <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
         </columns>
       </TableView>
-      <Button fx:id="editBtn" layoutX="811.0" layoutY="134.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="811.0" layoutY="178.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
-      <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="378.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
-      <SplitPane dividerPositions="0.5038363171355499" layoutX="14.0" layoutY="93.0" prefHeight="244.0" prefWidth="784.0">
+      <Button fx:id="editBtn" layoutX="811.0" layoutY="196.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="811.0" layoutY="233.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
+      <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="449.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
+      <SplitPane dividerPositions="0.5038363171355499" layoutX="20.0" layoutY="159.0" prefHeight="244.0" prefWidth="784.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="0.0">
                <children>
@@ -61,7 +61,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="403.0">
                <children>
-                  <TableView fx:id="partsTable" prefHeight="242.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-111.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="partsTable" prefHeight="241.0" prefWidth="385.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="partIDCol" minWidth="0.0" prefWidth="96.0" text="PartID" />
                       <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="214.0" text="Parts Used" />
@@ -72,9 +72,9 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="addEntryBtn" layoutX="811.0" layoutY="95.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="811.0" layoutY="215.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
-      <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="371.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="addEntryBtn" layoutX="811.0" layoutY="159.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
+      <Button fx:id="viewParts" layoutX="811.0" layoutY="269.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="442.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />
          </image>
@@ -85,17 +85,17 @@
             <Image url="@image/refresh.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="336.0" fitWidth="298.0" layoutX="924.0" layoutY="95.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="268.0" fitWidth="369.0" layoutX="931.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/vehicle.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="19.0" layoutY="338.0" prefHeight="40.0" prefWidth="218.0" text="Vehicle List" underline="true">
+      <Label layoutX="20.0" layoutY="402.0" prefHeight="40.0" prefWidth="218.0" text="Vehicle List" underline="true">
          <font>
             <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
-      <MenuBar fx:id="menu" layoutY="2.0" prefHeight="18.0" prefWidth="1236.0">
+      <MenuBar fx:id="menu" layoutY="2.0" prefHeight="25.0" prefWidth="1359.0">
          <menus>
             <Menu fx:id="users" mnemonicParsing="false" text="Users">
                <items>
@@ -131,6 +131,16 @@
             </Menu>
          </menus>
       </MenuBar>
+      <Label layoutX="20.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Customer &amp; Booking Info" underline="true">
+         <font>
+            <Font name="Bauhaus 93" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="418.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Parts Used Info" underline="true">
+         <font>
+            <Font name="Bauhaus 93" size="24.0" />
+         </font>
+      </Label>
       
 
    </children>
