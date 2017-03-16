@@ -79,6 +79,8 @@ public class VehicleController implements Initializable {
     public JFXCheckBox pastB;
     @FXML
     public JFXCheckBox futureB;
+    @FXML
+    public JFXCheckBox showAll;
     
     @FXML
     public TableView<Vehicle> table;
@@ -227,7 +229,7 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
-        
+        showAll.setSelected(true);
         if(!Authentication.LoginController.isAdmin)
         {
             users.setVisible(false);
@@ -863,6 +865,7 @@ public class VehicleController implements Initializable {
         }
         
          futureB.setSelected(false);
+         showAll.setSelected(false);
         
         custData = FXCollections.observableArrayList(tempData);
         LocalDate now = LocalDate.now();
@@ -889,6 +892,7 @@ public class VehicleController implements Initializable {
         }
    
         pastB.setSelected(false);
+        showAll.setSelected(false);
         
         custData = FXCollections.observableArrayList(tempData);
 
@@ -905,6 +909,21 @@ public class VehicleController implements Initializable {
             }
         }
         custTable.setItems(custData);    
+    }
+    
+    @FXML
+    private void showAllBooking() throws ClassNotFoundException, SQLException
+    {
+        if(!showAll.isSelected())
+        {
+            return;
+        }
+        
+        futureB.setSelected(false);
+        pastB.setSelected(false);
+
+        
+        buildCustomerData();
     }
     
      public void alertInf(String message) {

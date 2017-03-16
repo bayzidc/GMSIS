@@ -144,6 +144,7 @@
       </Label>
       <JFXCheckBox fx:id="pastB" layoutX="20.0" layoutY="164.0" onAction="#filterByPast" text="View Past Bookings" />
       <JFXCheckBox fx:id="futureB" layoutX="20.0" layoutY="201.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="138.0" text="View Future Bookings" />
+      <JFXCheckBox fx:id="showAll" layoutX="20.0" layoutY="235.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="150.0" text="View All Bookings" />
       
 
    </children>

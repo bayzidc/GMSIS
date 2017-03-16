@@ -1652,7 +1652,6 @@ public class DiagnosisAndRepairController implements Initializable {
         nBooking.setSelected(false);
         
         data = FXCollections.observableArrayList(tempData);
-
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
