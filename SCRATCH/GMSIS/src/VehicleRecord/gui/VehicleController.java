@@ -35,6 +35,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -72,6 +73,8 @@ public class VehicleController implements Initializable {
     public ImageView refeshImg;
     @FXML
     public TextField searchVehicle;
+    @FXML
+    public ChoiceBox searchBy;
     @FXML
     public JFXButton backButtn;
     
@@ -175,6 +178,7 @@ public class VehicleController implements Initializable {
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
     private ObservableList<CustBookingInfo> tempData = FXCollections.observableArrayList();
+    ObservableList<String> search = FXCollections.observableArrayList("Make","Full/Partial RegNumber","Vehicle Type");
 
 
     @Override
@@ -229,6 +233,8 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
+        searchBy.setValue("Search By...");
+        searchBy.setItems(search);
         showAll.setSelected(true);
         if(!Authentication.LoginController.isAdmin)
         {
@@ -641,16 +647,20 @@ public class VehicleController implements Initializable {
                                 return true;
                             }
                             String newValLow = newValue.toLowerCase();
-                            if (vehicle.getRegNumber().toLowerCase().contains(newValLow)) {
-                                return true;
-                            } else if (vehicle.getMake().toLowerCase().contains(newValLow)) {
-                                return true;
+                            if(searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Make") && vehicle.getMake().toLowerCase().contains(newValLow) )
+                            {
+                                   return true;
                             }
                             
-                            else if (vehicle.getVehicleType().toLowerCase().contains(newValLow)) {
-                                return true;
+                            else if(searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Full/Partial RegNumber") && vehicle.getRegNumber().toLowerCase().contains(newValLow))
+                            {
+                                    return true;
                             }
-
+                            
+                            else if(searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Vehicle Type") && vehicle.getVehicleType().toLowerCase().contains(newValLow))
+                            {
+                                     return true;
+                            }
                             return false;
                         });
                     });
