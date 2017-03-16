@@ -56,11 +56,19 @@ public class LoginController implements Initializable {
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node)event.getSource()).getScene().getWindow();
         
+        stage2.setResizable(false);
+            stage2.setHeight(810);
+            stage2.setWidth(1359);
+        
         Parent customer = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
         Scene customer_Scene = new Scene(customer);
         Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
         
+        stage3.setResizable(false);
+            stage3.setHeight(810);
+            stage3.setWidth(1359);
+            
         if(isValidLogin() && isAdmin())
         {
             stage2.hide();           

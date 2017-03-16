@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import VehicleRecord.logic.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="638.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
@@ -17,7 +16,7 @@
             <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="21.0" layoutY="102.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
+      <Label fx:id="vID" layoutX="21.0" layoutY="102.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
       <TextField fx:id="id" layoutX="93.0" layoutY="98.0" prefHeight="26.0" prefWidth="28.0" />
       <Label layoutX="292.0" layoutY="103.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
       <ChoiceBox fx:id="customerNames" layoutX="414.0" layoutY="98.0" prefWidth="150.0" />

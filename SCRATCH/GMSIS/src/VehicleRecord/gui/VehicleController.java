@@ -6,16 +6,20 @@
 package VehicleRecord.gui;
 
 import Authentication.sqlite;
+import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.logic.CustBookingInfo;
 import VehicleRecord.logic.PartsInfo;
 import VehicleRecord.logic.Vehicle;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import javafx.collections.FXCollections;
@@ -70,6 +74,12 @@ public class VehicleController implements Initializable {
     public TextField searchVehicle;
     @FXML
     public JFXButton backButtn;
+    
+    @FXML
+    public JFXCheckBox pastB;
+    @FXML
+    public JFXCheckBox futureB;
+    
     @FXML
     public TableView<Vehicle> table;
     @FXML
@@ -162,6 +172,7 @@ public class VehicleController implements Initializable {
     ObservableList<Vehicle> data;
     ObservableList<CustBookingInfo> custData;
     ObservableList<PartsInfo> partsData;
+    private ObservableList<CustBookingInfo> tempData = FXCollections.observableArrayList();
 
 
     @Override
@@ -217,7 +228,6 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
         
-        alertInf(""+Authentication.LoginController.isAdmin);
         if(!Authentication.LoginController.isAdmin)
         {
             users.setVisible(false);
@@ -341,6 +351,8 @@ public class VehicleController implements Initializable {
         c.updateBtn.setVisible(false);
         c.addEntry.setVisible(true);
         c.customerNames.setDisable(false);
+        c.id.setVisible(false);
+        c.vID.setVisible(false);
         Scene vehicle_Scene = new Scene(vehicle_Page);
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
@@ -361,6 +373,8 @@ public class VehicleController implements Initializable {
             Stage stage2 = (Stage) ((Node) e.getSource()).getScene().getWindow();
             c.addEntry.setVisible(false);
             c.updateBtn.setVisible(true);
+            c.id.setVisible(true);
+            c.vID.setVisible(true);
             String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
             String vecMake = table.getSelectionModel().getSelectedItem().getMake();
             String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -391,9 +405,21 @@ public class VehicleController implements Initializable {
             c.motRenDate.getEditor().setText(mot);
             c.lastService.getEditor().setText(ls);
             c.vehicleChoice.setValue(vecType);
-            c.nameAndAdd.setText(wNameAndAdd);  
-            c.warExpiry.getEditor().setText(warDate);
+            
             c.id.setText(String.valueOf(ID));
+            if(war.equals("Yes"))
+            {
+                c.yesWarranty.setSelected(true);
+                c.noWarranty.setSelected(false);
+                c.nameAndAdd.setText(wNameAndAdd);  
+                c.warExpiry.getEditor().setText(warDate);
+            }
+            
+            if(war.equals("No"))
+            {
+                c.noWarranty.setSelected(true);
+                c.yesWarranty.setSelected(false);
+            }
             c.custID.setText(String.valueOf(cust));
             c.customerNames.setValue(cName);
             c.customerNames.setDisable(true);
@@ -538,7 +564,7 @@ public class VehicleController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id AND customer.customer_id = bill.customerID";
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) 
@@ -560,7 +586,8 @@ public class VehicleController implements Initializable {
                     alertInf("There are no bookings available for some customers. Please go to the repair booking section.");
                 }
 
-            }           
+            }        
+            tempData.addAll(custData);
             custTable.setItems(custData);
             rs.close();
             conn.close();
@@ -825,6 +852,59 @@ public class VehicleController implements Initializable {
             alertError("Error on deleting booking data. Please try again later.");
         }
         return bookingDeleted;
+    }
+    
+    @FXML
+    private void filterByPast() throws ClassNotFoundException
+    {
+       if(!pastB.isSelected())
+        {
+            return;
+        }
+        
+         futureB.setSelected(false);
+        
+        custData = FXCollections.observableArrayList(tempData);
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for(int i=0; i<custData.size(); i++)
+        {
+            LocalDate tempDate = LocalDate.parse(custData.get(i).getBookingDate(),formatter);
+            if(now.isBefore(tempDate)) //past dates
+            {
+                custData.remove(i);
+                i--;
+            }
+        }
+        custTable.setItems(custData);
+    }
+    
+    @FXML
+    private void filterByFuture() throws ClassNotFoundException
+    {
+        if(!futureB.isSelected())
+        {
+            return;
+        }
+   
+        pastB.setSelected(false);
+        
+        custData = FXCollections.observableArrayList(tempData);
+
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        for(int i=0; i<custData.size(); i++)
+        {
+            LocalDate tempDate = LocalDate.parse(custData.get(i).getBookingDate(),formatter);
+            if(now.isAfter(tempDate) || !now.equals(tempDate)) //past dates
+            {
+                custData.remove(i);
+                i--;
+            }
+        }
+        custTable.setItems(custData);    
     }
     
      public void alertInf(String message) {

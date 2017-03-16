@@ -22,8 +22,9 @@ public class Login extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setResizable(true);
-            stage.setMaximized(true);
+            stage.setResizable(false);
+            stage.setHeight(810);
+            stage.setWidth(1359);
             stage.show();
 
         } catch (Exception e) {

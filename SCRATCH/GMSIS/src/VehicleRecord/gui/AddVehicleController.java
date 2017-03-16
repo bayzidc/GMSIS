@@ -56,6 +56,8 @@ public class AddVehicleController implements Initializable {
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
     
     // Declaring FXML buttons, choiceboxes, textfields, tablecolumns, tables etc.
+    @FXML 
+    public Label vID;
     @FXML
     public Label warrantyName;
     @FXML
@@ -118,29 +120,24 @@ public class AddVehicleController implements Initializable {
         custID.setEditable(false);
         yesWarranty.setOnAction(e ->{
             warrantyChoice.add(yesWarranty.getText());
-            if(yesWarranty.isSelected())
-        {
             noWarranty.setSelected(false); 
             nameAndAdd.setVisible(true);
             warExpiry.setVisible(true);
             warrantyName.setVisible(true);
             warrantyDate.setVisible(true);
-            nameAndAdd.clear();
+            nameAndAdd.clear();         
             warExpiry.setValue(null);
-        }
         });
         
         noWarranty.setOnAction(e ->{
+            yesWarranty.setSelected(false);
             warrantyChoice.add(noWarranty.getText());
             nameAndAdd.clear();
+            warExpiry.setValue(null);
             nameAndAdd.setVisible(false);
             warExpiry.setVisible(false);
             warrantyName.setVisible(false);
             warrantyDate.setVisible(false);
-            if(noWarranty.isSelected())
-        {
-            yesWarranty.setSelected(false);
-        }
         });
         
 
@@ -154,14 +151,13 @@ public class AddVehicleController implements Initializable {
                 {
                     conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
-                    String query = "select vehicleID, customer_id, customer_fullname from vehicleList,customer where customer_fullname = ? AND customer.customer_id = vehicleList.customerid";
+                    String query = "select customer_id, customer_fullname from customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
                     while(rs.next())
                     {
                         custID.setText(String.valueOf(rs.getInt("customer_id")));
-                        id.setText(String.valueOf(rs.getInt("vehicleID")));
                     }
                     conn.close();
                     ps.close();
@@ -283,6 +279,12 @@ public class AddVehicleController implements Initializable {
             id.clear();
             quickSel.setValue(null);
             customerNames.setValue(null);
+            Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
+            Scene vec_Scene = new Scene(vecRecords);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();           
+            stage2.setScene(vec_Scene);
+            stage2.show();
         }
         
     }
@@ -331,6 +333,12 @@ public class AddVehicleController implements Initializable {
             id.clear();
             customerNames.setValue(null);
             custID.clear();
+            Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
+            Scene vec_Scene = new Scene(vecRecords);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();           
+            stage2.setScene(vec_Scene);
+            stage2.show();
         }
     }
     
@@ -379,7 +387,14 @@ public class AddVehicleController implements Initializable {
             state.setString(8, ((TextField) lastService.getEditor()).getText());
             state.setString(9, mileage.getText());
             state.setString(10, (String) vehicleChoice.getValue());
-            state.setString(11, warrantyChoice.toString());
+            if(yesWarranty.isSelected())
+            {
+            state.setString(11, "Yes");
+            }
+            else
+            {
+                state.setString(11, "No");
+            }
             state.setString(12, nameAndAdd.getText());
             state.setString(13, ((TextField) warExpiry.getEditor()).getText());
             state.setString(14, custID.getText());
@@ -468,7 +483,14 @@ public class AddVehicleController implements Initializable {
             state.setString(8, lastService.getEditor().getText());
             state.setInt(9, Integer.parseInt(mileage.getText()));
             state.setString(10, vehicleChoice.getValue().toString());
-            state.setString(11, warrantyChoice.toString());
+            if(yesWarranty.isSelected())
+            {
+            state.setString(11, "Yes");
+            }
+            else
+            {
+                state.setString(11, "No");
+            }
             state.setString(12, nameAndAdd.getText());
             state.setString(13, warExpiry.getEditor().getText());
             state.setInt(14, Integer.parseInt(id.getText()));
@@ -611,7 +633,7 @@ public class AddVehicleController implements Initializable {
     public boolean checkTextFields()
     {
         boolean checked = true;
-        if(vehicleChoice.getSelectionModel().isEmpty() || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals("") || warExpiry.getEditor().getText().equals(""))
+        if(vehicleChoice.getSelectionModel().isEmpty() || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
         {
             checked = false;
             alertInf("Please complete all fields.");
@@ -623,14 +645,16 @@ public class AddVehicleController implements Initializable {
             alertInf("Please specify the name associated with this vehicle.");
         }
         
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
         {
-            alertInf("Please enter the name and address for the warranty.");
+            alertInf("Please enter the name, address and expiry date for the warranty.");
+            checked = false;
         }
         
         if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
         {
             alertInf("Please select if the vehicle is under warranty or not.");
+            checked = false;
         }
         return checked;
     }

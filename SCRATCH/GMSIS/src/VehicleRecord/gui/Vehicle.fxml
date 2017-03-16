@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -42,10 +43,10 @@
             <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
         </columns>
       </TableView>
-      <Button fx:id="editBtn" layoutX="811.0" layoutY="196.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="811.0" layoutY="233.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
+      <Button fx:id="editBtn" layoutX="1019.0" layoutY="197.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="1019.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
       <TextField fx:id="searchVehicle" layoutX="17.0" layoutY="449.0" prefHeight="25.0" prefWidth="338.0" promptText="Search Vehicle by Make, Partial or Full Registration Number..." />
-      <SplitPane dividerPositions="0.5038363171355499" layoutX="20.0" layoutY="159.0" prefHeight="244.0" prefWidth="784.0">
+      <SplitPane dividerPositions="0.5038363171355499" layoutX="203.0" layoutY="160.0" prefHeight="244.0" prefWidth="784.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="0.0">
                <children>
@@ -61,7 +62,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="242.0" prefWidth="403.0">
                <children>
-                  <TableView fx:id="partsTable" prefHeight="241.0" prefWidth="385.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="partsTable" layoutY="1.0" prefHeight="241.0" prefWidth="385.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <columns>
                       <TableColumn fx:id="partIDCol" minWidth="0.0" prefWidth="96.0" text="PartID" />
                       <TableColumn fx:id="partsUsedCol" minWidth="0.0" prefWidth="214.0" text="Parts Used" />
@@ -72,8 +73,8 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="addEntryBtn" layoutX="811.0" layoutY="159.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="811.0" layoutY="269.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <Button fx:id="addEntryBtn" layoutX="1019.0" layoutY="160.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
+      <Button fx:id="viewParts" layoutX="1019.0" layoutY="270.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
       <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="366.0" layoutY="442.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />
@@ -85,7 +86,7 @@
             <Image url="@image/refresh.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="268.0" fitWidth="369.0" layoutX="931.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="139.0" fitWidth="188.0" layoutX="1157.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/vehicle.jpg" />
          </image>
@@ -131,16 +132,18 @@
             </Menu>
          </menus>
       </MenuBar>
-      <Label layoutX="20.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Customer &amp; Booking Info" underline="true">
+      <Label layoutX="203.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Customer &amp; Booking Info" underline="true">
          <font>
             <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="418.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Parts Used Info" underline="true">
+      <Label layoutX="595.0" layoutY="105.0" prefHeight="40.0" prefWidth="400.0" text="Parts Used Info" underline="true">
          <font>
             <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
+      <JFXCheckBox fx:id="pastB" layoutX="20.0" layoutY="164.0" onAction="#filterByPast" text="View Past Bookings" />
+      <JFXCheckBox fx:id="futureB" layoutX="20.0" layoutY="201.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="138.0" text="View Future Bookings" />
       
 
    </children>

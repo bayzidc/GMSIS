@@ -8,16 +8,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="803.0" prefWidth="1196.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="743.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.LoginController">
    <children>
-      <Label fx:id="titleID" alignment="CENTER" layoutX="663.0" layoutY="148.0" prefHeight="75.0" prefWidth="245.0" text="Welcome to GMSIS" textFill="#171717">
+      <Label fx:id="titleID" alignment="CENTER" layoutX="557.0" layoutY="225.0" prefHeight="75.0" prefWidth="245.0" text="Welcome to GMSIS" textFill="#171717">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="username" layoutX="674.0" layoutY="263.0" prefHeight="33.0" prefWidth="223.0" promptText="User ID..." />
-      <PasswordField fx:id="pass" layoutX="674.0" layoutY="311.0" prefHeight="33.0" prefWidth="223.0" promptText="Password..." />
-      <Button fx:id="loginBtn" layoutX="748.0" layoutY="359.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="75.0" text="Login" />
-      <Hyperlink fx:id="forgotPass" layoutX="740.0" layoutY="417.0" prefHeight="24.0" prefWidth="103.0" text="Forgot Password?" textFill="#252323" />
+      <TextField fx:id="username" layoutX="568.0" layoutY="340.0" prefHeight="33.0" prefWidth="223.0" promptText="User ID..." />
+      <PasswordField fx:id="pass" layoutX="568.0" layoutY="388.0" prefHeight="33.0" prefWidth="223.0" promptText="Password..." />
+      <Button fx:id="loginBtn" layoutX="642.0" layoutY="436.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="33.0" prefWidth="75.0" text="Login" />
+      <Hyperlink fx:id="forgotPass" layoutX="634.0" layoutY="494.0" prefHeight="24.0" prefWidth="103.0" text="Forgot Password?" textFill="#252323" />
    </children>
 </AnchorPane>
