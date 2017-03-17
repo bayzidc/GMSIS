@@ -509,7 +509,7 @@ public class PartStockController implements Initializable {
                 String name = table.getSelectionModel().getSelectedItem().getPartName();
 
                 if (result.get() == buttonTypeYes) {
-                  showPart.setPartName(nameOfParts.getText());
+                  showPart.setPartName((nameOfParts.getText().toLowerCase()));
                   showPart.setPartDescription(description.getText());
                   showPart.setCost(Double.parseDouble(cost.getText()));
                   System.out.println("");
