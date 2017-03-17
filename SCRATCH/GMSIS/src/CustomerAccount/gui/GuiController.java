@@ -110,7 +110,9 @@ public class GuiController implements Initializable {
             System.out.println("Running this. BUILD DATA");
             accTypeText.setItems(FXCollections.observableArrayList("Business", "Private"));
             accTypeText.getSelectionModel().selectFirst();
+            System.out.println("Doing this.");
             buildData();
+            System.out.println("Stopped here?");
 
             table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
                 @Override
@@ -216,7 +218,7 @@ public class GuiController implements Initializable {
                 buildData();
             }
         } catch (Exception e) {
-            System.out.println("Here 3.");
+            System.out.println(e.getStackTrace());
             alertInf();
         }
     }
@@ -295,9 +297,10 @@ public class GuiController implements Initializable {
 
             customerDeleted = true;
             clearDetails();
-        } catch (Exception e) {
-            alertInf();
+        } catch (SQLException e) {
+            alertError();
             System.out.println("Here 5.");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
         return customerDeleted;
 
@@ -347,7 +350,10 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
 
-            conn = (new sqlite().connect());
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+
             String SQL = "Select * from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
@@ -394,7 +400,7 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerVehReg"));
     }
 
-    public void createData(customerAccount acc) throws ClassNotFoundException {
+    public void createData(customerAccount acc) throws ClassNotFoundException, NullPointerException {
 
         Connection conn = null;
 
@@ -421,9 +427,9 @@ public class GuiController implements Initializable {
                 conn.close();
                 clearDetails();
             }//submit=true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             alertInf();
-            System.out.println("Here 8.");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
         //return submit;       
 

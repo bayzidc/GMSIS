@@ -16,7 +16,8 @@ public class sqlite
     {
       Class.forName("org.sqlite.JDBC");
       c = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
+      c.createStatement().execute("PRAGMA foreign_keys = ON");
+      
     } catch (SQLException e)
     {
       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
