@@ -1619,7 +1619,7 @@ public class DiagnosisAndRepairController implements Initializable {
         nBooking.setSelected(false);
         
         data = FXCollections.observableArrayList(tempData);
-     alertInfo(data.size()+"",null);
+
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -1630,7 +1630,6 @@ public class DiagnosisAndRepairController implements Initializable {
             {
                 data.remove(i);
                 i--;
-                alertInfo(null,null);
             }
         }
         table.setItems(data);
@@ -1658,7 +1657,8 @@ public class DiagnosisAndRepairController implements Initializable {
         for(int i=0; i<data.size(); i++)
         {
             LocalDate tempDate = LocalDate.parse(data.get(i).getDate(),formatter);
-            if(now.isAfter(tempDate) || !now.equals(tempDate)) //past dates
+  
+            if(now.isAfter(tempDate)) //past dates
             {
                 data.remove(i);
                 i--;
