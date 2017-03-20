@@ -169,7 +169,7 @@ public class AdminController implements Initializable {
     
     private boolean allCompleted()
     {
-        if(!firstName.equals("") && !surname.equals("") && !newPass.equals("") && !hourlyRate.equals(""))
+        if(!firstName.equals("") && !surname.equals("") && !newPass.equals(""))
         {
             return true;
         }
@@ -218,6 +218,7 @@ public class AdminController implements Initializable {
         admin.setSelected(false);
         isMechanic.setSelected(false);
         hourlyRate.clear();
+        hourlyRate.setVisible(false);
     }
 
     @FXML
@@ -310,6 +311,7 @@ public class AdminController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         id.setEditable(false);
+        hourlyRate.setVisible(false);
         
         
         passCol.setCellValueFactory(
@@ -342,16 +344,22 @@ public class AdminController implements Initializable {
         {
             return;
         }
+        hourlyRate.clear();
+        hourlyRate.setVisible(false);
         isMechanic.setSelected(false);
     }
     
     @FXML
     private void mechanicSelected()
     {
-        if(!admin.isSelected())
+        if(!isMechanic.isSelected())
         {
+            hourlyRate.clear();
+            hourlyRate.setVisible(false);
             return;
         }
+        hourlyRate.clear();
+        hourlyRate.setVisible(true);
         admin.setSelected(false);
     }
     
@@ -359,6 +367,8 @@ public class AdminController implements Initializable {
     @FXML
     public void editUser(ActionEvent event) //print on text field
     {
+        hourlyRate.clear();
+        
         if(table.getSelectionModel().getSelectedItem()==null)
         {
             alertError(null,"Please select a row");
@@ -375,18 +385,22 @@ public class AdminController implements Initializable {
         if(table.getSelectionModel().getSelectedItem().getAdmin().equals("1"))
         {
             admin.setSelected(true);
+            hourlyRate.setVisible(false);
         }
         else
         {
             admin.setSelected(false);
+            hourlyRate.setVisible(false);
         }
         if(table.getSelectionModel().getSelectedItem().getIsMechanic().equals("1"))
         {
             isMechanic.setSelected(true);
+            hourlyRate.setVisible(true);
         }
         else
         {
             isMechanic.setSelected(false);
+            hourlyRate.setVisible(false);
         }
         
         
@@ -453,7 +467,14 @@ public class AdminController implements Initializable {
                 state.setBoolean(5, false);
             }
 
-            state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
+           if((hourlyRate.getText().equals("")))
+                  {
+                      state.setDouble(6, 0);
+                  }
+                  else
+                 {
+                    state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
+                 }
             
             state.setString(7, id.getText());
 
@@ -531,8 +552,14 @@ public class AdminController implements Initializable {
                 state.setBoolean(5, false);
             }
             
-          
-            state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
+             if((hourlyRate.getText().equals("")))
+                  {
+                      state.setDouble(6, 0);
+                  }
+                 else
+                {
+                    state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
+                }
 
             state.execute();
 

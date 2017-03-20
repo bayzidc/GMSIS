@@ -37,7 +37,7 @@
       <TextField fx:id="newPass" layoutX="112.0" layoutY="262.0" promptText="Password..." />
       <Button fx:id="update" layoutX="112.0" layoutY="520.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="149.0" text="Update Details" />
  
-      <CheckBox fx:id="admin" layoutX="112.0" layoutY="374.0" mnemonicParsing="false" onAction="#adminSelected" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
+      <CheckBox fx:id="admin" layoutX="112.0" layoutY="334.0" mnemonicParsing="false" onAction="#adminSelected" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
       <MenuBar fx:id="menu" layoutY="1.0" prefHeight="25.0" prefWidth="742.0">
          <menus>
             <Menu fx:id="users" mnemonicParsing="false" text="Users">
@@ -74,8 +74,8 @@
             </Menu>
          </menus>
       </MenuBar>
-      <TextField fx:id="hourlyRate" layoutX="112.0" layoutY="300.0" promptText="Hourly rate" />
-      <CheckBox fx:id="isMechanic" layoutX="113.0" layoutY="405.0" mnemonicParsing="false" onAction="#mechanicSelected" text="Select if Mechanic" />
+      <TextField fx:id="hourlyRate" layoutX="112.0" layoutY="393.0" promptText="Hourly rate" />
+      <CheckBox fx:id="isMechanic" layoutX="112.0" layoutY="360.0" mnemonicParsing="false" onAction="#mechanicSelected" text="Select if Mechanic" />
       <TextField fx:id="id" layoutX="112.0" layoutY="142.0" promptText="ID" />
       <Button fx:id="clearAll" layoutX="112.0" layoutY="558.0" mnemonicParsing="false" onAction="#clearAllButton" prefHeight="25.0" prefWidth="149.0" text="Clear All" />
 
