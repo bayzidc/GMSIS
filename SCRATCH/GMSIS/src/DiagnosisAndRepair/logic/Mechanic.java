@@ -11,7 +11,7 @@ import javafx.beans.property.*;
  *
  * @author Bayzid
  */
-public class Mechanic {
+public class Mechanic{
     
     private SimpleIntegerProperty mechanicID;
     private SimpleDoubleProperty hourlyRate;

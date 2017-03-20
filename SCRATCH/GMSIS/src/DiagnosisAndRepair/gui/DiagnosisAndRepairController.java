@@ -23,7 +23,7 @@ import Authentication.sqlite;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import DiagnosisAndRepair.logic.PartsInfo;
 import DiagnosisAndRepair.logic.Mechanic;
-import Authentication.Home;
+import Authentication.User;
 import CustomerAccount.gui.BillController;
 import DiagnosisAndRepair.logic.Mechanic;
 import java.util.*;
@@ -563,10 +563,10 @@ public class DiagnosisAndRepairController implements Initializable {
 
            conn = (new sqlite().connect());
 
-            String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
+            String SQL = "Select FirstName,Surname from User where ID='"+ mechID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                   
-                mechName = rs.getString("fullname");    
+                mechName = rs.getString("FirstName") + " " +rs.getString("Surname");    
             
             rs.close();
             conn.close();
@@ -680,11 +680,14 @@ public class DiagnosisAndRepairController implements Initializable {
 
             conn = (new sqlite().connect());
 
-            String SQL = "Select fullname,mechanic_id from mechanic";
+            String SQL = "Select ID,FirstName,Surname,isMechanic from User";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
             {       
-                mechNames.add(rs.getInt("mechanic_id")+": "+rs.getString("fullname"));    
+                if(rs.getBoolean("isMechanic"))
+                {
+                    mechNames.add(rs.getInt("ID")+": "+rs.getString("FirstName")+" "+rs.getString("Surname"));
+                }
             }
             mechanicCombo.setItems(mechNames);
             
@@ -958,12 +961,13 @@ public class DiagnosisAndRepairController implements Initializable {
         
         try
         {
+            
             conn = (new sqlite().connect());
             String sql = "DELETE FROM booking WHERE booking_id= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setInt(1, obj.getBookingID());
+  
             state.executeUpdate();
-            
             state.close();
             conn.close();
             
@@ -979,7 +983,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
 
     
-    private void createBooking(DiagnosisAndRepairBooking obj, String[] custArr, String[] mechArr) throws ClassNotFoundException
+    private void createBooking(DiagnosisAndRepairBooking obj, String[] custArr, String[] mechArr)
     {
         Connection conn = null;
         
@@ -1009,7 +1013,7 @@ public class DiagnosisAndRepairController implements Initializable {
             alertInfo(null,"Booking Successful");
             
         }
-        catch(SQLException e)
+        catch(Exception e)
         {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             
@@ -1542,7 +1546,7 @@ public class DiagnosisAndRepairController implements Initializable {
                 {
                     state.setBoolean(6, false);
                 }
-                alertInfo(null,null);
+            
                 //BillController.showBill.setMechanicCost(0);
                 state.execute();
 
@@ -2060,7 +2064,7 @@ public class DiagnosisAndRepairController implements Initializable {
 
            conn = (new sqlite().connect());
 
-            String SQL = "Select hourlyRate from mechanic,booking where booking.mechanic_id=mechanic.mechanic_id and booking.booking_id='"+ bookingID +"'";
+            String SQL = "Select hourlyRate from User,booking where booking.mechanic_id=User.ID and booking.booking_id='"+ bookingID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                   
                 rate = rs.getDouble("hourlyRate");    
