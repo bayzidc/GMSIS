@@ -7,6 +7,7 @@ package VehicleRecord.gui;
 
 import Authentication.sqlite;
 import VehicleRecord.logic.Vehicle;
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -36,9 +37,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
@@ -61,6 +64,14 @@ public class AddVehicleController implements Initializable {
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
     
     // Declaring FXML buttons, choiceboxes, textfields, tablecolumns, tables etc.
+    @FXML
+    public AnchorPane pane;
+    @FXML 
+    public SplitPane split;
+    @FXML 
+    public JFXButton back;
+    @FXML
+    public JFXButton log;
     @FXML 
     public Label vID;
     @FXML
@@ -248,16 +259,20 @@ public class AddVehicleController implements Initializable {
         }
     }
     
+    @FXML 
+    private void logout(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
+    
     // Method which allows the user to go back to the Vehicle Records page
     @FXML
     public void backButton(ActionEvent event) throws IOException
     {
-        Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
-        Scene vec_Scene = new Scene(vecRecords);
-        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage2.hide();           
-        stage2.setScene(vec_Scene);
-        stage2.show();
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
         
     }
     

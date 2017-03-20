@@ -1,61 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import VehicleRecord.logic.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="638.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="810.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.AddVehicleController">
    <children>
-      <Label layoutX="244.0" prefHeight="66.0" prefWidth="162.0" text="Vehicle Entry">
+      <Label layoutX="599.0" layoutY="33.0" prefHeight="66.0" prefWidth="162.0" text="Vehicle Entry">
          <font>
             <Font name="Bauhaus 93" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="vID" layoutX="21.0" layoutY="102.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
-      <TextField fx:id="id" layoutX="93.0" layoutY="98.0" prefHeight="26.0" prefWidth="28.0" />
-      <Label layoutX="292.0" layoutY="103.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
-      <ChoiceBox fx:id="customerNames" layoutX="414.0" layoutY="98.0" prefWidth="150.0" />
-      <Label layoutX="24.0" layoutY="152.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type: *" />
-      <Label layoutX="293.0" layoutY="152.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty: *" />
-      <Label fx:id="warrantyName" layoutX="293.0" layoutY="190.0" prefHeight="17.0" prefWidth="150.0" text="Warranty Name/Address: *" />
-      <Label fx:id="warrantyDate" layoutX="293.0" layoutY="282.0" prefHeight="17.0" prefWidth="128.0" text="Warranty Expiry Date: *" />
-      <Label layoutX="22.0" layoutY="184.0" prefHeight="17.0" prefWidth="95.0" text="Quick Selection:" />
-      <Label layoutX="20.0" layoutY="230.0" prefHeight="17.0" prefWidth="95.0" text="Registration No: *" />
-      <Label layoutX="19.0" layoutY="273.0" prefHeight="17.0" prefWidth="50.0" text="Make: *" />
-      <Label layoutX="19.0" layoutY="312.0" prefHeight="17.0" prefWidth="50.0" text="Model: *" />
-      <Label layoutX="18.0" layoutY="351.0" prefHeight="17.0" prefWidth="83.0" text="Engine Size: *" />
-      <Label layoutX="18.0" layoutY="397.0" prefHeight="17.0" prefWidth="70.0" text="Fuel Type: *" />
-      <Label layoutX="292.0" layoutY="321.0" prefHeight="17.0" prefWidth="128.0" text="M.O.T Renewal Date: *" />
-      <Label layoutX="292.0" layoutY="360.0" prefHeight="17.0" prefWidth="117.0" text="Date Of Last Service: *" />
-      <Label layoutX="20.0" layoutY="473.0" prefHeight="17.0" prefWidth="117.0" text="Current Mileage : *" />
-      <ChoiceBox fx:id="vehicleChoice" layoutX="115.0" layoutY="148.0" prefHeight="25.0" prefWidth="140.0" />
-      <CheckBox fx:id="yesWarranty" layoutX="368.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleYesBox" text="Yes" />
-      <CheckBox fx:id="noWarranty" layoutX="416.0" layoutY="152.0" mnemonicParsing="false" onAction="#handleNoBox" text="No" />
-      <DatePicker fx:id="warExpiry" layoutX="435.0" layoutY="278.0" prefHeight="17.0" prefWidth="107.0" />
-      <ChoiceBox fx:id="quickSel" layoutX="113.0" layoutY="180.0" prefHeight="10.0" prefWidth="140.0" />
-      <StringTextField fx:id="regNumber" layoutX="127.0" layoutY="226.0" prefHeight="17.0" prefWidth="95.0" />
-      <LettersTextField fx:id="make" layoutX="74.0" layoutY="269.0" prefHeight="25.0" prefWidth="150.0" />
-      <LettersTextField fx:id="model" layoutX="74.0" layoutY="308.0" prefHeight="26.0" prefWidth="150.0" />
-      <NumberTextField fx:id="engSize" layoutX="93.0" layoutY="347.0" prefHeight="26.0" prefWidth="128.0" />
-      <ChoiceBox fx:id="fuelType" layoutX="85.0" layoutY="393.0" prefHeight="25.0" prefWidth="128.0" />
-      <DatePicker fx:id="motRenDate" layoutX="435.0" layoutY="317.0" prefHeight="25.0" prefWidth="107.0" />
-      <DatePicker fx:id="lastService" layoutX="435.0" layoutY="356.0" prefHeight="25.0" prefWidth="107.0" />
-      <NumberTextField fx:id="mileage" layoutX="127.0" layoutY="469.0" prefHeight="26.0" prefWidth="95.0" />
-      <Button fx:id="backToRec" layoutX="20.0" layoutY="11.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="117.0" text="Back to Records" />
-      <Button fx:id="clearBtn" layoutX="22.0" layoutY="511.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
-      <Label layoutX="19.0" layoutY="430.0" prefHeight="25.0" prefWidth="50.0" text="Colour: *" />
-      <LettersTextField fx:id="colour" layoutX="74.0" layoutY="430.0" prefHeight="26.0" prefWidth="150.0" />
-      <TextField fx:id="custID" layoutX="221.0" layoutY="98.0" prefHeight="17.0" prefWidth="28.0" />
-      <Label layoutX="162.0" layoutY="103.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
-      <Button fx:id="updateBtn" layoutX="174.0" layoutY="536.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="47.0" prefWidth="140.0" text="Make Changes" />
-      <Button fx:id="addEntry" layoutX="336.0" layoutY="536.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="47.0" prefWidth="150.0" text="Add Vehicle Entry" />
-      <WarrantyTextField fx:id="nameAndAdd" layoutX="443.0" layoutY="190.0" prefHeight="80.0" prefWidth="174.0" />
-      <Label layoutX="22.0" layoutY="66.0" prefHeight="25.0" prefWidth="245.0" text="Please complete all fields with *" textFill="#e40606" />
+      <Label layoutX="306.0" layoutY="99.0" prefHeight="25.0" prefWidth="245.0" text="Please complete all fields with *" textFill="#e40606" />
+      <JFXButton fx:id="back" layoutX="-2.0" layoutY="2.0" onAction="#backButton" prefHeight="47.0" prefWidth="225.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Back to Vehicle Records" textFill="#f5f5f8"/>
+      <SplitPane fx:id="split" dividerPositions="0.8211243611584327" layoutX="306.0" layoutY="134.0" orientation="VERTICAL" prefHeight="589.0" prefWidth="807.0" style="-fx-background-color: #85C1E9;">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="471.0" prefWidth="805.0">
+               <children>
+                  <Label layoutX="33.0" layoutY="22.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
+                  <ChoiceBox fx:id="customerNames" layoutX="140.0" layoutY="18.0" prefWidth="150.0" />
+                  <Label fx:id="vID" layoutX="486.0" layoutY="22.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
+                  <Label layoutX="405.0" layoutY="22.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
+                  <TextField fx:id="custID" layoutX="448.0" layoutY="18.0" prefHeight="17.0" prefWidth="28.0" />
+                  <TextField fx:id="id" layoutX="550.0" layoutY="18.0" prefHeight="26.0" prefWidth="28.0" />
+                  <Label layoutX="33.0" layoutY="56.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type: *" />
+                  <ChoiceBox fx:id="vehicleChoice" layoutX="140.0" layoutY="52.0" prefHeight="25.0" prefWidth="150.0" />
+                  <Label layoutX="33.0" layoutY="96.0" prefHeight="17.0" prefWidth="95.0" text="Quick Selection:" />
+                  <ChoiceBox fx:id="quickSel" layoutX="140.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" />
+                  <Label layoutX="33.0" layoutY="135.0" prefHeight="17.0" prefWidth="95.0" text="Registration No: *" />
+                  <Label layoutX="33.0" layoutY="174.0" prefHeight="17.0" prefWidth="50.0" text="Make: *" />
+                  <Label layoutX="33.0" layoutY="214.0" prefHeight="17.0" prefWidth="50.0" text="Model: *" />
+                  <Label layoutX="33.0" layoutY="255.0" prefHeight="17.0" prefWidth="83.0" text="Engine Size: *" />
+                  <Label layoutX="33.0" layoutY="290.0" prefHeight="17.0" prefWidth="70.0" text="Fuel Type: *" />
+                  <ChoiceBox fx:id="fuelType" layoutX="140.0" layoutY="286.0" prefHeight="25.0" prefWidth="150.0" />
+                  <Label layoutX="33.0" layoutY="338.0" prefHeight="25.0" prefWidth="50.0" text="Colour: *" />
+                  <Label layoutX="33.0" layoutY="384.0" prefHeight="17.0" prefWidth="117.0" text="Current Mileage : *" />
+                  <Label layoutX="401.0" layoutY="56.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty: *" />
+                  <Label fx:id="warrantyName" layoutX="401.0" layoutY="96.0" prefHeight="17.0" prefWidth="150.0" text="Warranty Name/Address: *" />
+                  <Label fx:id="warrantyDate" layoutX="401.0" layoutY="214.0" prefHeight="17.0" prefWidth="128.0" text="Warranty Expiry Date: *" />
+                  <Label layoutX="401.0" layoutY="255.0" prefHeight="17.0" prefWidth="128.0" text="M.O.T Renewal Date: *" />
+                  <Label layoutX="401.0" layoutY="290.0" prefHeight="17.0" prefWidth="117.0" text="Date Of Last Service: *" />
+                  <CheckBox fx:id="yesWarranty" layoutX="486.0" layoutY="56.0" mnemonicParsing="false" onAction="#handleYesBox" text="Yes" />
+                  <CheckBox fx:id="noWarranty" layoutX="551.0" layoutY="56.0" mnemonicParsing="false" onAction="#handleNoBox" text="No" />
+                  <DatePicker fx:id="warExpiry" layoutX="550.0" layoutY="210.0" prefHeight="25.0" prefWidth="128.0" />
+                  <DatePicker fx:id="motRenDate" layoutX="550.0" layoutY="251.0" prefHeight="25.0" prefWidth="128.0" />
+                  <DatePicker fx:id="lastService" layoutX="550.0" layoutY="286.0" prefHeight="25.0" prefWidth="128.0" />
+                  <StringTextField fx:id="regNumber" layoutX="140.0" layoutY="131.0" prefHeight="25.0" prefWidth="150.0" />
+                  <LettersTextField fx:id="make" layoutX="140.0" layoutY="170.0" prefHeight="25.0" prefWidth="150.0" />
+                  <LettersTextField fx:id="model" layoutX="140.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" />
+                  <NumberTextField fx:id="engSize" layoutX="140.0" layoutY="251.0" prefHeight="26.0" prefWidth="150.0" />
+                  <NumberTextField fx:id="mileage" layoutX="140.0" layoutY="380.0" prefHeight="26.0" prefWidth="150.0" />
+                  <LettersTextField fx:id="colour" layoutX="140.0" layoutY="338.0" prefHeight="26.0" prefWidth="150.0" />
+                  <WarrantyTextField fx:id="nameAndAdd" layoutX="550.0" layoutY="95.0" prefHeight="97.0" prefWidth="128.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Button fx:id="clearBtn" layoutX="30.0" layoutY="28.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="47.0" prefWidth="117.0" text="Clear all" />
+                  <Button fx:id="updateBtn" layoutX="341.0" layoutY="28.0" mnemonicParsing="false" onAction="#updateButton" prefHeight="47.0" prefWidth="140.0" text="Make Changes" />
+                  <Button fx:id="addEntry" layoutX="641.0" layoutY="28.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="47.0" prefWidth="150.0" text="Add Vehicle Entry" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <JFXButton fx:id="log" layoutX="1134.0" layoutY="2.0" onAction="#logout" prefHeight="47.0" prefWidth="225.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8"/>
    </children>
 </AnchorPane>
