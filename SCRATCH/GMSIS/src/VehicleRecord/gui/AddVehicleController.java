@@ -14,9 +14,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,12 +33,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javax.swing.JOptionPane;
 
 /**
@@ -140,6 +145,39 @@ public class AddVehicleController implements Initializable {
             warrantyDate.setVisible(false);
         });
         
+        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
+        {
+            @Override
+            public void updateItem(LocalDate item, boolean empty)
+            {
+                super.updateItem(item, empty);
+
+                if(item.isAfter(LocalDate.now()))
+                {
+                    
+                    setStyle("-fx-background-color: #fcbabf;");
+                    Platform.runLater(() -> setDisable(true));                 
+                }
+            }
+        };
+        lastService.setDayCellFactory(dayCellFactory);
+        
+        Callback<DatePicker, DateCell> dayCellFactory1 = dp1 -> new DateCell()
+        {
+            @Override
+            public void updateItem(LocalDate item, boolean empty)
+            {
+                super.updateItem(item, empty);
+
+                if(item.isBefore(LocalDate.now()))
+                {
+                    
+                    setStyle("-fx-background-color: #fcbabf;");
+                    Platform.runLater(() -> setDisable(true));                 
+                }
+            }
+        };
+        motRenDate.setDayCellFactory(dayCellFactory1);
 
         try {
             buildData();
