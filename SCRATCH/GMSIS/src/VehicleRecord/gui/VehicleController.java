@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import javafx.collections.FXCollections;
@@ -35,6 +36,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -233,7 +235,7 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
-        searchBy.setValue("Search By...");
+        searchBy.setValue("Make");
         searchBy.setItems(search);
         showAll.setSelected(true);
         if(!Authentication.LoginController.isAdmin)
@@ -364,7 +366,10 @@ public class VehicleController implements Initializable {
         Scene vehicle_Scene = new Scene(vehicle_Page);
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
+        stageVehicle.setHeight(810);
+        stageVehicle.setWidth(1359);
         stageVehicle.show();
+        
 
     }
     
@@ -434,6 +439,8 @@ public class VehicleController implements Initializable {
             stage2.hide();
             Scene edit_Scene = new Scene(root);
             primaryStage.setScene(edit_Scene);
+            primaryStage.setHeight(810);
+            primaryStage.setWidth(1359);
             primaryStage.show();
         }
         
@@ -449,9 +456,9 @@ public class VehicleController implements Initializable {
     {
         try
         {
-            String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this vehicle? (Yes or No) ");
+            Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this vehicle?");
             int id = table.getSelectionModel().getSelectedItem().getVecID();
-            if (confirmDelete.equalsIgnoreCase("Yes") && isVehicleDeleted() && deletePartofVec() && deleteBookingDate())
+            if (confirmDelete.get() == ButtonType.OK && isVehicleDeleted())
             {
                 alertInf("VehicleID: " + id + " has been deleted.");
                 buildData();
@@ -492,19 +499,20 @@ public class VehicleController implements Initializable {
 
     public void buildParts()
     {
+        int id = table.getSelectionModel().getSelectedItem().getVecID();
         partsData = FXCollections.observableArrayList();
         Connection conn = null;
         try
         {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "Select vehiclePartsUsed.partsId, name, quantity from vehiclePartsUsed, vehicleList where vehicleList.vehicleID= vehiclePartsUsed.vehicleID";
+            String SQL = "Select vehiclePartsUsed.partsUsedID, nameOfPart, quantity from vehiclePartsUsed, vehiclePartsStock,vehicleList where vehicleList.vehicleID= '"+id+"' AND vehiclePartsStock.parts_id = vehiclePartsUsed.parts_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
                 PartsInfo parts = new PartsInfo();
-                parts.partID.set(rs.getInt("partsId"));
-                parts.partsUsed.set(rs.getString("name"));
+                parts.partID.set(rs.getInt("partsUsedID"));
+                parts.partsUsed.set(rs.getString("nameOfPart"));
                 parts.quantity.set(rs.getInt("quantity"));
                 partsData.add(parts);
             }
@@ -514,6 +522,7 @@ public class VehicleController implements Initializable {
         }
         catch(Exception e)
         {
+            
             alertError("Error on building parts data. Please try again later.");
         }
     }
@@ -529,7 +538,7 @@ public class VehicleController implements Initializable {
          try 
          {
              conn = (new sqlite().connect());
-             stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsId) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=?");
+             stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsUsedID) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=? AND vehicleList.vehicleID = vehiclePartsUsed.partsUsedID");
              stmt.setString(1, String.valueOf(id));
              rset = stmt.executeQuery();
              if (rset.next())
@@ -568,6 +577,7 @@ public class VehicleController implements Initializable {
     public void buildCustomerData() throws ClassNotFoundException, SQLException 
     {
         custData = FXCollections.observableArrayList();
+        tempData.clear();
         Connection conn = null;
 
         try {
@@ -716,156 +726,6 @@ public class VehicleController implements Initializable {
 
     }
 
-    //Method which deletes the parts used on the vehicle from the database once the vehicle is deleted
-    public boolean deletePartofVec() throws ClassNotFoundException
-    {
-        boolean partDeleted = false;
-        int ID = table.getSelectionModel().getSelectedItem().getVecID();
-        Connection conn = null;
-
-        try 
-        {
-            conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
-            String sql ="delete from vehiclePartsUsed where vehiclePartsUsed.vehicleID";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.executeUpdate();
-
-            state.close();
-            conn.close();
-            partDeleted = true;
-
-    
-        } 
-        catch (SQLException e) 
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return partDeleted;
-    }
-    
-    //Method which returns the part ID from the database
-    private int getPartID() throws ClassNotFoundException
-    {
-        int partID = 0;
-        Connection conn = null;
- 
-        java.sql.Statement state = null;
-        try
-        {
-            conn = (new sqlite().connect());
-            conn.setAutoCommit(false);
-            
-            state = conn.createStatement();
-            
-            ResultSet rs = state.executeQuery("SELECT partsId FROM vehiclePartsUsed, vehiclePartsStock WHERE vehiclePartsStock.parts_id = vehiclePartsUsed.partsId");
-            while(rs.next())
-            {
-                 partID= rs.getInt("partsId");
-            }
-            rs.close();
-            state.close();
-            conn.close();
-        }
-        catch(SQLException e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return partID;
-    }
-    
-    //Method which returns the part ID used on the vehicle
-    private int getVehiclePartID() throws ClassNotFoundException
-    {
-        int vecPartID = 0;
-        Connection conn = null;
- 
-        java.sql.Statement state = null;
-        try
-        {
-            conn = (new sqlite().connect());
-            conn.setAutoCommit(false);
-            
-            state = conn.createStatement();
-            
-            ResultSet rs = state.executeQuery("SELECT partsid FROM vehicleList, vehiclePartsStock WHERE vehiclePartsStock.parts_id = vehicleList.partsid");
-            while(rs.next())
-            {
-                 vecPartID= rs.getInt("partsid");
-            }
-            rs.close();
-            state.close();
-            conn.close();
-        }
-        catch(SQLException e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return vecPartID;
-    }
-    
-    //Method which returns the booking ID from the database
-    private int getBookingID() throws ClassNotFoundException
-    {
-        int bookID = 0;
-        Connection conn = null;
- 
-        java.sql.Statement state = null;
-        try
-        {
-            conn = (new sqlite().connect());
-            conn.setAutoCommit(false);
-            
-            state = conn.createStatement();
-            
-            ResultSet rs = state.executeQuery("SELECT bookingid FROM vehicleList, booking WHERE vehicleList.bookingid = booking.booking_id");
-            while(rs.next())
-            {
-                 bookID= rs.getInt("bookingid");
-            }
-            rs.close();
-            state.close();
-            conn.close();
-        }
-        catch(SQLException e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return bookID;
-    }
-    
-    //Method which removes the booking associated with a vehicle in the database
-    public boolean deleteBookingDate() throws ClassNotFoundException
-    {
-        int id = table.getSelectionModel().getSelectedItem().getVecID();
-        boolean bookingDeleted = false;
-        Connection conn = null;
-        
-        try
-        {
-            conn = (new sqlite().connect());
-            String sql = "delete from booking where booking.vehicleID=? ";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, String.valueOf(id));
-            state.executeUpdate();
-            
-            state.close();
-            conn.close();
-            bookingDeleted = true;
-            
-        }
-        
-        catch(Exception e)
-        {
-            alertError("Error on deleting booking data. Please try again later.");
-        }
-        return bookingDeleted;
-    }
-    
     @FXML
     private void filterByPast() throws ClassNotFoundException
     {
@@ -890,6 +750,8 @@ public class VehicleController implements Initializable {
                 i--;
             }
         }
+        
+        alertInf("There are no past bookings for the vehicles.");
         custTable.setItems(custData);
     }
     
@@ -901,22 +763,27 @@ public class VehicleController implements Initializable {
             return;
         }
    
-        pastB.setSelected(false);
         showAll.setSelected(false);
+        pastB.setSelected(false);
         
         custData = FXCollections.observableArrayList(tempData);
-
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for(int i=0; i<custData.size(); i++)
         {
             LocalDate tempDate = LocalDate.parse(custData.get(i).getBookingDate(),formatter);
-            if(now.isAfter(tempDate) || !now.equals(tempDate)) //past dates
+  
+            if(now.isAfter(tempDate)) //past dates
             {
                 custData.remove(i);
                 i--;
             }
+        }
+        
+        if(custData.isEmpty())
+        {
+            alertInf("There are no future bookings. Please create a booking for your vehicle in the Diagnosis and Repair Section.");
         }
         custTable.setItems(custData);    
     }
@@ -952,6 +819,13 @@ public class VehicleController implements Initializable {
         alert.showAndWait();
     }
    
-
+    private Optional<ButtonType> alertConfirm(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
+	alert.setTitle("Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
 
 }
