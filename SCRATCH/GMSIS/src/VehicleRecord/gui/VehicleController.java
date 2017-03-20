@@ -145,35 +145,18 @@ public class VehicleController implements Initializable {
     @FXML
     private AnchorPane pane;
     @FXML
-    private MenuBar menu;
+    private JFXButton users;
     @FXML
-    private Menu users;
+    private JFXButton customers;
     @FXML
-    private MenuItem user;
+    private JFXButton vehicles;
     @FXML
-    private Menu customerAcc;
+    private JFXButton bookings;
     @FXML
-    private MenuItem customers;
+    private JFXButton parts;
     @FXML
-    private Menu vecRecord;
-    @FXML
-    private MenuItem records;
-    @FXML
-    private MenuItem vecEntry;
-    @FXML
-    private Menu diagAndRep;
-    @FXML
-    private MenuItem booking;
-    @FXML
-    private Menu partsRecord;
-    @FXML
-    private MenuItem partsStock;
-    @FXML
-    private MenuItem partsUsed;
-    @FXML
-    private Menu logout;
-    @FXML
-    private MenuItem home;
+    private JFXButton logout;
+
 
     //Declaring observable lists to be manipulated later on.
     ObservableList<Vehicle> data;
