@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,6 +30,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -73,26 +75,32 @@ public class AdminController implements Initializable {
     @FXML
     private TextField id;
     @FXML
-    private TextField oldPass;
-    @FXML
-    private TextField Pass;
-    @FXML
     private TextField newPass;
+    @FXML
+    private TextField hourlyRate;
     @FXML
     private CheckBox admin;
     @FXML
-    private TableView<Home> table;
+    private CheckBox isMechanic;
     @FXML
-    private TableColumn<Home, String> passCol;
+    private TableView<User> table;
     @FXML
-    private TableColumn<Home, String> IDCol;
+    private TableColumn<User, String> passCol;
     @FXML
-    private TableColumn<Home, String> firstnameCol;
+    private TableColumn<User, String> IDCol;
     @FXML
-    private TableColumn<Home, String> surnameCol;
+    private TableColumn<User, String> firstnameCol;
     @FXML
-    private TableColumn<Home, String> adminCol;
-    private ObservableList<Home> data;
+    private TableColumn<User, String> surnameCol;
+    @FXML
+    private TableColumn<User, String> adminCol;
+    @FXML
+    private TableColumn<User, String> isMechCol;
+    @FXML
+    private TableColumn<User, String> hourlyRateCol;
+    
+    
+    private ObservableList<User> data;
     private IntegerProperty index = new SimpleIntegerProperty();
 
     /**
@@ -159,6 +167,14 @@ public class AdminController implements Initializable {
         pane.getChildren().setAll(rootPane);
     }
     
+    private boolean allCompleted()
+    {
+        if(!firstName.equals("") && !surname.equals("") && !newPass.equals("") && !hourlyRate.equals(""))
+        {
+            return true;
+        }
+        return false;
+    }
     
     @FXML
     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -167,21 +183,41 @@ public class AdminController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new_User_scene);
         stage.show();*/
+        
+        if(!allCompleted())
+        {
+            alertError(null,"Please complete all fields");
+            return;
+        }
+        
         createData();
         buildData();
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
-	    alert.setTitle("Information");
-	    alert.setHeaderText(null);
-            alert.setContentText("Your unique User ID is " + getID());
-            alert.showAndWait();
+       
+            alertInfo(null,"Your unique User ID is " + getID());
+            
         //JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
 
         //JOptionPane.showMessageDialog(null, "Your unique User ID is " + getID()
+        id.clear();
         firstName.clear();
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
+        isMechanic.setSelected(false);
+        hourlyRate.clear();
+    }
+    
+    @FXML
+    private void clearAllButton(ActionEvent event)
+    {
+        id.clear();
+        firstName.clear();
+        surname.clear();
+        newPass.clear();
+        admin.setSelected(false);
+        isMechanic.setSelected(false);
+        hourlyRate.clear();
     }
 
     @FXML
@@ -191,26 +227,25 @@ public class AdminController implements Initializable {
         Stage delPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         delPage.setScene(del_User_scene);
         delPage.show();*/
-        String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this user? (Yes or No) ");
-        if (confirmDelete.equalsIgnoreCase("Yes") && isDeleted()) {
+        
+        if(table.getSelectionModel().getSelectedItem()==null)
+        {
+            alertError(null,"Please select a row");
+            return;
+        }
+        
+        
+        Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this user?");
+        if (confirmDelete.get()==ButtonType.OK && isDeleted()) {
 
             String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
-            JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
+            alertInfo(null,"UserID: " + ID + " has been deleted");
             buildData();
         }
 
     }
 
-    @FXML
-    private void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        /*Parent edit_User = FXMLLoader.load(getClass().getResource("EditUsers.fxml"));
-        Scene edit_User_scene = new Scene(edit_User);
-        Stage editPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        editPage.setScene(edit_User_scene);
-        editPage.show();*/
-        editUser();
-    }
-
+  
     @FXML
     private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException {
         Parent logoutPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -274,26 +309,25 @@ public class AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        id.setEditable(false);
+        
+        
         passCol.setCellValueFactory(
-                new PropertyValueFactory<Home, String>("Password"));
+                new PropertyValueFactory<User, String>("Password"));
         IDCol.setCellValueFactory(
-                new PropertyValueFactory<Home, String>("ID"));
+                new PropertyValueFactory<User, String>("ID"));
         firstnameCol.setCellValueFactory(
-                new PropertyValueFactory<Home, String>("FirstName"));
+                new PropertyValueFactory<User, String>("FirstName"));
         surnameCol.setCellValueFactory(
-                new PropertyValueFactory<Home, String>("Surname"));
+                new PropertyValueFactory<User, String>("Surname"));
         adminCol.setCellValueFactory(
-                new PropertyValueFactory<Home, String>("Admin"));
+                new PropertyValueFactory<User, String>("Admin"));
+        isMechCol.setCellValueFactory(
+                new PropertyValueFactory<User, String>("isMechanic"));
+        hourlyRateCol.setCellValueFactory(
+                new PropertyValueFactory<User, String>("hourlyRate"));
 
-        table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                index.set(data.indexOf(newValue));
-                System.out.println("Index on click is: " + data.indexOf(newValue));
 
-            }
-
-        });
         try {
             buildData();
         } catch (Exception e) {
@@ -301,28 +335,89 @@ public class AdminController implements Initializable {
         }
     }
 
-    public void editUser() //print on text field
+    @FXML
+    private void adminSelected()
     {
-        String ID = table.getSelectionModel().getSelectedItem().getID();
-        String pass = table.getSelectionModel().getSelectedItem().getPassword();
-
-        id.setText(ID);
-        oldPass.setText(pass);
+        if(!admin.isSelected())
+        {
+            return;
+        }
+        isMechanic.setSelected(false);
+    }
+    
+    @FXML
+    private void mechanicSelected()
+    {
+        if(!admin.isSelected())
+        {
+            return;
+        }
+        admin.setSelected(false);
+    }
+    
+    
+    @FXML
+    public void editUser(ActionEvent event) //print on text field
+    {
+        if(table.getSelectionModel().getSelectedItem()==null)
+        {
+            alertError(null,"Please select a row");
+            return;
+        }
+        
+        
+         id.setText(table.getSelectionModel().getSelectedItem().getID());
+         firstName.setText(table.getSelectionModel().getSelectedItem().getFirstName());
+         surname.setText(table.getSelectionModel().getSelectedItem().getSurname());
+         newPass.setText(table.getSelectionModel().getSelectedItem().getPassword());
+         hourlyRate.setText(Double.toString(table.getSelectionModel().getSelectedItem().getHourlyRate()));
+       
+        if(table.getSelectionModel().getSelectedItem().getAdmin().equals("1"))
+        {
+            admin.setSelected(true);
+        }
+        else
+        {
+            admin.setSelected(false);
+        }
+        if(table.getSelectionModel().getSelectedItem().getIsMechanic().equals("1"))
+        {
+            isMechanic.setSelected(true);
+        }
+        else
+        {
+            isMechanic.setSelected(false);
+        }
+        
+        
     }
     // TODO
 
     @FXML
-    private void updatePass(ActionEvent event) throws IOException, ClassNotFoundException //update button
+    private void update(ActionEvent event) throws IOException, ClassNotFoundException //update button
     {
-        isEditForm();
-        JOptionPane.showMessageDialog(null, "Updated");
-        buildData();
+        if(!allCompleted())
+        {
+            alertError(null,"Please complete all fields");
+            return;
+        }
+        
+        
+        updateData();
+   
         id.clear();
-        oldPass.clear();
-        Pass.clear();
+        firstName.clear();
+        surname.clear();
+        newPass.clear();
+        admin.setSelected(false);
+        isMechanic.setSelected(false);
+        hourlyRate.clear();
+        
+        buildData();
+        
     }
 
-    private void isEditForm() throws ClassNotFoundException {
+    private void updateData() throws ClassNotFoundException {
 
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
@@ -333,20 +428,44 @@ public class AdminController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "UPDATE Login SET Password=? WHERE ID=?";
+            String sql = "UPDATE User SET FirstName=?, Surname=?, Password=?, Admin=?, isMechanic=?, hourlyRate=? WHERE ID=?";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, Pass.getText());
-            state.setString(2, id.getText());
+       
+            state.setString(1, firstName.getText());
+            state.setString(2, surname.getText());
+            state.setString(3, newPass.getText());
+            
+            if(admin.isSelected())
+            {
+                state.setBoolean(4, true);
+            }
+            else
+            {
+                state.setBoolean(4, false);
+            }
+            
+            if(isMechanic.isSelected())
+            {
+                state.setBoolean(5, true);
+            }
+            else
+            {
+                state.setBoolean(5, false);
+            }
+
+            state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
+            
+            state.setString(7, id.getText());
 
             state.execute();
 
             state.close();
             conn.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
         }
+       
 
     }
 
@@ -359,15 +478,17 @@ public class AdminController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             System.out.println("Opened Database Successfully");
 
-            String SQL = "Select * from Login";
+            String SQL = "Select * from User";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                Home cm = new Home();
+                User cm = new User();
                 cm.password.set(rs.getString("Password"));
                 cm.ID.set(rs.getString("ID"));
                 cm.firstName.set(rs.getString("FirstName"));
                 cm.surname.set(rs.getString("Surname"));
                 cm.admin.set(rs.getString("Admin"));
+                cm.isMechanic.set(rs.getString("isMechanic"));
+                cm.hourlyRate.set(rs.getDouble("hourlyRate"));
                 data.add(cm);
             }
             table.setItems(data);
@@ -382,7 +503,7 @@ public class AdminController implements Initializable {
     public void createData() throws ClassNotFoundException {
         //boolean submit = false;
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        System.out.println("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Password= " + "'" + newPass.getText() + "'");
+        System.out.println("SELECT * FROM User WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Password= " + "'" + newPass.getText() + "'");
         Connection conn = null;
 
         try {
@@ -391,7 +512,7 @@ public class AdminController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "insert into Login(FirstName, Surname, Password, Admin) values(?,?,?,?)";
+            String sql = "insert into User(FirstName, Surname, Password, Admin, isMechanic, hourlyRate) values(?,?,?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
@@ -399,10 +520,19 @@ public class AdminController implements Initializable {
             state.setString(3, newPass.getText());
 
             if (admin.isSelected()) {
-                state.setString(4, "true");
+                state.setBoolean(4, true);
             } else {
-                state.setString(4, "false");
+                state.setBoolean(4, false);
             }
+            
+            if (isMechanic.isSelected()) {
+                state.setBoolean(5, true);
+            } else {
+                state.setBoolean(5, false);
+            }
+            
+          
+            state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
 
             state.execute();
 
@@ -412,7 +542,7 @@ public class AdminController implements Initializable {
             //submit=true;
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            
         }
         //return submit;       
 
@@ -430,7 +560,7 @@ public class AdminController implements Initializable {
 
             state = conn.createStatement();
 
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE FirstName= " + "'" + firstName.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM User WHERE FirstName= " + "'" + firstName.getText() + "'");
             while (rs.next()) {
                 id = rs.getString("ID");
             }
@@ -439,21 +569,12 @@ public class AdminController implements Initializable {
             conn.close();
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            
         }
         return id;
 
     }
 
-    /*public void deleteData()
-    {   
-        int i = index.get();
-        if(i>-1)
-        {
-           data.remove(i);
-           table.getSelectionModel().clearSelection();
-        }
-    }*/
     private boolean isDeleted() throws ClassNotFoundException {
         boolean userDeleted = false;
 
@@ -466,7 +587,7 @@ public class AdminController implements Initializable {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
 
             System.out.println("Opened Database Successfully");
-            String sql = "DELETE FROM Login WHERE ID= ?";
+            String sql = "DELETE FROM User WHERE ID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, ID);
             state.executeUpdate();
@@ -478,10 +599,39 @@ public class AdminController implements Initializable {
 
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            
         }
         return userDeleted;
 
     }
 
+    private void alertInfo(String header, String information) 
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(header);
+        alert.setContentText(information);
+        alert.showAndWait();
+    }
+
+    private void alertError(String header, String error) 
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(header);
+        alert.setContentText(error);
+        alert.showAndWait();
+        
+    }
+    
+    
+      private Optional<ButtonType> alertConfirm(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
+	alert.setTitle("Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
+    }
+    
 }

@@ -98,7 +98,7 @@ public class LoginController implements Initializable {
     public boolean isValidLogin()
     {
         boolean loggedIn = false;
-        System.out.println("SELECT * FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+        System.out.println("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
         
         Connection conn = null;
         
@@ -111,7 +111,7 @@ public class LoginController implements Initializable {
             System.out.println("Opened Database Successfully");
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT * FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
                 if(rs.getString("ID") !=null && rs.getString("Password") !=null)
@@ -147,10 +147,10 @@ public class LoginController implements Initializable {
             
             state = conn.createStatement();
             
-            ResultSet rs = state.executeQuery("SELECT Admin FROM Login WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
+            ResultSet rs = state.executeQuery("SELECT Admin FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
             while(rs.next())
             {
-                if(rs.getString("Admin").equals("true"))
+                if(rs.getBoolean("Admin"))
                         {
                             admin = true;
                             break;

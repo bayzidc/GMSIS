@@ -12,34 +12,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="511.0" prefWidth="742.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="810.0" prefWidth="1300.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
    <children>
-      <Label layoutX="305.0" layoutY="30.0" prefHeight="36.0" prefWidth="133.0" text="User Records">
+      <Label layoutX="584.0" layoutY="33.0" prefHeight="36.0" prefWidth="133.0" text="User Records">
          <font>
             <Font name="Bauhaus 93" size="20.0" />
          </font></Label>
-      <Button fx:id="createUser" layoutX="76.0" layoutY="279.0" mnemonicParsing="false" onAction="#createButton" prefHeight="22.0" prefWidth="91.0" text="Create User" />
-      <Button fx:id="editUser" layoutX="76.0" layoutY="315.0" mnemonicParsing="false" onAction="#editButton" prefHeight="25.0" prefWidth="91.0" text="Edit User" />
-      <Button fx:id="deleteUser" layoutX="76.0" layoutY="347.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="91.0" text="Delete User" />
-      <TableView fx:id="table" layoutX="240.0" layoutY="69.0" prefHeight="265.0" prefWidth="494.0">
+      <Button fx:id="createUser" layoutX="112.0" layoutY="481.0" mnemonicParsing="false" onAction="#createButton" prefHeight="25.0" prefWidth="149.0" text="Create User" />
+      <Button fx:id="editUser" layoutX="647.0" layoutY="618.0" mnemonicParsing="false" onAction="#editUser" prefHeight="25.0" prefWidth="179.0" text="Edit User" />
+      <Button fx:id="deleteUser" layoutX="455.0" layoutY="618.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="179.0" text="Delete User" />
+      <TableView fx:id="table" layoutX="455.0" layoutY="110.0" prefHeight="500.0" prefWidth="742.0">
         <columns>
-          <TableColumn fx:id="passCol" prefWidth="146.0" text="Password" />
-          <TableColumn fx:id="IDCol" prefWidth="57.0" text="ID" />
-            <TableColumn fx:id="firstnameCol" prefWidth="115.0" text="FirstName" />
-            <TableColumn fx:id="surnameCol" prefWidth="97.0" text="Surname" />
-            <TableColumn fx:id="adminCol" prefWidth="82.0" text="Admin" />
+          <TableColumn fx:id="passCol" prefWidth="140.0" text="Password" />
+          <TableColumn fx:id="IDCol" prefWidth="105.0" text="ID" />
+            <TableColumn fx:id="firstnameCol" prefWidth="111.0" text="FirstName" />
+            <TableColumn fx:id="surnameCol" prefWidth="107.0" text="Surname" />
+            <TableColumn fx:id="adminCol" prefWidth="75.0" text="Admin" />
+            <TableColumn fx:id="isMechCol" prefWidth="79.0" text="isMechanic" />
+            <TableColumn fx:id="hourlyRateCol" prefWidth="124.0" text="hourlyRate" />
         </columns>
       </TableView>
-      <TextField fx:id="firstName" layoutX="47.0" layoutY="95.0" promptText="First Name..." />
-      <TextField fx:id="surname" layoutX="47.0" layoutY="136.0" promptText="Surname..." />
-      <TextField fx:id="newPass" layoutX="47.0" layoutY="177.0" promptText="New Password..." />
-      <Button fx:id="update" layoutX="420.0" layoutY="427.0" mnemonicParsing="false" onAction="#updatePass" prefHeight="25.0" prefWidth="119.0" text="Update Details" />
-      <TextField fx:id="oldPass" editable="false" layoutX="240.0" layoutY="390.0" promptText="Old password" />
-      <TextField fx:id="id" editable="false" layoutX="240.0" layoutY="347.0" promptText="ID" />
-
-      <TextField fx:id="Pass" layoutX="240.0" layoutY="433.0" promptText="New password" />
+      <TextField fx:id="firstName" layoutX="112.0" layoutY="180.0" promptText="First Name..." />
+      <TextField fx:id="surname" layoutX="112.0" layoutY="221.0" promptText="Surname..." />
+      <TextField fx:id="newPass" layoutX="112.0" layoutY="262.0" promptText="Password..." />
+      <Button fx:id="update" layoutX="112.0" layoutY="520.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="149.0" text="Update Details" />
  
-      <CheckBox fx:id="admin" layoutX="71.0" layoutY="229.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
+      <CheckBox fx:id="admin" layoutX="112.0" layoutY="374.0" mnemonicParsing="false" onAction="#adminSelected" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
       <MenuBar fx:id="menu" layoutY="1.0" prefHeight="25.0" prefWidth="742.0">
          <menus>
             <Menu fx:id="users" mnemonicParsing="false" text="Users">
@@ -76,6 +74,10 @@
             </Menu>
          </menus>
       </MenuBar>
+      <TextField fx:id="hourlyRate" layoutX="112.0" layoutY="300.0" promptText="Hourly rate" />
+      <CheckBox fx:id="isMechanic" layoutX="113.0" layoutY="405.0" mnemonicParsing="false" onAction="#mechanicSelected" text="Select if Mechanic" />
+      <TextField fx:id="id" layoutX="112.0" layoutY="142.0" promptText="ID" />
+      <Button fx:id="clearAll" layoutX="112.0" layoutY="558.0" mnemonicParsing="false" onAction="#clearAllButton" prefHeight="25.0" prefWidth="149.0" text="Clear All" />
 
    </children>
 </AnchorPane>
