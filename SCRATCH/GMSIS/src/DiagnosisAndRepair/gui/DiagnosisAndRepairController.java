@@ -4,21 +4,7 @@
  * and open the template in the editor.
  */
 package DiagnosisAndRepair.gui;
-/*
-mileage update on vehiclelist
-mileage .restriction
-doubleclick edit
-dropdwon search function
-menu bar
-database delete
-filter table fixes datetime and weekly and alert if empty
-restrict today date calender
-test overlaps
-BILLS add and update
-UML diagrams
-test cases
-improve gui
-*/
+
 import Authentication.sqlite;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import DiagnosisAndRepair.logic.PartsInfo;
@@ -952,6 +938,16 @@ public class DiagnosisAndRepairController implements Initializable {
         {             
             buildBooking();
             alertInfo(null, "Booking ID " + id + " has been deleted.");
+            
+            if(!book.isVisible())
+                    {
+                        update.setVisible(false);
+                        book.setVisible(true);
+                        exitEditB.setVisible(false); 
+                        customerCombo.setDisable(false);
+                        vehicleCombo.setDisable(false);
+                        clearFields();    
+                    }
         }
     }
     
@@ -1065,6 +1061,8 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
         allBooking.setSelected(true);
+        
+        partsTable.setItems(null);
         
         data = FXCollections.observableArrayList();
         tempData.clear();
@@ -1462,11 +1460,11 @@ public class DiagnosisAndRepairController implements Initializable {
         
         conn = (new sqlite().connect());
         
-        String SQL = "select nameofPart,cost,dateOfWarrantyExpire from vehiclePartsUsed,vehiclePartsStock where bookingID='"+id+"' and vehiclePartsUsed.parts_id=vehiclePartsStock.parts_id";           
+        String SQL = "select nameofPart,quantity,dateOfWarrantyExpire from vehiclePartsUsed,vehiclePartsStock where bookingID='"+id+"' and vehiclePartsUsed.parts_id=vehiclePartsStock.parts_id";           
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
         {     
-            data3.add(new PartsInfo(rs.getString("nameofPart"), rs.getInt("cost"), rs.getString("dateOfWarrantyExpire")));
+            data3.add(new PartsInfo(rs.getString("nameofPart"), rs.getInt("quantity"), rs.getString("dateOfWarrantyExpire")));
         }
         
         rs.close();
@@ -2138,5 +2136,7 @@ public class DiagnosisAndRepairController implements Initializable {
         alert.setContentText(message);
         return alert.showAndWait();
     }
+    
+    
     
 }
