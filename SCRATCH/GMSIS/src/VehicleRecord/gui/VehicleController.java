@@ -41,6 +41,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -59,6 +60,8 @@ import javax.swing.JOptionPane;
 public class VehicleController implements Initializable {
 
     //Declaring FXML buttons, images, tables, tablecolumns etc.
+    @FXML
+    public ScrollPane spane;
     @FXML
     public Button backBtn;
     @FXML
@@ -218,6 +221,10 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
+        
+        spane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        spane.setContent(table);
+        spane.setFitToHeight(true);
         searchBy.setValue("Make");
         searchBy.setItems(search);
         showAll.setSelected(true);
@@ -450,7 +457,6 @@ public class VehicleController implements Initializable {
                 alertInf("VehicleID: " + id + " has been deleted.");
                 buildData();
                 buildCustomerData();
-                buildParts();
             }
 
         }
@@ -525,7 +531,7 @@ public class VehicleController implements Initializable {
          try 
          {
              conn = (new sqlite().connect());
-             stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsUsedID) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=? AND vehicleList.vehicleID = vehiclePartsUsed.partsUsedID");
+             stmt = conn.prepareStatement("SELECT Count(vehiclePartsUsed.partsUsedID) from vehiclePartsUsed,vehicleList WHERE vehicleList.vehicleID=? AND vehicleList.vehicleID = vehiclePartsUsed.vehicleID");
              stmt.setString(1, String.valueOf(id));
              rset = stmt.executeQuery();
              if (rset.next())
@@ -580,16 +586,6 @@ public class VehicleController implements Initializable {
                 cust.regNumber.set(rs.getString("RegNumber"));
                 cust.totalCost.set(rs.getDouble("totalCost"));
                 custData.add(cust);
-
-                if(rs.getString("customer_fullname").equals(""))
-                {
-                   alertInf("There are no customers in our system at the moment. Please go to the customer services section");
-                } 
-                
-                if(rs.getString("scheduled_date").equals(""))
-                {
-                    alertInf("There are no bookings available for some customers. Please go to the repair booking section.");
-                }
 
             }        
             tempData.addAll(custData);

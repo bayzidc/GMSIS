@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -21,26 +22,6 @@
             <Font name="Bauhaus 93" size="36.0" />
          </font>
       </Label>
-      <TableView fx:id="table" fixedCellSize="0.0" layoutX="17.0" layoutY="487.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="1291.0">
-        <columns>
-          <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
-          <TableColumn fx:id="makeCol" prefWidth="55.0" text="Make" />
-            <TableColumn fx:id="modelCol" prefWidth="63.0" text="Model" />
-            <TableColumn fx:id="engSizeCol" prefWidth="71.0" text="Engine Size" />
-            <TableColumn fx:id="fuelTypeCol" text="Fuel Type" />
-            <TableColumn fx:id="colourCol" prefWidth="71.0" text="Colour" />
-            <TableColumn fx:id="motRenewalCol" prefWidth="84.0" text="M.O.T Date" />
-            <TableColumn fx:id="lastServiceCol" prefWidth="102.0" text="Date of Last Serv" />
-            <TableColumn fx:id="mileageCol" prefWidth="60.0" text="Mileage" />
-            <TableColumn fx:id="vehicleTCol" prefWidth="82.0" text="Vehicle Type" />
-            <TableColumn fx:id="warrantyCol" prefWidth="67.0" text="Warranty?" />
-            <TableColumn fx:id="nameAndAddCol" prefWidth="139.0" text="Warranty Name/Add" />
-            <TableColumn fx:id="warExpDateCol" prefWidth="112.0" text="Warranty ExpDate" />
-            <TableColumn fx:id="vecIDCol" prefWidth="64.0" text="VehicleID" />
-            <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
-            <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
-        </columns>
-      </TableView>
       <Button fx:id="editBtn" layoutX="1019.0" layoutY="197.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
       <Button fx:id="deleteBtn" layoutX="1019.0" layoutY="231.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
       <TextField fx:id="searchVehicle" layoutX="238.0" layoutY="451.0" prefHeight="25.0" prefWidth="275.0" promptText="Search..." />
@@ -116,5 +97,33 @@
       <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
       <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
+      <ScrollPane fx:id="spane" layoutX="27.0" layoutY="488.0" prefHeight="244.0" prefWidth="1327.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="298.0" prefWidth="1293.0">
+               <children>
+                  <TableView fx:id="table" fixedCellSize="0.0" layoutX="1.0" layoutY="-2.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="305.0" prefWidth="1317.0">
+                    <columns>
+                      <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
+                      <TableColumn fx:id="makeCol" prefWidth="55.0" text="Make" />
+                        <TableColumn fx:id="modelCol" prefWidth="63.0" text="Model" />
+                        <TableColumn fx:id="engSizeCol" prefWidth="71.0" text="Engine Size" />
+                        <TableColumn fx:id="fuelTypeCol" text="Fuel Type" />
+                        <TableColumn fx:id="colourCol" prefWidth="71.0" text="Colour" />
+                        <TableColumn fx:id="motRenewalCol" prefWidth="84.0" text="M.O.T Date" />
+                        <TableColumn fx:id="lastServiceCol" prefWidth="102.0" text="Date of Last Serv" />
+                        <TableColumn fx:id="mileageCol" prefWidth="60.0" text="Mileage" />
+                        <TableColumn fx:id="vehicleTCol" prefWidth="82.0" text="Vehicle Type" />
+                        <TableColumn fx:id="warrantyCol" prefWidth="67.0" text="Warranty?" />
+                        <TableColumn fx:id="nameAndAddCol" prefWidth="139.0" text="Warranty Name/Add" />
+                        <TableColumn fx:id="warExpDateCol" prefWidth="112.0" text="Warranty ExpDate" />
+                        <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
+                        <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
+                        <TableColumn fx:id="vecIDCol" prefWidth="84.0" text="VehicleID" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

@@ -715,7 +715,7 @@ public class AddVehicleController implements Initializable {
     public boolean checkForWhiteSpace()
     {
         boolean checked = true;
-        if(regNumber.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || engSize.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || nameAndAdd.getText().trim().isEmpty())
+        if(regNumber.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || engSize.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty())
          {
              alertInf("You cannot have a white space at the start of the textfield");
              checked = false;
