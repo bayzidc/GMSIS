@@ -53,7 +53,7 @@
         </items>
       </SplitPane>
       <Button fx:id="addEntryBtn" layoutX="1019.0" layoutY="160.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="1019.0" layoutY="270.0" mnemonicParsing="false" onAction="#viewPartsData" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <Button fx:id="viewParts" layoutX="1019.0" layoutY="270.0" mnemonicParsing="false" onAction="#buildParts" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
       <ImageView fx:id="searchVecImg" fitHeight="46.0" fitWidth="40.0" layoutX="520.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/searchcar.png" />

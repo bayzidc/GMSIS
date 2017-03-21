@@ -468,38 +468,23 @@ public class VehicleController implements Initializable {
     
     //Method which allows the user to view the parts used once the appropriate row has been selected
     @FXML
-    public void viewPartsData(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
+    public void buildParts(ActionEvent event) throws ClassNotFoundException, SQLException
     {
-        try
-        {
-            int id = table.getSelectionModel().getSelectedItem().getVecID();
-            if(!checkIfPartExists())
-            {
-                alertInf("There are no parts used for this vehicle");
-            }
-            else
-            {
-                buildParts();
-            }
-            
-        }
-        
-        catch(Exception e)
-        {
-            alertInf( "Please select a row to view the part used for that vehicle.");
-        }
-    }
-
-    public void buildParts()
-    {
+        try{
         int id = table.getSelectionModel().getSelectedItem().getVecID();
         partsData = FXCollections.observableArrayList();
+        if(!checkIfPartExists())
+            {
+                alertInf("There are no parts used for this vehicle");
+                partsData.clear();
+            }
+        else{
         Connection conn = null;
         try
         {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "Select vehiclePartsUsed.partsUsedID, nameOfPart, quantity from vehiclePartsUsed, vehiclePartsStock,vehicleList where vehicleList.vehicleID= '"+id+"' AND vehiclePartsStock.parts_id = vehiclePartsUsed.parts_id";
+            String SQL = "Select vehiclePartsUsed.partsUsedID, nameOfPart, quantity from vehiclePartsUsed, vehiclePartsStock,vehicleList where vehicleList.vehicleID= '"+id+"' AND vehiclePartsStock.parts_id = vehiclePartsUsed.parts_id AND vehicleList.vehicleID = vehiclePartsUsed.vehicleID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
@@ -517,6 +502,12 @@ public class VehicleController implements Initializable {
         {
             
             alertError("Error on building parts data. Please try again later.");
+        }
+        }
+        }
+        catch(Exception e)
+        {
+            alertInf( "Please select a row to view the part used for that vehicle.");
         }
     }
     
