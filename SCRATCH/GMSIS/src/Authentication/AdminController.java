@@ -77,11 +77,7 @@ public class AdminController implements Initializable {
     @FXML
     private TextField newPass;
     @FXML
-    private TextField hourlyRate;
-    @FXML
     private CheckBox admin;
-    @FXML
-    private CheckBox isMechanic;
     @FXML
     private TableView<User> table;
     @FXML
@@ -94,10 +90,6 @@ public class AdminController implements Initializable {
     private TableColumn<User, String> surnameCol;
     @FXML
     private TableColumn<User, String> adminCol;
-    @FXML
-    private TableColumn<User, String> isMechCol;
-    @FXML
-    private TableColumn<User, String> hourlyRateCol;
     
     
     private ObservableList<User> data;
@@ -195,17 +187,13 @@ public class AdminController implements Initializable {
 
        
             alertInfo(null,"Your unique User ID is " + getID());
-            
-        //JOptionPane.showMessageDialog(null,"Your unique User ID is " + getID());
 
-        //JOptionPane.showMessageDialog(null, "Your unique User ID is " + getID()
         id.clear();
         firstName.clear();
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
-        isMechanic.setSelected(false);
-        hourlyRate.clear();
+
     }
     
     @FXML
@@ -216,9 +204,6 @@ public class AdminController implements Initializable {
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
-        isMechanic.setSelected(false);
-        hourlyRate.clear();
-        hourlyRate.setVisible(false);
     }
 
     @FXML
@@ -311,7 +296,6 @@ public class AdminController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         id.setEditable(false);
-        hourlyRate.setVisible(false);
         
         
         passCol.setCellValueFactory(
@@ -324,10 +308,7 @@ public class AdminController implements Initializable {
                 new PropertyValueFactory<User, String>("Surname"));
         adminCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("Admin"));
-        isMechCol.setCellValueFactory(
-                new PropertyValueFactory<User, String>("isMechanic"));
-        hourlyRateCol.setCellValueFactory(
-                new PropertyValueFactory<User, String>("hourlyRate"));
+
 
 
         try {
@@ -336,39 +317,13 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+ 
 
-    @FXML
-    private void adminSelected()
-    {
-        if(!admin.isSelected())
-        {
-            return;
-        }
-        hourlyRate.clear();
-        hourlyRate.setVisible(false);
-        isMechanic.setSelected(false);
-    }
-    
-    @FXML
-    private void mechanicSelected()
-    {
-        if(!isMechanic.isSelected())
-        {
-            hourlyRate.clear();
-            hourlyRate.setVisible(false);
-            return;
-        }
-        hourlyRate.clear();
-        hourlyRate.setVisible(true);
-        admin.setSelected(false);
-    }
-    
     
     @FXML
     public void editUser(ActionEvent event) //print on text field
     {
-        hourlyRate.clear();
-        
+
         if(table.getSelectionModel().getSelectedItem()==null)
         {
             alertError(null,"Please select a row");
@@ -380,29 +335,16 @@ public class AdminController implements Initializable {
          firstName.setText(table.getSelectionModel().getSelectedItem().getFirstName());
          surname.setText(table.getSelectionModel().getSelectedItem().getSurname());
          newPass.setText(table.getSelectionModel().getSelectedItem().getPassword());
-         hourlyRate.setText(Double.toString(table.getSelectionModel().getSelectedItem().getHourlyRate()));
        
         if(table.getSelectionModel().getSelectedItem().getAdmin().equals("1"))
         {
             admin.setSelected(true);
-            hourlyRate.setVisible(false);
         }
         else
         {
             admin.setSelected(false);
-            hourlyRate.setVisible(false);
         }
-        if(table.getSelectionModel().getSelectedItem().getIsMechanic().equals("1"))
-        {
-            isMechanic.setSelected(true);
-            hourlyRate.setVisible(true);
-        }
-        else
-        {
-            isMechanic.setSelected(false);
-            hourlyRate.setVisible(false);
-        }
-        
+ 
         
     }
     // TODO
@@ -424,8 +366,6 @@ public class AdminController implements Initializable {
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
-        isMechanic.setSelected(false);
-        hourlyRate.clear();
         
         buildData();
         
@@ -442,7 +382,7 @@ public class AdminController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "UPDATE User SET FirstName=?, Surname=?, Password=?, Admin=?, isMechanic=?, hourlyRate=? WHERE ID=?";
+            String sql = "UPDATE User SET FirstName=?, Surname=?, Password=?, Admin=? WHERE ID=?";
             PreparedStatement state = conn.prepareStatement(sql);
        
             state.setString(1, firstName.getText());
@@ -458,25 +398,9 @@ public class AdminController implements Initializable {
                 state.setBoolean(4, false);
             }
             
-            if(isMechanic.isSelected())
-            {
-                state.setBoolean(5, true);
-            }
-            else
-            {
-                state.setBoolean(5, false);
-            }
-
-           if((hourlyRate.getText().equals("")))
-                  {
-                      state.setDouble(6, 0);
-                  }
-                  else
-                 {
-                    state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
-                 }
+           
             
-            state.setString(7, id.getText());
+            state.setString(5, id.getText());
 
             state.execute();
 
@@ -508,8 +432,6 @@ public class AdminController implements Initializable {
                 cm.firstName.set(rs.getString("FirstName"));
                 cm.surname.set(rs.getString("Surname"));
                 cm.admin.set(rs.getString("Admin"));
-                cm.isMechanic.set(rs.getString("isMechanic"));
-                cm.hourlyRate.set(rs.getDouble("hourlyRate"));
                 data.add(cm);
             }
             table.setItems(data);
@@ -533,7 +455,7 @@ public class AdminController implements Initializable {
 
             System.out.println("Opened Database Successfully");
 
-            String sql = "insert into User(FirstName, Surname, Password, Admin, isMechanic, hourlyRate) values(?,?,?,?,?,?)";
+            String sql = "insert into User(FirstName, Surname, Password, Admin) values(?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, firstName.getText());
@@ -546,20 +468,7 @@ public class AdminController implements Initializable {
                 state.setBoolean(4, false);
             }
             
-            if (isMechanic.isSelected()) {
-                state.setBoolean(5, true);
-            } else {
-                state.setBoolean(5, false);
-            }
-            
-             if((hourlyRate.getText().equals("")))
-                  {
-                      state.setDouble(6, 0);
-                  }
-                 else
-                {
-                    state.setDouble(6, Double.parseDouble(hourlyRate.getText()));
-                }
+           
 
             state.execute();
 

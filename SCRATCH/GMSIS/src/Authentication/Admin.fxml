@@ -19,25 +19,23 @@
             <Font name="Bauhaus 93" size="20.0" />
          </font></Label>
       <Button fx:id="createUser" layoutX="112.0" layoutY="481.0" mnemonicParsing="false" onAction="#createButton" prefHeight="25.0" prefWidth="149.0" text="Create User" />
-      <Button fx:id="editUser" layoutX="647.0" layoutY="618.0" mnemonicParsing="false" onAction="#editUser" prefHeight="25.0" prefWidth="179.0" text="Edit User" />
-      <Button fx:id="deleteUser" layoutX="455.0" layoutY="618.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="179.0" text="Delete User" />
-      <TableView fx:id="table" layoutX="455.0" layoutY="110.0" prefHeight="500.0" prefWidth="742.0">
+      <Button fx:id="editUser" layoutX="647.0" layoutY="599.0" mnemonicParsing="false" onAction="#editUser" prefHeight="25.0" prefWidth="179.0" text="Edit User" />
+      <Button fx:id="deleteUser" layoutX="455.0" layoutY="599.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="179.0" text="Delete User" />
+      <TableView fx:id="table" layoutX="455.0" layoutY="110.0" prefHeight="479.0" prefWidth="730.0">
         <columns>
-          <TableColumn fx:id="passCol" prefWidth="140.0" text="Password" />
-          <TableColumn fx:id="IDCol" prefWidth="105.0" text="ID" />
-            <TableColumn fx:id="firstnameCol" prefWidth="111.0" text="FirstName" />
-            <TableColumn fx:id="surnameCol" prefWidth="107.0" text="Surname" />
-            <TableColumn fx:id="adminCol" prefWidth="75.0" text="Admin" />
-            <TableColumn fx:id="isMechCol" prefWidth="79.0" text="isMechanic" />
-            <TableColumn fx:id="hourlyRateCol" prefWidth="124.0" text="hourlyRate" />
+          <TableColumn fx:id="passCol" prefWidth="146.0" text="Password" />
+          <TableColumn fx:id="IDCol" prefWidth="118.0" text="ID" />
+            <TableColumn fx:id="firstnameCol" prefWidth="153.0" text="FirstName" />
+            <TableColumn fx:id="surnameCol" prefWidth="153.0" text="Surname" />
+            <TableColumn fx:id="adminCol" prefWidth="159.0" text="Admin" />
         </columns>
       </TableView>
-      <TextField fx:id="firstName" layoutX="112.0" layoutY="180.0" promptText="First Name..." />
-      <TextField fx:id="surname" layoutX="112.0" layoutY="221.0" promptText="Surname..." />
-      <TextField fx:id="newPass" layoutX="112.0" layoutY="262.0" promptText="Password..." />
+      <TextField fx:id="firstName" layoutX="112.0" layoutY="200.0" promptText="First Name..." />
+      <TextField fx:id="surname" layoutX="112.0" layoutY="241.0" promptText="Surname..." />
+      <TextField fx:id="newPass" layoutX="112.0" layoutY="282.0" promptText="Password..." />
       <Button fx:id="update" layoutX="112.0" layoutY="520.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="149.0" text="Update Details" />
  
-      <CheckBox fx:id="admin" layoutX="112.0" layoutY="334.0" mnemonicParsing="false" onAction="#adminSelected" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
+      <CheckBox fx:id="admin" layoutX="112.0" layoutY="343.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
       <MenuBar fx:id="menu" layoutY="1.0" prefHeight="25.0" prefWidth="742.0">
          <menus>
             <Menu fx:id="users" mnemonicParsing="false" text="Users">
@@ -74,9 +72,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <TextField fx:id="hourlyRate" layoutX="112.0" layoutY="393.0" promptText="Hourly rate" />
-      <CheckBox fx:id="isMechanic" layoutX="112.0" layoutY="360.0" mnemonicParsing="false" onAction="#mechanicSelected" text="Select if Mechanic" />
-      <TextField fx:id="id" layoutX="112.0" layoutY="142.0" promptText="ID" />
+      <TextField fx:id="id" layoutX="112.0" layoutY="162.0" promptText="ID" />
       <Button fx:id="clearAll" layoutX="112.0" layoutY="558.0" mnemonicParsing="false" onAction="#clearAllButton" prefHeight="25.0" prefWidth="149.0" text="Clear All" />
 
    </children>

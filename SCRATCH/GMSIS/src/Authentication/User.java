@@ -21,8 +21,6 @@ public class User {
    public SimpleStringProperty firstName = new SimpleStringProperty();
    public SimpleStringProperty surname = new SimpleStringProperty();
    public SimpleStringProperty admin = new SimpleStringProperty();
-   public SimpleStringProperty isMechanic = new SimpleStringProperty();
-   public SimpleDoubleProperty hourlyRate = new SimpleDoubleProperty();
 
    
    public String getPassword() {
@@ -43,14 +41,6 @@ public class User {
    
    public String getAdmin() {
       return admin.get();
-   }
-   
-   public String getIsMechanic() {
-      return isMechanic.get();
-   }
-
-   public double getHourlyRate() {
-      return hourlyRate.get();
    }
 
     
