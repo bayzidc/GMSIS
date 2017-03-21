@@ -99,7 +99,7 @@ public class GuiController implements Initializable {
     private ObservableList<customerAccount> data;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
-    public static customerAccount acc = new customerAccount(0, "", "", "", 0, "", "", "");
+    public static customerAccount acc = new customerAccount(0, "", "", "", "", "", "", "");
 
     /**
      * Initializes the controller class.
@@ -132,7 +132,7 @@ public class GuiController implements Initializable {
                                 fullNameText.setText(rs.getString("customer_fullname"));
                                 addressText.setText(rs.getString("customer_address"));
                                 postCodeText.setText(rs.getString("customer_postcode"));
-                                phoneText.setText(String.valueOf(rs.getInt("customer_phone")));
+                                phoneText.setText(rs.getString("customer_phone"));
                                 emailText.setText(rs.getString("customer_email"));
                                 if (rs.getString("customer_type").equals("Business")) {
                                     accTypeText.getSelectionModel().selectFirst();
@@ -147,7 +147,7 @@ public class GuiController implements Initializable {
                             acc.setCustomerFullName(fullNameText.getText());
                             acc.setCustomerAddress(addressText.getText());
                             acc.setCustomerPostCode(postCodeText.getText());
-                            acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+                            acc.setCustomerPhone(phoneText.getText());
                             acc.setCustomerEmail(emailText.getText());
                             acc.setCustomerType(whichType);
                             getCustomerDetails(acc);
@@ -198,13 +198,13 @@ public class GuiController implements Initializable {
             acc.setCustomerFullName(fullNameText.getText());
             acc.setCustomerAddress(addressText.getText());
             acc.setCustomerPostCode(postCodeText.getText());
-            acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+            acc.setCustomerPhone(phoneText.getText());
             acc.setCustomerEmail(emailText.getText());
             acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
             createData(acc);
             buildData();
         } catch (Exception e) {
-            alertInf();
+            e.printStackTrace();
         }
     }
 
@@ -226,8 +226,8 @@ public class GuiController implements Initializable {
     @FXML
     private void updateButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-            int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+            int check = phoneText.getLength();
+            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 9 || emailText.getText().equals("")) {
                 alertInf();
             }
             String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to update this user? (Yes or No) ");
@@ -235,7 +235,7 @@ public class GuiController implements Initializable {
                 acc.setCustomerFullName(fullNameText.getText());
                 acc.setCustomerAddress(addressText.getText());
                 acc.setCustomerPostCode(postCodeText.getText());
-                acc.setCustomerPhone(Integer.parseInt(phoneText.getText()));
+                acc.setCustomerPhone(phoneText.getText());
                 acc.setCustomerEmail(emailText.getText());
                 acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
                 updateData(acc); //Gets ID 
@@ -327,7 +327,7 @@ public class GuiController implements Initializable {
                 state.setString(1, acc.getCustomerFullName());
                 state.setString(2, acc.getCustomerAddress());
                 state.setString(3, acc.getCustomerPostCode());
-                state.setInt(4, acc.getCustomerPhone());
+                state.setString(4, acc.getCustomerPhone());
                 state.setString(5, acc.getCustomerEmail());
                 state.setString(6, acc.getCustomerType());
                 state.setInt(7, acc.getCustomerID());
@@ -350,9 +350,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
+            conn = (new sqlite().connect());
 
             String SQL = "Select * from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -362,7 +360,7 @@ public class GuiController implements Initializable {
                 acc.setCustomerFullName(rs.getString(2));
                 acc.setCustomerAddress(rs.getString(3));
                 acc.setCustomerPostCode(rs.getString(4));
-                acc.setCustomerPhone(rs.getInt(5));
+                acc.setCustomerPhone(rs.getString(5));
                 acc.setCustomerEmail(rs.getString(6));
                 acc.setCustomerType(rs.getString(7));
                 java.sql.Statement state = null;
@@ -417,7 +415,7 @@ public class GuiController implements Initializable {
                 state.setString(1, fullNameText.getText());
                 state.setString(2, addressText.getText());
                 state.setString(3, postCodeText.getText());
-                state.setInt(4, Integer.parseInt(phoneText.getText()));
+                state.setString(4, phoneText.getText());
                 state.setString(5, emailText.getText());
                 state.setString(6, accTypeText.getSelectionModel().getSelectedItem().toString());
 

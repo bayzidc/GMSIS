@@ -23,16 +23,16 @@ public class customerAccount {
     public StringProperty customerEmail;
     public StringProperty customerType;
     public StringProperty customerVehReg;
-    public IntegerProperty customerPhone;
+    public StringProperty customerPhone;
 
-    public customerAccount(int id, String fullname, String address, String postcode, int phone, String email, String type, String vehReg) {
+    public customerAccount(int id, String fullname, String address, String postcode, String phone, String email, String type, String vehReg) {
         this.customerID = new SimpleIntegerProperty(id);
         this.customerFullName = new SimpleStringProperty(fullname);
         this.customerAddress = new SimpleStringProperty(address);
         this.customerPostCode = new SimpleStringProperty(postcode);
         this.customerEmail = new SimpleStringProperty(email);
         this.customerType = new SimpleStringProperty(type);
-        this.customerPhone = new SimpleIntegerProperty(phone);
+        this.customerPhone = new SimpleStringProperty(phone);
         this.customerVehReg = new SimpleStringProperty(vehReg);
     }
 
@@ -60,7 +60,7 @@ public class customerAccount {
         return customerType.get();
     }
 
-    public int getCustomerPhone() {
+    public String getCustomerPhone() {
         return customerPhone.get();
     }
 
@@ -92,7 +92,7 @@ public class customerAccount {
         customerType.set(type);
     }
 
-    public void setCustomerPhone(int number) {
+    public void setCustomerPhone(String number) {
         customerPhone.set(number);
     }
 
@@ -138,7 +138,7 @@ public class customerAccount {
         return customerType;
     }
 
-    public IntegerProperty customerPhoneProperty() {
+    public StringProperty customerPhoneProperty() {
         return customerPhone;
     }
 
