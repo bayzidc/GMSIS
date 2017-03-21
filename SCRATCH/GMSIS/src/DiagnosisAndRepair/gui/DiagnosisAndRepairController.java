@@ -776,7 +776,7 @@ public class DiagnosisAndRepairController implements Initializable {
             System.out.println("");
         }
 
-        //updateMechanicBill(obj.getBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(mechArr[0]));
+        updateMechanicBill(obj.getBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(mechArr[0]));
         
     }
     
@@ -823,7 +823,7 @@ public class DiagnosisAndRepairController implements Initializable {
         createBooking(obj,custArr,mechArr);
         buildBooking();
         clearFields();
-        //addMechanicBill(recentBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(custArr[0]),Integer.parseInt(mechArr[0]));
+        addMechanicBill(recentBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(custArr[0]),Integer.parseInt(mechArr[0]));
     }
     
     
@@ -1520,8 +1520,8 @@ public class DiagnosisAndRepairController implements Initializable {
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
-              //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
-             // Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
+              BillController.showBill.addCostToBillMechanic(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
+              Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
 
                 Connection conn = new sqlite().connect();
 
@@ -1531,9 +1531,9 @@ public class DiagnosisAndRepairController implements Initializable {
                 state.setInt(2, bookingID);
                 state.setInt(3, vehicleID);
 
-                //state.setDouble(4, mechanicCost);
+                state.setDouble(4, mechanicCost);
  
-                //state.setDouble(5, mechanicCost);
+                state.setDouble(5, mechanicCost);
  
                 String exists = IfWarrantyAndNotExpired(vehicleID, conn);
                 if(exists.equalsIgnoreCase("Yes"))
@@ -1568,33 +1568,32 @@ public class DiagnosisAndRepairController implements Initializable {
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
               CustomerAccount.gui.BillController.showBill.addCostToBillMechanic(CustomerAccount.gui.BillController.showBill, mech);
              //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
-             // Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
-
+             
+              Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
+              
+              
                 Connection conn = new sqlite().connect();
 
-                String sql = "UPDATE bill SET mechanicCost=?, totalCost=?, settled=? WHERE bookingID=?";
+                String sql = "UPDATE bill SET mechanicCost=?, totalCost=? WHERE bookingID=?";
                 
                 PreparedStatement state = conn.prepareStatement(sql);
      
-                //state.setDouble(1, mechanicCost);
+                state.setDouble(1, mechanicCost);
  
                 double partsCost = findPartsCost(bookingID,conn);
                 
-                //state.setDouble(2, mechanicCost+partsCost);
                 
-                String exists = IfWarrantyAndNotExpired(vehicleID, conn);
-                if(exists.equalsIgnoreCase("Yes"))
-                {
-                    state.setBoolean(3, true);
-                }
-                else if(exists.equalsIgnoreCase("No"))
-                {
-                    state.setBoolean(3, false);
-                }
-
-                state.setDouble(4, bookingID);
+                CustomerAccount.gui.BillController.showBill.setPartsCost(partsCost);
+                CustomerAccount.gui.BillController.showBill.calculateTotalCost();
+                double totalCost = CustomerAccount.gui.BillController.showBill.getTotalCost();
                 
-                //BillController.showBill.setMechanicCost(0);
+                state.setDouble(2, totalCost);
+                
+                state.setDouble(3, bookingID);
+                
+               BillController.showBill.setMechanicCost(0);
+               BillController.showBill.setPartsCost(0);
+               BillController.showBill.calculateTotalCost();
                 state.execute();
 
                 state.close();
