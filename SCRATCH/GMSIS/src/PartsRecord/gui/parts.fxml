@@ -42,7 +42,7 @@
       <Button fx:id="clear" layoutX="319.0" layoutY="336.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
       <Label layoutX="13.0" layoutY="162.0" text="Quantity : " />
       <TextField fx:id="quantity" layoutX="111.0" layoutY="157.0" prefHeight="27.0" prefWidth="195.0" />
-      <ComboBox fx:id="bookingIdCombo" layoutX="111.0" layoutY="67.0" prefHeight="27.0" prefWidth="195.0" promptText="Select ID" />
+      <ComboBox fx:id="bookingIdCombo" layoutX="111.0" layoutY="67.0" onAction="#showInstallDate" prefHeight="27.0" prefWidth="195.0" promptText="Select ID" />
       <ComboBox fx:id="partNameCombo" layoutX="111.0" layoutY="113.0" prefHeight="27.0" prefWidth="195.0" promptText="Select Name" />
       <Button fx:id="addBill" layoutX="380.0" layoutY="336.0" mnemonicParsing="false" onAction="#addBill" text="Add to Bill" />
       <TableView fx:id="custInfoTable" layoutX="500.0" layoutY="70.0" prefHeight="201.0" prefWidth="383.0">
@@ -52,5 +52,6 @@
             <TableColumn fx:id="bookingDateCol" prefWidth="133.0" text="BookingDate" />
         </columns>
       </TableView>
+      <ComboBox fx:id="searchCombo" layoutX="607.0" layoutY="651.0" prefWidth="150.0" promptText="Search By" />
    </children>
 </AnchorPane>

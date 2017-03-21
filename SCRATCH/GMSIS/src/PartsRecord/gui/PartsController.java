@@ -75,6 +75,8 @@ public class PartsController implements Initializable {
     private ComboBox<Integer> bookingIdCombo;
     @FXML
     private TextField searchField;
+    @FXML
+    private ComboBox<String> searchCombo;
     //@FXML
     //private ComboBox 
     @FXML
@@ -113,6 +115,8 @@ public class PartsController implements Initializable {
     public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0, false);
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
     ObservableList<String> namesCombo = FXCollections.observableArrayList();
+    
+    
 
     @FXML
     public TableView<vehicleCustomerInfo> custInfoTable;
@@ -305,7 +309,39 @@ public class PartsController implements Initializable {
         return cost;
     }
     
-    public void installButton() throws IOException, ClassNotFoundException {
+    public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
+        dateOfInstall.setValue(getScheduleDate(part.getBookingID()));
+        dateOfInstall.setEditable(false);
+        
+    }
+    
+    public LocalDate getScheduleDate(int bookingID)throws IOException, ClassNotFoundException {
+        String date = "";
+        
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select scheduled_date from booking where booking_id ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+                date = rs.getString("scheduled_date");
+            
+            
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return convertStringToDateForBookingCombo(date) ;
+        
+    }
+    
+    public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
         part.setBookingID(bookingIdCombo.getValue());
         part.setPartName(partNameCombo.getValue());
         part.setQuantity(Integer.parseInt(quantity.getText()));
@@ -400,6 +436,12 @@ public class PartsController implements Initializable {
             }
         };
         dateOfInstall.setDayCellFactory(dayCellFactory);
+        ObservableList<String> searchOption = FXCollections.observableArrayList();
+        searchOption.add("vehreg");
+        searchOption.add("customerName");
+        searchOption.add("Both");
+        searchCombo.setItems(searchOption);
+        
 
         try {
             fillPartsNameCombo();
@@ -524,10 +566,11 @@ public class PartsController implements Initializable {
                 alertError("Please complete all the fields.");
             } else {
                 //part.setPartId(Integer.parseInt(idNumber.getText()));
+                part.setBookingID(bookingIdCombo.getValue());
                 part.setPartName(partNameCombo.getValue());
                 part.setQuantity(Integer.parseInt(quantity.getText()));
                 part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-                part.setBookingID(bookingIdCombo.getValue());
+                
 
                 editData(part);
                 buildPartsUsedData();
@@ -723,8 +766,7 @@ public class PartsController implements Initializable {
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC"); 
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
             String SQL = "Select customer_fullname, scheduled_date, RegNumber from customer, booking, vehicleList where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -773,111 +815,165 @@ public class PartsController implements Initializable {
         }
         return true;
     }
-
-    public void changeAddedBillTrue(partsUsed part) throws ClassNotFoundException {
-        try {
-            Connection conn = null;
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-
-            String sql = "UPDATE vehiclePartsUsed SET addedBill=? WHERE partsUsedID=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setBoolean(1, true);
-            state.setInt(2, part.getUsedID());
-
-            state.execute();
-
-            state.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-            System.out.println("error in addingBILL TRUE");
-        }
-    }
     
-    
-    
-    public void settleBills(int ID, boolean value) throws ClassNotFoundException {
-        try {
-            Connection conn = null;
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-
-            String sql = "UPDATE bill SET settled=? WHERE vehicleID=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setBoolean(1, value);
-            state.setInt(2, ID);
-
-            state.execute();
-
-            state.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.out.println("error in settling bills");
-        }
-    }
-
     @FXML
-    public void addBill() throws ClassNotFoundException {
+    public void addBill(ActionEvent event) throws ClassNotFoundException {
+        boolean bookingExist = false;
+        double totalBill = 0.0;
+        
         int bookingID = table.getSelectionModel().getSelectedItem().getBookingID(); 
         int vehicleID = findVehicleID(table.getSelectionModel().getSelectedItem().getBookingID());
         int customerID = findCustomerID(table.getSelectionModel().getSelectedItem().getBookingID());
+        
         try {
             System.out.println("This is value of boolean: " + part.getAddedBill());
             if (part.getAddedBill() == false) {
-                changeAddedBillTrue(part);
-                BillController.showBill.addCostToBill(BillController.showBill, part, part.getQuantity());
-                Double totalCost = BillController.showBill.getTotalCost();
-                System.out.println("The total cost is: " + totalCost);
-                Connection conn = null;
+                
+                bookingExist = checkIfBookingExists(bookingID);
+                System.out.println("Booking exists value:" + bookingExist);
+                if(bookingExist){
+                
+                  BillController.showBill.addCostToBill(BillController.showBill, part, part.getQuantity());
+                  Double totalPartsCost = BillController.showBill.getTotalCost();
+                  System.out.println("The total cost is: " + totalPartsCost);
+                  
+                  Connection conn = null;
+                  System.out.println("Creating data.");
+                  conn = (new sqlite().connect());
+                  String sql = "UPDATE bill SET partsCost=?,totalCost=?,settled=? WHERE bookingID=?";
+                  PreparedStatement state = conn.prepareStatement(sql);
+                  
+                  state.setDouble(1, totalPartsCost);
+                  double mechanicCost = getMechanicCost(bookingID);
+                  System.out.println("The mechanic cost is" + mechanicCost);
+                  totalBill = totalPartsCost + mechanicCost;
+                  
+                  state.setDouble(2,totalBill );
+                  
+                  String exists = IfWarrantyAndNotExpired(vehicleID);
+                  System.out.println("The warranty exists value is" + exists);
+                  if(exists.equalsIgnoreCase("Yes"))
+                  {
+                     state.setBoolean(3, true);
+                     System.out.println("Setting bills to true");
+                  }
+                  else if(exists.equalsIgnoreCase("No"))
+                  {
+                    state.setBoolean(3, false);
+                    System.out.println("Setting bills to false");
+                  }
 
-                Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+                 state.setDouble(4, bookingID);
+                 state.execute();
 
-                System.out.println("Creating data.");
-
-                String sql = "insert into bill(customerID, bookingID,vehicleID, totalCost, settled) values(?,?,?,?,?)";
-                PreparedStatement state = conn.prepareStatement(sql);
-                state.setInt(1, customerID);
-                state.setInt(2, bookingID);
-                state.setInt(3, vehicleID);
-                //System.out.println("I am here up");
-                state.setDouble(4, totalCost);
-                //System.out.println("I am here down");
-                state.setBoolean(5, false);
-                BillController.showBill.setTotalCost(0);
-                state.execute();
-
-                state.close();
-                conn.close();
-                buildPartsUsedData();
+                 state.close();
+                 conn.close();
+                 changeAddedBillTrue(part);
+                 buildPartsUsedData();
+                }
             }
-            else alertInformation("Already added to Bill.");
-        } //submit=true;
+            
+            else {
+                alertInformation("Already added to Bill.");
+            }    
+        } 
         catch (Exception e) {
             alertInformation("Error in adding BILL.");
             System.out.println("Here 8.");
         }
-        String warrantyExists = checkIfWarrantyExists(vehicleID);
-        if(warrantyExists.equals("Yes")){
-            settleBills(vehicleID, true);
+        
         }
-        else if(warrantyExists.equals("No")){
-           settleBills(vehicleID, false); 
+       
+        
+    
+    
+    public String IfWarrantyAndNotExpired(int vehicleID) throws ClassNotFoundException{
+        
+        String check= "";
+        Connection conn = null;
+        
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened database successfully to check whether warranty Exist or not.");
+            String SQL = "Select Warranty,WarrantyExpDate from vehicleList where vehicleID ='" + vehicleID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+               
+            check = rs.getString("Warranty");
+            System.out.println("Check value is" + check);
+            
+
+            if(check.equalsIgnoreCase("Yes"))
+            {   
+                System.out.println("Inside first if statement");
+                LocalDate now = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate expDate = LocalDate.parse(rs.getString("WarrantyExpDate"), formatter);
+                if(now.isAfter(expDate))
+                {
+                    check = "No";//past the exp date
+                    System.out.println("Inside if statement");
+                }
+            }
+            
+            rs.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        System.out.println("inside checking whether warranty Exists");
+        return check;
+        
     }
     
+    public double getMechanicCost(int bookingID)throws ClassNotFoundException{
+        double value  = 0.0;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened database successfully to get mechanic cost");
+            String SQL = "Select mechanicCost from bill where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                value = rs.getDouble("mechanicCost");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding mechanicCost from bill table.");
+        }
+        return value;
+    }
+    
+    public boolean checkIfBookingExists(int bookingID) throws ClassNotFoundException{
+        boolean value  = false;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Openend database successfully to check if booking exists.");
+            String SQL = "Select bookingID from bill where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                value = true;
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding bookingId from bill table.");
+        }
+        return value;
+    }
+    
+
     
     
-    public String checkIfWarrantyExists(int vehicleID) throws ClassNotFoundException{
+    
+    /*public String checkIfWarrantyExists(int vehicleID) throws ClassNotFoundException{
         String checkWarranty= "";
 
         Connection conn = null;
@@ -900,7 +996,61 @@ public class PartsController implements Initializable {
             System.out.println("Error in checking Warranty");
         }
         return checkWarranty;
+    }*/
+
+    public void changeAddedBillTrue(partsUsed part) throws ClassNotFoundException {
+        try {
+            Connection conn = null;
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully for changing addedBill to true");
+
+            String sql = "UPDATE vehiclePartsUsed SET addedBill=? WHERE partsUsedID=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            state.setBoolean(1, true);
+            state.setInt(2, part.getUsedID());
+
+            state.execute();
+
+            state.close();
+            conn.close();
+            System.out.println("Added bill to true");
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+            System.out.println("error in addingBILL TRUE");
+        }
     }
+    
+    
+    
+    /*public void settleBills(int ID, boolean value) throws ClassNotFoundException {
+        try {
+            Connection conn = null;
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully");
+
+            String sql = "UPDATE bill SET settled=? WHERE vehicleID=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            state.setBoolean(1, value);
+            state.setInt(2, ID);
+
+            state.execute();
+
+            state.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.out.println("error in settling bills");
+        }
+    }*/
+
+    
 
     
 
@@ -1152,16 +1302,21 @@ public class PartsController implements Initializable {
     }
 
     private void fillBookingIdCombo() throws ClassNotFoundException {
-
+        String date = "";
+        LocalDate today = LocalDate.now();
         Connection conn = null;
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             //conn = (new sqlite().connect());
-            String SQL = "Select booking_id from Booking";
+            String SQL = "Select booking_id,scheduled_date from Booking";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                bookingId.add(rs.getInt("booking_id"));
+                date = rs.getString("scheduled_date");
+                LocalDate scheduleDate = convertStringToDateForBookingCombo(date);
+                if(today.isBefore(scheduleDate) || today.equals(scheduleDate)) {
+                  bookingId.add(rs.getInt("booking_id"));
+                }
             }
             bookingIdCombo.setItems(bookingId);
 
@@ -1173,15 +1328,27 @@ public class PartsController implements Initializable {
             System.out.println("Error filling in the combo.");
         }
     }
-
     
-
-    
-
     public LocalDate convertStringToDate(String dateString) {
         LocalDate date = null;
 
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        System.out.println("I am here");
+        try {
+
+            date = LocalDate.parse(dateString, df);
+            System.out.println("I am here 2");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+    
+     
+    public LocalDate convertStringToDateForBookingCombo(String dateString) {
+        LocalDate date = null;
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println("I am here");
         try {
 

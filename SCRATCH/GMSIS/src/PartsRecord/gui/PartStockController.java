@@ -295,6 +295,8 @@ public class PartStockController implements Initializable {
             else {
                createData(showPart);
                buildPartsStockData();
+               fillPartsIdCombo();
+               
                clearFields();
             }
             }
@@ -697,7 +699,8 @@ public class PartStockController implements Initializable {
     }
     
     private void fillPartsIdCombo() throws ClassNotFoundException {
-
+        
+        partIdList.clear();
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
