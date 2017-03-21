@@ -57,6 +57,8 @@ import javax.swing.*;
 
 import java.time.DayOfWeek;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.time.*;
 
 import java.util.ResourceBundle;
@@ -214,6 +216,7 @@ public class DiagnosisAndRepairController implements Initializable {
         searchCombo.setValue("Name");
         monthCombo.setItems(monthLs);
         
+        restrictMileage(mileage);
         update.setVisible(false);
         exitEditB.setVisible(false);
         allBooking.setSelected(true);
@@ -2067,6 +2070,29 @@ public class DiagnosisAndRepairController implements Initializable {
         return rate;
     }
     
+        
+    private void restrictMileage(TextField field)
+    {
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        field.setTextFormatter( new TextFormatter<>(input ->
+        {
+        if ( input.getControlNewText().isEmpty() )
+        {
+            return input;
+        }
+        ParsePosition parsePosition = new ParsePosition( 0 );
+        Object object = format.parse( input.getControlNewText(), parsePosition );
+        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
+        {
+            return null;
+        }
+        else
+        {
+            return input;
+        }
+        }));
+    }
+    
     private int calculateDuration(String sTime, String eTime)
      {
         
@@ -2125,6 +2151,8 @@ public class DiagnosisAndRepairController implements Initializable {
         alert.setContentText(message);
         return alert.showAndWait();
     }
+    
+
     
     
     
