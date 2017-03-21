@@ -223,7 +223,7 @@ public class VehicleController implements Initializable {
         showAll.setSelected(true);
         if(!Authentication.LoginController.isAdmin)
         {
-            users.setVisible(false);
+            users.setDisable(true);
         }
         
         try 
@@ -415,6 +415,10 @@ public class VehicleController implements Initializable {
             {
                 c.noWarranty.setSelected(true);
                 c.yesWarranty.setSelected(false);
+                c.warExpiry.setVisible(false);
+                c.nameAndAdd.setVisible(false);
+                c.warrantyName.setVisible(false);
+                c.warrantyDate.setVisible(false);
             }
             c.custID.setText(String.valueOf(cust));
             c.customerNames.setValue(cName);

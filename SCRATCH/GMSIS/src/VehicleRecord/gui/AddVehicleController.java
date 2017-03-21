@@ -307,7 +307,7 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
-        if(checkTextFields())
+        if(checkTextFields() && checkForWhiteSpace())
         {
             createData();
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
@@ -346,7 +346,7 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
-        if(checkTextFields())
+        if(checkTextFields() && checkForWhiteSpace())
         {
         vec.setRegNumber(regNumber.getText());
         vec.setColour(colour.getText());
@@ -712,6 +712,16 @@ public class AddVehicleController implements Initializable {
         return checked;
     }
     
+    public boolean checkForWhiteSpace()
+    {
+        boolean checked = true;
+        if(regNumber.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || engSize.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || nameAndAdd.getText().trim().isEmpty())
+         {
+             alertInf("You cannot have a white space at the start of the textfield");
+             checked = false;
+         }
+        return checked;
+    }
     //Method which sets the no checkbox to unselected when yes checkbox is checked
     @FXML
     private void handleYesBox()
