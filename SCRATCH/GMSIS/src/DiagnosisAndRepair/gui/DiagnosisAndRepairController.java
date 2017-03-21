@@ -1520,9 +1520,12 @@ public class DiagnosisAndRepairController implements Initializable {
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
+              alertInfo(null,getMechanicHourlyRate(bookingID)+"          "+getMechanicHoursWorked(bookingID));
               BillController.showBill.addCostToBillMechanic(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
               Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
 
+              alertInfo(null,mechanicCost+"");
+              
                 Connection conn = new sqlite().connect();
 
                 String sql = "insert into bill(customerID, bookingID, vehicleID, mechanicCost, totalCost, settled) values(?,?,?,?,?,?)";
@@ -2030,7 +2033,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private double getMechanicHoursWorked(int bookingID) throws ClassNotFoundException
     {
-        double hour = 0;
+        double hour = 0.0;
         
          Connection conn = null;
         try {
@@ -2040,7 +2043,9 @@ public class DiagnosisAndRepairController implements Initializable {
             String SQL = "Select duration from booking where booking_id='"+ bookingID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                   
-                hour = rs.getInt("duration") / 60;    
+                
+            
+                hour = (double)rs.getInt("duration") / 60;    
             
             rs.close();
             conn.close();
