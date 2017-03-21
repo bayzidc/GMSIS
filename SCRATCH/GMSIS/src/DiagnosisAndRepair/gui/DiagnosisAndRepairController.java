@@ -10,7 +10,6 @@ import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import DiagnosisAndRepair.logic.PartsInfo;
 import DiagnosisAndRepair.logic.Mechanic;
 import Authentication.User;
-import CustomerAccount.gui.BillController;
 import DiagnosisAndRepair.logic.Mechanic;
 import java.util.*;
 import java.net.URL;
@@ -1569,7 +1568,7 @@ public class DiagnosisAndRepairController implements Initializable {
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
-              CustomerAccount.gui.BillController.showBill.addCostToBillMechanic(CustomerAccount.gui.BillController.showBill, mech);
+              CustomerAccount.gui.GuiController.showBill.addCostToBillMechanic(CustomerAccount.gui.GuiController.showBill, mech);
              //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
              
               Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method

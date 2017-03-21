@@ -6,7 +6,6 @@
 package PartsRecord.gui;
 
 import Authentication.sqlite;
-import CustomerAccount.gui.BillController;
 import PartsRecord.logic.parts;
 import PartsRecord.logic.partsUsed;
 import java.io.IOException;
@@ -833,8 +832,8 @@ public class PartsController implements Initializable {
                 System.out.println("Booking exists value:" + bookingExist);
                 if(bookingExist){
                 
-                  BillController.showBill.addCostToBillParts(BillController.showBill, part, part.getQuantity());
-                  Double totalPartsCost = BillController.showBill.getPartsCost();
+                  CustomerAccount.gui.GuiController.showBill.addCostToBillParts(CustomerAccount.gui.GuiController.showBill, part, part.getQuantity());
+                  Double totalPartsCost = CustomerAccount.gui.GuiController.showBill.getPartsCost();
                   System.out.println("The total cost is: " + totalPartsCost);
                   
                   Connection conn = null;

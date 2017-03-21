@@ -6,6 +6,7 @@
 package CustomerAccount.gui;
 
 import Authentication.sqlite;
+import CustomerAccount.logic.bill;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
+import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.logic.Vehicle;
 import java.io.IOException;
 import java.util.function.Predicate;
@@ -50,6 +52,33 @@ import javax.swing.JOptionPane;
  */
 public class GuiController implements Initializable {
 
+    //FOR BOOKING
+    @FXML
+    private TableView<DiagnosisAndRepairBooking> tableBooking;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, Integer> bookingIDBooking;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, Integer> vehicleID;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, String> mechanicName;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, Integer> date;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, Integer> duration;
+    @FXML
+    private ObservableList<DiagnosisAndRepairBooking> dataBooking;
+    //FOR BILL
+    @FXML
+    private TableView<bill> tableBill;
+    @FXML
+    private TableColumn<bill, Integer> bookingIDBill;
+    @FXML
+    private TableColumn<bill, Boolean> billStatus;
+    @FXML
+    private TableColumn<bill, Integer> cost;
+    @FXML
+    private ObservableList<bill> dataBill;
+    // FOR GUI
     @FXML
     private Button backButtton;
     @FXML
@@ -97,9 +126,11 @@ public class GuiController implements Initializable {
     @FXML
     private TableColumn<customerAccount, String> customerType;
     private ObservableList<customerAccount> data;
+    private ObservableList<bill> data2;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
     public static customerAccount acc = new customerAccount(0, "", "", "", "", "", "", "");
+    public static bill showBill = new bill(0, "", 0, 0, 0, false);
 
     /**
      * Initializes the controller class.
@@ -153,11 +184,12 @@ public class GuiController implements Initializable {
                             getCustomerDetails(acc);
                             state.close();
                             conn.close();
+                            buildDataBill();
+                            buildDataBooking();
                         }
                     } catch (Exception e) {
                         System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                        System.out.println("Here 1.");
-                        alertError();
+                        e.printStackTrace();
                     }
                 }
             });
@@ -440,6 +472,7 @@ public class GuiController implements Initializable {
         postCodeText.clear();
         phoneText.clear();
         emailText.clear();
+        searchCustomer.clear();
         accTypeText.getSelectionModel().selectFirst();
     }
 
@@ -460,6 +493,116 @@ public class GuiController implements Initializable {
             stage2.setScene(admin_Scene);
             stage2.show();
         }
+    }
+
+    public void buildDataBill() {
+        dataBill = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+            int getID = acc.getCustomerID();
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+
+            String SQL = "Select * from bill WHERE customerID = " + getID;
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                dataBill.add(new bill(rs.getInt(1), rs.getString(2), rs.getDouble(7), 0, 0, rs.getBoolean(8)));
+            }
+
+            tableBill.setItems(dataBill);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError();
+        }
+
+        bookingIDBill.setCellValueFactory(
+                new PropertyValueFactory<>("bookingID"));
+        cost.setCellValueFactory(
+                new PropertyValueFactory<>("totalCost"));
+        billStatus.setCellValueFactory(
+                new PropertyValueFactory<>("billStatus"));
+    }
+
+    public void buildDataBooking() throws ClassNotFoundException {
+        dataBooking = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+            int ID = GuiController.acc.getCustomerID();
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            System.out.println("Opened Database Successfully");
+
+            String SQL = "Select * from booking WHERE customer_id=" + ID;
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                dataBooking.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), "", findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), 0, rs.getString(7), rs.getString(8)));
+
+            }
+
+            bookingIDBooking.setCellValueFactory(
+                    new PropertyValueFactory<>("bookingID"));
+            vehicleID.setCellValueFactory(
+                    new PropertyValueFactory<>("vehicleReg"));
+            mechanicName.setCellValueFactory(
+                    new PropertyValueFactory<>("mechanicName"));
+            date.setCellValueFactory(
+                    new PropertyValueFactory<>("date"));
+            duration.setCellValueFactory(
+                    new PropertyValueFactory<>("duration"));
+
+            tableBooking.setItems(dataBooking);
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            alertError();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    private String findVehicleReg(int vehicleReg) throws ClassNotFoundException {
+        String vehicleRegIS = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select RegNumber from vehicleList where vehicleID='" + vehicleReg + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                vehicleRegIS = rs.getString("RegNumber");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return vehicleRegIS;
+    }
+
+    private String findMechanicName(int mechanicID) throws ClassNotFoundException {
+        String mechanicName = "";
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select fullname from mechanic where mechanic_id='" + mechanicID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                mechanicName = rs.getString("fullname");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return mechanicName;
     }
 
     public void alertInf() {
