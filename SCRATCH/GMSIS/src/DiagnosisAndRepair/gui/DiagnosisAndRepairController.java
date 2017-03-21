@@ -10,6 +10,7 @@ import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import DiagnosisAndRepair.logic.PartsInfo;
 import DiagnosisAndRepair.logic.Mechanic;
 import Authentication.User;
+import CustomerAccount.gui.GuiController;
 import DiagnosisAndRepair.logic.Mechanic;
 import java.util.*;
 import java.net.URL;
@@ -1520,8 +1521,8 @@ public class DiagnosisAndRepairController implements Initializable {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
               alertInfo(null,getMechanicHourlyRate(bookingID)+"          "+getMechanicHoursWorked(bookingID));
-              BillController.showBill.addCostToBillMechanic(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
-              Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
+              GuiController.showBill.addCostToBillMechanic(GuiController.showBill, mech); //create a addMechanicCostToBill method in bill class
+              Double mechanicCost = GuiController.showBill.getMechanicCost(); //create total mech cost method
 
               alertInfo(null,mechanicCost+"");
               
@@ -1571,7 +1572,7 @@ public class DiagnosisAndRepairController implements Initializable {
               CustomerAccount.gui.GuiController.showBill.addCostToBillMechanic(CustomerAccount.gui.GuiController.showBill, mech);
              //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
              
-              Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
+              Double mechanicCost = GuiController.showBill.getMechanicCost(); //create total mech cost method
               
               
                 Connection conn = new sqlite().connect();
@@ -1585,17 +1586,17 @@ public class DiagnosisAndRepairController implements Initializable {
                 double partsCost = findPartsCost(bookingID,conn);
                 
                 
-                CustomerAccount.gui.BillController.showBill.setPartsCost(partsCost);
-                CustomerAccount.gui.BillController.showBill.calculateTotalCost();
-                double totalCost = CustomerAccount.gui.BillController.showBill.getTotalCost();
+                CustomerAccount.gui.GuiController.showBill.setPartsCost(partsCost);
+                CustomerAccount.gui.GuiController.showBill.calculateTotalCost();
+                double totalCost = CustomerAccount.gui.GuiController.showBill.getTotalCost();
                 
                 state.setDouble(2, totalCost);
                 
                 state.setDouble(3, bookingID);
                 
-               BillController.showBill.setMechanicCost(0);
-               BillController.showBill.setPartsCost(0);
-               BillController.showBill.calculateTotalCost();
+               GuiController.showBill.setMechanicCost(0);
+               GuiController.showBill.setPartsCost(0);
+               GuiController.showBill.calculateTotalCost();
                 state.execute();
 
                 state.close();
