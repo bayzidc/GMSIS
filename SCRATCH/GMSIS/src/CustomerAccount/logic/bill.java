@@ -21,19 +21,31 @@ import javafx.beans.property.StringProperty;
 public class bill {
 
     public IntegerProperty billID;
+    public DoubleProperty partsCost;
+    public DoubleProperty mechanicCost;
     public DoubleProperty totalCost;
     public StringProperty bookingID;
     public BooleanProperty billStatus;
 
-    public bill(int billID, String bookingID, int costOfBill, boolean isSettled) {
+    public bill(int billID, String bookingID, double costOfBill,double mechanicCost,double partsCost, boolean isSettled) {
         this.totalCost = new SimpleDoubleProperty(costOfBill);
         this.bookingID = new SimpleStringProperty(bookingID);
         this.billStatus = new SimpleBooleanProperty(isSettled);
         this.billID = new SimpleIntegerProperty(billID);
+        this.partsCost = new SimpleDoubleProperty(partsCost);
+        this.mechanicCost = new SimpleDoubleProperty(mechanicCost);
     }
 
     public double getTotalCost() {
         return totalCost.get();
+    }
+    
+    public double getPartsCost(){
+        return partsCost.get();
+    }
+    
+    public double getMechanicCost(){
+        return mechanicCost.get();
     }
 
     public boolean getBillStatus() {
@@ -52,8 +64,20 @@ public class bill {
         billID.set(ID);
     }
 
-    public void setTotalCost(int cost) {
+    public void calculateTotalCost() {
+        totalCost.set(mechanicCost.get()+partsCost.get());
+    }
+    
+    public void setTotalCost(double cost){
         totalCost.set(cost);
+    }
+    
+    public void setMechanicCost(double cost){
+        mechanicCost.set(cost);
+    }
+    
+    public void setPartsCost(double cost){
+        partsCost.set(cost);
     }
 
     public void setBookingID(String ID) {
@@ -72,8 +96,12 @@ public class bill {
         return bookingID;
     }
 
-    public void addCostToBill(bill Bill, PartsRecord.logic.partsUsed part, int quantity) {
-        Bill.totalCost.set(totalCost.get()+(quantity*part.getCost()));
+    public void addCostToBillParts(bill Bill, PartsRecord.logic.partsUsed part, int quantity) {
+        Bill.partsCost.set(partsCost.get()+(quantity*part.getCost()));
+    }
+    
+    public void addCostToBillMechanic(bill Bill, DiagnosisAndRepair.logic.Mechanic mech){
+        Bill.mechanicCost.set(mechanicCost.get()+(mech.getHourlyRate()*mech.getHoursWorked()));
     }
 
 }

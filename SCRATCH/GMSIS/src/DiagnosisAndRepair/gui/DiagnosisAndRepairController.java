@@ -1566,7 +1566,8 @@ public class DiagnosisAndRepairController implements Initializable {
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
-              //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
+              CustomerAccount.gui.BillController.showBill.addCostToBillMechanic(CustomerAccount.gui.BillController.showBill, mech);
+             //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
              // Double mechanicCost = BillController.showBill.getMechanicCost(); //create total mech cost method
 
                 Connection conn = new sqlite().connect();

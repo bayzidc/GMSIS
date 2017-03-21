@@ -310,14 +310,14 @@ public class PartsController implements Initializable {
     }
     
     public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
-        dateOfInstall.setValue(getScheduleDate(part.getBookingID()));
+        dateOfInstall.setValue(getScheduleDate(bookingIdCombo.getValue()));
         dateOfInstall.setEditable(false);
         
     }
     
     public LocalDate getScheduleDate(int bookingID)throws IOException, ClassNotFoundException {
         String date = "";
-        
+        System.out.println("Booking id is " + bookingID);
         Connection conn = null;
         try {
 
@@ -327,7 +327,7 @@ public class PartsController implements Initializable {
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
                 date = rs.getString("scheduled_date");
-            
+                System.out.println("Getting date value : " + date);
             
 
             rs.close();
@@ -833,8 +833,8 @@ public class PartsController implements Initializable {
                 System.out.println("Booking exists value:" + bookingExist);
                 if(bookingExist){
                 
-                  BillController.showBill.addCostToBill(BillController.showBill, part, part.getQuantity());
-                  Double totalPartsCost = BillController.showBill.getTotalCost();
+                  BillController.showBill.addCostToBillParts(BillController.showBill, part, part.getQuantity());
+                  Double totalPartsCost = BillController.showBill.getPartsCost();
                   System.out.println("The total cost is: " + totalPartsCost);
                   
                   Connection conn = null;
@@ -1347,13 +1347,13 @@ public class PartsController implements Initializable {
      
     public LocalDate convertStringToDateForBookingCombo(String dateString) {
         LocalDate date = null;
-
+        System.out.println("The date is " + dateString);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        System.out.println("I am here");
+        System.out.println("I am here in convert string");
         try {
 
             date = LocalDate.parse(dateString, df);
-            System.out.println("I am here 2");
+            System.out.println("I am here again in convert string");
         } catch (Exception e) {
             e.printStackTrace();
         }

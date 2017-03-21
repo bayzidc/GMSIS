@@ -54,7 +54,7 @@ public class BillController implements Initializable {
     private TableColumn<bill, Integer> cost;
     @FXML
     private ObservableList<bill> data;
-    public static bill showBill = new bill(0,"" , 0, false);
+    public static bill showBill = new bill(0,"" , 0,0,0, false);
 
     /**
      * Initializes the controller class.
@@ -81,7 +81,7 @@ public class BillController implements Initializable {
                             while (rs.next()) {
                                 showBill.setBillID(rs.getInt(1));
                                 showBill.setBookingID(findCustomerName(rs.getInt(3)));
-                                showBill.setTotalCost(rs.getInt(4));
+                                showBill.setTotalCost(rs.getDouble(4));
                                 showBill.setBillStatus(rs.getBoolean(5));
                             }
                             state.close();
@@ -128,7 +128,7 @@ public class BillController implements Initializable {
             String SQL = "Select * from bill WHERE customerID = " + getID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                data.add(new bill(rs.getInt(1),findCustomerName(rs.getInt(2)), rs.getInt(4), rs.getBoolean(5)));
+                data.add(new bill(rs.getInt(1),findCustomerName(rs.getInt(2)),rs.getDouble(7),rs.getDouble(5),rs.getDouble(6), rs.getBoolean(5)));
                 System.out.println("Boolean is: " + rs.getBoolean(5));
             }
             
