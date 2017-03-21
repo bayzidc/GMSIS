@@ -15,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -40,6 +42,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -124,12 +127,13 @@ public class AddVehicleController implements Initializable {
     public Button addEntry;
     
     //Creating a vehicle object to be used later on
-    Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0,"");
+    public static Vehicle vec = new Vehicle("","","",0.0,"","","","",0,"","","","",0,0,"");
    
     
      @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        restrictDecimal(engSize);
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
         id.setEditable(false);
@@ -309,29 +313,23 @@ public class AddVehicleController implements Initializable {
     {
         if(checkTextFields() && checkForWhiteSpace())
         {
+            vec.setRegNumber(regNumber.getText());
+            vec.setColour(colour.getText());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType((String) fuelType.getValue());
+            vec.setLastService(((TextField) lastService.getEditor()).getText());
+            vec.setMake(make.getText());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText());
+            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
+            vec.setVehicleType((String) vehicleChoice.getValue());
+            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
+            vec.setCustID(Integer.parseInt(custID.getText()));
+            vec.setCustName((String) customerNames.getValue());
             createData();
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
             buildData();
-            regNumber.clear();
-            make.clear();
-            model.clear();
-            engSize.clear();
-            fuelType.setValue(null);
-            colour.clear();
-            motRenDate.setValue(null);
-            motRenDate.getEditor().setText(null);
-            lastService.setValue(null);
-            lastService.getEditor().setText(null);
-            mileage.clear();
-            vehicleChoice.setValue(null);
-            yesWarranty.setSelected(false);
-            noWarranty.setSelected(false);
-            nameAndAdd.clear();
-            warExpiry.setValue(null);
-            warExpiry.getEditor().setText(null);
-            id.clear();
-            quickSel.setValue(null);
-            customerNames.setValue(null);
             Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
             Scene vec_Scene = new Scene(vecRecords);
             Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -348,44 +346,23 @@ public class AddVehicleController implements Initializable {
     {
         if(checkTextFields() && checkForWhiteSpace())
         {
-        vec.setRegNumber(regNumber.getText());
-        vec.setColour(colour.getText());
-        vec.setEngSize(Double.parseDouble(engSize.getText()));
-        vec.setFuelType(fuelType.getValue().toString());
-        vec.setLastService(lastService.getEditor().getText());
-        vec.setMake(make.getText());
-        vec.setMileage(Integer.parseInt(mileage.getText()));
-        vec.setModel(model.getText());
-        vec.setMotRenewal(motRenDate.getEditor().getText());
-        vec.setVehicleType(vehicleChoice.getValue().toString());
-        vec.setWarNameAndAdd(nameAndAdd.getText());
-        vec.setWarranty(yesWarranty.getText());
-        vec.setWarranty(noWarranty.getText());
-        vec.setWarrantyExpDate(warExpiry.getEditor().getText());
+            vec.setRegNumber(regNumber.getText());
+            vec.setColour(colour.getText());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType((String) fuelType.getValue());
+            vec.setLastService(((TextField) lastService.getEditor()).getText());
+            vec.setMake(make.getText());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText());
+            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
+            vec.setVehicleType((String) vehicleChoice.getValue());
+            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
+            vec.setCustID(Integer.parseInt(custID.getText()));
+            vec.setCustName((String) customerNames.getValue());
         
             editVehicle();
             alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + customerNames.getSelectionModel().getSelectedItem());
-
-            regNumber.clear();
-            make.clear();
-            model.clear();
-            engSize.clear();
-            fuelType.setValue(null);
-            colour.clear();
-            mileage.clear();
-            vehicleChoice.setValue(null);
-            motRenDate.setValue(null);
-            motRenDate.getEditor().setText(null);
-            lastService.setValue(null);
-            lastService.getEditor().setText(null);
-            yesWarranty.setSelected(false);
-            noWarranty.setSelected(false);
-            nameAndAdd.clear();
-            warExpiry.setValue(null);
-            warExpiry.getEditor().setText(null);
-            id.clear();
-            customerNames.setValue(null);
-            custID.clear();
             Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
             Scene vec_Scene = new Scene(vecRecords);
             Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -757,6 +734,28 @@ public class AddVehicleController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    private void restrictDecimal(TextField field)
+    {
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        field.setTextFormatter( new TextFormatter<>(input ->
+        {
+        if ( input.getControlNewText().isEmpty() )
+        {
+            return input;
+        }
+        ParsePosition parsePosition = new ParsePosition( 0 );
+        Object object = format.parse( input.getControlNewText(), parsePosition );
+        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
+        {
+            return null;
+        }
+        else
+        {
+            return input;
+        }
+        }));
     }
     
 }

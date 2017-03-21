@@ -5,27 +5,29 @@
  */
 package VehicleRecord.logic;
 
-/**
- *
- * @author User
- */
 import javafx.scene.control.TextField;
 
 /**
  *
  * @author User
  */
-public class NumberTextField extends TextField
+    import javafx.scene.control.TextField;
+
+/**
+ *
+ * @author User
+ */
+public class DoubleTextField extends TextField
 {
-    public NumberTextField()
+    public DoubleTextField()
     {
-        this.setPromptText("Enter only a valid number...");
+        this.setPromptText("Enter only a valid decimal number...");
     }
     
     @Override
     public void replaceText(int i, int i1, String string)
     {
-        if(string.matches("[0-9]") || string.isEmpty())
+        if(string.matches("[0-9]") || string.matches("[.]") || string.isEmpty())
         {
             super.replaceText(i,i1,string);
         }
