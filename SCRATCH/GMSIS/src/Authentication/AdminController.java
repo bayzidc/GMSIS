@@ -5,6 +5,7 @@
  */
 package Authentication;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -50,7 +51,10 @@ public class AdminController implements Initializable {
 
     @FXML
     private AnchorPane pane;
+     
     @FXML
+    private JFXButton users;
+    
     private Button customerButton;
     @FXML
     private Button createUser;

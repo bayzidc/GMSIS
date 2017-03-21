@@ -5,6 +5,7 @@
  */
 package common.gui;
 
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,36 +31,12 @@ import javafx.stage.Stage;
 public class CommonController implements Initializable {
     @FXML
     private AnchorPane pane;
+    
+     
+    
     @FXML
     private MenuBar menu;
-    @FXML
-    private Menu users;
-    @FXML
-    private MenuItem user;
-    @FXML
-    private Menu customerAcc;
-    @FXML
-    private MenuItem customers;
-    @FXML
-    private Menu vecRecord;
-    @FXML
-    private MenuItem records;
-    @FXML
-    private MenuItem vecEntry;
-    @FXML
-    private Menu diagAndRep;
-    @FXML
-    private MenuItem booking;
-    @FXML
-    private Menu partsRecord;
-    @FXML
-    private MenuItem partsStock;
-    @FXML
-    private MenuItem partsUsed;
-    @FXML
-    private Menu logout;
-    @FXML
-    private MenuItem home;
+    
 
     /**
      * Initializes the controller class.

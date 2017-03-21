@@ -81,36 +81,19 @@ public class DiagnosisAndRepairController implements Initializable {
     
     @FXML
     private AnchorPane pane;
+    
     @FXML
-    private MenuBar menu;
+    private JFXButton users;
     @FXML
-    private Menu users;
+    private JFXButton customers;
     @FXML
-    private MenuItem user;
+    private JFXButton vehicles;
     @FXML
-    private Menu customerAcc;
+    private JFXButton bookings;
     @FXML
-    private MenuItem customers;
+    private JFXButton parts;
     @FXML
-    private Menu vecRecord;
-    @FXML
-    private MenuItem records;
-    @FXML
-    private MenuItem vecEntry;
-    @FXML
-    private Menu diagAndRep;
-    @FXML
-    private MenuItem booking;
-    @FXML
-    private Menu partsRecord;
-    @FXML
-    private MenuItem partsStock;
-    @FXML
-    private MenuItem partsUsed;
-    @FXML
-    private Menu logout;
-    @FXML
-    private MenuItem home;
+    private JFXButton logout;
     
 
     @FXML
@@ -300,7 +283,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
         if(!Authentication.LoginController.isAdmin)
         {
-            users.setVisible(false);
+            users.setDisable(true);
         }
     
     }    
@@ -541,25 +524,26 @@ public class DiagnosisAndRepairController implements Initializable {
         return vehReg;
     }
     
-    private String findMechName(String mechID) throws ClassNotFoundException
+    private String findMechName(int mechID, Connection conn) 
     {
         String mechName = "";
-        Connection conn = null;
+
+
+        
         try {
-
-           conn = (new sqlite().connect());
-
-            String SQL = "Select FirstName,Surname from User where ID='"+ mechID +"'";
+            
+           
+            
+            String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
-                  
-                mechName = rs.getString("FirstName") + " " +rs.getString("Surname");    
+                 
+                mechName = rs.getString("fullname");    
             
-            rs.close();
-            conn.close();
-            
-        } catch (SQLException e) {
+               rs.close();
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error");
+            alertInfo(null,"asf");
         }
         return mechName;
     }
@@ -666,14 +650,13 @@ public class DiagnosisAndRepairController implements Initializable {
 
             conn = (new sqlite().connect());
 
-            String SQL = "Select ID,FirstName,Surname,isMechanic from User";
+            String SQL = "Select mechanic_id,fullname from mechanic";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
             {       
-                if(rs.getBoolean("isMechanic"))
-                {
-                    mechNames.add(rs.getInt("ID")+": "+rs.getString("FirstName")+" "+rs.getString("Surname"));
-                }
+             
+                    mechNames.add(rs.getInt("mechanic_id")+": "+rs.getString("fullname"));
+           
             }
             mechanicCombo.setItems(mechNames);
             
@@ -776,7 +759,7 @@ public class DiagnosisAndRepairController implements Initializable {
             System.out.println("");
         }
 
-        updateMechanicBill(obj.getBookingID(),findVehID(obj.getVehicleReg()),Integer.parseInt(mechArr[0]));
+        updateMechanicBill(obj.getBookingID(),Integer.parseInt(mechArr[0]));
         
     }
     
@@ -1078,8 +1061,9 @@ public class DiagnosisAndRepairController implements Initializable {
             
             String make = findMake(rs.getString(2),conn);
             double mileage = findMileage(rs.getString(2),conn);
+            String mName = findMechName(rs.getInt(4),conn);
             
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), findMechName(rs.getString(4)) ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8)) );
+            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), mName ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8)) );
             
         }
         tempData.addAll(data);
@@ -1106,7 +1090,7 @@ public class DiagnosisAndRepairController implements Initializable {
                
             make = rs.getString("Make");    
        
-            rs.close();
+           rs.close();
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1367,7 +1351,7 @@ public class DiagnosisAndRepairController implements Initializable {
         int bookingID=0;
         String vReg="";
         String custID="";
-        String mechID="";
+        int mechID=0;
         String startTime="";
         String endTime="";
         int duration = 0;
@@ -1396,7 +1380,7 @@ public class DiagnosisAndRepairController implements Initializable {
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
                            custID=rs.getString("customer_id");
-                           mechID=rs.getString("mechanic_id");
+                           mechID=rs.getInt("mechanic_id");
                            startTime=rs.getString("startTime");
                            endTime=rs.getString("endTime");
                            duration = rs.getInt("duration");   
@@ -1415,7 +1399,7 @@ public class DiagnosisAndRepairController implements Initializable {
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
                            custID=rs.getString("customer_id");
-                           mechID=rs.getString("mechanic_id");
+                           mechID=rs.getInt("mechanic_id");
                            startTime=rs.getString("startTime");
                            endTime=rs.getString("endTime");
                            duration = rs.getInt("duration");                 
@@ -1423,12 +1407,13 @@ public class DiagnosisAndRepairController implements Initializable {
             }
             String make = findMake(Integer.toString(vID),conn);
             double mileage = findMileage(Integer.toString(vID),conn);
+            String mechName = findMechName(mechID,conn);
             
             rs.close();
             conn.close();
             if(dateToday.isBefore(nextDT))
             {
-                data.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), findMechName(mechID), nextDate, duration, mileage, startTime, endTime));
+                data.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime));
             }
        } //end for loop
         } catch (SQLException e) {
@@ -1520,11 +1505,9 @@ public class DiagnosisAndRepairController implements Initializable {
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
-              alertInfo(null,getMechanicHourlyRate(bookingID)+"          "+getMechanicHoursWorked(bookingID));
+
               GuiController.showBill.addCostToBillMechanic(GuiController.showBill, mech); //create a addMechanicCostToBill method in bill class
               Double mechanicCost = GuiController.showBill.getMechanicCost(); //create total mech cost method
-
-              alertInfo(null,mechanicCost+"");
               
                 Connection conn = new sqlite().connect();
 
@@ -1548,7 +1531,9 @@ public class DiagnosisAndRepairController implements Initializable {
                     state.setBoolean(6, false);
                 }
             
-                //BillController.showBill.setMechanicCost(0);
+               GuiController.showBill.setMechanicCost(0);
+               GuiController.showBill.setPartsCost(0);
+               GuiController.showBill.calculateTotalCost();
                 state.execute();
 
                 state.close();
@@ -1560,17 +1545,16 @@ public class DiagnosisAndRepairController implements Initializable {
         }
     }
     
-     private void updateMechanicBill(int bID, int vID, int mID) throws ClassNotFoundException {
+     private void updateMechanicBill(int bID, int mID) throws ClassNotFoundException {
         
         int bookingID = bID; 
-        int vehicleID = vID;
         int mechanicID = mID;
         
         try {
             
               Mechanic mech = new Mechanic(mechanicID,getMechanicHourlyRate(bookingID),getMechanicHoursWorked(bookingID));
               CustomerAccount.gui.GuiController.showBill.addCostToBillMechanic(CustomerAccount.gui.GuiController.showBill, mech);
-             //BillController.showBill.addMechanicCostToBill(BillController.showBill, mech); //create a addMechanicCostToBill method in bill class
+             //GuiController.showBill.addMechanicCostToBill(GuiController.showBill, mech); //create a addMechanicCostToBill method in bill class
              
               Double mechanicCost = GuiController.showBill.getMechanicCost(); //create total mech cost method
               
@@ -2067,7 +2051,7 @@ public class DiagnosisAndRepairController implements Initializable {
 
            conn = (new sqlite().connect());
 
-            String SQL = "Select hourlyRate from User,booking where booking.mechanic_id=User.ID and booking.booking_id='"+ bookingID +"'";
+            String SQL = "Select hourlyRate from mechanic,booking where booking.mechanic_id=mechanic.mechanic_id and booking.booking_id='"+ bookingID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                   
                 rate = rs.getDouble("hourlyRate");    
