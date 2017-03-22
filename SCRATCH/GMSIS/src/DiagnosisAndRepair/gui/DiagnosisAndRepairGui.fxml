@@ -45,7 +45,7 @@
       </TableView>
       <ComboBox fx:id="mechanicCombo" layoutX="125.0" layoutY="302.0" onAction="#resetDate" prefWidth="150.0" promptText="Select ID/Name" />
       <Label layoutX="26.0" layoutY="302.0" text="Mechanic" />
-      <TextField fx:id="searchField" layoutX="317.0" layoutY="101.0" onKeyReleased="#searchFunc" prefHeight="25.0" prefWidth="292.0" promptText="Enter fully or partially" />
+      <TextField fx:id="searchField" layoutX="317.0" layoutY="101.0" prefHeight="25.0" prefWidth="292.0" promptText="Enter fully or partially" />
       <Group />
       <Button fx:id="editButton" layoutX="535.0" layoutY="450.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="211.0" text="Edit" />
       <Button fx:id="deleteButton" layoutX="317.0" layoutY="450.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="211.0" text="Delete" />

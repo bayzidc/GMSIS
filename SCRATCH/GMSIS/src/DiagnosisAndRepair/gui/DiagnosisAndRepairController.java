@@ -13,8 +13,6 @@ import Authentication.User;
 import CustomerAccount.gui.GuiController;
 import DiagnosisAndRepair.logic.Mechanic;
 import java.util.*;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
@@ -32,13 +30,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -52,8 +47,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javax.swing.*;
-
 
 import java.time.DayOfWeek;
 import java.net.URL;
@@ -69,8 +62,6 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import java.util.Calendar;
-import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 /**
@@ -198,9 +189,6 @@ public class DiagnosisAndRepairController implements Initializable {
     private ObservableList<String> searchLs = FXCollections.observableArrayList("Name","Vehicle registration","Make");
     
     private ObservableList<String> monthLs = FXCollections.observableArrayList("01:January","02:February","03:March","04:April","05:May","06:June","07:July","08:August","09:September","10:October","11:November","12:December");
-
-    
-    //private ObservableList<String> times = FXCollections.observableArrayList("09:00 to 09:30","09:30 to 10:00","10:00 to 10:30","10:30 to 11:00","11:00 to 11:30","11:30 to 12:00","12:00 to 12:30","12:30 to 13:00","13:00 to 13:30","13:30 to 14:00","14:00 to 14:30","14:30 to 15:00","15:00 to 15:30","15:30 to 16:00","16:00 to 16:30","16:30 to 17:00");
     
 
     private DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","");
@@ -934,6 +922,7 @@ public class DiagnosisAndRepairController implements Initializable {
                         vehicleCombo.setDisable(false);
                         clearFields();    
                     }
+            datePicked.setValue(null);
         }
     }
     
@@ -1071,6 +1060,9 @@ public class DiagnosisAndRepairController implements Initializable {
         }
         tempData.addAll(data);
         table.setItems(data);
+        
+        searchField.clear();
+        searchFilter(data);
         
         rs.close();
         conn.close();
@@ -1328,8 +1320,16 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private void filterByNextBooking() throws ClassNotFoundException
     {
+        /*long time1,time2;
+        time1 = new Date().getTime();
+               
+        time2 = new Date().getTime();
+        System.out.println("is "+(time2-time1)+"ms");*/
+        
+        
         if(!nBooking.isSelected())
         {
+            nBooking.setSelected(true);
             return;
         }
         
@@ -1348,7 +1348,8 @@ public class DiagnosisAndRepairController implements Initializable {
         
         int size = fillVehID();
         
-        data = FXCollections.observableArrayList();
+       ObservableList<DiagnosisAndRepairBooking> nextList = FXCollections.observableArrayList();
+
   
         String nextDate="";
         int bookingID=0;
@@ -1416,14 +1417,17 @@ public class DiagnosisAndRepairController implements Initializable {
             conn.close();
             if(dateToday.isBefore(nextDT))
             {
-                data.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime));
+                nextList.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime));
             }
        } //end for loop
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error");
         }  
-        table.setItems(data);
+        table.setItems(nextList);
+ 
+        searchField.clear();
+        searchFilter(nextList);
        
     }
     
@@ -1644,10 +1648,11 @@ public class DiagnosisAndRepairController implements Initializable {
         return pCost;
     }
     
-    @FXML
-    private void searchFunc()
+    
+    private void searchFilter(ObservableList<DiagnosisAndRepairBooking> data)
     {
-        FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(tempData, e -> true);
+            System.out.println("new");
+            FilteredList<DiagnosisAndRepairBooking> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
             searchField.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
                 filteredData.setPredicate((Predicate<? super DiagnosisAndRepairBooking>) Booking -> {
@@ -1679,6 +1684,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
          if(!bHour.isSelected())
         {
+            bHour.setSelected(true);
             return;
         }
         
@@ -1694,35 +1700,39 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
         
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> hourList = FXCollections.observableArrayList(tempData);
      
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"); 
         LocalDateTime today = LocalDateTime.now();
         
         String dateTimeTemp = "";
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<hourList.size(); i++)
         {
-            dateTimeTemp = data.get(i).getDate() +" "+data.get(i).getStartTime();
+            dateTimeTemp = hourList.get(i).getDate() +" "+hourList.get(i).getStartTime();
             LocalDateTime dateTemp = LocalDateTime.parse(dateTimeTemp ,formatter);
         
             int minutes = (int)ChronoUnit.MINUTES.between(today, dateTemp);
             
             if(minutes > 60 || minutes<0)
             {
-                data.remove(i);
+                hourList.remove(i);
                 i--;  
             }
            
         }
         
-        if(data.isEmpty())
+        if(hourList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("No bookings within the next hour");
         }
         
-       table.setItems(data);
+       table.setItems(hourList);
+       
+       searchField.clear();
+       searchFilter(hourList);
+       
     }
     
     @FXML
@@ -1730,6 +1740,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!bToday.isSelected())
         {
+            bToday.setSelected(true);
             return;
         }
         
@@ -1746,28 +1757,32 @@ public class DiagnosisAndRepairController implements Initializable {
         nBooking.setSelected(false);
         
         
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> todayList = FXCollections.observableArrayList(tempData);
+
      
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String today = LocalDate.now().format(formatter);
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<todayList.size(); i++)
         {
-            if(!today.equals(data.get(i).getDate()))
+            if(!today.equals(todayList.get(i).getDate()))
             {
-                data.remove(i);
+                todayList.remove(i);
                 i--;  
             }
            
         }
         
-        if(data.isEmpty())
+        if(todayList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("No bookings for today");
         }
         
-       table.setItems(data);
+       table.setItems(todayList);
+       
+       searchField.clear();
+       searchFilter(todayList);
     } 
 
     @FXML
@@ -1775,6 +1790,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!bMonth.isSelected())
         {
+            bMonth.setSelected(true);
             return;
         }
         
@@ -1790,30 +1806,33 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
           
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> monthList = FXCollections.observableArrayList(tempData);
         
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = now.format(formatter);
         String[] dateNow = date.split("/");
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<monthList.size(); i++)
         {
-            String[] tempDate = data.get(i).getDate().split("/");
+            String[] tempDate = monthList.get(i).getDate().split("/");
             if(!dateNow[1].equals(tempDate[1]) || !dateNow[2].equals(tempDate[2])) //different month or different year
             {
-                data.remove(i);
+                monthList.remove(i);
                 i--;
             }
         }
         
-        if(data.isEmpty())
+        if(monthList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("No bookings for this month");
         }
         
-        table.setItems(data); 
+        table.setItems(monthList); 
+       
+        searchField.clear();
+        searchFilter(monthList);
     }
     
     @FXML
@@ -1821,6 +1840,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
        if(!pBooking.isSelected())
         {
+            pBooking.setSelected(true);
             return;
         }
         
@@ -1836,29 +1856,32 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
         
-        data = FXCollections.observableArrayList(tempData);
-
+        ObservableList<DiagnosisAndRepairBooking> pastList = FXCollections.observableArrayList(tempData);
+      
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<pastList.size(); i++)
         {
-            LocalDateTime tempDate = LocalDateTime.parse(data.get(i).getDate()+" "+data.get(i).getStartTime(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(pastList.get(i).getDate()+" "+pastList.get(i).getStartTime(),formatter);
   
             if(now.isBefore(tempDate)) 
             {
-                data.remove(i);
+                pastList.remove(i);
                 i--;
             }
         }
         
-        if(data.isEmpty())
+        if(pastList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("There is no past bookings");
         }
         
-        table.setItems(data);
+        table.setItems(pastList);
+        
+        searchField.clear();
+        searchFilter(pastList);
     }
     
     @FXML
@@ -1866,6 +1889,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!fBooking.isSelected())
         {
+            fBooking.setSelected(true);
             return;
         }
         
@@ -1881,28 +1905,32 @@ public class DiagnosisAndRepairController implements Initializable {
         bMonth.setSelected(false);
         nBooking.setSelected(false);
         
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> futureList = FXCollections.observableArrayList(tempData);
+       
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<futureList.size(); i++)
         {
-            LocalDateTime tempDate = LocalDateTime.parse(data.get(i).getDate()+" "+data.get(i).getStartTime(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(futureList.get(i).getDate()+" "+futureList.get(i).getStartTime(),formatter);
   
             if(now.isAfter(tempDate)) 
             {
-                data.remove(i);
+                futureList.remove(i);
                 i--;
             }
         }
         
-        if(data.isEmpty())
+        if(futureList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("There is no future bookings");
         }
         
-        table.setItems(data);    
+        table.setItems(futureList);   
+        
+        searchField.clear();
+        searchFilter(futureList);
     }
     
     @FXML
@@ -1910,6 +1938,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!allBooking.isSelected())
         {
+            allBooking.setSelected(true);
             return;
         }
         
@@ -1949,28 +1978,32 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
           
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> anyMonthList = FXCollections.observableArrayList(tempData);
+
         
         String dp = monthCombo.getValue();
         String[] month = dp.split(":");
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<anyMonthList.size(); i++)
         {
-            String[] tempDate = data.get(i).getDate().split("/");
+            String[] tempDate = anyMonthList.get(i).getDate().split("/");
             if(!month[0].equals(tempDate[1]))
             {
-                data.remove(i);
+                anyMonthList.remove(i);
                 i--;
             }
         }
         
-        if(data.isEmpty())
+        if(anyMonthList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("No bookings for "+month[1]);
         }
         
-        table.setItems(data);
+        table.setItems(anyMonthList);
+        
+        searchField.clear();
+        searchFilter(anyMonthList);
     }
             
     @FXML
@@ -1993,29 +2026,33 @@ public class DiagnosisAndRepairController implements Initializable {
         fBooking.setSelected(false);
         nBooking.setSelected(false);
           
-        data = FXCollections.observableArrayList(tempData);
+        ObservableList<DiagnosisAndRepairBooking> anyDateList = FXCollections.observableArrayList(tempData);
+        
         
         LocalDate now = anyDayPicker.getValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String date = now.format(formatter);
         
-        for(int i=0; i<data.size(); i++)
+        for(int i=0; i<anyDateList.size(); i++)
         {
-            String tempDate = data.get(i).getDate();
+            String tempDate = anyDateList.get(i).getDate();
             if(!date.equals(tempDate)) 
             {
-                data.remove(i);
+                anyDateList.remove(i);
                 i--;
             }
         }
         
-        if(data.isEmpty())
+        if(anyDateList.isEmpty())
         {
             textLabel.setVisible(true);
             textLabel.setText("No bookings for "+date);
         }
         
-        table.setItems(data);
+        table.setItems(anyDateList);
+        
+        searchField.clear();
+        searchFilter(anyDateList);
     }
     
     private double getMechanicHoursWorked(int bookingID) throws ClassNotFoundException
@@ -2151,9 +2188,4 @@ public class DiagnosisAndRepairController implements Initializable {
         alert.setContentText(message);
         return alert.showAndWait();
     }
-    
-
-    
-    
-    
 }
