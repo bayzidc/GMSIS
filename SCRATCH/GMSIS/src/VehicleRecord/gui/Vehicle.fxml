@@ -59,12 +59,6 @@
             <Image url="@image/searchcar.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="backButtn" buttonType="RAISED" layoutX="14.0" layoutY="77.0" onAction="#backButton" prefHeight="25.0" prefWidth="72.0" ripplerFill="#39b0f5" style="-fx-background-color: #000000;" text="Back" textFill="#eeebeb" />
-      <ImageView fx:id="refeshImg" fitHeight="25.0" fitWidth="35.0" layoutX="117.0" layoutY="77.0" onMousePressed="#refreshButton" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@image/refresh.png" />
-         </image>
-      </ImageView>
       <ImageView fitHeight="139.0" fitWidth="188.0" layoutX="1157.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/vehicle.jpg" />
@@ -125,5 +119,6 @@
             </AnchorPane>
         </content>
       </ScrollPane>
+      <Button fx:id="backBtn" layoutX="27.0" layoutY="65.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="72.0" text="Back" />
    </children>
 </AnchorPane>

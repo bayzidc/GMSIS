@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
@@ -26,21 +27,21 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="471.0" prefWidth="805.0">
                <children>
                   <Label layoutX="33.0" layoutY="22.0" prefHeight="17.0" prefWidth="107.0" text="Customer Name: *" />
-                  <ChoiceBox fx:id="customerNames" layoutX="140.0" layoutY="18.0" prefWidth="150.0" />
+                  <ComboBox fx:id="customerNames" layoutX="140.0" layoutY="18.0" prefWidth="150.0"  promptText = "Select Name"/>
                   <Label fx:id="vID" layoutX="486.0" layoutY="22.0" prefHeight="17.0" prefWidth="64.0" text="VehicleID:" />
                   <Label layoutX="405.0" layoutY="22.0" prefHeight="17.0" prefWidth="43.0" text="CustID:" />
                   <TextField fx:id="custID" layoutX="448.0" layoutY="18.0" prefHeight="17.0" prefWidth="28.0" />
                   <TextField fx:id="id" layoutX="550.0" layoutY="18.0" prefHeight="26.0" prefWidth="28.0" />
                   <Label layoutX="33.0" layoutY="56.0" prefHeight="17.0" prefWidth="83.0" text="Vehicle Type: *" />
-                  <ChoiceBox fx:id="vehicleChoice" layoutX="140.0" layoutY="52.0" prefHeight="25.0" prefWidth="150.0" />
+                  <ComboBox fx:id="vehicleChoice" layoutX="140.0" layoutY="52.0" prefHeight="25.0" prefWidth="150.0" promptText = "Select Type"/>
                   <Label layoutX="33.0" layoutY="96.0" prefHeight="17.0" prefWidth="95.0" text="Quick Selection:" />
-                  <ChoiceBox fx:id="quickSel" layoutX="140.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" />
+                  <ComboBox fx:id="quickSel" layoutX="140.0" layoutY="92.0" prefHeight="25.0" prefWidth="150.0" promptText = "Select Template"/>
                   <Label layoutX="33.0" layoutY="135.0" prefHeight="17.0" prefWidth="95.0" text="Registration No: *" />
                   <Label layoutX="33.0" layoutY="174.0" prefHeight="17.0" prefWidth="50.0" text="Make: *" />
                   <Label layoutX="33.0" layoutY="214.0" prefHeight="17.0" prefWidth="50.0" text="Model: *" />
                   <Label layoutX="33.0" layoutY="255.0" prefHeight="17.0" prefWidth="83.0" text="Engine Size: *" />
                   <Label layoutX="33.0" layoutY="290.0" prefHeight="17.0" prefWidth="70.0" text="Fuel Type: *" />
-                  <ChoiceBox fx:id="fuelType" layoutX="140.0" layoutY="286.0" prefHeight="25.0" prefWidth="150.0" />
+                  <ComboBox fx:id="fuelType" layoutX="140.0" layoutY="286.0" prefHeight="25.0" prefWidth="150.0" promptText = "Select Fuel Type"/>
                   <Label layoutX="33.0" layoutY="338.0" prefHeight="25.0" prefWidth="50.0" text="Colour: *" />
                   <Label layoutX="33.0" layoutY="384.0" prefHeight="17.0" prefWidth="117.0" text="Current Mileage : *" />
                   <Label layoutX="401.0" layoutY="56.0" prefHeight="17.0" prefWidth="64.0" text="Warrranty: *" />
@@ -54,8 +55,8 @@
                   <DatePicker fx:id="motRenDate" layoutX="550.0" layoutY="251.0" prefHeight="25.0" prefWidth="128.0" />
                   <DatePicker fx:id="lastService" layoutX="550.0" layoutY="286.0" prefHeight="25.0" prefWidth="128.0" />
                   <StringTextField fx:id="regNumber" layoutX="140.0" layoutY="131.0" prefHeight="25.0" prefWidth="150.0" />
-                  <LettersTextField fx:id="make" layoutX="140.0" layoutY="170.0" prefHeight="25.0" prefWidth="150.0" />
-                  <LettersTextField fx:id="model" layoutX="140.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" />
+                  <StringTextField fx:id="make" layoutX="140.0" layoutY="170.0" prefHeight="25.0" prefWidth="150.0" />
+                  <StringTextField fx:id="model" layoutX="140.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" />
                   <DoubleTextField fx:id="engSize" layoutX="140.0" layoutY="251.0" prefHeight="26.0" prefWidth="150.0" />
                   <NumberTextField fx:id="mileage" layoutX="140.0" layoutY="380.0" prefHeight="26.0" prefWidth="150.0" />
                   <LettersTextField fx:id="colour" layoutX="140.0" layoutY="338.0" prefHeight="26.0" prefWidth="150.0" />

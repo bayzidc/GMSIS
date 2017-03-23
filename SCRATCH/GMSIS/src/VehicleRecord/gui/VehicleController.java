@@ -80,8 +80,6 @@ public class VehicleController implements Initializable {
     public TextField searchVehicle;
     @FXML
     public ChoiceBox searchBy;
-    @FXML
-    public JFXButton backButtn;
     
     @FXML
     public JFXCheckBox pastB;
@@ -168,7 +166,7 @@ public class VehicleController implements Initializable {
     private ObservableList<CustBookingInfo> tempData = FXCollections.observableArrayList();
     ObservableList<String> search = FXCollections.observableArrayList("Make","Full/Partial RegNumber","Vehicle Type");
 
-
+    public static Vehicle passVec = VehicleRecord.gui.AddVehicleController.vec;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -450,9 +448,9 @@ public class VehicleController implements Initializable {
     {
         try
         {
-            Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this vehicle?");
             int id = table.getSelectionModel().getSelectedItem().getVecID();
-            if (confirmDelete.get() == ButtonType.OK && isVehicleDeleted())
+            Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this vehicle?");
+            if (confirmDelete.get() == ButtonType.OK && isVehicleDeleted(passVec))
             {
                 alertInf("VehicleID: " + id + " has been deleted.");
                 buildData();
@@ -507,7 +505,7 @@ public class VehicleController implements Initializable {
         }
         catch(Exception e)
         {
-            alertInf( "Please select a row to view the part used for that vehicle.");
+            alertInf( "Please select a row to view the part(s) used for that vehicle.");
         }
     }
     
@@ -667,7 +665,7 @@ public class VehicleController implements Initializable {
     }
 
     //Method which deletes the vehicle from the database where the appropriate vehicle ID is specified
-    public boolean isVehicleDeleted() throws ClassNotFoundException 
+    public boolean isVehicleDeleted(Vehicle passVec) throws ClassNotFoundException 
     {
         boolean vecDeleted = false;
 

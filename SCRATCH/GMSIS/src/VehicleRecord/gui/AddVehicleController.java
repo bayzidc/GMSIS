@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +35,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -82,9 +85,9 @@ public class AddVehicleController implements Initializable {
     @FXML
     public Label warrantyDate;
     @FXML 
-    public ChoiceBox customerNames;
+    public ComboBox customerNames;
     @FXML
-    public ChoiceBox vehicleChoice;
+    public ComboBox vehicleChoice;
     @FXML
     public CheckBox yesWarranty;
     @FXML
@@ -92,7 +95,7 @@ public class AddVehicleController implements Initializable {
     @FXML
     public TextArea nameAndAdd;
     @FXML
-    public ChoiceBox quickSel;
+    public ComboBox quickSel;
     @FXML
     public TextField regNumber;
     @FXML
@@ -102,7 +105,7 @@ public class AddVehicleController implements Initializable {
     @FXML
     public TextField engSize;
     @FXML
-    public ChoiceBox fuelType;
+    public ComboBox fuelType;
     @FXML
     public TextField colour;
     @FXML
@@ -284,6 +287,12 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException
     {
+        Optional<ButtonType> selected = alertConfirm("Are you sure you want to clear all?");
+        
+        if(selected.get() != ButtonType.OK)
+        {
+            return;
+        }
         regNumber.clear();
         make.clear();
         model.clear();
@@ -311,11 +320,20 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
+        Optional<ButtonType> selected = alertConfirm("Are you sure you want to add this vehicle?");
+        
+        if(selected.get() != ButtonType.OK)
+        {
+            return;
+        }
+        else
+        {
         if(checkTextFields() && checkForWhiteSpace())
         {
+            double eSize = Double.parseDouble(engSize.getText());
             vec.setRegNumber(regNumber.getText());
             vec.setColour(colour.getText());
-            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setEngSize(eSize);
             vec.setFuelType((String) fuelType.getValue());
             vec.setLastService(((TextField) lastService.getEditor()).getText());
             vec.setMake(make.getText());
@@ -327,7 +345,8 @@ public class AddVehicleController implements Initializable {
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
-            createData();
+            
+            createData(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
             buildData();
             Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
@@ -337,6 +356,7 @@ public class AddVehicleController implements Initializable {
             stage2.setScene(vec_Scene);
             stage2.show();
         }
+        }
         
     }
     
@@ -344,6 +364,14 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
+        Optional<ButtonType> selected = alertConfirm("Are you sure you want to edit this vehicle?");
+        
+        if(selected.get() != ButtonType.OK)
+        {
+            return;
+        }
+        else
+        {
         if(checkTextFields() && checkForWhiteSpace())
         {
             vec.setRegNumber(regNumber.getText());
@@ -360,8 +388,9 @@ public class AddVehicleController implements Initializable {
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
+            vec.setVecID(Integer.parseInt(id.getText()));
         
-            editVehicle();
+            editVehicle(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + customerNames.getSelectionModel().getSelectedItem());
             Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
             Scene vec_Scene = new Scene(vecRecords);
@@ -369,6 +398,7 @@ public class AddVehicleController implements Initializable {
             stage2.hide();           
             stage2.setScene(vec_Scene);
             stage2.show();
+        }
         }
     }
     
@@ -397,7 +427,7 @@ public class AddVehicleController implements Initializable {
     }
     
     //Method which inserts data into the vehiceList table into the database
-    public void createData() throws ClassNotFoundException
+    public void createData(Vehicle vec) throws ClassNotFoundException
     {    
         Connection conn = null;      
         try
@@ -407,16 +437,16 @@ public class AddVehicleController implements Initializable {
             
             String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate,customerid ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, regNumber.getText());
-            state.setString(2,make.getText());
-            state.setString(3, model.getText());
-            state.setString(4, engSize.getText());
-            state.setString(5, (String) fuelType.getValue());
-            state.setString(6, colour.getText());
-            state.setString(7, ((TextField) motRenDate.getEditor()).getText());
-            state.setString(8, ((TextField) lastService.getEditor()).getText());
-            state.setString(9, mileage.getText());
-            state.setString(10, (String) vehicleChoice.getValue());
+            state.setString(1, vec.getRegNumber());
+            state.setString(2, vec.getMake());
+            state.setString(3, vec.getModel());
+            state.setDouble(4, vec.getEngSize());
+            state.setString(5, vec.getFuelType());
+            state.setString(6, vec.getColour());
+            state.setString(7, vec.getMotRenewal());
+            state.setString(8, vec.getLastService());
+            state.setInt(9, vec.getMileage());
+            state.setString(10, vec.getVehicleType());
             if(yesWarranty.isSelected())
             {
             state.setString(11, "Yes");
@@ -425,9 +455,9 @@ public class AddVehicleController implements Initializable {
             {
                 state.setString(11, "No");
             }
-            state.setString(12, nameAndAdd.getText());
-            state.setString(13, ((TextField) warExpiry.getEditor()).getText());
-            state.setString(14, custID.getText());
+            state.setString(12, vec.getWarNameAndAdd());
+            state.setString(13, vec.getWarrantyExpDate());
+            state.setInt(14, vec.getCustID());
             state.execute();
             
             state.close();
@@ -459,6 +489,7 @@ public class AddVehicleController implements Initializable {
             rset = stmt.executeQuery();
             if (rset.next())
                 count = rset.getInt(1);
+                alertInf("Vehicle already exists with Registration Number " + regNumber.getText());
             return count > 0;
          } 
          finally 
@@ -490,7 +521,7 @@ public class AddVehicleController implements Initializable {
     }
     
     //Method which updates the vehicle changes into the database
-    public void editVehicle() throws ClassNotFoundException
+    public void editVehicle(Vehicle vec) throws ClassNotFoundException
     {
         Connection conn = null;
 
@@ -503,16 +534,16 @@ public class AddVehicleController implements Initializable {
 
             String sql = "UPDATE vehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
-            state.setString(1, regNumber.getText());
-            state.setString(2, make.getText());
-            state.setString(3, model.getText());
-            state.setDouble(4, Double.parseDouble(engSize.getText()));
-            state.setString(5, fuelType.getValue().toString());
-            state.setString(6, colour.getText());
-            state.setString(7, motRenDate.getEditor().getText());
-            state.setString(8, lastService.getEditor().getText());
-            state.setInt(9, Integer.parseInt(mileage.getText()));
-            state.setString(10, vehicleChoice.getValue().toString());
+            state.setString(1, vec.getRegNumber());
+            state.setString(2, vec.getMake());
+            state.setString(3, vec.getModel());
+            state.setDouble(4, vec.getEngSize());
+            state.setString(5, vec.getFuelType());
+            state.setString(6, vec.getColour());
+            state.setString(7, vec.getMotRenewal());
+            state.setString(8, vec.getLastService());
+            state.setInt(9, vec.getMileage());
+            state.setString(10, vec.getVehicleType());
             if(yesWarranty.isSelected())
             {
             state.setString(11, "Yes");
@@ -521,9 +552,9 @@ public class AddVehicleController implements Initializable {
             {
                 state.setString(11, "No");
             }
-            state.setString(12, nameAndAdd.getText());
-            state.setString(13, warExpiry.getEditor().getText());
-            state.setInt(14, Integer.parseInt(id.getText()));
+            state.setString(12, vec.getWarNameAndAdd());
+            state.setString(13, vec.getWarrantyExpDate());
+            state.setInt(14, vec.getVecID());
 
             state.execute();
 
@@ -675,10 +706,21 @@ public class AddVehicleController implements Initializable {
             alertInf("Please specify the name associated with this vehicle.");
         }
         
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        {
+            alertInf("Please enter the name and address for the warranty.");
+            checked = false;
+        }
+        
         if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
         {
             alertInf("Please enter the name, address and expiry date for the warranty.");
             checked = false;
+        }
+        
+        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        {
+            checked = true;
         }
         
         if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
@@ -698,6 +740,28 @@ public class AddVehicleController implements Initializable {
              checked = false;
          }
         return checked;
+    }
+    
+    private void restrictDecimal(TextField field)
+    {
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        field.setTextFormatter( new TextFormatter<>(input ->
+        {
+        if ( input.getControlNewText().isEmpty() )
+        {
+            return input;
+        }
+        ParsePosition parsePosition = new ParsePosition( 0 );
+        Object object = format.parse( input.getControlNewText(), parsePosition );
+        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
+        {
+            return null;
+        }
+        else
+        {
+            return input;
+        }
+        }));
     }
     //Method which sets the no checkbox to unselected when yes checkbox is checked
     @FXML
@@ -736,26 +800,15 @@ public class AddVehicleController implements Initializable {
         alert.showAndWait();
     }
     
-    private void restrictDecimal(TextField field)
+    private Optional<ButtonType> alertConfirm(String message)
     {
-        DecimalFormat format = new DecimalFormat( "#.0" );
-        field.setTextFormatter( new TextFormatter<>(input ->
-        {
-        if ( input.getControlNewText().isEmpty() )
-        {
-            return input;
-        }
-        ParsePosition parsePosition = new ParsePosition( 0 );
-        Object object = format.parse( input.getControlNewText(), parsePosition );
-        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
-        {
-            return null;
-        }
-        else
-        {
-            return input;
-        }
-        }));
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
+	alert.setTitle("Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
     }
+    
+    
     
 }
