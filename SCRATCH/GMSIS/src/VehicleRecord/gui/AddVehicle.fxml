@@ -54,13 +54,13 @@
                   <DatePicker fx:id="warExpiry" layoutX="550.0" layoutY="210.0" prefHeight="25.0" prefWidth="128.0" />
                   <DatePicker fx:id="motRenDate" layoutX="550.0" layoutY="251.0" prefHeight="25.0" prefWidth="128.0" />
                   <DatePicker fx:id="lastService" layoutX="550.0" layoutY="286.0" prefHeight="25.0" prefWidth="128.0" />
-                  <StringTextField fx:id="regNumber" layoutX="140.0" layoutY="131.0" prefHeight="25.0" prefWidth="150.0" />
-                  <StringTextField fx:id="make" layoutX="140.0" layoutY="170.0" prefHeight="25.0" prefWidth="150.0" />
-                  <StringTextField fx:id="model" layoutX="140.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" />
-                  <DoubleTextField fx:id="engSize" layoutX="140.0" layoutY="251.0" prefHeight="26.0" prefWidth="150.0" />
-                  <NumberTextField fx:id="mileage" layoutX="140.0" layoutY="380.0" prefHeight="26.0" prefWidth="150.0" />
-                  <LettersTextField fx:id="colour" layoutX="140.0" layoutY="338.0" prefHeight="26.0" prefWidth="150.0" />
-                  <WarrantyTextField fx:id="nameAndAdd" layoutX="550.0" layoutY="95.0" prefHeight="97.0" prefWidth="128.0" />
+                  <StringTextField fx:id="regNumber" layoutX="140.0" layoutY="131.0" prefHeight="25.0" prefWidth="150.0" promptText = "Enter RegNumber..."/>
+                  <StringTextField fx:id="make" layoutX="140.0" layoutY="170.0" prefHeight="25.0" prefWidth="150.0" promptText = "Enter make..."/>
+                  <StringTextField fx:id="model" layoutX="140.0" layoutY="210.0" prefHeight="26.0" prefWidth="150.0" promptText = "Enter model..."/>
+                  <DoubleTextField fx:id="engSize" layoutX="140.0" layoutY="251.0" prefHeight="26.0" prefWidth="150.0" promptText = "Enter engine size..."/>
+                  <NumberTextField fx:id="mileage" layoutX="140.0" layoutY="380.0" prefHeight="26.0" prefWidth="150.0" promptText = "Enter mileage..."/>
+                  <LettersTextField fx:id="colour" layoutX="140.0" layoutY="338.0" prefHeight="26.0" prefWidth="150.0" promptText = "Enter colour..."/>
+                  <WarrantyTextField fx:id="nameAndAdd" layoutX="550.0" layoutY="95.0" prefHeight="97.0" prefWidth="128.0" promptText = "Enter warranty name and address..."/>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
