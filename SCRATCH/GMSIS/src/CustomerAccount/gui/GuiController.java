@@ -40,6 +40,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
@@ -50,6 +51,8 @@ import javax.swing.JOptionPane;
  */
 public class GuiController implements Initializable {
 
+    @FXML
+    private AnchorPane pane;
     //FOR BOOKING
     @FXML
     private TableView<DiagnosisAndRepairBooking> tableBooking;
@@ -140,7 +143,7 @@ public class GuiController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            if(futureBooking.isSelected()){
+            if (futureBooking.isSelected()) {
                 futureBooking.setSelected(false);
             }
             pastBooking.setSelected(true);
@@ -220,7 +223,6 @@ public class GuiController implements Initializable {
                     } else if (customerAccount.getCustomerVehReg().toLowerCase().contains(newValLow)) {
                         return true;
                     }
-
                     return false;
                 });
                 SortedList<customerAccount> sortedData = new SortedList<>(filteredData);
@@ -561,10 +563,10 @@ public class GuiController implements Initializable {
             tableBooking.setItems(dataBooking);
             rs.close();
             conn.close();
-            if(futureBooking.isSelected()){
+            if (futureBooking.isSelected()) {
                 filterByFuture();
             }
-            if(pastBooking.isSelected()){
+            if (pastBooking.isSelected()) {
                 filterByPast();
             }
         } catch (SQLException e) {
@@ -706,6 +708,57 @@ public class GuiController implements Initializable {
         System.out.println(acc.getCustomerPhone());
         System.out.println(acc.getCustomerType());
         System.out.println(acc.getCustomerVehReg());
+    }
+
+    ///FXML BAR STUFF
+    @FXML
+    private void logout(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
+        pane.getChildren().setAll(rootPane);
+        Authentication.LoginController.isAdmin = false;
+    }
+
+    @FXML
+    private void users(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void cus(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void vehicleRecord(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void vehicleEntry(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void diag(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void pStock(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void pUsed(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        pane.getChildren().setAll(rootPane);
     }
 
 }

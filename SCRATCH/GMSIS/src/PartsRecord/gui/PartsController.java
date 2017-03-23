@@ -310,8 +310,7 @@ public class PartsController implements Initializable {
     
     public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
         dateOfInstall.setValue(getScheduleDate(bookingIdCombo.getValue()));
-        dateOfInstall.setEditable(false);
-        
+        dateOfInstall.setEditable(false);    
     }
     
     public LocalDate getScheduleDate(int bookingID)throws IOException, ClassNotFoundException {
@@ -439,9 +438,7 @@ public class PartsController implements Initializable {
         searchOption.add("vehreg");
         searchOption.add("customerName");
         searchOption.add("Both");
-        searchCombo.setItems(searchOption);
-        
-
+        searchCombo.setItems(searchOption);      
         try {
             fillPartsNameCombo();
         } catch (ClassNotFoundException ex) {
