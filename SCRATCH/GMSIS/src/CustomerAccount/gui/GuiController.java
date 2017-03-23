@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package CustomerAccount.gui;
 
 import Authentication.sqlite;
@@ -31,7 +26,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.logic.Vehicle;
+import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.function.Predicate;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -55,6 +53,10 @@ public class GuiController implements Initializable {
     //FOR BOOKING
     @FXML
     private TableView<DiagnosisAndRepairBooking> tableBooking;
+    @FXML
+    private JFXCheckBox futureBooking;
+    @FXML
+    private JFXCheckBox pastBooking;
     @FXML
     private TableColumn<DiagnosisAndRepairBooking, Integer> bookingIDBooking;
     @FXML
@@ -138,6 +140,10 @@ public class GuiController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            if(futureBooking.isSelected()){
+                futureBooking.setSelected(false);
+            }
+            pastBooking.setSelected(true);
             System.out.println("Running this. BUILD DATA");
             accTypeText.setItems(FXCollections.observableArrayList("Business", "Private"));
             accTypeText.getSelectionModel().selectFirst();
@@ -555,6 +561,12 @@ public class GuiController implements Initializable {
             tableBooking.setItems(dataBooking);
             rs.close();
             conn.close();
+            if(futureBooking.isSelected()){
+                filterByFuture();
+            }
+            if(pastBooking.isSelected()){
+                filterByPast();
+            }
         } catch (SQLException e) {
             alertError();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -603,6 +615,70 @@ public class GuiController implements Initializable {
             System.out.println("Error finding Customer Name.");
         }
         return mechanicName;
+    }
+
+    @FXML
+    private void filterByPast() throws ClassNotFoundException {
+        if (!pastBooking.isSelected()) {
+            pastBooking.setSelected(true);
+            return;
+        }
+
+        pastBooking.setSelected(true);
+        futureBooking.setSelected(false);
+
+        ObservableList<DiagnosisAndRepairBooking> pastList = FXCollections.observableArrayList(dataBooking);
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        for (int i = 0; i < pastList.size(); i++) {
+            LocalDateTime tempDate = LocalDateTime.parse(pastList.get(i).getDate() + " " + pastList.get(i).getStartTime(), formatter);
+
+            if (now.isBefore(tempDate)) {
+                pastList.remove(i);
+                i--;
+            }
+        }
+
+        if (pastList.isEmpty()) {
+            System.out.println("It's empty past.");
+        }
+
+        tableBooking.setItems(pastList);
+        tableBooking.refresh();
+    }
+
+    @FXML
+    private void filterByFuture() throws ClassNotFoundException {
+        if (!futureBooking.isSelected()) {
+            futureBooking.setSelected(true);
+            return;
+        }
+
+        futureBooking.setSelected(true);
+        pastBooking.setSelected(false);
+
+        ObservableList<DiagnosisAndRepairBooking> futureList = FXCollections.observableArrayList(dataBooking);
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        for (int i = 0; i < futureList.size(); i++) {
+            LocalDateTime tempDate = LocalDateTime.parse(futureList.get(i).getDate() + " " + futureList.get(i).getStartTime(), formatter);
+
+            if (now.isAfter(tempDate)) {
+                futureList.remove(i);
+                i--;
+            }
+        }
+
+        if (futureList.isEmpty()) {
+            System.out.println("It's empty the future");
+        }
+
+        tableBooking.setItems(futureList);
+        tableBooking.refresh();
     }
 
     public void alertInf() {
