@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import VehicleRecord.logic.*?>
 
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="810.0" prefWidth="1300.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
    <children>
@@ -21,9 +22,9 @@
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
        
        
-      <Label layoutX="756.0" layoutY="93.0" prefHeight="36.0" prefWidth="133.0" text="User Records">
+      <Label layoutX="626.0" layoutY="76.0" prefHeight="43.0" prefWidth="179.0" text="User Records">
          <font>
-            <Font name="Bauhaus 93" size="20.0" />
+            <Font name="Bauhaus 93" size="29.0" />
          </font></Label>
       <Button fx:id="createUser" layoutX="114.0" layoutY="517.0" mnemonicParsing="false" onAction="#createButton" prefHeight="25.0" prefWidth="149.0" text="Create User" />
       <Button fx:id="editUser" layoutX="649.0" layoutY="607.0" mnemonicParsing="false" onAction="#editUser" prefHeight="25.0" prefWidth="179.0" text="Edit User" />
@@ -37,9 +38,9 @@
             <TableColumn fx:id="adminCol" prefWidth="159.0" text="Admin" />
         </columns>
       </TableView>
-      <TextField fx:id="firstName" layoutX="114.0" layoutY="236.0" promptText="First Name..." />
-      <TextField fx:id="surname" layoutX="114.0" layoutY="277.0" promptText="Surname..." />
-      <TextField fx:id="newPass" layoutX="114.0" layoutY="318.0" promptText="Password..." />
+      <LettersTextField fx:id="firstName" layoutX="114.0" layoutY="236.0" promptText="First Name..." />
+      <LettersTextField fx:id="surname" layoutX="114.0" layoutY="277.0" promptText="Surname..." />
+      <StringTextField fx:id="newPass" layoutX="114.0" layoutY="318.0" promptText="Password..." />
       <Button fx:id="update" layoutX="114.0" layoutY="556.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="149.0" text="Update Details" />
  
       <CheckBox fx:id="admin" layoutX="114.0" layoutY="379.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />

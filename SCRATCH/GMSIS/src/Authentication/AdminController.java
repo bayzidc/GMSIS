@@ -165,38 +165,36 @@ public class AdminController implements Initializable {
     
     private boolean allCompleted()
     {
-        if(!firstName.equals("") && !surname.equals("") && !newPass.equals(""))
+        boolean checked = true;
+        if(firstName.getText().equals("") && surname.getText().equals("") && newPass.getText().equals(""))
         {
-            return true;
+            alertError(null, "Please complete all fields.");
+            return false;
         }
-        return false;
+        return checked;
     }
     
     @FXML
     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        /*Parent new_User = FXMLLoader.load(getClass().getResource("NewUser.fxml"));
-        Scene new_User_scene = new Scene(new_User);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new_User_scene);
-        stage.show();*/
         
-        if(!allCompleted())
+        if(!(allCompleted() && checkForWhiteSpace()))
         {
-            alertError(null,"Please complete all fields");
             return;
         }
-        
+        else
+        {
         createData();
         buildData();
 
        
-            alertInfo(null,"Your unique User ID is " + getID());
+        alertInfo(null,"Your unique User ID is " + getID());
 
         id.clear();
         firstName.clear();
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
+        }
 
     }
     
@@ -212,15 +210,10 @@ public class AdminController implements Initializable {
 
     @FXML
     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        /*Parent del_User = FXMLLoader.load(getClass().getResource("DeleteUser.fxml"));
-        Scene del_User_scene = new Scene(del_User);
-        Stage delPage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        delPage.setScene(del_User_scene);
-        delPage.show();*/
         
         if(table.getSelectionModel().getSelectedItem()==null)
         {
-            alertError(null,"Please select a row");
+            alertError(null,"Please select a row to delete a user");
             return;
         }
         
@@ -330,11 +323,13 @@ public class AdminController implements Initializable {
 
         if(table.getSelectionModel().getSelectedItem()==null)
         {
-            alertError(null,"Please select a row");
+            alertError(null,"Please select a row to edit a user");
             return;
         }
         
         
+        else
+        {
          id.setText(table.getSelectionModel().getSelectedItem().getID());
          firstName.setText(table.getSelectionModel().getSelectedItem().getFirstName());
          surname.setText(table.getSelectionModel().getSelectedItem().getSurname());
@@ -348,7 +343,7 @@ public class AdminController implements Initializable {
         {
             admin.setSelected(false);
         }
- 
+        }
         
     }
     // TODO
@@ -356,13 +351,13 @@ public class AdminController implements Initializable {
     @FXML
     private void update(ActionEvent event) throws IOException, ClassNotFoundException //update button
     {
-        if(!allCompleted())
+        if(!(allCompleted() && checkForWhiteSpace()))
         {
-            alertError(null,"Please complete all fields");
             return;
         }
         
-        
+        else
+        {
         updateData();
    
         id.clear();
@@ -372,7 +367,7 @@ public class AdminController implements Initializable {
         admin.setSelected(false);
         
         buildData();
-        
+        }
     }
 
     private void updateData() throws ClassNotFoundException {
@@ -544,7 +539,20 @@ public class AdminController implements Initializable {
         return userDeleted;
 
     }
+    
+  
 
+     public boolean checkForWhiteSpace()
+    {
+        boolean checked = true;
+        if(firstName.getText().trim().isEmpty() || surname.getText().trim().isEmpty() || newPass.getText().trim().isEmpty())
+         {
+             alertInfo("Try Again","You cannot have a white space at the start of the textfield");
+             checked = false;
+         }
+        return checked;
+    }
+    
     private void alertInfo(String header, String information) 
     {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
