@@ -194,6 +194,7 @@ public class AdminController implements Initializable {
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
+        editUser.setDisable(true);
         }
 
     }
@@ -343,6 +344,9 @@ public class AdminController implements Initializable {
         {
             admin.setSelected(false);
         }
+        
+        editUser.setDisable(false);
+        createUser.setDisable(true);
         }
         
     }
@@ -358,6 +362,16 @@ public class AdminController implements Initializable {
         
         else
         {
+            if(id.getText().equals(""))
+            {
+                alertError(null,"You can only edit an existing user.");
+                id.clear();
+                firstName.clear();
+                surname.clear();
+                newPass.clear();
+                admin.setSelected(false);
+                return;
+            }
         updateData();
    
         id.clear();
@@ -365,7 +379,7 @@ public class AdminController implements Initializable {
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
-        
+        createUser.setDisable(false);
         buildData();
         }
     }
