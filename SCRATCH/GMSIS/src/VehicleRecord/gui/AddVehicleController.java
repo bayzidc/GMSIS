@@ -328,7 +328,7 @@ public class AddVehicleController implements Initializable {
         }
         else
         {
-        if(checkTextFields() && checkForWhiteSpace())
+        if(checkTextFields() && checkForWhiteSpace() && !(checkIfVehicleAlreadyExists()))
         {
             double eSize = Double.parseDouble(engSize.getText());
             vec.setRegNumber(regNumber.getText());
@@ -355,6 +355,10 @@ public class AddVehicleController implements Initializable {
             stage2.hide();           
             stage2.setScene(vec_Scene);
             stage2.show();
+        }
+        else if(checkIfVehicleAlreadyExists())
+        {
+            alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
         }
         }
         
@@ -484,12 +488,11 @@ public class AddVehicleController implements Initializable {
          try
          {
             conn = (new sqlite().connect());
-            stmt = conn.prepareStatement("SELECT Count(vehicleID) from vehicleList WHERE RegNumber=?");
+            stmt = conn.prepareStatement("SELECT Count(RegNumber) from vehicleList WHERE RegNumber=?");
             stmt.setString(1, regNumber.getText());
             rset = stmt.executeQuery();
             if (rset.next())
                 count = rset.getInt(1);
-                alertInf("Vehicle already exists with Registration Number " + regNumber.getText());
             return count > 0;
          } 
          finally 
