@@ -30,6 +30,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.function.Predicate;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -39,6 +40,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -150,9 +152,7 @@ public class GuiController implements Initializable {
             System.out.println("Running this. BUILD DATA");
             accTypeText.setItems(FXCollections.observableArrayList("Business", "Private"));
             accTypeText.getSelectionModel().selectFirst();
-            System.out.println("Doing this.");
             buildData();
-            System.out.println("Stopped here?");
 
             table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
                 @Override
@@ -251,10 +251,12 @@ public class GuiController implements Initializable {
     @FXML
     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-            String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to delete this user? (Yes or No) ");
-            if (confirmDelete.equalsIgnoreCase("Yes") && isDeleted(acc)) {
-                int ID = table.getSelectionModel().getSelectedItem().getCustomerID(); //Gets ID 
-                JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
+            Optional<ButtonType> selected = alertConfirm("Are you sure you want to delete this Customer");
+
+            if (selected.get() != ButtonType.OK) {
+                return;
+            } else {
+                isDeleted(acc);
                 buildData();
             }
         } catch (Exception e) {
@@ -266,20 +268,18 @@ public class GuiController implements Initializable {
     @FXML
     private void updateButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
-            int check = phoneText.getLength();
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 9 || emailText.getText().equals("")) {
-                alertInf();
-            }
-            String confirmDelete = JOptionPane.showInputDialog("Are you sure you want to update this user? (Yes or No) ");
-            if (confirmDelete.equalsIgnoreCase("Yes")) {
+            Optional<ButtonType> selected = alertConfirm("Are you sure you want to update this Customer");
+
+            if (selected.get() != ButtonType.OK) {
+                return;
+            } else {
                 acc.setCustomerFullName(fullNameText.getText());
                 acc.setCustomerAddress(addressText.getText());
                 acc.setCustomerPostCode(postCodeText.getText());
                 acc.setCustomerPhone(phoneText.getText());
                 acc.setCustomerEmail(emailText.getText());
                 acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
-                updateData(acc); //Gets ID 
-                JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been updated");
+                updateData(acc);
                 buildData();
             }
         } catch (Exception e) {
@@ -337,6 +337,7 @@ public class GuiController implements Initializable {
 
             customerDeleted = true;
             clearDetails();
+            JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
         } catch (SQLException e) {
             alertError();
             System.out.println("Here 5.");
@@ -360,8 +361,11 @@ public class GuiController implements Initializable {
 
             String sql = "UPDATE customer SET customer_fullname=?,customer_address=?,customer_postcode=?,customer_phone=?,customer_email=?,customer_type=? WHERE customer_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
-            int check = Integer.parseInt(phoneText.getText());
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 1 || emailText.getText().equals("")) {
+            String name = fullNameText.getText();
+            String email = emailText.getText();
+            String phoneNumber = phoneText.getText();
+            int check = String.valueOf(phoneText.getText()).length();
+            if (fullNameText.getText().equals("") || name.matches(".*\\d+.*") || !email.contains("@") || addressText.getText().equals("") || postCodeText.getText().equals("") || !phoneNumber.matches("^[0-9]+$") || check < 6 || emailText.getText().equals("")) {
                 alertInf();
             } else {
                 state.setString(1, acc.getCustomerFullName());
@@ -377,6 +381,7 @@ public class GuiController implements Initializable {
                 state.close();
                 conn.close();
                 clearDetails();
+                JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been updated");
             }//submit=true;
         } catch (Exception e) {
             alertInf();
@@ -448,8 +453,11 @@ public class GuiController implements Initializable {
 
             String sql = "insert into customer(customer_fullname, customer_address, customer_postcode, customer_phone, customer_email, customer_type) values(?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
+            String name = fullNameText.getText();
+            String email = emailText.getText();
+            String phoneNumber = phoneText.getText();
             int check = String.valueOf(phoneText.getText()).length();
-            if (fullNameText.getText().equals("") || addressText.getText().equals("") || postCodeText.getText().equals("") || check < 6 || emailText.getText().equals("")) {
+            if (fullNameText.getText().equals("") || name.matches(".*\\d+.*") || !email.contains("@") || addressText.getText().equals("") || postCodeText.getText().equals("") || !phoneNumber.matches("^[0-9]+$") || check < 6 || emailText.getText().equals("")) {
                 alertInf();
             } else {
                 state.setString(1, fullNameText.getText());
@@ -697,6 +705,14 @@ public class GuiController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Something went wrong.");
         alert.showAndWait();
+    }
+
+    private Optional<ButtonType> alertConfirm(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        return alert.showAndWait();
     }
 
     public void getCustomerDetails(customerAccount acc) {
