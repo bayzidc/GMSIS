@@ -220,9 +220,6 @@ public class VehicleController implements Initializable {
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
         
-        spane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        spane.setContent(table);
-        spane.setFitToHeight(true);
         searchBy.setValue("Make");
         searchBy.setItems(search);
         showAll.setSelected(true);
