@@ -376,6 +376,7 @@ public class VehicleController implements Initializable {
             c.updateBtn.setVisible(true);
             c.id.setVisible(true);
             c.vID.setVisible(true);
+            c.regNumber.setEditable(false);
             String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
             String vecMake = table.getSelectionModel().getSelectedItem().getMake();
             String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -392,6 +393,9 @@ public class VehicleController implements Initializable {
             int ID = table.getSelectionModel().getSelectedItem().getVecID();
             int cust = table.getSelectionModel().getSelectedItem().getCustID();
             String cName = table.getSelectionModel().getSelectedItem().getCustName();
+            c.warExpiry.setValue(convert(warDate));
+            c.motRenDate.setValue(convert(mot));
+            c.lastService.setValue(convert(ls));
             if(regN.isEmpty())
             {
                 alertInf("One or more rows have a missing value in the row");
@@ -775,6 +779,12 @@ public class VehicleController implements Initializable {
         buildCustomerData();
     }
     
+    public LocalDate convert(String string)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(string, formatter);
+        return localDate;
+    }
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
         alert.setTitle("Information");

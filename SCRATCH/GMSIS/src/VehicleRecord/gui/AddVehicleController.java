@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -136,6 +137,14 @@ public class AddVehicleController implements Initializable {
      @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        vehicleChoice.setOnAction(e -> {
+            try {
+                fillQuickSelection();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AddVehicleController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         warExpiry.setEditable(false);
         motRenDate.setEditable(false);
         lastService.setEditable(false);
@@ -237,7 +246,7 @@ public class AddVehicleController implements Initializable {
                 {
                     conn = (new sqlite().connect());
                     System.out.println("Opened Database Successfully");
-                    String query = "select * from quickSelection where make = ?";
+                    String query = "select make,model,engSize,fuelType from quickSelection where template = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
                     rs = ps.executeQuery();
@@ -329,17 +338,23 @@ public class AddVehicleController implements Initializable {
         {
             return;
         }
-        else if(checkIfVehicleAlreadyExists())
-        {
-            alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
-        }
-        else if(!(checkTextFields() && checkForWhiteSpace() && (checkIfVehicleAlreadyExists())))
-        {
-            
+
+        if(!checkTextFields())
+        {      
             return;
         }
-        else
+        
+        if(!checkForWhiteSpace())
         {
+            return;
+        }
+        
+        if(checkIfVehicleAlreadyExists())
+        {
+            alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
+            return;
+        }
+        
             double eSize = Double.parseDouble(engSize.getText());
             vec.setRegNumber(regNumber.getText());
             vec.setColour(colour.getText());
@@ -365,7 +380,7 @@ public class AddVehicleController implements Initializable {
             stage2.hide();           
             stage2.setScene(vec_Scene);
             stage2.show();
-        }
+        
         
         }
         
@@ -381,10 +396,16 @@ public class AddVehicleController implements Initializable {
         {
             return;
         }
-        else
+        
+        if(!checkTextFieldEdit())
+        {      
+            return;
+        }
+        
+        if(!checkForWhiteSpace())
         {
-        if(checkTextFields() && checkForWhiteSpace())
-        {
+            return;
+        }
             vec.setRegNumber(regNumber.getText());
             vec.setColour(colour.getText());
             vec.setEngSize(Double.parseDouble(engSize.getText()));
@@ -410,8 +431,8 @@ public class AddVehicleController implements Initializable {
             stage2.setScene(vec_Scene);
             stage2.show();
         }
-        }
-    }
+        
+    
     
     //Method which builds and refreshes the data for the vehicle
     public void buildData() throws ClassNotFoundException
@@ -674,22 +695,22 @@ public class AddVehicleController implements Initializable {
     //Method which fills the quick selection combo box with vehicles from the database
     public void fillQuickSelection() throws ClassNotFoundException
     {
+        quickSelection.clear();
         Connection conn=null;
         try
         {
             conn = (new sqlite().connect());
-            String query = "Select make from quickSelection";
+            String query = "Select template from quickSelection where vecType = '" + vehicleChoice.getValue() + "'";
 
             ResultSet rs = conn.createStatement().executeQuery(query);
             
             
             while(rs.next())
             {
-                quickSelection.add(rs.getString("make"));
+                quickSelection.add(rs.getString("template"));
                 quickSel.setItems(quickSelection);
                 
             }
-
             rs.close();
             conn.close();
         }
@@ -703,37 +724,86 @@ public class AddVehicleController implements Initializable {
     //Method which error checks the textfields and makes sure that there are no empty fields.
     public boolean checkTextFields()
     {
-        if(vehicleChoice.getSelectionModel().isEmpty() || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getValue()==null || lastService.getValue()==null || mileage.getText().equals(""))
+        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
         {
             alertInf("Please complete all fields.");
             return false;
         }
-        
-        if(customerNames.getSelectionModel().isEmpty())
-        {
-            alertInf("Please specify the name associated with this vehicle.");
-            return false;
-        }
-        
+  
         if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
         {
             alertInf("Please enter the name and address for the warranty.");
             return false;
         }
         
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getValue()==null)
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
         {
             alertInf("Please enter the name, address and expiry date for the warranty.");
             return false;
         }
         
-        if(yesWarranty.isSelected() && warExpiry.getValue()==null)
+        if(yesWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
         {
             alertInf("Please enter the expiry date for the warranty.");
             return false;
         }
         
-        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getValue()==null)
+        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        {
+            return true;
+        }
+        
+        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
+        {
+            alertInf("Please select if the vehicle is under warranty or not.");
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean checkTextFieldEdit()
+    {
+        System.out.println(vehicleChoice.getValue()==null);
+        System.out.println(regNumber.getText().equals(""));
+        System.out.println(make.getText().equals(""));
+        System.out.println(model.getText().equals(""));
+        System.out.println(engSize.getText().equals(""));
+        System.out.println(fuelType.getValue()==null);
+        System.out.println(colour.getText().equals(""));
+        System.out.println(motRenDate.getEditor().getText().equals(""));
+        System.out.println(lastService.getEditor().getText().equals(""));
+        System.out.println(mileage.getText().equals(""));
+        
+        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
+        {
+            alertInf("Please complete all fields.");
+            return false;
+        }
+  
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        {
+            alertInf("Please enter the name and address for the warranty.");
+            return false;
+        }
+        
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the name, address and expiry date for the warranty.");
+            return false;
+        }
+        
+        if(yesWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the expiry date for the warranty.");
+            return false;
+        }
+        
+        if(noWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        {
+            return true;
+        }
+        
+        if(noWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
         {
             return true;
         }
@@ -797,7 +867,12 @@ public class AddVehicleController implements Initializable {
         }
     }
     
-    
+    public LocalDate convert(String string)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(string, formatter);
+        return localDate;
+    }
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
         alert.setTitle("Information");
