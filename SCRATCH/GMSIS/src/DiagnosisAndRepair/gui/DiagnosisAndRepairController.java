@@ -186,7 +186,7 @@ public class DiagnosisAndRepairController implements Initializable {
     private ObservableList<String> monthLs = FXCollections.observableArrayList("01:January","02:February","03:March","04:April","05:May","06:June","07:July","08:August","09:September","10:October","11:November","12:December");
     
 
-    private DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","");
+    public static DiagnosisAndRepairBooking obj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","","");
      
     /**
      * Initializes the controller class.
@@ -1044,7 +1044,7 @@ public class DiagnosisAndRepairController implements Initializable {
             int mileage = findMileage(rs.getString(2),conn);
             String mName = findMechName(rs.getInt(4),conn);
             
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), mName ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8)) );
+            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), mName ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8),""));
             
         }
         tempData.addAll(data);
@@ -1406,7 +1406,7 @@ public class DiagnosisAndRepairController implements Initializable {
             conn.close();
             if(dateToday.isBefore(nextDT))
             {
-                nextList.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime));
+                nextList.add(new DiagnosisAndRepairBooking(bookingID, findVehReg(Integer.toString(vID)), make, findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime,""));
             }
        } //end for loop
         } catch (SQLException e) {
