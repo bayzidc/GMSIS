@@ -18,14 +18,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
-import VehicleRecord.logic.Vehicle;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -74,6 +72,8 @@ public class GuiController implements Initializable {
     private TableColumn<DiagnosisAndRepairBooking, Integer> duration;
     @FXML
     private ObservableList<DiagnosisAndRepairBooking> dataBooking;
+    @FXML
+    private TableColumn<DiagnosisAndRepairBooking, String> partsUsedBooking;
     //FOR BILL
     @FXML
     private TableView<bill> tableBill;
@@ -127,7 +127,7 @@ public class GuiController implements Initializable {
     @FXML
     private TableColumn<customerAccount, String> customerVehReg;
     @FXML
-    private TableColumn<customerAccount, Integer> customerPhone;
+    private TableColumn<customerAccount, String> customerPhone;
     @FXML
     private TableColumn<customerAccount, String> customerEmail;
     @FXML
@@ -516,8 +516,7 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
             int getID = acc.getCustomerID();
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
 
             String SQL = "Select * from bill WHERE customerID = " + getID;
@@ -546,15 +545,21 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
             int ID = GuiController.acc.getCustomerID();
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-
+            int parts = 0;
             String SQL = "Select * from booking WHERE customer_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                dataBooking.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), "", findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), 0, rs.getString(7), rs.getString(8)));
-
+                DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName("");
+                java.sql.Statement state = null;
+                state = conn.createStatement();
+                ResultSet rs2 = state.executeQuery("SELECT * FROM vehiclePartsUsed WHERE customerID= " + acc.getCustomerID());
+                while (rs2.next()) {
+                    parts = rs2.getInt("parts_id");
+                    DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName(findPartName(parts));
+                }
+                dataBooking.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), "", findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), 0, rs.getString(7), rs.getString(8), DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.getPartName()));
             }
 
             bookingIDBooking.setCellValueFactory(
@@ -567,6 +572,8 @@ public class GuiController implements Initializable {
                     new PropertyValueFactory<>("date"));
             duration.setCellValueFactory(
                     new PropertyValueFactory<>("duration"));
+            partsUsedBooking.setCellValueFactory(
+                    new PropertyValueFactory<>("partName"));
 
             tableBooking.setItems(dataBooking);
             rs.close();
@@ -587,8 +594,7 @@ public class GuiController implements Initializable {
         String vehicleRegIS = "";
         Connection conn = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             String SQL = "Select RegNumber from vehicleList where vehicleID='" + vehicleReg + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
@@ -605,12 +611,32 @@ public class GuiController implements Initializable {
         return vehicleRegIS;
     }
 
+    private String findPartName(int partID) throws ClassNotFoundException {
+        String PartName = "";
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select nameofPart from vehiclePartsStock where parts_id='" + partID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                PartName = rs.getString("nameofPart");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return PartName;
+    }
+
     private String findMechanicName(int mechanicID) throws ClassNotFoundException {
         String mechanicName = "";
         Connection conn = null;
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
             String SQL = "Select fullname from mechanic where mechanic_id='" + mechanicID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
@@ -629,66 +655,74 @@ public class GuiController implements Initializable {
 
     @FXML
     private void filterByPast() throws ClassNotFoundException {
-        if (!pastBooking.isSelected()) {
-            pastBooking.setSelected(true);
-            return;
-        }
-
-        pastBooking.setSelected(true);
-        futureBooking.setSelected(false);
-
-        ObservableList<DiagnosisAndRepairBooking> pastList = FXCollections.observableArrayList(dataBooking);
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        for (int i = 0; i < pastList.size(); i++) {
-            LocalDateTime tempDate = LocalDateTime.parse(pastList.get(i).getDate() + " " + pastList.get(i).getStartTime(), formatter);
-
-            if (now.isBefore(tempDate)) {
-                pastList.remove(i);
-                i--;
+        try {
+            if (!pastBooking.isSelected()) {
+                pastBooking.setSelected(true);
+                return;
             }
-        }
 
-        if (pastList.isEmpty()) {
-            System.out.println("It's empty past.");
-        }
+            pastBooking.setSelected(true);
+            futureBooking.setSelected(false);
 
-        tableBooking.setItems(pastList);
-        tableBooking.refresh();
+            ObservableList<DiagnosisAndRepairBooking> pastList = FXCollections.observableArrayList(dataBooking);
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+            for (int i = 0; i < pastList.size(); i++) {
+                LocalDateTime tempDate = LocalDateTime.parse(pastList.get(i).getDate() + " " + pastList.get(i).getStartTime(), formatter);
+
+                if (now.isBefore(tempDate)) {
+                    pastList.remove(i);
+                    i--;
+                }
+            }
+
+            if (pastList.isEmpty()) {
+                System.out.println("It's empty past.");
+            }
+
+            tableBooking.setItems(pastList);
+            tableBooking.refresh();
+        } catch (Exception e) {
+            System.out.println("Error catched");
+        }
     }
 
     @FXML
     private void filterByFuture() throws ClassNotFoundException {
-        if (!futureBooking.isSelected()) {
-            futureBooking.setSelected(true);
-            return;
-        }
-
-        futureBooking.setSelected(true);
-        pastBooking.setSelected(false);
-
-        ObservableList<DiagnosisAndRepairBooking> futureList = FXCollections.observableArrayList(dataBooking);
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        for (int i = 0; i < futureList.size(); i++) {
-            LocalDateTime tempDate = LocalDateTime.parse(futureList.get(i).getDate() + " " + futureList.get(i).getStartTime(), formatter);
-
-            if (now.isAfter(tempDate)) {
-                futureList.remove(i);
-                i--;
+        try {
+            if (!futureBooking.isSelected()) {
+                futureBooking.setSelected(true);
+                return;
             }
-        }
 
-        if (futureList.isEmpty()) {
-            System.out.println("It's empty the future");
-        }
+            futureBooking.setSelected(true);
+            pastBooking.setSelected(false);
 
-        tableBooking.setItems(futureList);
-        tableBooking.refresh();
+            ObservableList<DiagnosisAndRepairBooking> futureList = FXCollections.observableArrayList(dataBooking);
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+            for (int i = 0; i < futureList.size(); i++) {
+                LocalDateTime tempDate = LocalDateTime.parse(futureList.get(i).getDate() + " " + futureList.get(i).getStartTime(), formatter);
+
+                if (now.isAfter(tempDate)) {
+                    futureList.remove(i);
+                    i--;
+                }
+            }
+
+            if (futureList.isEmpty()) {
+                System.out.println("It's empty the future");
+            }
+
+            tableBooking.setItems(futureList);
+            tableBooking.refresh();
+        } catch (Exception e) {
+            System.out.println("Error catched");
+        }
     }
 
     public void alertInf() {

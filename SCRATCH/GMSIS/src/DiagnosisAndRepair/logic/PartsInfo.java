@@ -15,13 +15,13 @@ public class PartsInfo {
       
    private SimpleStringProperty partName;
    private SimpleIntegerProperty quantity;
-   private SimpleStringProperty expiryDate;
+   private SimpleDoubleProperty cost;
    
-   public PartsInfo(String name, int quan, String date)
+   public PartsInfo(String name, int quan, double cost)
    {
        this.partName = new SimpleStringProperty(name);
        this.quantity = new SimpleIntegerProperty(quan);
-       this.expiryDate = new SimpleStringProperty(date);
+       this.cost = new SimpleDoubleProperty(cost);
    }
    
    public String getPartName()
@@ -32,8 +32,8 @@ public class PartsInfo {
    {
        return quantity.get();
    }
-   public String getExpiryDate()
+   public double getCost()
    {
-       return expiryDate.get();
+       return cost.get();
    }
 }

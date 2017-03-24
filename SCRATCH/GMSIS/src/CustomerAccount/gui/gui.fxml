@@ -15,7 +15,7 @@
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="779.0" prefWidth="1358.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.GuiController">
    <children>
        
-      <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
+      <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#e10b0b" style="-fx-background-color: #081786;" text="Users" textFill="WHITE" />
       <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
       <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecord" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
       <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
@@ -58,34 +58,35 @@
       <Button fx:id="backButtton" layoutX="36.0" layoutY="67.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <Label layoutX="29.0" layoutY="376.0" text="Search" textFill="#b01f1f" />
       <TextField fx:id="searchCustomer" layoutX="87.0" layoutY="365.0" onKeyPressed="#searchCustomer" prefHeight="39.0" prefWidth="245.0" promptText="Name, vehicle reg number..." />
-      <TableView fx:id="tableBooking" layoutX="82.0" layoutY="478.0" prefHeight="240.0" prefWidth="605.0">
+      <TableView fx:id="tableBooking" layoutX="82.0" layoutY="478.0" prefHeight="240.0" prefWidth="791.0">
         <columns>
           <TableColumn fx:id="bookingIDBooking" prefWidth="84.80001831054688" text="bookingID" />
-          <TableColumn fx:id="vehicleID" prefWidth="117.20001220703125" text="Reg Number" />
-            <TableColumn fx:id="mechanicName" prefWidth="145.79998779296875" text="Mechanic" />
-            <TableColumn fx:id="date" prefWidth="135.79998779296875" text="Date" />
-            <TableColumn fx:id="duration" prefWidth="122.20001220703125" text="Duration" />
+          <TableColumn fx:id="vehicleID" prefWidth="105.5999755859375" text="Reg Number" />
+            <TableColumn fx:id="partsUsedBooking" prefWidth="279.5999755859375" text="Parts Used" />
+            <TableColumn fx:id="mechanicName" prefWidth="126.4000244140625" text="Mechanic" />
+            <TableColumn fx:id="date" prefWidth="108.4000244140625" text="Date" />
+            <TableColumn fx:id="duration" prefWidth="86.5999755859375" text="Duration" />
         </columns>
       </TableView>
-      <TableView fx:id="tableBill" layoutX="721.0" layoutY="478.0" prefHeight="240.0" prefWidth="605.0">
+      <TableView fx:id="tableBill" layoutX="936.0" layoutY="478.0" prefHeight="240.0" prefWidth="390.0">
         <columns>
-          <TableColumn fx:id="bookingIDBill" prefWidth="197.79998779296875" text="bookingID" />
-          <TableColumn fx:id="cost" prefWidth="226.20001220703125" text="Cost" />
-            <TableColumn fx:id="billStatus" prefWidth="180.39996337890625" text="Settled?" />
+          <TableColumn fx:id="bookingIDBill" prefWidth="73.0" text="bookingID" />
+          <TableColumn fx:id="cost" minWidth="0.0" prefWidth="168.39990234375" text="Cost" />
+            <TableColumn fx:id="billStatus" prefWidth="147.60009765625" text="Settled?" />
         </columns>
       </TableView>
-      <Label layoutX="350.0" layoutY="443.0" text="Bookings">
+      <Label layoutX="438.0" layoutY="443.0" text="Bookings">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="1008.0" layoutY="443.0" text="Bills">
+      <Label layoutX="1117.0" layoutY="443.0" text="Bills">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <JFXCheckBox fx:id="pastBooking" checkedColor="#2f5c9a" layoutX="225.0" layoutY="741.0" onAction="#filterByPast" text="Past booking" />
-      <JFXCheckBox fx:id="futureBooking" checkedColor="#2f5c9a" layoutX="400.0" layoutY="741.0" onAction="#filterByFuture" text="Future booking" />
+      <JFXCheckBox fx:id="pastBooking" checkedColor="#2f5c9a" layoutX="320.0" layoutY="741.0" onAction="#filterByPast" text="Past booking" />
+      <JFXCheckBox fx:id="futureBooking" checkedColor="#2f5c9a" layoutX="527.0" layoutY="741.0" onAction="#filterByFuture" text="Future booking" />
    </children>
    <opaqueInsets>
       <Insets />
