@@ -55,6 +55,9 @@ public class AdminController implements Initializable {
     @FXML
     private JFXButton users;
     
+    @FXML
+    private Button backButton;
+    @FXML
     private Button customerButton;
     @FXML
     private Button createUser;
@@ -161,6 +164,26 @@ public class AdminController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
         pane.getChildren().setAll(rootPane);
+    }
+    
+    @FXML
+    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
+    {
+        if (Authentication.LoginController.isAdmin) {
+            Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
+            Scene admin_Scene = new Scene(adminUser);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();
+            stage2.setScene(admin_Scene);
+            stage2.show();
+        } else {
+            Parent adminUser = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
+            Scene admin_Scene = new Scene(adminUser);
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage2.hide();
+            stage2.setScene(admin_Scene);
+            stage2.show();
+        }
     }
     
     private boolean allCompleted()

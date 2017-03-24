@@ -136,6 +136,9 @@ public class AddVehicleController implements Initializable {
      @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        warExpiry.setEditable(false);
+        motRenDate.setEditable(false);
+        lastService.setEditable(false);
         restrictDecimal(engSize);
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
@@ -326,9 +329,16 @@ public class AddVehicleController implements Initializable {
         {
             return;
         }
-        else
+        else if(checkIfVehicleAlreadyExists())
         {
-        if(checkTextFields() && checkForWhiteSpace() && !(checkIfVehicleAlreadyExists()))
+            alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
+        }
+        else if(!(checkTextFields() && checkForWhiteSpace() && (checkIfVehicleAlreadyExists())))
+        {
+            
+            return;
+        }
+        else
         {
             double eSize = Double.parseDouble(engSize.getText());
             vec.setRegNumber(regNumber.getText());
@@ -356,13 +366,10 @@ public class AddVehicleController implements Initializable {
             stage2.setScene(vec_Scene);
             stage2.show();
         }
-        else if(checkIfVehicleAlreadyExists())
-        {
-            alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
-        }
+        
         }
         
-    }
+    
     
     //Method which allows the user to make changes to the vehicle they created
     @FXML
@@ -696,53 +703,57 @@ public class AddVehicleController implements Initializable {
     //Method which error checks the textfields and makes sure that there are no empty fields.
     public boolean checkTextFields()
     {
-        boolean checked = true;
-        if(vehicleChoice.getSelectionModel().isEmpty() || make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
+        if(vehicleChoice.getSelectionModel().isEmpty() || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getSelectionModel().isEmpty() || colour.getText().equals("") || motRenDate.getValue()==null || lastService.getValue()==null || mileage.getText().equals(""))
         {
-            checked = false;
             alertInf("Please complete all fields.");
+            return false;
         }
         
         if(customerNames.getSelectionModel().isEmpty())
         {
-            checked = false;
             alertInf("Please specify the name associated with this vehicle.");
+            return false;
         }
         
         if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
         {
             alertInf("Please enter the name and address for the warranty.");
-            checked = false;
+            return false;
         }
         
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getValue()==null)
         {
             alertInf("Please enter the name, address and expiry date for the warranty.");
-            checked = false;
+            return false;
         }
         
-        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        if(yesWarranty.isSelected() && warExpiry.getValue()==null)
         {
-            checked = true;
+            alertInf("Please enter the expiry date for the warranty.");
+            return false;
+        }
+        
+        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getValue()==null)
+        {
+            return true;
         }
         
         if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
         {
             alertInf("Please select if the vehicle is under warranty or not.");
-            checked = false;
+            return false;
         }
-        return checked;
+        return true;
     }
     
     public boolean checkForWhiteSpace()
     {
-        boolean checked = true;
         if(regNumber.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || engSize.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty())
          {
              alertInf("You cannot have a white space at the start of the textfield");
-             checked = false;
+             return false;
          }
-        return checked;
+        return true;
     }
     
     private void restrictDecimal(TextField field)
