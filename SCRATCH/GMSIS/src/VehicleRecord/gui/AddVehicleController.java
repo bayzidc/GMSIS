@@ -209,6 +209,23 @@ public class AddVehicleController implements Initializable {
         };
         motRenDate.setDayCellFactory(dayCellFactory1);
 
+        Callback<DatePicker, DateCell> dayCellFactory2 = dp2 -> new DateCell()
+        {
+            @Override
+            public void updateItem(LocalDate item, boolean empty)
+            {
+                super.updateItem(item, empty);
+
+                if(item.isBefore(LocalDate.now()))
+                {
+                    
+                    setStyle("-fx-background-color: #fcbabf;");
+                    Platform.runLater(() -> setDisable(true));                 
+                }
+            }
+        };
+        warExpiry.setDayCellFactory(dayCellFactory2);
+        
         try {
             buildData();
              customerNames.setOnAction(e ->{ //Customer names show up on the database into a choicebox for the user to select
@@ -349,6 +366,10 @@ public class AddVehicleController implements Initializable {
             return;
         }
         
+        if(!decimalPlaces(Double.parseDouble(engSize.getText())))
+        {
+            return;
+        }
         if(checkIfVehicleAlreadyExists())
         {
             alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
@@ -403,6 +424,11 @@ public class AddVehicleController implements Initializable {
         }
         
         if(!checkForWhiteSpace())
+        {
+            return;
+        }
+        
+        if(!decimalPlaces(Double.parseDouble(engSize.getText())))
         {
             return;
         }
@@ -826,6 +852,20 @@ public class AddVehicleController implements Initializable {
         return true;
     }
     
+    public boolean decimalPlaces(double num) 
+    {
+        String numstr = Double.toString(num);
+        String[] strarray = numstr.split("[.]");
+        if (strarray.length == 2)
+        {
+            if (strarray[1].length() > 2)
+            {
+                alertInf("Only enter upto 2 decimal places.");
+                return false;
+            }
+        }
+        return true;
+    }
     private void restrictDecimal(TextField field)
     {
         DecimalFormat format = new DecimalFormat( "#.0" );

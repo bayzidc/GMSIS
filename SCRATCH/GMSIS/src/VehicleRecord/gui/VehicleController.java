@@ -365,6 +365,7 @@ public class VehicleController implements Initializable {
     @FXML
     public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfields
     {
+        Vehicle v ;
         try
         {
             Stage primaryStage = new Stage();
@@ -377,6 +378,7 @@ public class VehicleController implements Initializable {
             c.id.setVisible(true);
             c.vID.setVisible(true);
             c.regNumber.setEditable(false);
+
             String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
             String vecMake = table.getSelectionModel().getSelectedItem().getMake();
             String vecModel = table.getSelectionModel().getSelectedItem().getModel();
@@ -390,16 +392,16 @@ public class VehicleController implements Initializable {
             String war = table.getSelectionModel().getSelectedItem().getWarranty();
             String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
             String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
+            if(!warDate.isEmpty())
+            {
+                c.warExpiry.setValue(convert(warDate));
+            }
             int ID = table.getSelectionModel().getSelectedItem().getVecID();
             int cust = table.getSelectionModel().getSelectedItem().getCustID();
             String cName = table.getSelectionModel().getSelectedItem().getCustName();
-            c.warExpiry.setValue(convert(warDate));
             c.motRenDate.setValue(convert(mot));
             c.lastService.setValue(convert(ls));
-            if(regN.isEmpty())
-            {
-                alertInf("One or more rows have a missing value in the row");
-            }
+            
             c.regNumber.setText(regN);
             c.make.setText(vecMake);
             c.model.setText(vecModel);
@@ -410,8 +412,8 @@ public class VehicleController implements Initializable {
             c.motRenDate.getEditor().setText(mot);
             c.lastService.getEditor().setText(ls);
             c.vehicleChoice.setValue(vecType);
-            
             c.id.setText(String.valueOf(ID));
+            
             if(war.equals("Yes"))
             {
                 c.yesWarranty.setSelected(true);
@@ -432,6 +434,7 @@ public class VehicleController implements Initializable {
             c.custID.setText(String.valueOf(cust));
             c.customerNames.setValue(cName);
             c.customerNames.setDisable(true);
+            c.fillQuickSelection();
             stage2.hide();
             Scene edit_Scene = new Scene(root);
             primaryStage.setScene(edit_Scene);
@@ -478,14 +481,13 @@ public class VehicleController implements Initializable {
         if(!checkIfPartExists())
             {
                 alertInf("There are no parts used for this vehicle");
-                partsData.clear();
+                partsTable.setItems(null);
             }
         else{
         Connection conn = null;
         try
         {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             String SQL = "Select vehiclePartsUsed.partsUsedID, nameOfPart, quantity from vehiclePartsUsed, vehiclePartsStock,vehicleList where vehicleList.vehicleID= '"+id+"' AND vehiclePartsStock.parts_id = vehiclePartsUsed.parts_id AND vehicleList.vehicleID = vehiclePartsUsed.vehicleID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
@@ -568,7 +570,7 @@ public class VehicleController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) 
@@ -601,7 +603,6 @@ public class VehicleController implements Initializable {
         {
 
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             String SQL = "select RegNumber, Make, Model, Engsize, FuelType, Colour, MOTDate, LastServiceDate, Mileage, VehicleType, Warranty, WarrantyNameAndAdd, WarrantyExpDate, vehicleID, customer_id, customer_fullname from vehicleList, customer where vehicleList.customerid = customer.customer_id";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) 
@@ -680,7 +681,6 @@ public class VehicleController implements Initializable {
         try 
         {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM vehicleList WHERE vehicleID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, String.valueOf(ID));
@@ -707,6 +707,7 @@ public class VehicleController implements Initializable {
     {
        if(!pastB.isSelected())
         {
+            pastB.setSelected(true);
             return;
         }
         
@@ -736,6 +737,7 @@ public class VehicleController implements Initializable {
     {
         if(!futureB.isSelected())
         {
+            futureB.setSelected(true);
             return;
         }
    
@@ -769,6 +771,7 @@ public class VehicleController implements Initializable {
     {
         if(!showAll.isSelected())
         {
+            showAll.setSelected(true);
             return;
         }
         
