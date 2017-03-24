@@ -1125,17 +1125,19 @@ public class PartsController implements Initializable {
         try {
             conn = (new sqlite().connect());
             System.out.println("Opened Database Successfully");
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND vehicleList.customerid = customer.customer_id AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
+            String SQL = "Select * from booking";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) {
-                
-                custVehicle.setCustomerName(rs.getString("customer_fullname"));
-                custVehicle.setRegNumber(rs.getString("RegNumber"));
+                custVehicle.setBookingDate("");
+                custVehicle.setCustomerName("");
+                custVehicle.setRegNumber("");
+                custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
+                custVehicle.setRegNumber(findVehReg(rs.getInt("vehicleID")));
                 custVehicle.setBookingDate(rs.getString("scheduled_date"));
-                Double totalC = rs.getDouble("totalCost");
+                //Double totalC = rs.getDouble("totalCost");
                 
-                customerData.add(custVehicle);
+                customerData.add(new vehicleCustomerInfo(custVehicle.getCustomerName(), custVehicle.getBookingDate(), custVehicle.getRegNumber()));
             }
             tempData.addAll(customerData);
             

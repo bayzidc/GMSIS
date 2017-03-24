@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -51,6 +52,8 @@ import javax.swing.JOptionPane;
  */
 public class GuiController implements Initializable {
 
+    @FXML
+    private JFXButton users;
     @FXML
     private AnchorPane pane;
     //FOR BOOKING
@@ -147,6 +150,9 @@ public class GuiController implements Initializable {
         try {
             if (futureBooking.isSelected()) {
                 futureBooking.setSelected(false);
+            }
+            if (!Authentication.LoginController.isAdmin) {
+                users.setDisable(true);
             }
             pastBooking.setSelected(true);
             System.out.println("Running this. BUILD DATA");
@@ -337,7 +343,7 @@ public class GuiController implements Initializable {
 
             customerDeleted = true;
             clearDetails();
-            JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been deleted");
+            alertInfoSuccess("Success", "Customer was deleted.");
         } catch (SQLException e) {
             alertError();
             System.out.println("Here 5.");
@@ -381,7 +387,7 @@ public class GuiController implements Initializable {
                 state.close();
                 conn.close();
                 clearDetails();
-                JOptionPane.showMessageDialog(null, "UserID: " + ID + " has been updated");
+                alertInfoSuccess("Success", "Customer was updated.");
             }//submit=true;
         } catch (Exception e) {
             alertInf();
@@ -472,6 +478,7 @@ public class GuiController implements Initializable {
                 state.close();
                 conn.close();
                 clearDetails();
+                alertInfoSuccess("Success", "Customer was added.");
             }//submit=true;
         } catch (SQLException e) {
             alertInf();
@@ -552,9 +559,10 @@ public class GuiController implements Initializable {
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
                 DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName("");
+                int vehicleID = rs.getInt(2);
                 java.sql.Statement state = null;
                 state = conn.createStatement();
-                ResultSet rs2 = state.executeQuery("SELECT * FROM vehiclePartsUsed WHERE customerID= " + acc.getCustomerID());
+                ResultSet rs2 = state.executeQuery("SELECT * FROM vehiclePartsUsed WHERE customerID= " + acc.getCustomerID() + " AND vehicleID=" + vehicleID);
                 while (rs2.next()) {
                     parts = rs2.getInt("parts_id");
                     DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName(findPartName(parts));
@@ -730,6 +738,14 @@ public class GuiController implements Initializable {
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText("One or more fields are incomplete, incorrect or a user is not selected.");
+        alert.showAndWait();
+    }
+
+    private void alertInfoSuccess(String header, String information) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(header);
+        alert.setContentText(information);
         alert.showAndWait();
     }
 
