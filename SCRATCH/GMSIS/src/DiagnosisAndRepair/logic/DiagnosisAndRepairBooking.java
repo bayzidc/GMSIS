@@ -17,13 +17,13 @@ public class DiagnosisAndRepairBooking {
    private SimpleStringProperty vehicleReg;
    private SimpleStringProperty make;
    private SimpleStringProperty mechanicName;
-   private SimpleDoubleProperty mileage;
+   private SimpleIntegerProperty mileage;
    private SimpleStringProperty date;
    private SimpleIntegerProperty duration;
    private SimpleStringProperty startTime;
    private SimpleStringProperty endTime;
   
-   public DiagnosisAndRepairBooking(int id, String reg, String make, String cName, String mName, String date, int duration, double mileage, String startTime, String endTime)
+   public DiagnosisAndRepairBooking(int id, String reg, String make, String cName, String mName, String date, int duration, int mileage, String startTime, String endTime)
    {
        this.bookingID = new SimpleIntegerProperty(id);
        this.vehicleReg = new SimpleStringProperty(reg);
@@ -32,7 +32,7 @@ public class DiagnosisAndRepairBooking {
        this.mechanicName = new SimpleStringProperty(mName);
        this.date = new SimpleStringProperty(date);
        this.duration = new SimpleIntegerProperty(duration);
-       this.mileage = new SimpleDoubleProperty(mileage);
+       this.mileage = new SimpleIntegerProperty(mileage);
        this.startTime = new SimpleStringProperty(startTime);
        this.endTime = new SimpleStringProperty(endTime);
    }
@@ -58,7 +58,7 @@ public class DiagnosisAndRepairBooking {
    {
        return mechanicName.get();
    }
-   public double getMileage()
+   public int getMileage()
    {
        return mileage.get();
    }
@@ -100,7 +100,7 @@ public class DiagnosisAndRepairBooking {
    {
        mechanicName.set(mName);
    }
-   public void setMileage(double mile)
+   public void setMileage(int mile)
    {
        mileage.set(mile);
    }
@@ -141,7 +141,7 @@ public class DiagnosisAndRepairBooking {
    {
        return mechanicName;
    }
-   public DoubleProperty getMileageProperty()
+   public IntegerProperty getMileageProperty()
    {
        return mileage;
    }

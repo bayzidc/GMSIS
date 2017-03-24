@@ -14,13 +14,10 @@ import CustomerAccount.gui.GuiController;
 import DiagnosisAndRepair.logic.Mechanic;
 import java.util.*;
 import java.io.IOException;
-import java.sql.SQLException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.sql.*;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.scene.Node;
@@ -35,10 +32,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Predicate;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.*;
+import javafx.beans.value.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -61,7 +56,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
+import javafx.util.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 /**
@@ -149,7 +144,7 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML 
     private TableColumn<DiagnosisAndRepairBooking, String> mechanicIDCol;
     @FXML 
-    private TableColumn<DiagnosisAndRepairBooking, Double> mileageCol;
+    private TableColumn<DiagnosisAndRepairBooking, Integer> mileageCol;
     @FXML 
     private TableColumn<DiagnosisAndRepairBooking, String> dateCol;
     @FXML 
@@ -174,9 +169,9 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML 
     private TableColumn<PartsInfo, Integer> quanCol;
     @FXML 
-    private TableColumn<PartsInfo, String> expiryCol;
+    private TableColumn<PartsInfo, String> costCol;
     
-    private ObservableList<PartsInfo> data3;
+    private ObservableList<PartsInfo> data2;
      
      
     ObservableList<Integer> vehID = FXCollections.observableArrayList();
@@ -220,7 +215,7 @@ public class DiagnosisAndRepairController implements Initializable {
     mechanicIDCol.setCellValueFactory(
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("mechanicName"));        
     mileageCol.setCellValueFactory(
-        new PropertyValueFactory<DiagnosisAndRepairBooking,Double>("mileage"));        
+        new PropertyValueFactory<DiagnosisAndRepairBooking,Integer>("mileage"));        
     dateCol.setCellValueFactory(                
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("date"));
     durationCol.setCellValueFactory(
@@ -235,8 +230,8 @@ public class DiagnosisAndRepairController implements Initializable {
         new PropertyValueFactory<PartsInfo,String>("partName"));
     quanCol.setCellValueFactory(
         new PropertyValueFactory<PartsInfo,Integer>("quantity"));
-    expiryCol.setCellValueFactory(
-        new PropertyValueFactory<PartsInfo,String>("expiryDate")); 
+    costCol.setCellValueFactory(
+        new PropertyValueFactory<PartsInfo,String>("cost")); 
             
         Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
         {
@@ -304,15 +299,9 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private void vehicleRecord(ActionEvent event) throws IOException
     {
+        
           AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
           pane.getChildren().setAll(rootPane);
-    }
-    
-    @FXML
-    private void vehicleEntry(ActionEvent event) throws IOException
-    {
-         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
-         pane.getChildren().setAll(rootPane);
     }
     
     @FXML 
@@ -324,13 +313,6 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     @FXML 
-    private void pStock(ActionEvent event) throws IOException
-    {
-        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
-        pane.getChildren().setAll(rootPane);
-    }
-    
-    @FXML 
     private void pUsed(ActionEvent event) throws IOException
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
@@ -338,7 +320,20 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     
-    
+    @FXML
+    private void addParts(ActionEvent event) throws IOException 
+    {
+       /* if(table.getSelectionModel().getSelectedItem()==null)
+        {
+            alertInfo(null,"Select a row first");
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        Parent root = (AnchorPane)loader.load();
+        PartsRecord.gui.PartsController obj = (PartsRecord.gui.PartsController) loader.getController();       
+        obj.setBookingID(table.getSelectionModel().getSelectedItem().getBookingID());
+        pane.getChildren().setAll(root);*/
+    }
     
     private boolean checkSaturday(LocalDate item)
     {
@@ -465,7 +460,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
         if(vehicleReg.isEmpty())
         {
-            alertInfo(null,"There are no vehicle for the selected customer");
+            alertInfo("There are no vehicle for the selected customer","Please add a vehicle first");
         }
     }
     
@@ -518,13 +513,8 @@ public class DiagnosisAndRepairController implements Initializable {
     private String findMechName(int mechID, Connection conn) 
     {
         String mechName = "";
-
-
-        
         try {
-            
-           
-            
+
             String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                  
@@ -534,7 +524,6 @@ public class DiagnosisAndRepairController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error");
-            alertInfo(null,"asf");
         }
         return mechName;
     }
@@ -704,7 +693,7 @@ public class DiagnosisAndRepairController implements Initializable {
         obj.setDuration(calculateDuration(startTime.getValue(),endTime.getValue()));
         obj.setStartTime(startTime.getValue());
         obj.setEndTime(endTime.getValue());
-        obj.setMileage(Double.parseDouble(mileage.getText()));
+        obj.setMileage(Integer.parseInt(mileage.getText()));
         
         updateData(obj,custArr,mechArr);
         buildBooking();
@@ -792,7 +781,7 @@ public class DiagnosisAndRepairController implements Initializable {
         obj.setDuration(calculateDuration(startTime.getValue(),endTime.getValue()));
         obj.setStartTime(startTime.getValue());
         obj.setEndTime(endTime.getValue());
-        obj.setMileage(Double.parseDouble(mileage.getText()));
+        obj.setMileage(Integer.parseInt(mileage.getText()));
             
         createBooking(obj,custArr,mechArr);
         buildBooking();
@@ -858,7 +847,7 @@ public class DiagnosisAndRepairController implements Initializable {
         String date = table.getSelectionModel().getSelectedItem().getDate();
         String sTime = table.getSelectionModel().getSelectedItem().getStartTime();     
         String eTime = table.getSelectionModel().getSelectedItem().getEndTime();
-        double mAge = table.getSelectionModel().getSelectedItem().getMileage();
+        int mAge = table.getSelectionModel().getSelectedItem().getMileage();
         
         String cust = findCustID(reg)+": "+custName;
         System.out.println(cust);
@@ -875,7 +864,7 @@ public class DiagnosisAndRepairController implements Initializable {
         fillStartTimeCombo(); 
         startTime.setValue(findComboVal(startTimeLs,sTime));
         endTime.setValue(findComboVal(endTimeLs,eTime));
-        mileage.setText(Double.toString(mAge));
+        mileage.setText(Integer.toString(mAge));
     }
 
     
@@ -991,14 +980,14 @@ public class DiagnosisAndRepairController implements Initializable {
         }
     }
     
-    private void updateMileage(double mileage, int id, Connection conn)
+    private void updateMileage(int mileage, int id, Connection conn)
     {   
         try
         {
             String sql = "UPDATE vehicleList SET Mileage=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
            
-            state.setDouble(1, mileage);
+            state.setInt(1, mileage);
             state.setInt(2, id);
                 
             state.execute();
@@ -1052,7 +1041,7 @@ public class DiagnosisAndRepairController implements Initializable {
         {
             
             String make = findMake(rs.getString(2),conn);
-            double mileage = findMileage(rs.getString(2),conn);
+            int mileage = findMileage(rs.getString(2),conn);
             String mName = findMechName(rs.getInt(4),conn);
             
             data.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehReg(rs.getString(2)), make, findCustName(rs.getString(3)), mName ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8)) );
@@ -1094,16 +1083,16 @@ public class DiagnosisAndRepairController implements Initializable {
         return make;
     }
     
-    private double findMileage(String vehID, Connection conn)
+    private int findMileage(String vehID, Connection conn)
     {
-        double mileage = 0;
+        int mileage = 0;
   
         try {
 
             String SQL = "Select Mileage from vehicleList where vehicleID='"+ vehID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                
-            mileage = rs.getDouble("Mileage");    
+            mileage = rs.getInt("Mileage");    
        
             rs.close();
             
@@ -1410,7 +1399,7 @@ public class DiagnosisAndRepairController implements Initializable {
                 }      
             }
             String make = findMake(Integer.toString(vID),conn);
-            double mileage = findMileage(Integer.toString(vID),conn);
+            int mileage = findMileage(Integer.toString(vID),conn);
             String mechName = findMechName(mechID,conn);
             
             rs.close();
@@ -1436,7 +1425,7 @@ public class DiagnosisAndRepairController implements Initializable {
     private void buildPartsInfo(ActionEvent event) throws ClassNotFoundException
     {
         
-        data3 = FXCollections.observableArrayList();
+        data2 = FXCollections.observableArrayList();
         
         int id;
         if(table.getSelectionModel().getSelectedItem() == null)
@@ -1452,11 +1441,11 @@ public class DiagnosisAndRepairController implements Initializable {
         
         conn = (new sqlite().connect());
         
-        String SQL = "select nameofPart,quantity,dateOfWarrantyExpire from vehiclePartsUsed,vehiclePartsStock where bookingID='"+id+"' and vehiclePartsUsed.parts_id=vehiclePartsStock.parts_id";           
+        String SQL = "select nameofPart,quantity,cost from vehiclePartsUsed,vehiclePartsStock where bookingID='"+id+"' and vehiclePartsUsed.parts_id=vehiclePartsStock.parts_id";           
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
         {     
-            data3.add(new PartsInfo(rs.getString("nameofPart"), rs.getInt("quantity"), rs.getString("dateOfWarrantyExpire")));
+            data2.add(new PartsInfo(rs.getString("nameofPart"), rs.getInt("quantity"), rs.getDouble("cost")));
         }
         
         rs.close();
@@ -1468,12 +1457,12 @@ public class DiagnosisAndRepairController implements Initializable {
           System.out.println("Error on Building Data");            
     }
  
-        if(data3.isEmpty())
+        if(data2.isEmpty())
         {
             alertInfo(null,"There is no parts infomation to show for this booking");
         }
         
-        partsTable.setItems(data3);
+        partsTable.setItems(data2);
     }
 
     
@@ -1631,7 +1620,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private double findPartsCost(int bookingID, Connection conn) throws ClassNotFoundException
     {
-        double pCost = 0;
+        double pCost = 0.0;
         
         try {
 
