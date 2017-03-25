@@ -60,6 +60,7 @@ import CustomerAccount.gui.GuiController;
 import VehicleRecord.logic.CustBookingInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -100,6 +101,7 @@ public class PartsController implements Initializable {
     //private ComboBox 
     @FXML
     private Button installParts;
+    
     @FXML
     private Button editParts;
     @FXML
@@ -518,6 +520,7 @@ public class PartsController implements Initializable {
                   state.setInt(3, bookingID);
                   GuiController.showBill.setMechanicCost(0);
                   GuiController.showBill.setPartsCost(0);
+                  
                  
                  
                  state.execute();
@@ -525,7 +528,7 @@ public class PartsController implements Initializable {
                  
                  conn.close();
                  
-                 
+                 alertInformation("The bill has been added for bookingId " + bookingID);
                  changeAddedBillTrue(part);
                  
                  buildPartsUsedData();
@@ -799,6 +802,8 @@ public class PartsController implements Initializable {
         searchOption.add("CustomerName");
         
         searchCombo.setItems(searchOption);
+        
+        installParts.setTooltip(new Tooltip("Press here to install parts"));
         
 
         try {
