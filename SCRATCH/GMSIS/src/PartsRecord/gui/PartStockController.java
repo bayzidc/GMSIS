@@ -47,7 +47,10 @@ import javafx.scene.control.DateCell;
 import javafx.util.Callback;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import java.util.regex.*;
 
 /**
  * FXML Controller class
@@ -73,7 +76,8 @@ public class PartStockController implements Initializable {
     @FXML
     private TextField nameOfParts;
     @FXML
-    private TextField description;
+    private TextArea description;
+    
     @FXML
     private TextField cost;
     @FXML
@@ -180,12 +184,6 @@ public class PartStockController implements Initializable {
         pane.getChildren().setAll(rootPane);
     }
     
-    @FXML 
-    private void pStock(ActionEvent event) throws IOException
-    {
-        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
-        pane.getChildren().setAll(rootPane);
-    }
     
     @FXML 
     private void pUsed(ActionEvent event) throws IOException
@@ -276,6 +274,16 @@ public class PartStockController implements Initializable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        description.setWrapText (true);
+        addparts.setTooltip(new Tooltip("Complete all the fields and click to add a new part"));
+        addItem.setTooltip(new Tooltip("Complete all the fields and click to add item to stock"));
+        clear.setTooltip(new Tooltip("Click to clear all the fields"));
+        clear2.setTooltip(new Tooltip("Click to clear all the fields"));
+        edit.setTooltip(new Tooltip("Select a row from the table and click to edit a part"));
+        update.setTooltip(new Tooltip("Edit a part and click to update any changes"));
+        delete.setTooltip(new Tooltip("Select a row from the table and click to delete a part"));
+        
         partNameCol.setCellValueFactory(
                 new PropertyValueFactory<>("PartName"));
         
@@ -307,24 +315,67 @@ public class PartStockController implements Initializable {
     
     @FXML
     public void addButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Are you sure you want to add this part?");
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonTypeNo) {
+            return;
+        }
         if(!isFieldsCompleted2()){
-            alertError("Please complete all the fields."); 
+            return;
         }
-        else{
-            showPart.setPartName((nameOfParts.getText()).toLowerCase());
-            showPart.setPartDescription(description.getText());
-            showPart.setCost(Double.parseDouble(cost.getText()));
-            boolean checkName = checkNameAlreadyExist(showPart.getPartName());
-            if(checkName){
-               alertInformation("The part already exists in the stock.");
-            }
-            else {
-               createData(showPart);
-               buildPartsStockData();
-               fillPartsIdCombo();
-               clearFields();
-            }
+        if(!verifyCost(cost.getText())){
+            return;
         }
+        if(!checkForWhiteSpace()){
+            return;
+        }
+        
+        showPart.setPartName((nameOfParts.getText()).toLowerCase());
+        showPart.setPartDescription(description.getText());
+        showPart.setCost(Double.parseDouble(cost.getText()));
+        boolean checkName = checkNameAlreadyExist(showPart.getPartName());
+        if(checkName){
+            alertInformation("The part already exists in the stock. Enter a different name to add a new part.");
+        }
+        else {
+            alertInformation("The new part is added to the stock.");
+            createData(showPart);
+            buildPartsStockData();
+            fillPartsIdCombo();
+            clearFields();
+        }
+        
+    }
+   
+    public boolean verifyCost(String cost){
+        boolean check = true;
+        System.out.println("I am here in verify quantity.");
+        if(!cost.matches("^[0-9]+(\\.[0-9]{1,2}$)?")){
+           alertError("Please enter a valid cost.");
+           check = false;
+        }
+        return check;
+    }
+    
+    
+    public boolean verifyQuantity(String quantity){
+        boolean check = true;
+        if(!quantity.matches("[0-9]+")){
+            alertError("Please enter a valid quantity.");
+            check = false;
+            
+        }
+        return check;
     }
 
     public boolean checkNameAlreadyExist(String name) throws ClassNotFoundException 
@@ -359,20 +410,39 @@ public class PartStockController implements Initializable {
     
      @FXML
     public void addItemButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        if(isFieldsCompleted()){
-            alertError("Please complete all the fields."); 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Are you sure you want to add this part?");
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonTypeNo) {
+            return;
         }
-        else {
-            int value = partIdCombo.getValue();
-            partItemObj.setPartName(findPartsName(value));
-            partItemObj.setQuantity(Integer.parseInt(quantity.getText()));
-            partItemObj.setArrivalDate(arrivalDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            createDeliveryData(partItemObj);
-            buildItemData();
-            updateStockLevel(value, partItemObj.getQuantity());
-            buildPartsStockData();
-            clearItemFields(); // Clear all the input fields.
-        }    
+        if(!isFieldsCompleted()){
+            return;
+        }
+        if(!verifyQuantity(quantity.getText())){
+            return;
+        }
+        
+        int value = partIdCombo.getValue();
+        partItemObj.setPartName(findPartsName(value));
+        partItemObj.setQuantity(Integer.parseInt(quantity.getText()));
+        partItemObj.setArrivalDate(arrivalDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        alertInformation("The item is added to the stock.");
+        createDeliveryData(partItemObj);
+        buildItemData();
+        updateStockLevel(value, partItemObj.getQuantity());
+        buildPartsStockData();
+        alertInformation("The stock level is updated.");
+        clearItemFields(); // Clear all the input fields.
+          
     }
     
     public String findPartsName(int ID) throws ClassNotFoundException{
@@ -512,8 +582,7 @@ public class PartStockController implements Initializable {
     @FXML
     private void editParts(ActionEvent event) throws ClassNotFoundException
     {       
-        
-        try
+     try
         {
             idFromTable = table.getSelectionModel().getSelectedItem().getPartIDentify();
         }
@@ -536,40 +605,66 @@ public class PartStockController implements Initializable {
     }
     
     @FXML 
-    private void updateParts(ActionEvent event) throws ClassNotFoundException
-    {
-        if(!isFieldsCompleted2())
-        {
-            alertError("Please complete all the fields");
+    private void updateParts(ActionEvent event) throws ClassNotFoundException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Are you sure you want to update the parts?");
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get() == buttonTypeNo) {
             return;
         }
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation Dialog");
-                alert.setHeaderText("");
-                alert.setContentText("Are you sure you want to update the parts?");
-                ButtonType buttonTypeYes = new ButtonType("Yes");
-                ButtonType buttonTypeNo = new ButtonType("No");
-
-                alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if(result.get() != buttonTypeYes)
-                {
-                    return;
-                }
-                showPart.setPartName((nameOfParts.getText().toLowerCase()));
-                showPart.setPartDescription(description.getText());
-                showPart.setCost(Double.parseDouble(cost.getText()));
-                updatePartsInDataBase(showPart);
-                buildPartsStockData();
-                String newName = findNewName(idFromTable);
-                if(!newName.equals(partNameFromTable)) {
-                    updateNameInItemTable(newName, partNameFromTable);
-                    buildItemData();
-                }else {
-                    return;
-                }
+        if(!isFieldsCompleted2()){
+            return;
+        }
+        if(!verifyCost(cost.getText())){
+            return;
+        }  
+        
+        showPart.setPartName((nameOfParts.getText().toLowerCase()));
+        showPart.setPartDescription(description.getText());
+        showPart.setCost(Double.parseDouble(cost.getText()));
+        updatePartsInDataBase(showPart);
+        buildPartsStockData();
+        String newName = findNewName(idFromTable);
+        if(!newName.equals(partNameFromTable)) {
+            updateNameInItemTable(newName, partNameFromTable);
+            //updateNameInPartsUsedTable(newName, partNameFromTable)
+            buildItemData();
+        }
     }
+    
+    /*@FXML
+    private void updateNameInPartsUsedTable(String newName, String oldName) throws ClassNotFoundException {
+
+        Connection conn = null;
+        System.out.println("The new name is " + newName);
+        System.out.println("The old name is " + oldName);
+
+        try {
+            conn = (new sqlite().connect());
+            String sql = "UPDATE vehiclePartsUsed SET partName=? WHERE partName=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            
+                state.setString(1, newName);
+                state.setString(2,oldName );
+                state.execute();
+
+                state.close();
+                conn.close();
+                clearFields();
+            }//submit=true;
+         catch (Exception e) {
+            
+            System.out.println("Error while updating data.");
+        }
+
+    }*/
     
     
     @FXML
@@ -774,7 +869,8 @@ public class PartStockController implements Initializable {
     }
     
     public boolean isFieldsCompleted() {
-        if (partIdCombo.getValue() != null || quantity.getText().equals("") || arrivalDate.getValue().equals("")) {
+        if (partIdCombo.getValue() == null || quantity.getText().equals("") || arrivalDate.getValue().equals("")) {
+            alertError("Please complete all the fields."); 
             return false;
         }
         return true;
@@ -782,6 +878,7 @@ public class PartStockController implements Initializable {
     
     public boolean isFieldsCompleted2() {
         if (nameOfParts.getText().equals("") || description.getText().equals("") || cost.getText().equals("")) {
+            alertError("Please complete all the fields."); 
             return false;
         }
         return true;
@@ -794,6 +891,17 @@ public class PartStockController implements Initializable {
        
     }
     
+    public boolean checkForWhiteSpace()
+    {
+        if(nameOfParts.getText().trim().isEmpty() || description.getText().trim().isEmpty())
+         {
+             alertError("You cannot have a white space at the start of the fields.");
+             return false;
+         }
+        return true;
+    }
+    
+ 
     public void clearItemFields(){
         partIdCombo.setValue(null);
         quantity.clear();
