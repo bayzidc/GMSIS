@@ -25,8 +25,11 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +55,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
-
+import java.net.*;
 /**
  * FXML Controller class
  *
@@ -69,6 +72,7 @@ public class AddVehicleController implements Initializable {
     ObservableList<String> custN = FXCollections.observableArrayList();
     ObservableList<String> fuelT = FXCollections.observableArrayList("Petrol","Diesel");
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
+    private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
     
     // Declaring FXML buttons, choiceboxes, textfields, tablecolumns, tables etc.
     @FXML
@@ -343,6 +347,13 @@ public class AddVehicleController implements Initializable {
         id.clear();
         customerNames.setValue(null);
         custID.clear();
+        if(!(yesWarranty.isSelected() && noWarranty.isSelected()))
+        {
+            nameAndAdd.setVisible(true);
+            warExpiry.setVisible(true);
+            warrantyName.setVisible(true);
+            warrantyDate.setVisible(true);
+        }
     }
     
     // Method which allows the user to add a vehicle for a specified customer.
@@ -356,7 +367,7 @@ public class AddVehicleController implements Initializable {
             return;
         }
 
-        if(!checkTextFields())
+        if(!checkTextFields() || !checkIndividual())
         {      
             return;
         }
@@ -755,7 +766,7 @@ public class AddVehicleController implements Initializable {
             alertInf("Please complete all fields.");
             return false;
         }
-  
+        
         if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
         {
             alertInf("Please enter the name and address for the warranty.");
@@ -787,25 +798,79 @@ public class AddVehicleController implements Initializable {
         return true;
     }
     
-    public boolean checkTextFieldEdit()
+    public boolean checkIndividual()
     {
-        System.out.println(vehicleChoice.getValue()==null);
-        System.out.println(regNumber.getText().equals(""));
-        System.out.println(make.getText().equals(""));
-        System.out.println(model.getText().equals(""));
-        System.out.println(engSize.getText().equals(""));
-        System.out.println(fuelType.getValue()==null);
-        System.out.println(colour.getText().equals(""));
-        System.out.println(motRenDate.getEditor().getText().equals(""));
-        System.out.println(lastService.getEditor().getText().equals(""));
-        System.out.println(mileage.getText().equals(""));
         
-        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
+        if(vehicleChoice.getValue()==null)
         {
-            alertInf("Please complete all fields.");
+            alertInf("Please enter the vehicle type.");
             return false;
         }
   
+        if(regNumber.getText().equals(""))
+        {
+            alertInf("Please enter a registration number");
+            return false;
+        }
+        
+        if(make.getText().equals(""))
+        {
+            alertInf("Please enter a make.");
+            return false;
+        }
+        
+        if(model.getText().equals(""))
+        {
+            alertInf("Please enter a model.");
+            return false;
+        }
+        
+        if(engSize.getText().equals(""))
+        {
+            alertInf("Please enter the engine size.");
+            return false;
+        }
+        
+        if(fuelType.getValue()==null)
+        {
+            alertInf("Please select a fuel type");
+            return false;         
+        }
+        
+        if(colour.getText().equals(""))
+        {
+            alertInf("Please enter a colour");
+            return false;
+        }
+        
+        if(motRenDate.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the M.O.T renewal date.");
+            return false;
+        }
+        
+        if(lastService.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the date of last service.");
+            return false;
+        }
+        
+        if(mileage.getText().equals(""))
+        {
+            alertInf("Please enter a mileage.");
+            return false;
+        }
+        return true;
+    }
+    public boolean checkTextFieldEdit()
+    {
+        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
+        {
+            alertInf("Please complete all fields.");
+            setUpValidation(regNumber);
+            return false;
+        }
+        
         if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
         {
             alertInf("Please enter the name and address for the warranty.");
@@ -887,6 +952,32 @@ public class AddVehicleController implements Initializable {
         }
         }));
     }
+    
+    private void setUpValidation(final TextField tf) { 
+    regNumber.textProperty().addListener(new ChangeListener<String>() {
+
+        @Override
+        public void changed(ObservableValue<? extends String> observable,
+                String oldValue, String newValue) {
+            validate(tf);
+        }
+
+    });
+
+    validate(tf);
+}
+
+private void validate(TextField tf) {
+    ObservableList<String> styleClass = tf.getStyleClass();
+    if (tf.getText().trim().length()==0) {
+        tf.pseudoClassStateChanged(errorClass, true);
+    }
+    else{
+        tf.pseudoClassStateChanged(errorClass, false);
+    }
+
+}
+
     //Method which sets the no checkbox to unselected when yes checkbox is checked
     @FXML
     private void handleYesBox()

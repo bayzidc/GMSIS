@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import VehicleRecord.logic.*?>
 
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="810.0" prefWidth="1300.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
    <children>

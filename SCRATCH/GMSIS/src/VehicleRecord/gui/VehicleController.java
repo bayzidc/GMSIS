@@ -73,6 +73,8 @@ public class VehicleController implements Initializable {
     @FXML
     public Button viewParts;
     @FXML
+    public Button viewInfo;
+    @FXML
     public ImageView searchVecImg;
     @FXML 
     public ImageView refeshImg;
@@ -349,6 +351,7 @@ public class VehicleController implements Initializable {
         c.id.setVisible(false);
         c.vID.setVisible(false);
         Scene vehicle_Scene = new Scene(vehicle_Page);
+        //vehicle_Scene.getStylesheets().add(getClass().getResource("vehicle.css").toExternalForm());
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
         stageVehicle.setHeight(810);
@@ -434,6 +437,7 @@ public class VehicleController implements Initializable {
             c.fillQuickSelection();
             stage2.hide();
             Scene edit_Scene = new Scene(root);
+            //edit_Scene.getStylesheets().add(getClass().getResource("vehicle.css").toExternalForm());
             primaryStage.setScene(edit_Scene);
             primaryStage.setHeight(810);
             primaryStage.setWidth(1359);
@@ -559,6 +563,52 @@ public class VehicleController implements Initializable {
     }
     
     //Method which loads the customers name, registration number and scheduled booking date from the database
+    
+    public void buildCustomerDataBtn(ActionEvent event)
+    {
+        futureB.setSelected(false);
+        pastB.setSelected(false);
+        showAll.setSelected(false);
+        try{
+        int id = table.getSelectionModel().getSelectedItem().getVecID();
+        tempData.clear();
+        custData = FXCollections.observableArrayList();
+        
+
+        try {
+            Connection conn = null;
+            conn = (new sqlite().connect());
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where vehicleList.vehicleID= '"+id+"' AND customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+  
+            while (rs.next()) 
+            {
+                CustBookingInfo cust = new CustBookingInfo("","","",0.0);
+                cust.fullName.set(rs.getString("customer_fullname"));
+                cust.bookingDate.set(rs.getString("scheduled_date"));
+                cust.regNumber.set(rs.getString("RegNumber"));
+                cust.totalCost.set(rs.getDouble("totalCost"));
+                custData.add(cust);
+
+            }        
+            tempData.addAll(custData);
+            custTable.setItems(custData);
+            rs.close();
+            conn.close();
+        }
+        
+        catch(Exception e)
+        {
+            
+            alertError("Error on building customer data. Please try again later.");
+        }
+        }
+        catch(Exception ev)
+        {
+            alertInf( "Please select a row to view the customer/booking information for that vehicle.");
+        }
+        }
+    
     public void buildCustomerData() throws ClassNotFoundException, SQLException 
     {
         custData = FXCollections.observableArrayList();
@@ -724,8 +774,10 @@ public class VehicleController implements Initializable {
                 i--;
             }
         }
-        
+        if(custData.isEmpty())
+        {
         alertInf("There are no past bookings for the vehicles.");
+        }
         custTable.setItems(custData);
     }
     
