@@ -154,7 +154,7 @@ public class DiagnosisAndRepairBooking {
         endTime.set(time);
     }
     
-    
+    //returns duration in minutes for 2 times
     public int calculateDuration(String sTime, String eTime)
      {
         
@@ -194,7 +194,7 @@ public class DiagnosisAndRepairBooking {
             return false;
     }
     
-    public String findCustName(String custID) throws ClassNotFoundException
+    public String findCustName(int custID) throws ClassNotFoundException
     {
         String custName = "";
         Connection conn = null;
@@ -217,7 +217,7 @@ public class DiagnosisAndRepairBooking {
         return custName;
     }
     
-    public String findVehReg(String vehID) throws ClassNotFoundException
+    public String findVehReg(int vehID) throws ClassNotFoundException
     {
         String vehReg = "";
         Connection conn = null;
@@ -240,17 +240,21 @@ public class DiagnosisAndRepairBooking {
         return vehReg;
     }
     
-    public String findMechName(int mechID, Connection conn) 
+    public String findMechName(int mechID) 
     {
         String mechName = "";
         try {
 
+            Connection conn = (new sqlite().connect());
+            
             String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                  
                 mechName = rs.getString("fullname");    
             
                rs.close();
+               conn.close();
+               
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error");
@@ -327,19 +331,22 @@ public class DiagnosisAndRepairBooking {
         return vehRegID;
     }
      
-     public String findMake(String vehID, Connection conn)
+     public String findMake(int vehID) throws ClassNotFoundException
     {
         String make = "";
   
         try {
 
+            Connection conn = (new sqlite().connect());
+            
             String SQL = "Select Make from vehicleList where vehicleID='"+ vehID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                
             make = rs.getString("Make");    
        
            rs.close();
-            
+           conn.close();
+           
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error");
@@ -347,19 +354,21 @@ public class DiagnosisAndRepairBooking {
         return make;
     }
     
-    public int findMileage(String vehID, Connection conn)
+    public int findMileage(int vehID) throws ClassNotFoundException
     {
         int mileage = 0;
   
         try {
 
+           Connection conn = (new sqlite().connect());
+            
             String SQL = "Select Mileage from vehicleList where vehicleID='"+ vehID +"'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
                
             mileage = rs.getInt("Mileage");    
        
             rs.close();
-            
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error");
@@ -367,10 +376,12 @@ public class DiagnosisAndRepairBooking {
         return mileage;
     }
     
-     public void updateMileage(int mileage, int id, Connection conn)
+    //update mileage on vehicle table 
+    public void updateMileage(int mileage, int id) throws ClassNotFoundException
     {   
         try
         {
+            Connection conn = (new sqlite().connect());
             String sql = "UPDATE vehicleList SET Mileage=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);
            
@@ -378,37 +389,13 @@ public class DiagnosisAndRepairBooking {
             state.setInt(2, id);
                 
             state.execute();
+            
+            conn.close();
         }
         catch(SQLException e)
         {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());  
         }
-    }
-    
-    
-     
-    public int recentBookingID() throws ClassNotFoundException
-    {
-        int id=0;
-        
-         Connection conn = null;
-    try{      
-        
-        conn = (new sqlite().connect());
-        
-        String SQL = "select booking_id from booking order by booking_id desc";            
-        ResultSet rs = conn.createStatement().executeQuery(SQL);  
-        
-        id = rs.getInt("booking_id");
-        
-        rs.close();
-        conn.close();
-        
-    }
-    catch(SQLException e){
-          e.printStackTrace();          
-    }
-        return id;
     }
 
 }

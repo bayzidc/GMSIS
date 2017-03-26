@@ -185,6 +185,7 @@ public class DiagnosisAndRepairController implements Initializable {
         searchCombo.setValue("Customer Name");
         monthCombo.setItems(monthLs);
         
+        //restrict to only integer mileage
         UnaryOperator<Change> intInput = change -> {
         String input = change.getText();
         if (input.matches("[0-9]*")) { 
@@ -220,7 +221,7 @@ public class DiagnosisAndRepairController implements Initializable {
         new PropertyValueFactory<DiagnosisAndRepairBooking,String>("endTime"));
     
  
-            
+        //restrict date picker   
         Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
         {
             @Override
@@ -244,7 +245,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
     try
     {
-        
+        //fill combo boxes and tableview
         fillCustomerCombo();
         fillMechanicCombo();
         buildBooking();
@@ -254,7 +255,7 @@ public class DiagnosisAndRepairController implements Initializable {
         e.printStackTrace(); 
     }
     
-    
+        //user disabled if day-to-day
         if(!Authentication.LoginController.isAdmin)
         {
             users.setDisable(true);
@@ -309,6 +310,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     
+    //initiate adding parts button
     @FXML
     private void addParts(ActionEvent event) throws IOException 
     {
@@ -342,7 +344,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
   
-    
+    //disable all bank holiday dates for 2017
     private LocalDate getBankHoliday(String item)
     {    
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -422,6 +424,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
     }
     
+    //on action of customer combo box, loads specific vehicle no.
     @FXML
     private void findVehicleOnChange(ActionEvent event) throws ClassNotFoundException
     {
@@ -463,6 +466,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
     }
     
+    //on action of vehicle combo box, loads its mileage
     @FXML
     private void findMileageOnChange(ActionEvent event) throws ClassNotFoundException
     {
@@ -473,14 +477,13 @@ public class DiagnosisAndRepairController implements Initializable {
         }
         
         Connection conn = new sqlite().connect();
-        mileage.setText(Integer.toString(obj.findMileage(Integer.toString(obj.findVehID(vehicleCombo.getValue())),conn)));
+        mileage.setText(Integer.toString(obj.findMileage(obj.findVehID(vehicleCombo.getValue()))));
         try {
             conn.close();
         } catch (SQLException ex) {
             
         }
     }
-    
     
     
     private void fillVehicleCombo() throws ClassNotFoundException
@@ -542,6 +545,7 @@ public class DiagnosisAndRepairController implements Initializable {
         endTime.setItems(null);
     }
     
+    //update button action
     @FXML 
     private void updateBooking(ActionEvent event) throws ClassNotFoundException
     {
@@ -585,13 +589,14 @@ public class DiagnosisAndRepairController implements Initializable {
         updateData(obj,custArr,mechArr);
         buildBooking();
         fillCustomerCombo();
-        clearFields();
         book.setVisible(true);
         exitEditB.setVisible(false);
         update.setVisible(false);
+        clearFields();
 
     }
     
+    //update the database booking info
     private void updateData(DiagnosisAndRepairBooking obj,String[] custArr, String[] mechArr) throws ClassNotFoundException
     {
          Connection conn = null;
@@ -610,7 +615,7 @@ public class DiagnosisAndRepairController implements Initializable {
                 state.setString(7, obj.getEndTime()); 
                 state.setInt(8, obj.getBookingID());
                 
-                obj.updateMileage(obj.getMileage(),obj.findVehID(obj.getVehicleReg()), conn);
+                obj.updateMileage(obj.getMileage(),obj.findVehID(obj.getVehicleReg()));
                 
                 state.execute();
 
@@ -625,11 +630,11 @@ public class DiagnosisAndRepairController implements Initializable {
          catch (SQLException e) {
             System.out.println("");
         }
-
         new Mechanic(0,0,0).updateMechanicBill(obj.getBookingID(),Integer.parseInt(mechArr[0]));
         
     }
     
+    //submit booking button action
     @FXML
     private void booking(ActionEvent event) throws IOException, ClassNotFoundException
     {
@@ -670,19 +675,20 @@ public class DiagnosisAndRepairController implements Initializable {
         obj.setEndTime(endTime.getValue());
         obj.setMileage(Integer.parseInt(mileage.getText()));
             
-        createBooking(obj,custArr,mechArr);
+        int recentBookingID = createBooking(obj,custArr,mechArr);
         buildBooking();
         clearFields();
-        new Mechanic(0,0,0).addMechanicBill(obj.recentBookingID(),obj.findVehID(obj.getVehicleReg()),Integer.parseInt(custArr[0]),Integer.parseInt(mechArr[0]));
+        new Mechanic(0,0,0).addMechanicBill(recentBookingID,obj.findVehID(obj.getVehicleReg()),Integer.parseInt(custArr[0]),Integer.parseInt(mechArr[0]));
     }
     
-    
+    //clear all button
     @FXML
     private void clearAll(ActionEvent event)
     {
         clearFields();
     }
     
+    //reset entries
     private void clearFields()
     {
         if(book.isVisible())
@@ -700,6 +706,7 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.clear();
     }
     
+    //check if every entry is complete
     private boolean checkIfCompleted()
     { 
         if(customerCombo.getValue()!=null && vehicleCombo.getValue()!=null && mechanicCombo.getValue()!=null && datePicked.getValue()!=null && startTime.getValue()!=null && endTime.getValue()!=null && mileage.getText()!=null)
@@ -709,6 +716,7 @@ public class DiagnosisAndRepairController implements Initializable {
         return false;
     }
     
+    //edit booking button action
     @FXML
     private void editBooking(ActionEvent event) throws ClassNotFoundException
     {       
@@ -767,7 +775,7 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.setText(Integer.toString(mAge));
     }
 
-    
+    //find value from combo box
     private String findComboVal(ObservableList<String> list, String target)
     {
         for(String i: list)
@@ -780,6 +788,7 @@ public class DiagnosisAndRepairController implements Initializable {
         return null;
     }
     
+    //delete booking button action
     @FXML 
     private void deleteBooking(ActionEvent event) throws ClassNotFoundException
     {
@@ -815,6 +824,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
     }
     
+    //delete booking from the database
     private boolean isBookingDeleted(DiagnosisAndRepairBooking obj) throws ClassNotFoundException
     {        
         Connection conn = null;
@@ -842,10 +852,11 @@ public class DiagnosisAndRepairController implements Initializable {
         return false; 
     }
 
-    
-    private void createBooking(DiagnosisAndRepairBooking obj, String[] custArr, String[] mechArr)
+    //insert booking data into the database and return booking id
+    private int createBooking(DiagnosisAndRepairBooking obj, String[] custArr, String[] mechArr)
     {
         Connection conn = null;
+        int id = -1;
         
         try
         {
@@ -862,26 +873,31 @@ public class DiagnosisAndRepairController implements Initializable {
             state.setString(6, obj.getStartTime());
             state.setString(7, obj.getEndTime());
             
-            obj.updateMileage(obj.getMileage(),obj.findVehID(obj.getVehicleReg()),conn);
+            obj.updateMileage(obj.getMileage(),obj.findVehID(obj.getVehicleReg()));
             
             state.execute(); 
             
-           
+            ResultSet rs = conn.createStatement().getGeneratedKeys();  
+            
+            if(rs.next())
+            {
+                id = rs.getInt(1);
+            }
             state.close();
             conn.close();
-            
+           
             alertInfo(null,"Booking Successful");
-            
         }
         catch(Exception e)
         {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             
         }
+        return id;
     }
     
    
-    
+    //cancel from edit mode button action
     @FXML
     private void exitEdit(ActionEvent event) throws ClassNotFoundException  
     {
@@ -895,7 +911,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
     }
     
-    
+    //load up the booking table view  
     private void buildBooking() throws ClassNotFoundException
     {
         textLabel.setVisible(false);
@@ -923,11 +939,7 @@ public class DiagnosisAndRepairController implements Initializable {
         while(rs.next())
         {
             
-            String make = obj.findMake(rs.getString(2),conn);
-            int mileage = obj.findMileage(rs.getString(2),conn);
-            String mName = obj.findMechName(rs.getInt(4),conn);
-            
-            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), obj.findVehReg(rs.getString(2)), make, obj.findCustName(rs.getString(3)), mName ,rs.getString(5), rs.getInt(6), mileage, rs.getString(7), rs.getString(8),""));
+            data.add(new DiagnosisAndRepairBooking(rs.getInt(1), obj.findVehReg(rs.getInt(2)), obj.findMake(rs.getInt(2)), obj.findCustName(rs.getInt(3)), obj.findMechName(rs.getInt(4)) ,rs.getString(5), rs.getInt(6), obj.findMileage(rs.getInt(2)), rs.getString(7), rs.getString(8),""));
             
         }
         tempData.addAll(data);
@@ -1029,7 +1041,6 @@ public class DiagnosisAndRepairController implements Initializable {
         ResultSet rs = conn.createStatement().executeQuery(SQL);  
         while(rs.next())
         {
-            
             if(!book.isVisible() && rs.getInt("booking_id")==obj.getBookingID())
             {
                 if(!rs.next())
@@ -1068,7 +1079,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     @FXML 
-    private void fillEndTimeCombo(ActionEvent event) throws ClassNotFoundException
+    private void fillEndTimeComboOnChange(ActionEvent event) throws ClassNotFoundException
     {
      
         if(startTime.getValue()==null || datePicked.getValue()==null)
@@ -1164,8 +1175,8 @@ public class DiagnosisAndRepairController implements Initializable {
         endTime.setItems(temp);
     }
     
-   
-     private int fillVehID() throws ClassNotFoundException
+    //find all vehicle ID
+    private int fillVehID() throws ClassNotFoundException
     {
         vehID.clear();
         Connection conn = null;
@@ -1173,15 +1184,11 @@ public class DiagnosisAndRepairController implements Initializable {
 
             conn = (new sqlite().connect());
 
-            String SQL = "Select vehicleID from booking";
+            String SQL = "Select distinct vehicleID from booking";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while(rs.next())
             {
-                int id = rs.getInt("vehicleID");   
-                if(!vehID.contains(id))
-                {
-                    vehID.add(id);
-                }
+                    vehID.add(rs.getInt("vehicleID"));
             }
             rs.close();
             conn.close();
@@ -1231,7 +1238,7 @@ public class DiagnosisAndRepairController implements Initializable {
         String nextDate="";
         int bookingID=0;
         String vReg="";
-        String custID="";
+        int custID=0;
         int mechID=0;
         String startTime="";
         String endTime="";
@@ -1260,13 +1267,13 @@ public class DiagnosisAndRepairController implements Initializable {
      
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
-                           custID=rs.getString("customer_id");
+                           custID=rs.getInt("customer_id");
                            mechID=rs.getInt("mechanic_id");
                            startTime=rs.getString("startTime");
                            endTime=rs.getString("endTime");
                            duration = rs.getInt("duration");   
             rs.next();
-            
+       
             while (rs.next()) 
             {          
                  
@@ -1279,22 +1286,19 @@ public class DiagnosisAndRepairController implements Initializable {
                            nextDT = dateTemp;
                            nextDate=date;
                            bookingID=rs.getInt("booking_id");
-                           custID=rs.getString("customer_id");
+                           custID=rs.getInt("customer_id");
                            mechID=rs.getInt("mechanic_id");
                            startTime=rs.getString("startTime");
                            endTime=rs.getString("endTime");
                            duration = rs.getInt("duration");                 
                 }      
             }
-            String make = obj.findMake(Integer.toString(vID),conn);
-            int mileage = obj.findMileage(Integer.toString(vID),conn);
-            String mechName = obj.findMechName(mechID,conn);
             
             rs.close();
             conn.close();
             if(dateToday.isBefore(nextDT))
             {
-                nextList.add(new DiagnosisAndRepairBooking(bookingID, obj.findVehReg(Integer.toString(vID)), make, obj.findCustName(custID), mechName, nextDate, duration, mileage, startTime, endTime,""));
+                nextList.add(new DiagnosisAndRepairBooking(bookingID, obj.findVehReg(vID), obj.findMake(vID), obj.findCustName(custID), obj.findMechName(mechID), nextDate, duration, obj.findMileage(vID), startTime, endTime,""));
             }
        } //end for loop
         } catch (SQLException e) {
@@ -1309,7 +1313,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     
-    
+    //method used for searching the table view
     private void searchFilter(ObservableList<DiagnosisAndRepairBooking> data)
     {
             

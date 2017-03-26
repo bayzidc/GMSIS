@@ -56,6 +56,7 @@ public class Mechanic{
         hoursWorked.set(hour);
     }
     
+    //add mechanic labour cost after making a booking
     public void addMechanicBill(int bID, int vID, int cID, int mID) throws ClassNotFoundException {
         
         int bookingID = bID; 
@@ -106,6 +107,7 @@ public class Mechanic{
         }
     }
     
+    //update mechanic labour cost after editing a booking
      public void updateMechanicBill(int bID, int mID) throws ClassNotFoundException {
         
         int bookingID = bID; 
@@ -153,7 +155,7 @@ public class Mechanic{
         }
     }
     
-      public double findMechanicHoursWorked(int bookingID) throws ClassNotFoundException
+     public double findMechanicHoursWorked(int bookingID) throws ClassNotFoundException
     {
         double hour = 0.0;
         
@@ -203,7 +205,7 @@ public class Mechanic{
         return rate;
     }
     
-     
+    //check if there is warranty and not expired
     public String IfWarrantyAndNotExpired(int vehicleID, Connection conn) throws ClassNotFoundException{
         
         String check= "";
@@ -234,6 +236,7 @@ public class Mechanic{
         return check;
     }
     
+    //find parts cost from database column used for updating bill
     public double findPartsCost(int bookingID, Connection conn) throws ClassNotFoundException
     {
         double pCost = 0.0;

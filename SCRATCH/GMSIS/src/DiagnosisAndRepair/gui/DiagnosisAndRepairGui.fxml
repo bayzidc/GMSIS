@@ -62,7 +62,7 @@
       <Button fx:id="back" layoutX="28.0" layoutY="72.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="50.0" text="Back" />
       <Button fx:id="update" layoutX="81.0" layoutY="618.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="25.0" prefWidth="75.0" text="Update" />
       <Button fx:id="clear" layoutX="202.0" layoutY="618.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="25.0" prefWidth="75.0" text="Clear All" />
-      <ComboBox fx:id="startTime" layoutX="139.0" layoutY="436.0" onAction="#fillEndTimeCombo" prefWidth="150.0" promptText="Select Time" />
+      <ComboBox fx:id="startTime" layoutX="139.0" layoutY="436.0" onAction="#fillEndTimeComboOnChange" prefWidth="150.0" promptText="Select Time" />
       <ComboBox fx:id="endTime" layoutX="139.0" layoutY="486.0" prefWidth="150.0" promptText="Select TIme" />
       <Button fx:id="exitEditB" layoutX="130.0" layoutY="571.0" mnemonicParsing="false" onAction="#exitEdit" text="Exit edit mode" />
       <Separator layoutX="38.0" layoutY="247.0" prefHeight="1.0" prefWidth="252.0" />
