@@ -60,6 +60,7 @@ import CustomerAccount.gui.GuiController;
 import VehicleRecord.logic.CustBookingInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import java.time.LocalDateTime;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
@@ -130,7 +131,6 @@ public class PartsController implements Initializable {
     private TableColumn<partsUsed, String> customerNameCol;
     @FXML
     private TableColumn<partsUsed, Integer> bookingIdCol;
-    
     @FXML
     public JFXCheckBox pastBooking;
     @FXML
@@ -161,23 +161,21 @@ public class PartsController implements Initializable {
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
     
     
-    
-    private void filterByPast() throws ClassNotFoundException
-    {
-       if(!pastBooking.isSelected())
-        {
-            return;
+    @FXML
+    private void filterByPast() throws ClassNotFoundException {
+       if(!pastBooking.isSelected()){  
+           pastBooking.setSelected(true);
+           return;
         }
-    
+         System.out.println("Here in past booking dates.");
          futureBooking.setSelected(false);
          showAll.setSelected(false);
-        
-        customerData = FXCollections.observableArrayList(tempData);
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+         
+         customerData = FXCollections.observableArrayList(tempData);
+         LocalDate now = LocalDate.now();
+         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        for(int i=0; i<customerData.size(); i++)
-        {
+        for(int i=0; i<customerData.size(); i++){
             LocalDate tempDate = LocalDate.parse(customerData.get(i).getBookingDate(),formatter);
             if(now.isBefore(tempDate)) //past dates
             {
@@ -185,21 +183,25 @@ public class PartsController implements Initializable {
                 i--;
             }
         }
+        if(customerData.isEmpty()){
+           alertInformation("There are no past bookings for the vehicles.");
+        }
         
-        alertInformation("There are no past bookings for the vehicles.");
         custInfoTable.setItems(customerData);
     }
-    
+       
+        
     @FXML
     private void filterByFuture() throws ClassNotFoundException
     {
-        if(!futureBooking.isSelected())
-        {
+        if(!futureBooking.isSelected()){
+            futureBooking.setSelected(true);
             return;
         }
    
         showAll.setSelected(false);
         pastBooking.setSelected(false);
+        
         
         customerData = FXCollections.observableArrayList(tempData);
         LocalDate now = LocalDate.now();
@@ -228,6 +230,7 @@ public class PartsController implements Initializable {
     {
         if(!showAll.isSelected())
         {
+            showAll.setSelected(true);
             return;
         }
         
@@ -437,9 +440,9 @@ public class PartsController implements Initializable {
                     }
                     String newValLow = newValue2.toLowerCase();
                     
-                    if (partsUsed.getCustomerFullName().toLowerCase().contains(newValLow) && searchCombo.getValue().equalsIgnoreCase("CustomerName")) {
+                    if (partsUsed.getCustomerFullName().toLowerCase().contains(newValLow) && searchCombo.getValue().equalsIgnoreCase("Customer Name")) {
                         return true;
-                    } else if (partsUsed.getVehicleRegNo().toLowerCase().contains(newValLow) && searchCombo.getValue().equalsIgnoreCase("Vehregistration")) {
+                    } else if (partsUsed.getVehicleRegNo().toLowerCase().contains(newValLow) && searchCombo.getValue().equalsIgnoreCase("Vehicle registration")) {
                         return true;
                     }
 
@@ -798,10 +801,13 @@ public class PartsController implements Initializable {
         dateOfInstall.setDayCellFactory(dayCellFactory);
         showAll.setSelected(true);
         ObservableList<String> searchOption = FXCollections.observableArrayList();
-        searchOption.add("Vehregistration");
-        searchOption.add("CustomerName");
+        searchOption.add("Customer Name");
+        searchOption.add("Vehicle registration");
         
+        
+        searchCombo.setValue("Customer Name");
         searchCombo.setItems(searchOption);
+        
         
         installParts.setTooltip(new Tooltip("Press here to install parts"));
         
@@ -1140,13 +1146,13 @@ public class PartsController implements Initializable {
                 custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
                 custVehicle.setRegNumber(findVehReg(rs.getInt("vehicleID")));
                 custVehicle.setBookingDate(rs.getString("scheduled_date"));
-                //Double totalC = rs.getDouble("totalCost");
+    
                 
                 customerData.add(new vehicleCustomerInfo(custVehicle.getCustomerName(), custVehicle.getBookingDate(), custVehicle.getRegNumber()));
             }
+            
+            
             tempData.addAll(customerData);
-            
-            
             custInfoTable.setItems(customerData);
             rs.close();
             conn.close();
