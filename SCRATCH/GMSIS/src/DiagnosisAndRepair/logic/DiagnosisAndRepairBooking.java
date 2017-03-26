@@ -5,6 +5,13 @@
  */
 package DiagnosisAndRepair.logic;
 
+import Authentication.sqlite;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import javafx.beans.property.*;
 
 /**
@@ -39,6 +46,16 @@ public class DiagnosisAndRepairBooking {
         this.partName = new SimpleStringProperty(nameOfPart);
     }
 
+    /*public DiagnosisAndRepairBooking(int id, String reg, String nameOfPart, String mName, String date, int duration)
+    {
+        this.bookingID = new SimpleIntegerProperty(id);
+        this.vehicleReg = new SimpleStringProperty(reg);
+        this.partName = new SimpleStringProperty(nameOfPart);
+        this.mechanicName = new SimpleStringProperty(mName);
+        this.date = new SimpleStringProperty(date);
+        this.duration = new SimpleIntegerProperty(duration);    
+    }*/
+    
     public int getBookingID() {
         return bookingID.get();
     }
@@ -95,6 +112,7 @@ public class DiagnosisAndRepairBooking {
         String updateString = partName.get() + ", " + name;
         partName.set(updateString);
     }
+    
 
     public void setBookingID(int id) {
         bookingID.set(id);
@@ -135,44 +153,262 @@ public class DiagnosisAndRepairBooking {
     public void setEndTime(String time) {
         endTime.set(time);
     }
-
-    public IntegerProperty getBookingIDProperty() {
-        return bookingID;
+    
+    
+    public int calculateDuration(String sTime, String eTime)
+     {
+        
+        String[] arr1 = new String[2];
+        String[] arr2 = new String[2];
+       
+        arr1 = sTime.split(":"); 
+        arr2 = eTime.split(":");
+        
+        int duration=0;
+        
+        int startHour = Integer.parseInt(arr1[0]);
+        int endHour = Integer.parseInt(arr2[0]);
+  
+        int startMin = Integer.parseInt(arr1[1]);
+        int endMin = Integer.parseInt(arr2[1]);
+        
+        if(startMin == endMin)
+        {
+            duration += (endHour-startHour) * 60;
+        }
+        else
+        {   
+            duration += ((endHour-startHour)-1) * 60;                     
+            duration +=(60-startMin);        
+            duration += endMin;  
+        }
+        return duration;
+    }  
+    
+    public boolean checkSaturday(LocalDate item)
+    {
+            if(item.getDayOfWeek() == DayOfWeek.SATURDAY)
+            {
+                return true;
+            }
+            return false;
     }
+    
+    public String findCustName(String custID) throws ClassNotFoundException
+    {
+        String custName = "";
+        Connection conn = null;
+        try {
 
-    public StringProperty getCustNameProperty() {
+           conn = (new sqlite().connect());
+
+            String SQL = "Select customer_fullname from customer where customer_id='"+ custID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                custName = rs.getString("customer_fullname");    
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
         return custName;
     }
+    
+    public String findVehReg(String vehID) throws ClassNotFoundException
+    {
+        String vehReg = "";
+        Connection conn = null;
+        try {
 
-    public StringProperty getVehicleRegProperty() {
-        return vehicleReg;
+            conn = (new sqlite().connect());
+
+            String SQL = "Select RegNumber from vehicleList where vehicleID='"+ vehID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                vehReg = rs.getString("RegNumber");    
+           
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return vehReg;
     }
+    
+    public String findMechName(int mechID, Connection conn) 
+    {
+        String mechName = "";
+        try {
 
-    public StringProperty getMakeProperty() {
+            String SQL = "Select fullname from mechanic where mechanic_id='"+ mechID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                 
+                mechName = rs.getString("fullname");    
+            
+               rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return mechName;
+    }
+    
+    public String findCustID(String reg) throws ClassNotFoundException
+    {
+        String custID = "";
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select customerid from vehicleList where RegNumber='"+ reg +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+           
+            custID = rs.getString("customerid");    
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return custID;
+    }
+    
+    public String findMechID(int bookingID) throws ClassNotFoundException
+    {
+        String mechID = "";
+        Connection conn = null;
+        try {
+
+           conn = (new sqlite().connect());
+
+            String SQL = "Select mechanic_id from booking where booking_id='"+ bookingID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                mechID = rs.getString("mechanic_id");   
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return mechID;
+    }
+    
+     public int findVehID(String vehReg) throws ClassNotFoundException
+    {
+        int vehRegID = 0;
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select vehicleID from vehicleList where RegNumber='"+ vehReg +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+                  
+                vehRegID = rs.getInt("vehicleID");   
+            
+            rs.close();
+            conn.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return vehRegID;
+    }
+     
+     public String findMake(String vehID, Connection conn)
+    {
+        String make = "";
+  
+        try {
+
+            String SQL = "Select Make from vehicleList where vehicleID='"+ vehID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+               
+            make = rs.getString("Make");    
+       
+           rs.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
         return make;
     }
+    
+    public int findMileage(String vehID, Connection conn)
+    {
+        int mileage = 0;
+  
+        try {
 
-    public StringProperty getMechanicNameProperty() {
-        return mechanicName;
-    }
-
-    public IntegerProperty getMileageProperty() {
+            String SQL = "Select Mileage from vehicleList where vehicleID='"+ vehID +"'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+               
+            mileage = rs.getInt("Mileage");    
+       
+            rs.close();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
         return mileage;
     }
-
-    public StringProperty getDateProperty() {
-        return date;
+    
+     public void updateMileage(int mileage, int id, Connection conn)
+    {   
+        try
+        {
+            String sql = "UPDATE vehicleList SET Mileage=? WHERE vehicleID=?";
+            PreparedStatement state = conn.prepareStatement(sql);
+           
+            state.setInt(1, mileage);
+            state.setInt(2, id);
+                
+            state.execute();
+        }
+        catch(SQLException e)
+        {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());  
+        }
+    }
+    
+    
+     
+    public int recentBookingID() throws ClassNotFoundException
+    {
+        int id=0;
+        
+         Connection conn = null;
+    try{      
+        
+        conn = (new sqlite().connect());
+        
+        String SQL = "select booking_id from booking order by booking_id desc";            
+        ResultSet rs = conn.createStatement().executeQuery(SQL);  
+        
+        id = rs.getInt("booking_id");
+        
+        rs.close();
+        conn.close();
+        
+    }
+    catch(SQLException e){
+          e.printStackTrace();          
+    }
+        return id;
     }
 
-    public IntegerProperty getDurationProperty() {
-        return duration;
-    }
-
-    public StringProperty getStartTimeProperty() {
-        return startTime;
-    }
-
-    public StringProperty getEndTimeProperty() {
-        return endTime;
-    }
 }
