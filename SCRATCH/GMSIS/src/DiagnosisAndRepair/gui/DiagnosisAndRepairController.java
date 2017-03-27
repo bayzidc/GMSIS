@@ -172,7 +172,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     private ObservableList<String> monthLs = FXCollections.observableArrayList();
 
-    public static DiagnosisAndRepairBooking BookingObj = null;
+    public static DiagnosisAndRepairBooking BookingObj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","","");
      
     /**
      * Initializes the controller class.
@@ -181,8 +181,6 @@ public class DiagnosisAndRepairController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) 
     {
-        
-        BookingObj = new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","","");
         
         startTimeLs = FXCollections.observableArrayList("09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00");
         endTimeLs = FXCollections.observableArrayList("09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30");
@@ -716,13 +714,13 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.clear();
     }
     
-    /*public initiateBooking(String cName, int id, String reg, int mile)
+    public void initiateBooking(String cName, int id, String reg, int mile)
     {
-        customerCombo.setValue(id+" "+cName);
+        customerCombo.setValue(id+": "+cName);
         vehicleCombo.setValue(reg);
         mileage.setText(Integer.toString(mile));
         
-    }*/
+    }
     
     //check if every entry is complete
     private boolean checkIfCompleted()

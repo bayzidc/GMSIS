@@ -45,17 +45,11 @@ public class DiagnosisAndRepairBooking {
         this.endTime = new SimpleStringProperty(endTime);
         this.partName = new SimpleStringProperty(nameOfPart);
     }
-
-    /*public DiagnosisAndRepairBooking(int id, String reg, String nameOfPart, String mName, String date, int duration)
-    {
-        this.bookingID = new SimpleIntegerProperty(id);
-        this.vehicleReg = new SimpleStringProperty(reg);
-        this.partName = new SimpleStringProperty(nameOfPart);
-        this.mechanicName = new SimpleStringProperty(mName);
-        this.date = new SimpleStringProperty(date);
-        this.duration = new SimpleIntegerProperty(duration);    
-    }*/
     
+    public DiagnosisAndRepairBooking getBookingInstance()
+    {
+        return new DiagnosisAndRepairBooking(0,"","","","","",0,0,"","","");
+    }
     public int getBookingID() {
         return bookingID.get();
     }
