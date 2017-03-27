@@ -716,13 +716,13 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.clear();
     }
     
-    /*public initiateBooking(String cName, int id, String reg, int mile)
+    public void initiateBooking(String cName, int id, String reg, int mile)
     {
         customerCombo.setValue(id+" "+cName);
         vehicleCombo.setValue(reg);
         mileage.setText(Integer.toString(mile));
         
-    }*/
+    }
     
     //check if every entry is complete
     private boolean checkIfCompleted()
