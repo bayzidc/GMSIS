@@ -74,30 +74,6 @@ public class CustBookingInfo {
    {
        time.set(startT);
    }
-   public SimpleStringProperty fullNameProperty()
-   {
-       return fullName;
-   }
-   
-   public SimpleStringProperty bookingDateProperty()
-   {
-       return bookingDate;
-   }
-   
-   public SimpleStringProperty regNumberProperty()
-   {
-       return regNumber;
-   }
-   
-   public SimpleDoubleProperty totalCostProperty()
-   {
-       return totalCost;
-   }
-   
-   public SimpleStringProperty timeProperty()
-   {
-       return time;
-   }
 }
 
 
