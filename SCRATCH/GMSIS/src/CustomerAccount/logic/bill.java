@@ -96,8 +96,8 @@ public class bill {
         return bookingID;
     }
 
-    public void addCostToBillParts(bill Bill, PartsRecord.logic.partsUsed part, int quantity) {
-        Bill.partsCost.set(partsCost.get()+(quantity*part.getCost()));
+    public void addCostToBillParts(bill Bill, double cost, int quantity) {
+        Bill.partsCost.set(partsCost.get()+(quantity*cost));
     }
     
     public void addCostToBillMechanic(bill Bill, DiagnosisAndRepair.logic.Mechanic mech){

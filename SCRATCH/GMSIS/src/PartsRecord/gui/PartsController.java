@@ -140,7 +140,7 @@ public class PartsController implements Initializable {
     @FXML // Observable list to hold partsUsed object.
     ObservableList<partsUsed> data;
     public int usedPartID;
-    public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0, false);
+    public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0,false);
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
     ObservableList<String> namesCombo = FXCollections.observableArrayList();
     
@@ -159,6 +159,630 @@ public class PartsController implements Initializable {
 
     ObservableList<vehicleCustomerInfo> customerData;
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    
+    // add data to the database from the textfield.
+    public void createData(partsUsed part) throws ClassNotFoundException {
+
+        Connection conn = null;
+
+        try {
+            conn = (new sqlite().connect());
+
+            System.out.println("Opened PartsUsed database successfully.");
+            System.out.println("Creating data.");
+            //query you have to write to insert your data
+            String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID, addedBill) values(?,?,?,?,?,?,?,?)";
+            //The query is sent to the database and prepared there which means the SQL statement is "analysed".
+            PreparedStatement state = conn.prepareStatement(sql);
+
+            if (isFieldsCompleted()) {
+
+                alertError("Please complete all the fields.");
+
+            } else {
+                // the values are sent to the server
+                // use the appropriate state.setXX() methods to set the appropriate values for the parameters that you've defined.
+                // Then call state.executeUpdate() to execute the call to the database.
+                state.setInt(1, findPartsID(part.getPartName()));
+                //state.setString(2, part.getPartName());
+                //state.setDouble(3, findPartsCost(part.getPartName()));
+                state.setInt(2, part.getQuantity());
+                state.setString(3, part.getInstallDate());
+                state.setString(4, findExpireDate(part.getInstallDate()));// return a string date
+                state.setInt(5, findVehicleID(part.getBookingID()));
+                state.setInt(6, findCustomerID(part.getBookingID()));
+                state.setInt(7, part.getBookingID()); // booking ID
+                //state.setBoolean(8, false);
+
+                state.execute();
+
+                state.close();
+                conn.close();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Creating Data");
+        }
+
+    }
+    
+    private int findPartsID(String name) throws ClassNotFoundException {
+        int partID = 0;
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select parts_id from vehiclePartsStock where nameofPart='" + name + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                partID = rs.getInt("parts_id");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding PartsId.");
+        }
+        return partID;
+    }
+    
+    public String findExpireDate(String installDate) {
+
+        Date date = null;
+        String warrantyexpire = "";
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+
+            date = df.parse(installDate);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.YEAR, 1); // to get previous year add -1
+            Date warrantyExpire = cal.getTime();
+            warrantyexpire = df.format(warrantyExpire);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return warrantyexpire;
+    }
+    
+    private int findVehicleID(int bookingID) throws ClassNotFoundException {
+        int vehRegID = 0;
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            String SQL = "Select vehicleID from booking where booking_id='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                vehRegID = rs.getInt("vehicleID");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding vehicle id.");
+        }
+        return vehRegID;
+    }
+
+    private int findCustomerID(int bookingID) throws ClassNotFoundException {
+        int customerID = 0;
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            String SQL = "Select customer_id from Booking where booking_id='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                customerID = rs.getInt("customer_id");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding customerId");
+        }
+        return customerID;
+    }
+    
+    private String findCustomerName(int customerID) throws ClassNotFoundException {
+        String customerName = "";
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select customer_fullname from customer where customer_id='" + customerID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                customerName = rs.getString("customer_fullname");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Customer Name.");
+        }
+        return customerName;
+    }
+
+    private String findVehReg(int vehicleID) throws ClassNotFoundException {
+        String vehRegNo = "";
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select RegNumber from vehicleList where vehicleID='" + vehicleID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                vehRegNo = rs.getString("RegNumber");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error in finding veh Reg.");
+        }
+        return vehRegNo;
+    }
+    
+    // Filling data to the tableView From the database.
+    public void buildPartsUsedData() {
+        data = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select * from vehiclePartsUsed";
+            // Execute query and store results in a resultSet
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                
+                part.setUsedID(rs.getInt(1));
+                part.setPartName(findPartsName(rs.getInt(2)));
+                part.setCost(findCostFromStock(rs.getInt(2)));
+                part.setQuantity(rs.getInt(3));
+                part.setInstallDate(rs.getString(4));
+                part.setWarrantyExpireDate(rs.getString(5));
+                part.setVehicleRegNo(findVehReg(rs.getInt(6)));
+                part.setcustomerFullName(findCustomerName(rs.getInt(7)));
+                part.setBookingID(rs.getInt(8));
+                part.setAddedBill(rs.getBoolean(9));
+
+                data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID(), part.getAddedBill()));
+                
+                searchField.clear();
+                searchFilter(data);
+            }
+
+            table.setItems(data);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data.");
+        }
+
+    }
+    
+    public String findPartsName(int ID) throws ClassNotFoundException{
+        String name = "";
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select nameofPart from vehiclePartsStock where parts_id ='" + ID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                name = rs.getString("nameofPart");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding partsName.");
+        }
+        return name;
+    }
+    
+    private Double findCostFromStock(int ID) throws ClassNotFoundException {
+        double cost = 0.0;
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select cost from vehiclePartsStock where parts_id='" + ID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                cost = rs.getDouble("cost");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding cost from stock.");
+        }
+        return cost;
+    }
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item.isBefore(LocalDate.now())) {
+                    setStyle("-fx-background-color: #fcbabf;");
+                    Platform.runLater(() -> setDisable(true));
+                }
+            }
+        };
+        dateOfInstall.setDayCellFactory(dayCellFactory);
+        showAll.setSelected(true);
+        ObservableList<String> searchOption = FXCollections.observableArrayList();
+        searchOption.add("Customer Name");
+        searchOption.add("Vehicle registration");
+        
+        
+        searchCombo.setValue("Customer Name");
+        searchCombo.setItems(searchOption);
+        
+        
+        installParts.setTooltip(new Tooltip("Press here to install parts"));
+        
+
+        try {
+            fillPartsNameCombo();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            fillBookingIdCombo();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        usedIdCol.setCellValueFactory(
+                new PropertyValueFactory<>("usedID"));
+        nameCol.setCellValueFactory(
+                new PropertyValueFactory<>("partName"));
+        costCol.setCellValueFactory(
+                new PropertyValueFactory<>("cost"));
+        quantityCol.setCellValueFactory(
+                new PropertyValueFactory<>("quantity"));
+        installDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("installDate"));
+        expireDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("warrantyExpireDate"));
+        registrationNoCol.setCellValueFactory(
+                new PropertyValueFactory<>("vehicleRegNo"));
+        customerNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("customerFullName"));
+        bookingIdCol.setCellValueFactory(
+                new PropertyValueFactory<>("bookingID"));
+        regNoCol.setCellValueFactory(
+                new PropertyValueFactory<>("vehicleregNo"));
+        fullCustomerNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("customerName"));
+        bookingDateCol.setCellValueFactory(
+                new PropertyValueFactory<>("bookingDate"));
+        try {
+            buildPartsUsedData();
+            buildCustomerData();
+
+        } catch (Exception e) {
+            System.out.println("Error 1.");
+            e.printStackTrace();
+
+        }
+    }
+    
+    public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("");
+        alert.setContentText("Are you sure you want to install the part?");
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == buttonTypeNo) {
+            return;
+        }
+        if(!isFieldsCompleted()){
+            return;
+        }
+        if(!verifyQuantity(quantity.getText())){
+            return;
+        }
+        if(!checkForWhiteSpace()){
+            return;
+        }
+        
+        if(!isFieldsCompleted()) {
+            
+        } else{
+            part.setBookingID(bookingIdCombo.getValue());
+            part.setPartName(partNameCombo.getValue());
+            part.setQuantity(Integer.parseInt(quantity.getText()));
+            part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        
+            int stockAvailable = findStockLevel(part.getPartName());
+            if ((stockAvailable > 0) && stockAvailable >= part.getQuantity()) {
+               decreaseStockLevel(part.getPartName(), stockAvailable);
+               createData(part);
+               buildPartsUsedData();
+               clearFields();
+               //boolean isBillAdded = findIsBillAdded()
+               addBill(part.getBookingID(),part.getQuantity(),findPartsCost(part.getPartName()));
+            } else if (stockAvailable == 0) {
+               alertInformation("The stock is currently empty.");
+            } else if (stockAvailable < part.getQuantity()) {
+               alertInformation("The quantity you want is not available in the stock");
+            }
+            
+        }
+        
+    }
+    
+    public boolean verifyQuantity(String quantity){
+        boolean check = true;
+        if(!quantity.matches("[0-9]+")){
+            alertError("Please enter a valid quantity.");
+            check = false;
+            
+        }
+        return check;
+    }
+    
+    public int findStockLevel(String name) throws ClassNotFoundException {
+        int stockLevel = 0;
+
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select stockLevelsOfParts from vehiclePartsStock where nameofPart='" + name + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                stockLevel = rs.getInt("stockLevelsOfParts");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        return stockLevel;
+
+    }
+
+    
+    @FXML
+     public void addBill(int bookingId, int quantity, double cost) throws ClassNotFoundException {
+        boolean bookingExist = false;
+        double totalBill = 0.0;
+        try {
+                
+                bookingExist = checkIfBookingExists(bookingId);
+                System.out.println("Booking exists value:" + bookingExist);
+                if(bookingExist){
+                
+                  CustomerAccount.gui.GuiController.showBill.addCostToBillParts(CustomerAccount.gui.GuiController.showBill, cost, part.getQuantity());
+                  Double totalUnitPartsCost = CustomerAccount.gui.GuiController.showBill.getPartsCost();
+                  System.out.println("The total Unit cost of part is: " + totalUnitPartsCost);
+                  Double oldPartsCost = getOldPartsCost(bookingId);
+                  Double totalPartsCost = oldPartsCost + totalUnitPartsCost;
+                  System.out.println("The total overall cost of part is: " + totalUnitPartsCost);
+                  
+                  
+                  Connection conn = null;
+                  System.out.println("Creating data.");
+                  conn = (new sqlite().connect());
+                  String sql = "UPDATE bill SET partsCost=?,totalCost=? WHERE bookingID=?";
+                  PreparedStatement state = conn.prepareStatement(sql);
+                  
+                  state.setDouble(1, totalPartsCost);
+                  double mechanicCost = getMechanicCost(bookingId);
+                  System.out.println("The mechanic cost is" + mechanicCost);
+                  totalBill = totalPartsCost + mechanicCost;
+                  System.out.println("The total Bill is " + totalBill);
+                  
+                  state.setDouble(2,totalBill);
+                  state.setInt(3, bookingId);
+                  GuiController.showBill.setMechanicCost(0);
+                  GuiController.showBill.setPartsCost(0);
+                  
+                 
+                 
+                 state.execute();
+                 state.close();
+                 
+                 conn.close();
+                 
+                 alertInformation("The bill has been added for bookingId " + bookingId);
+                
+                 
+                 buildPartsUsedData();
+                 
+                }
+            
+            
+               
+        } 
+        catch (Exception e) {
+            alertInformation("Error in adding BILL.");
+            System.out.println("Here 8.");
+        }
+        
+        }
+    
+    public double getOldPartsCost(int bookingID) throws ClassNotFoundException{
+        double value  = 0.0;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened database successfully to get mechanic cost");
+            String SQL = "Select partsCost from bill where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                value = rs.getDouble("partsCost");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding mechanicCost from bill table.");
+        }
+        return value;
+    }
+       
+    
+    public double getMechanicCost(int bookingID)throws ClassNotFoundException{
+        double value  = 0.0;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened database successfully to get mechanic cost");
+            String SQL = "Select mechanicCost from bill where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                value = rs.getDouble("mechanicCost");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding mechanicCost from bill table.");
+        }
+        return value;
+    }
+    
+    public boolean checkIfBookingExists(int bookingID) throws ClassNotFoundException{
+        boolean value  = false;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Openend database successfully to check if booking exists.");
+            String SQL = "Select bookingID from bill where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                value = true;
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding bookingId from bill table.");
+        }
+        return value;
+    }
+    
+    public void decreaseStockLevel(String name, int stockAvailable) throws ClassNotFoundException {
+        Connection conn = null;
+        System.out.println("I am here in the decrease stocKlevel");
+        int quantityWanted = part.getQuantity();
+        System.out.println("Quantity Wanted : " + quantityWanted);
+        System.out.println("StockAvailable : " + stockAvailable);
+        int newStockLevel = stockAvailable - quantityWanted;
+        System.out.println("NewstocKlevel : " + newStockLevel);
+        try {
+            // Create a Java Connection to the database.
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            System.out.println("Opened Database Successfully while decreasing stockLevel.");
+
+            String sql = "UPDATE vehiclePartsStock SET stockLevelsOfParts =? WHERE nameofPart =?";
+            PreparedStatement state = conn.prepareStatement(sql);
+            // Binding the parameters.
+            state.setInt(1, newStockLevel);
+            state.setString(2, part.getPartName());
+            state.execute();
+
+            state.close();
+            conn.close();
+            clearFields();
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+    
+    
+    
+    public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
+        String date = "";
+        
+        if(bookingIdCombo.getValue() == null){
+            return;
+        }
+        int comboBookingValue = bookingIdCombo.getValue();
+        
+        System.out.println("Booking id is checking to be " + comboBookingValue);
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select scheduled_date from booking where booking_id ='" + comboBookingValue + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+                date = rs.getString("scheduled_date");
+                System.out.println("Getting date value : " + date);
+            
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        LocalDate local = convertStringToDateForBookingCombo(date) ;
+        
+        dateOfInstall.setValue(local);
+       
+        
+        
+    }
     
     
     @FXML
@@ -292,144 +916,7 @@ public class PartsController implements Initializable {
     }
     
     
-    // add data to the database from the textfield.
-    public void createData(partsUsed part) throws ClassNotFoundException {
-
-        Connection conn = null;
-
-        try {
-            conn = (new sqlite().connect());
-
-            System.out.println("Opened PartsUsed database successfully.");
-            System.out.println("Creating data.");
-            //query you have to write to insert your data
-            String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID, addedBill) values(?,?,?,?,?,?,?,?)";
-            //The query is sent to the database and prepared there which means the SQL statement is "analysed".
-            PreparedStatement state = conn.prepareStatement(sql);
-
-            if (isFieldsCompleted()) {
-
-                alertError("Please complete all the fields.");
-
-            } else {
-                // the values are sent to the server
-                // use the appropriate state.setXX() methods to set the appropriate values for the parameters that you've defined.
-                // Then call state.executeUpdate() to execute the call to the database.
-                state.setInt(1, findPartsID(part.getPartName()));
-                //state.setString(2, part.getPartName());
-                //state.setDouble(3, findPartsCost(part.getPartName()));
-                state.setInt(2, part.getQuantity());
-                state.setString(3, part.getInstallDate());
-                state.setString(4, findExpireDate(part.getInstallDate()));// return a string date
-                state.setInt(5, findVehicleID(part.getBookingID()));
-                state.setInt(6, findCustomerID(part.getBookingID()));
-                state.setInt(7, part.getBookingID()); // booking ID
-                state.setBoolean(8, false);
-
-                state.execute();
-
-                state.close();
-                conn.close();
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Creating Data");
-        }
-
-    }
-    
-    private int findPartsID(String name) throws ClassNotFoundException {
-        int partID = 0;
-        Connection conn = null;
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            String SQL = "Select parts_id from vehiclePartsStock where nameofPart='" + name + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                partID = rs.getInt("parts_id");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding PartsId.");
-        }
-        return partID;
-    }
-    
-    // Filling data to the tableView From the database.
-    public void buildPartsUsedData() {
-        data = FXCollections.observableArrayList();
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully while buidling PartsUsedData");
-
-            String SQL = "Select * from vehiclePartsUsed";
-            // Execute query and store results in a resultSet
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                //  a ResultSet object that retrieves the results of your query,
-                // and executes a simple while loop, which retrieves and displays those results.
-                // Calling the constructor
-                part.setUsedID(rs.getInt(1));
-                part.setPartName(findPartsName(rs.getInt(2)));
-                part.setCost(findCostFromStock(rs.getInt(2)));
-                part.setQuantity(rs.getInt(3));
-                part.setInstallDate(rs.getString(4));
-                part.setWarrantyExpireDate(rs.getString(5));
-                part.setVehicleRegNo(findVehReg(rs.getInt(6)));
-                part.setcustomerFullName(findCustomerName(rs.getInt(7)));
-                part.setBookingID(rs.getInt(8));
-                part.setAddedBill(rs.getBoolean(9));
-
-                data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID(), part.getAddedBill()));
-                
-                searchField.clear();
-               searchFilter(data);
-                /*FilteredList<partsUsed> filteredData = new FilteredList<>(data, e -> true);
-                searchField.setOnKeyReleased(e -> {
-                    searchField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-                        filteredData.setPredicate((Predicate<? super partsUsed>) partsUsed -> {
-                            if (newValue == null || newValue.isEmpty()) {
-                                return true;
-                            }
-                            String newLowerValue = newValue.toLowerCase();
-                            if (partsUsed.getVehicleRegNo().toLowerCase().contains(newLowerValue)) {
-                                return true; // Filter matches vehicle registraion number.
-                            } else if (partsUsed.getCustomerFullName().toLowerCase().contains(newLowerValue)) {
-                                return true; // filter matches customer full name.
-                            }
-
-                            return false;
-                        });
-                        SortedList<partsUsed> sortedData = new SortedList<>(filteredData);
-                        sortedData.comparatorProperty().bind(table.comparatorProperty());
-                        table.setItems(sortedData);
-                    });
-                });*/
-
-            }
-
-            table.setItems(data);
-            rs.close();
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Building Data.");
-        }
-
-    }
-    
-    private void searchFilter(ObservableList<partsUsed> data)
-    {
+    private void searchFilter(ObservableList<partsUsed> data) {
             System.out.println("new");
             FilteredList<partsUsed> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
@@ -453,457 +940,6 @@ public class PartsController implements Initializable {
                 sortedData.comparatorProperty().bind(table.comparatorProperty());
                 table.setItems(sortedData);
         });
-    }
-    
-    public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        boolean value = isFieldsCompleted();
-        alertInformation(" The fields value is " + value );
-        if(!isFieldsCompleted()) {
-            alertInformation("Please complete all the fields");
-        }else{
-            part.setBookingID(bookingIdCombo.getValue());
-            part.setPartName(partNameCombo.getValue());
-            part.setQuantity(Integer.parseInt(quantity.getText()));
-            part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        
-            int stockAvailable = findStockLevel(part.getPartName());
-            if ((stockAvailable > 0) && stockAvailable >= part.getQuantity()) {
-               decreaseStockLevel(part.getPartName(), stockAvailable);
-               createData(part);
-               buildPartsUsedData();
-               clearFields();
-            } else if (stockAvailable == 0) {
-               alertInformation("The stock is currently empty.");
-            } else if (stockAvailable < part.getQuantity()) {
-               alertInformation("The quantity you want  is not available in the stock");
-            }
-            
-        }
-        
-    }
-    
-    @FXML
-    public void addBill(ActionEvent event) throws ClassNotFoundException {
-        boolean bookingExist = false;
-        double totalBill = 0.0;
-        
-        int bookingID = table.getSelectionModel().getSelectedItem().getBookingID(); 
-        int vehicleID = findVehicleID(table.getSelectionModel().getSelectedItem().getBookingID());
-        int customerID = findCustomerID(table.getSelectionModel().getSelectedItem().getBookingID());
-        
-        try {
-            System.out.println("This is value of boolean: " + part.getAddedBill());
-            if (part.getAddedBill() == false) {
-                
-                bookingExist = checkIfBookingExists(bookingID);
-                System.out.println("Booking exists value:" + bookingExist);
-                if(bookingExist){
-                
-                  CustomerAccount.gui.GuiController.showBill.addCostToBillParts(CustomerAccount.gui.GuiController.showBill, part, part.getQuantity());
-                  Double totalUnitPartsCost = CustomerAccount.gui.GuiController.showBill.getPartsCost();
-                  System.out.println("The total Unit cost of part is: " + totalUnitPartsCost);
-                  Double oldPartsCost = getOldPartsCost(bookingID);
-                  Double totalPartsCost = oldPartsCost + totalUnitPartsCost;
-                  System.out.println("The total overall cost of part is: " + totalUnitPartsCost);
-                  
-                  
-                  Connection conn = null;
-                  System.out.println("Creating data.");
-                  conn = (new sqlite().connect());
-                  String sql = "UPDATE bill SET partsCost=?,totalCost=? WHERE bookingID=?";
-                  PreparedStatement state = conn.prepareStatement(sql);
-                  
-                  state.setDouble(1, totalPartsCost);
-                  double mechanicCost = getMechanicCost(bookingID);
-                  System.out.println("The mechanic cost is" + mechanicCost);
-                  totalBill = totalPartsCost + mechanicCost;
-                  System.out.println("The total Bill is " + totalBill);
-                  
-                  state.setDouble(2,totalBill);
-                  state.setInt(3, bookingID);
-                  GuiController.showBill.setMechanicCost(0);
-                  GuiController.showBill.setPartsCost(0);
-                  
-                 
-                 
-                 state.execute();
-                 state.close();
-                 
-                 conn.close();
-                 
-                 alertInformation("The bill has been added for bookingId " + bookingID);
-                 changeAddedBillTrue(part);
-                 
-                 buildPartsUsedData();
-                 
-                }
-            }
-            
-            else {
-                alertInformation("Already added to Bill.");
-            }    
-        } 
-        catch (Exception e) {
-            alertInformation("Error in adding BILL.");
-            System.out.println("Here 8.");
-        }
-        
-        }
-    
-    public double getOldPartsCost(int bookingID) throws ClassNotFoundException{
-        double value  = 0.0;
-        Connection conn = null;
-        try {
-            conn = (new sqlite().connect());
-            System.out.println("Opened database successfully to get mechanic cost");
-            String SQL = "Select partsCost from bill where bookingID ='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                value = rs.getDouble("partsCost");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding mechanicCost from bill table.");
-        }
-        return value;
-    }
-       
-    
-    public double getMechanicCost(int bookingID)throws ClassNotFoundException{
-        double value  = 0.0;
-        Connection conn = null;
-        try {
-            conn = (new sqlite().connect());
-            System.out.println("Opened database successfully to get mechanic cost");
-            String SQL = "Select mechanicCost from bill where bookingID ='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                value = rs.getDouble("mechanicCost");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding mechanicCost from bill table.");
-        }
-        return value;
-    }
-    
-    public boolean checkIfBookingExists(int bookingID) throws ClassNotFoundException{
-        boolean value  = false;
-        Connection conn = null;
-        try {
-            conn = (new sqlite().connect());
-            System.out.println("Openend database successfully to check if booking exists.");
-            String SQL = "Select bookingID from bill where bookingID ='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                value = true;
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding bookingId from bill table.");
-        }
-        return value;
-    }
-    
-
-    public void changeAddedBillTrue(partsUsed part) throws ClassNotFoundException {
-        try {
-            Connection conn = null;
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully for changing addedBill to true");
-
-            String sql = "UPDATE vehiclePartsUsed SET addedBill=? WHERE partsUsedID=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setBoolean(1, true);
-            state.setInt(2, part.getUsedID());
-
-            state.execute();
-
-            state.close();
-            conn.close();
-            System.out.println("Added bill to true");
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-            System.out.println("error in addingBILL TRUE");
-        }
-    }
-
-    public int findStockLevel(String name) throws ClassNotFoundException {
-        int stockLevel = 0;
-
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-
-            String SQL = "Select stockLevelsOfParts from vehiclePartsStock where nameofPart='" + name + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                stockLevel = rs.getInt("stockLevelsOfParts");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
-        return stockLevel;
-
-    }
-
-    public void decreaseStockLevel(String name, int stockAvailable) throws ClassNotFoundException {
-        Connection conn = null;
-        System.out.println("I am here in the decrease stocKlevel");
-        int quantityWanted = part.getQuantity();
-        System.out.println("Quantity Wanted : " + quantityWanted);
-        System.out.println("StockAvailable : " + stockAvailable);
-        int newStockLevel = stockAvailable - quantityWanted;
-        System.out.println("NewstocKlevel : " + newStockLevel);
-        try {
-            // Create a Java Connection to the database.
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully while decreasing stockLevel.");
-
-            String sql = "UPDATE vehiclePartsStock SET stockLevelsOfParts =? WHERE nameofPart =?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            // Binding the parameters.
-            state.setInt(1, newStockLevel);
-            state.setString(2, part.getPartName());
-            state.execute();
-
-            state.close();
-            conn.close();
-            clearFields();
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-    }
-    
-    public String findPartsName(int ID) throws ClassNotFoundException{
-        String name = "";
-        Connection conn = null;
-        try {
-            conn = (new sqlite().connect());
-            String SQL = "Select nameofPart from vehiclePartsStock where parts_id ='" + ID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                name = rs.getString("nameofPart");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding partsName.");
-        }
-        return name;
-    }
-    
-    private Double findCostFromStock(int ID) throws ClassNotFoundException {
-        double cost = 0.0;
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-
-            String SQL = "Select cost from vehiclePartsStock where parts_id='" + ID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                cost = rs.getDouble("cost");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding cost from stock.");
-        }
-        return cost;
-    }
-    
-    public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
-        dateOfInstall.setValue(getScheduleDate(bookingIdCombo.getValue()));
-        //dateOfInstall.setEditable(false);
-        
-    }
-    
-    public LocalDate getScheduleDate(int bookingID)throws IOException, ClassNotFoundException {
-        String date = "";
-        System.out.println("Booking id is " + bookingID);
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-
-            String SQL = "Select scheduled_date from booking where booking_id ='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) 
-                date = rs.getString("scheduled_date");
-                System.out.println("Getting date value : " + date);
-            
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
-        return convertStringToDateForBookingCombo(date) ;
-        
-    }
-    
-    
-    
-    
-    
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-        Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item.isBefore(LocalDate.now())) {
-                    setStyle("-fx-background-color: #fcbabf;");
-                    Platform.runLater(() -> setDisable(true));
-                }
-            }
-        };
-        dateOfInstall.setDayCellFactory(dayCellFactory);
-        showAll.setSelected(true);
-        ObservableList<String> searchOption = FXCollections.observableArrayList();
-        searchOption.add("Customer Name");
-        searchOption.add("Vehicle registration");
-        
-        
-        searchCombo.setValue("Customer Name");
-        searchCombo.setItems(searchOption);
-        
-        
-        installParts.setTooltip(new Tooltip("Press here to install parts"));
-        
-
-        try {
-            fillPartsNameCombo();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            fillBookingIdCombo();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        usedIdCol.setCellValueFactory(
-                new PropertyValueFactory<>("usedID"));
-        nameCol.setCellValueFactory(
-                new PropertyValueFactory<>("partName"));
-        costCol.setCellValueFactory(
-                new PropertyValueFactory<>("cost"));
-        quantityCol.setCellValueFactory(
-                new PropertyValueFactory<>("quantity"));
-        installDateCol.setCellValueFactory(
-                new PropertyValueFactory<>("installDate"));
-        expireDateCol.setCellValueFactory(
-                new PropertyValueFactory<>("warrantyExpireDate"));
-        registrationNoCol.setCellValueFactory(
-                new PropertyValueFactory<>("vehicleRegNo"));
-        customerNameCol.setCellValueFactory(
-                new PropertyValueFactory<>("customerFullName"));
-        bookingIdCol.setCellValueFactory(
-                new PropertyValueFactory<>("bookingID"));
-        regNoCol.setCellValueFactory(
-                new PropertyValueFactory<>("vehicleregNo"));
-        fullCustomerNameCol.setCellValueFactory(
-                new PropertyValueFactory<>("customerName"));
-        bookingDateCol.setCellValueFactory(
-                new PropertyValueFactory<>("bookingDate"));
-        try {
-            buildPartsUsedData();
-            buildCustomerData();
-
-            // selectedItemProperty = gives you the item the user selected form the table.
-            // add listner to your tableview selectedItemProperty
-            // The listener is gonna sit on the item of the tableView and its gonna wait for some action to happen, Ex: User selecting an item from the tableview 
-            //
-            table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-                @Override //This method will be called whenever user selected row
-
-                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                    try {   //Checks whether item is selected.
-                        if (table.getSelectionModel().getSelectedItem() != null) {
-                            Connection conn = null;
-                            conn = (new sqlite().connect());
-                            System.out.println("Opened Database Successfully initial");
-                            usedPartID = table.getSelectionModel().getSelectedItem().getUsedID();
-                            //String name = table.getSelectionModel().getSelectedItem().getPartName();
-                            java.sql.Statement state = null;
-                            state = conn.createStatement();
-
-                            part.setUsedID(usedPartID);
-                            part.setPartName(table.getSelectionModel().getSelectedItem().getPartName());
-                            part.setQuantity(table.getSelectionModel().getSelectedItem().getQuantity());
-                            part.setCost(table.getSelectionModel().getSelectedItem().getCost());
-                            part.setInstallDate(table.getSelectionModel().getSelectedItem().getInstallDate());
-                            part.setWarrantyExpireDate(table.getSelectionModel().getSelectedItem().getWarrantyExpireDate());
-                            part.setcustomerFullName(table.getSelectionModel().getSelectedItem().getCustomerFullName());
-                            part.setVehicleRegNo(table.getSelectionModel().getSelectedItem().getVehicleRegNo());
-                            part.setBookingID(table.getSelectionModel().getSelectedItem().getBookingID());
-
-                            // Execute query and store results in a resultSet
-                            ResultSet rs = state.executeQuery("SELECT * FROM vehiclePartsUsed WHERE partsUsedID = " + "'" + usedPartID + "'");
-                            while (rs.next()) {
-                                // get data from db and show it on the textFields.
-                                usedPartID = rs.getInt("partsUsedID");
-                                partNameCombo.setValue(part.getPartName());
-                                quantity.setText(String.valueOf(rs.getInt("quantity")));
-                                dateOfInstall.setValue(convertStringToDate(part.getInstallDate()));
-                                bookingIdCombo.setValue(rs.getInt("bookingID"));
-                                part.setAddedBill(rs.getBoolean(9));
-                            }
-                            getCustomerDetails(part);
-                            state.close();
-                            conn.close();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            System.out.println("Error 1.");
-            e.printStackTrace();
-
-        }
     }
     
     public void fillPartsNameCombo() throws ClassNotFoundException {
@@ -1048,10 +1084,17 @@ public class PartsController implements Initializable {
     
     @FXML
     public void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
-        try {
-            if(isFieldsCompleted()) {
-                alertError("Select a row in order to delete a part.");
-            } else {
+        int id;
+        try
+        {
+            id = table.getSelectionModel().getSelectedItem().getUsedID();
+        }
+        catch(Exception e)
+        {
+            alertError("Please select a row first to delete a part.");
+            return;
+        }
+                part.setUsedID(id);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation Dialog");
                 alert.setHeaderText("");
@@ -1063,20 +1106,15 @@ public class PartsController implements Initializable {
 
                 Optional<ButtonType> result = alert.showAndWait();
 
-                int idSelected = table.getSelectionModel().getSelectedItem().getUsedID();
+                //int idSelected = table.getSelectionModel().getSelectedItem().getUsedID();
 
                 if (result.get() == buttonTypeYes && isPartsDeleted(part)) {
 
-                    alertInformation("PartsUsedID: " + idSelected + " has been deleted.");
+                    alertInformation("PartsUsedID: " + id + " has been deleted.");
 
                 }
                 buildPartsUsedData();
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-
-        }
-
+            
     }
 
     private boolean isPartsDeleted(partsUsed part) throws ClassNotFoundException {
@@ -1160,6 +1198,16 @@ public class PartsController implements Initializable {
             alertError("Error in building customer Data.");
         }
     }
+    
+    public boolean checkForWhiteSpace()
+    {
+        if(quantity.getText().trim().isEmpty())
+         {
+             alertError("You cannot have a white space at the start of the fields.");
+             return false;
+         }
+        return true;
+    }
 
     public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
         clearFields();
@@ -1168,6 +1216,7 @@ public class PartsController implements Initializable {
 
     public boolean isFieldsCompleted() {
         if (partNameCombo.getValue() == null || quantity.getText().equals("") || dateOfInstall.getValue().equals("") || bookingIdCombo.getValue() == null) {
+            alertInformation("Please complete all the fields");
             return false;
         }
         return true;
@@ -1314,52 +1363,7 @@ public class PartsController implements Initializable {
         alert.showAndWait();
     }
 
-    private int findVehicleID(int bookingID) throws ClassNotFoundException {
-        int vehRegID = 0;
-        Connection conn = null;
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            String SQL = "Select vehicleID from booking where booking_id='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                vehRegID = rs.getInt("vehicleID");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding vehicle id.");
-        }
-        return vehRegID;
-    }
-
-    private int findCustomerID(int bookingID) throws ClassNotFoundException {
-        int customerID = 0;
-        Connection conn = null;
-        try {
-
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            String SQL = "Select customer_id from Booking where booking_id='" + bookingID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                customerID = rs.getInt("customer_id");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding customerId");
-        }
-        return customerID;
-    }
+    
 
     
 
@@ -1387,70 +1391,9 @@ public class PartsController implements Initializable {
         return cost;
     }
 
-    public String findExpireDate(String installDate) {
+    
 
-        Date date = null;
-        String warrantyexpire = "";
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-
-            date = df.parse(installDate);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            cal.add(Calendar.YEAR, 1); // to get previous year add -1
-            Date warrantyExpire = cal.getTime();
-            warrantyexpire = df.format(warrantyExpire);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return warrantyexpire;
-    }
-
-    private String findCustomerName(int customerID) throws ClassNotFoundException {
-        String customerName = "";
-        Connection conn = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            String SQL = "Select customer_fullname from customer where customer_id='" + customerID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                customerName = rs.getString("customer_fullname");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error finding Customer Name.");
-        }
-        return customerName;
-    }
-
-    private String findVehReg(int vehicleID) throws ClassNotFoundException {
-        String vehRegNo = "";
-        Connection conn = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            String SQL = "Select RegNumber from vehicleList where vehicleID='" + vehicleID + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) {
-                vehRegNo = rs.getString("RegNumber");
-            }
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error in finding veh Reg.");
-        }
-        return vehRegNo;
-    }
+    
 
     private void fillBookingIdCombo() throws ClassNotFoundException {
         String date = "";

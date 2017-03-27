@@ -5,6 +5,13 @@
  */
 package PartsRecord.logic;
 
+import Authentication.sqlite;
+import CustomerAccount.gui.GuiController;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -13,6 +20,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 
 /**
  *
@@ -160,5 +169,5 @@ public class partsUsed {
     public StringProperty customerNameProperty() {
         return customerFullName;
     }
-
+    
 }
