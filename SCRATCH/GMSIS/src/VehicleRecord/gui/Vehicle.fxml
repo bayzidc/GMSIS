@@ -107,5 +107,6 @@
         </columns>
       </TableView>
       <Button fx:id="viewInfo" layoutX="1019.0" layoutY="308.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="25.0" prefWidth="124.0" text="View Cust/Book Info" />
+      <Button fx:id="addBooking" layoutX="1019.0" layoutY="347.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="105.0" text="Add Booking" />
    </children>
 </AnchorPane>

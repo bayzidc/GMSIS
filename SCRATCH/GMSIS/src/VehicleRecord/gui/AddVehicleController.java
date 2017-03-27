@@ -11,25 +11,17 @@ import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.ParsePosition;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +33,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -49,13 +40,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javax.swing.JOptionPane;
-import java.net.*;
 /**
  * FXML Controller class
  *
@@ -66,14 +53,12 @@ public class AddVehicleController implements Initializable {
   
     
     // Declaring all observable array lists
-    VehicleController cont = new VehicleController();
     ObservableList<String> vehicleBox = FXCollections.observableArrayList("Car","Van","Truck");
     ObservableList<String> quickSelection = FXCollections.observableArrayList();
     ObservableList<String> custN = FXCollections.observableArrayList();
     ObservableList<String> fuelT = FXCollections.observableArrayList("Petrol","Diesel");
     ObservableList<String> warrantyChoice = FXCollections.observableArrayList();
-    private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
-    
+
     // Declaring FXML buttons, choiceboxes, textfields, tablecolumns, tables etc.
     @FXML
     public AnchorPane pane;
@@ -152,7 +137,7 @@ public class AddVehicleController implements Initializable {
         warExpiry.setEditable(false);
         motRenDate.setEditable(false);
         lastService.setEditable(false);
-        restrictDecimal(engSize);
+        vec.restrictDecimal(engSize);
         vehicleChoice.setItems(vehicleBox);
         fuelType.setItems(fuelT);
         id.setEditable(false);
@@ -304,6 +289,7 @@ public class AddVehicleController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
         pane.getChildren().setAll(rootPane);
+        Authentication.LoginController.isAdmin = false;
     }
     
     
@@ -377,7 +363,7 @@ public class AddVehicleController implements Initializable {
             return;
         }
         
-        if(!decimalPlaces(Double.parseDouble(engSize.getText())))
+        if(!vec.decimalPlaces(Double.parseDouble(engSize.getText())))
         {
             return;
         }
@@ -439,7 +425,7 @@ public class AddVehicleController implements Initializable {
             return;
         }
         
-        if(!decimalPlaces(Double.parseDouble(engSize.getText())))
+        if(!vec.decimalPlaces(Double.parseDouble(engSize.getText())))
         {
             return;
         }
@@ -669,36 +655,6 @@ public class AddVehicleController implements Initializable {
         
     }
     
-    //Method which retrieves the customer names from the database
-    private String getCustomerName() throws ClassNotFoundException
-    {
-        String name = "";
-        Connection conn = null;
- 
-        java.sql.Statement state = null;
-        try
-        {
-            conn = (new sqlite().connect());
-            conn.setAutoCommit(false);
-            
-            state = conn.createStatement();
-            
-            ResultSet rs = state.executeQuery("SELECT customer_fullname FROM customer,vehicleList WHERE customer.customer_id = vehicleList.vehicleID");
-            while(rs.next())
-            {
-                 name = rs.getString("customer_fullname");
-            }
-            rs.close();
-            state.close();
-            conn.close();
-        }
-        catch(SQLException e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        return name;
-    }
     
     //Method which fills the combo box with customer names from the database
     public void fillCustomerNames() throws ClassNotFoundException
@@ -867,7 +823,6 @@ public class AddVehicleController implements Initializable {
         if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
         {
             alertInf("Please complete all fields.");
-            setUpValidation(regNumber);
             return false;
         }
         
@@ -917,93 +872,7 @@ public class AddVehicleController implements Initializable {
         return true;
     }
     
-    public boolean decimalPlaces(double num) 
-    {
-        String numstr = Double.toString(num);
-        String[] strarray = numstr.split("[.]");
-        if (strarray.length == 2)
-        {
-            if (strarray[1].length() > 2)
-            {
-                alertInf("Only enter upto 2 decimal places.");
-                return false;
-            }
-        }
-        return true;
-    }
-    private void restrictDecimal(TextField field)
-    {
-        DecimalFormat format = new DecimalFormat( "#.0" );
-        field.setTextFormatter( new TextFormatter<>(input ->
-        {
-        if ( input.getControlNewText().isEmpty() )
-        {
-            return input;
-        }
-        ParsePosition parsePosition = new ParsePosition( 0 );
-        Object object = format.parse( input.getControlNewText(), parsePosition );
-        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
-        {
-            return null;
-        }
-        else
-        {
-            return input;
-        }
-        }));
-    }
-    
-    private void setUpValidation(final TextField tf) { 
-    regNumber.textProperty().addListener(new ChangeListener<String>() {
 
-        @Override
-        public void changed(ObservableValue<? extends String> observable,
-                String oldValue, String newValue) {
-            validate(tf);
-        }
-
-    });
-
-    validate(tf);
-}
-
-private void validate(TextField tf) {
-    ObservableList<String> styleClass = tf.getStyleClass();
-    if (tf.getText().trim().length()==0) {
-        tf.pseudoClassStateChanged(errorClass, true);
-    }
-    else{
-        tf.pseudoClassStateChanged(errorClass, false);
-    }
-
-}
-
-    //Method which sets the no checkbox to unselected when yes checkbox is checked
-    @FXML
-    private void handleYesBox()
-    {
-        if(yesWarranty.isSelected())
-        {
-            noWarranty.setSelected(false); 
-        }
-    }
-    
-    //Method which sets the yes checkbox to unselected when no checkbox is checked
-    @FXML
-    private void handleNoBox()
-    {
-        if(noWarranty.isSelected())
-        {
-            yesWarranty.setSelected(false);
-        }
-    }
-    
-    public LocalDate convert(String string)
-    {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate localDate = LocalDate.parse(string, formatter);
-        return localDate;
-    }
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
         alert.setTitle("Information");

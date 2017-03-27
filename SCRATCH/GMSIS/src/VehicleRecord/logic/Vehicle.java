@@ -5,9 +5,20 @@
  */
 package VehicleRecord.logic;
 
+import Authentication.sqlite;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
 /**
  *
@@ -187,6 +198,58 @@ public class Vehicle {
    {
        custName.set(cN);
    }
-           
+         
+   public LocalDate convert(String string)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(string, formatter);
+        return localDate;
+    }
+   
+   public void restrictDecimal(TextField field)
+    {
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        field.setTextFormatter( new TextFormatter<>(input ->
+        {
+        if ( input.getControlNewText().isEmpty() )
+        {
+            return input;
+        }
+        ParsePosition parsePosition = new ParsePosition( 0 );
+        Object object = format.parse( input.getControlNewText(), parsePosition );
+        if ( object == null || parsePosition.getIndex() < input.getControlNewText().length() )
+        {
+            return null;
+        }
+        else
+        {
+            return input;
+        }
+        }));
+    }
+   
+   public boolean decimalPlaces(double num) 
+    {
+        String numstr = Double.toString(num);
+        String[] strarray = numstr.split("[.]");
+        if (strarray.length == 2)
+        {
+            if (strarray[1].length() > 2)
+            {
+                alertInf("Only enter upto 2 decimal places.");
+                return false;
+            }
+        }
+        return true;
+    }
+  
+   
+    public void alertInf(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 }

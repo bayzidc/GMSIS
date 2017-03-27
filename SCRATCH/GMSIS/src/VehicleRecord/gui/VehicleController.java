@@ -6,7 +6,6 @@
 package VehicleRecord.gui;
 
 import Authentication.sqlite;
-import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.logic.CustBookingInfo;
 import VehicleRecord.logic.PartsInfo;
 import VehicleRecord.logic.Vehicle;
@@ -18,7 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -38,9 +37,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -50,7 +46,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -60,8 +55,6 @@ import javax.swing.JOptionPane;
 public class VehicleController implements Initializable {
 
     //Declaring FXML buttons, images, tables, tablecolumns etc.
-    @FXML
-    public ScrollPane spane;
     @FXML
     public Button backBtn;
     @FXML
@@ -75,9 +68,7 @@ public class VehicleController implements Initializable {
     @FXML
     public Button viewInfo;
     @FXML
-    public ImageView searchVecImg;
-    @FXML 
-    public ImageView refeshImg;
+    public Button addBooking;
     @FXML
     public TextField searchVehicle;
     @FXML
@@ -169,6 +160,7 @@ public class VehicleController implements Initializable {
     ObservableList<String> search = FXCollections.observableArrayList("Make","Full/Partial RegNumber","Vehicle Type");
 
     public static Vehicle passVec = VehicleRecord.gui.AddVehicleController.vec;
+    public static Vehicle vec = new Vehicle("", "", "", 0.0, "", "", "", "", 0, "", "", "", "",0,0, "");
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -265,6 +257,7 @@ public class VehicleController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
         pane.getChildren().setAll(rootPane);
+        Authentication.LoginController.isAdmin = false;
     }
     
     @FXML 
@@ -340,6 +333,22 @@ public class VehicleController implements Initializable {
 
     //Method which directs the user to another fxml to add a vehicle
     @FXML
+    public void addBooking(ActionEvent event) throws IOException
+    {
+        if(table.getSelectionModel().getSelectedItem()==null)
+        {
+            alertError("Select a row first");
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        Parent root = (AnchorPane)loader.load();
+        DiagnosisAndRepair.gui.DiagnosisAndRepairController obj = (DiagnosisAndRepair.gui.DiagnosisAndRepairController) loader.getController();       
+        //obj.initiateBooking(table.getSelectionModel().getSelectedItem().getCustName(), table.getSelectionModel().getSelectedItem().getCustID(), table.getSelectionModel().getSelectedItem().getRegNumber());
+        pane.getChildren().setAll(root);
+        
+        
+    }
+    @FXML
     public void addEntry(ActionEvent event) throws IOException 
     {
         FXMLLoader loader = new FXMLLoader();
@@ -394,13 +403,13 @@ public class VehicleController implements Initializable {
             String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
             if(!warDate.isEmpty())
             {
-                c.warExpiry.setValue(convert(warDate));
+                c.warExpiry.setValue(vec.convert(warDate));
             }
             int ID = table.getSelectionModel().getSelectedItem().getVecID();
             int cust = table.getSelectionModel().getSelectedItem().getCustID();
             String cName = table.getSelectionModel().getSelectedItem().getCustName();
-            c.motRenDate.setValue(convert(mot));
-            c.lastService.setValue(convert(ls));
+            c.motRenDate.setValue(vec.convert(mot));
+            c.lastService.setValue(vec.convert(ls));
             
             c.regNumber.setText(regN);
             c.make.setText(vecMake);
@@ -578,16 +587,17 @@ public class VehicleController implements Initializable {
         try {
             Connection conn = null;
             conn = (new sqlite().connect());
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where vehicleList.vehicleID= '"+id+"' AND customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
+            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost,startTime from customer, booking, vehicleList,bill where vehicleList.vehicleID= '"+id+"' AND customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) 
             {
-                CustBookingInfo cust = new CustBookingInfo("","","",0.0);
+                CustBookingInfo cust = new CustBookingInfo("","","",0.0,"");
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 cust.regNumber.set(rs.getString("RegNumber"));
                 cust.totalCost.set(rs.getDouble("totalCost"));
+                cust.time.set(rs.getString("startTime"));
                 custData.add(cust);
 
             }        
@@ -622,7 +632,7 @@ public class VehicleController implements Initializable {
   
             while (rs.next()) 
             {
-                CustBookingInfo cust = new CustBookingInfo("","","",0.0);
+                CustBookingInfo cust = new CustBookingInfo("","","",0.0,"");
                 cust.fullName.set(rs.getString("customer_fullname"));
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 cust.regNumber.set(rs.getString("RegNumber"));
@@ -762,12 +772,12 @@ public class VehicleController implements Initializable {
          showAll.setSelected(false);
         
         custData = FXCollections.observableArrayList(tempData);
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         for(int i=0; i<custData.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(custData.get(i).getBookingDate(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate() + " " + custData.get(i).getTime(),formatter);
             if(now.isBefore(tempDate)) //past dates
             {
                 custData.remove(i);
@@ -794,12 +804,12 @@ public class VehicleController implements Initializable {
         pastB.setSelected(false);
         
         custData = FXCollections.observableArrayList(tempData);
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+  
         for(int i=0; i<custData.size(); i++)
         {
-            LocalDate tempDate = LocalDate.parse(custData.get(i).getBookingDate(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate()  + " " + custData.get(i).getTime(),formatter);
   
             if(now.isAfter(tempDate)) //past dates
             {
@@ -831,12 +841,12 @@ public class VehicleController implements Initializable {
         buildCustomerData();
     }
     
-    public LocalDate convert(String string)
+    /*public LocalDate convert(String string)
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(string, formatter);
         return localDate;
-    }
+    }*/
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
         alert.setTitle("Information");

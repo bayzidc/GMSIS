@@ -17,14 +17,16 @@ public class CustBookingInfo {
    public SimpleStringProperty bookingDate = new SimpleStringProperty();
    public SimpleStringProperty regNumber = new SimpleStringProperty();
    public SimpleDoubleProperty totalCost = new SimpleDoubleProperty();
+   public SimpleStringProperty time = new SimpleStringProperty();
   
    
-   public CustBookingInfo(String fName, String bDate, String reg, double tCost)
+   public CustBookingInfo(String fName, String bDate, String reg, double tCost,String t)
    {
       this.fullName = new SimpleStringProperty(fName);
       this.bookingDate = new SimpleStringProperty(bDate);
       this.regNumber = new SimpleStringProperty(reg);
       this.totalCost = new SimpleDoubleProperty(tCost);
+      this.time = new SimpleStringProperty(t);
    }
    public String getFullName(){
            return fullName.get();
@@ -44,6 +46,11 @@ public class CustBookingInfo {
    {
        return totalCost.get();
    }
+   
+   public String getTime()
+   {
+       return time.get();
+   }
    public void setFullName(String fullN)
    {
        fullName.set(fullN);
@@ -61,6 +68,11 @@ public class CustBookingInfo {
    public void setTotalCost(double tC)
    {
        totalCost.set(tC);
+   }
+   
+   public void setTime(String startT)
+   {
+       time.set(startT);
    }
    public SimpleStringProperty fullNameProperty()
    {
@@ -80,6 +92,11 @@ public class CustBookingInfo {
    public SimpleDoubleProperty totalCostProperty()
    {
        return totalCost;
+   }
+   
+   public SimpleStringProperty timeProperty()
+   {
+       return time;
    }
 }
 
