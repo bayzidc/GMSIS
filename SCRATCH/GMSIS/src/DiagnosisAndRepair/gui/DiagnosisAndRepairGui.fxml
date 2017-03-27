@@ -23,14 +23,14 @@
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="793.0" prefWidth="1326.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
    <children>
        
-      <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
-      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
-      <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecord" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
-      <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
-      <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
+      <JFXButton fx:id="users" layoutY="2.0" onAction="#usersPage" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
+      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#customerPage" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
+      <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecordPage" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
+      <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#bookingPage" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
+      <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#partsUsedPage" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
        
-      <DatePicker fx:id="datePicked" editable="false" layoutX="163.0" layoutY="373.0" onAction="#fillStartTimeOnChange" prefHeight="25.0" prefWidth="129.0" promptText="dd/mm/yyyy" />
+      <DatePicker fx:id="datePicked" editable="false" layoutX="163.0" layoutY="373.0" onAction="#AlertStartTimeOnChange" prefHeight="25.0" prefWidth="129.0" promptText="dd/mm/yyyy" />
       <Label layoutX="40.0" layoutY="377.0" text="Scheduled  Date" />
       <Button fx:id="book" layoutX="61.0" layoutY="614.0" mnemonicParsing="false" onAction="#booking" prefHeight="34.0" prefWidth="116.0" text="Submit Booking" />
       <Label layoutX="40.0" layoutY="440.0" text="Start Time" />
@@ -62,9 +62,9 @@
       <Button fx:id="back" layoutX="28.0" layoutY="72.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="50.0" text="Back" />
       <Button fx:id="update" layoutX="81.0" layoutY="618.0" mnemonicParsing="false" onAction="#updateBooking" prefHeight="25.0" prefWidth="75.0" text="Update" />
       <Button fx:id="clear" layoutX="202.0" layoutY="618.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="25.0" prefWidth="75.0" text="Clear All" />
-      <ComboBox fx:id="startTime" layoutX="139.0" layoutY="436.0" onAction="#fillEndTimeComboOnChange" prefWidth="150.0" promptText="Select Time" />
+      <ComboBox fx:id="startTime" layoutX="139.0" layoutY="436.0" onAction="#AlertEndTimeComboOnChange" prefWidth="150.0" promptText="Select Time" />
       <ComboBox fx:id="endTime" layoutX="139.0" layoutY="486.0" prefWidth="150.0" promptText="Select TIme" />
-      <Button fx:id="exitEditB" layoutX="130.0" layoutY="571.0" mnemonicParsing="false" onAction="#exitEdit" text="Exit edit mode" />
+      <Button fx:id="exitEditB" layoutX="130.0" layoutY="571.0" mnemonicParsing="false" onAction="#exitEditMode" text="Exit edit mode" />
       <Separator layoutX="38.0" layoutY="247.0" prefHeight="1.0" prefWidth="252.0" />
       <Label layoutX="41.0" layoutY="277.0" text="Current Mileage" />
       <TextField fx:id="mileage" layoutX="139.0" layoutY="273.0" prefHeight="25.0" prefWidth="150.0" />
