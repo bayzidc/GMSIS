@@ -343,7 +343,7 @@ public class VehicleController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
         Parent root = (AnchorPane)loader.load();
         DiagnosisAndRepair.gui.DiagnosisAndRepairController obj = (DiagnosisAndRepair.gui.DiagnosisAndRepairController) loader.getController();       
-        //obj.initiateBooking(table.getSelectionModel().getSelectedItem().getCustName(), table.getSelectionModel().getSelectedItem().getCustID(), table.getSelectionModel().getSelectedItem().getRegNumber(), table.getSelectionModel().getSelectedItem().getMileage());
+        obj.initiateBooking(table.getSelectionModel().getSelectedItem().getCustName(), table.getSelectionModel().getSelectedItem().getCustID(), table.getSelectionModel().getSelectedItem().getRegNumber(), table.getSelectionModel().getSelectedItem().getMileage());
         pane.getChildren().setAll(root);
         
         
