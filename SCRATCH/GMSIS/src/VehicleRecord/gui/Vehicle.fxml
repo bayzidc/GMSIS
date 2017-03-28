@@ -24,7 +24,7 @@
       </Label>
       <Button fx:id="editBtn" layoutX="725.0" layoutY="199.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
       <Button fx:id="deleteBtn" layoutX="725.0" layoutY="236.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
-      <TextField fx:id="searchVehicle" layoutX="238.0" layoutY="451.0" prefHeight="25.0" prefWidth="218.0" promptText="Search..." />
+      <TextField fx:id="searchVehicle" layoutX="238.0" layoutY="451.0" prefHeight="25.0" prefWidth="218.0" promptText="Enter fully or partially..." />
       <SplitPane dividerPositions="0.624" layoutX="14.0" layoutY="161.0" prefHeight="241.0" prefWidth="673.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="616.0">
@@ -53,7 +53,7 @@
         </items>
       </SplitPane>
       <Button fx:id="addEntryBtn" layoutX="725.0" layoutY="161.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="725.0" layoutY="269.0" mnemonicParsing="false" onAction="#buildParts" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
+      <Button fx:id="viewParts" layoutX="976.0" layoutY="451.0" mnemonicParsing="false" onAction="#buildParts" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
       <Label layoutX="616.0" layoutY="435.0" prefHeight="40.0" prefWidth="218.0" text="Vehicle List" underline="true">
          <font>
             <Font name="Bauhaus 93" size="24.0" />
@@ -99,11 +99,11 @@
             <TableColumn fx:id="warExpDateCol" prefWidth="112.0" text="Warranty ExpDate" />
             <TableColumn fx:id="custIDCol" prefWidth="66.0" text="CustID" />
             <TableColumn fx:id="custNameCol" prefWidth="89.0" text="CustName" />
-            <TableColumn fx:id="vecIDCol" prefWidth="84.0" text="VehicleID" />
+            <TableColumn fx:id="vecIDCol" prefWidth="90.0" text="VehicleID" />
         </columns>
       </TableView>
-      <Button fx:id="viewInfo" layoutX="725.0" layoutY="305.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="25.0" prefWidth="124.0" text="View Cust/Book Info" />
-      <Button fx:id="addBooking" layoutX="725.0" layoutY="340.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="105.0" text="Add Booking" />
+      <Button fx:id="viewInfo" layoutX="1095.0" layoutY="451.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="25.0" prefWidth="124.0" text="View Cust/Book Info" />
+      <Button fx:id="addBooking" layoutX="1232.0" layoutY="451.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="105.0" text="Add Booking" />
       <TextArea fx:id="vecInfo" editable="false" layoutX="899.0" layoutY="161.0" prefHeight="258.0" prefWidth="438.0" />
       <Label layoutX="899.0" layoutY="114.0" prefHeight="40.0" prefWidth="400.0" text="Vehicle Info" underline="true">
          <font>
