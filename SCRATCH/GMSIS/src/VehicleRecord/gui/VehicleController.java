@@ -22,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -40,6 +42,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -73,6 +76,8 @@ public class VehicleController implements Initializable {
     public TextField searchVehicle;
     @FXML
     public ChoiceBox searchBy;
+    @FXML
+    public TextArea vecInfo;
     
     @FXML
     public JFXCheckBox pastB;
@@ -161,6 +166,8 @@ public class VehicleController implements Initializable {
 
     public static Vehicle passVec = VehicleRecord.gui.AddVehicleController.vec;
     public static Vehicle vec = new Vehicle("", "", "", 0.0, "", "", "", "", 0, "", "", "", "",0,0, "");
+    private Vehicle vehicleToDisplay = null ;
+    public ActionEvent e;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -213,7 +220,36 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
-        
+        // vecI = table.getSelectionModel().getSelectedItem();
+         table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    try {
+                        vehicleToDisplay = table.getSelectionModel().getSelectedItem();
+                        if (vehicleToDisplay != null) {
+                             vecInfo.setText("Customer Name: " + vehicleToDisplay.getCustName() + "\n" + "Vehicle Type: " +
+                                     vehicleToDisplay.getVehicleType() + "\n" + "Registration Number: " +
+                                     vehicleToDisplay.getRegNumber() + "\n" + "Make: " +
+                                             vehicleToDisplay.getMake() + "\n" + "Model: " +
+                                             vehicleToDisplay.getModel() + "\n" + "Engine Size: " +
+                                             vehicleToDisplay.getEngSize() + "\n" + "Fuel Type: " +
+                                             vehicleToDisplay.getFuelType() + "\n" + "M.O.T Renewal Date: " +
+                                             vehicleToDisplay.getMotRenewal() + "\n" + "Last Service Date: " +
+                                             vehicleToDisplay.getLastService() + "\n" + "Mileage: " +
+                                             vehicleToDisplay.getMileage() + "\n" + "Colour: " +
+                                             vehicleToDisplay.getColour() + "\n" + "Warranty?: " +
+                                             vehicleToDisplay.getWarranty() + "\n" + "Warranty Name/Address: " +
+                                             vehicleToDisplay.getWarNameAndAdd() + "\n" + "Warranty Expiry Date: " +
+                                             vehicleToDisplay.getWarrantyExpDate() + "\n"
+                                      );
+                            }
+                 }
+                     catch(Exception e)
+                             {
+                             alertError("Cannot load vehicle info.");
+                             }
+                }
+         });
         searchBy.setValue("Make");
         searchBy.setItems(search);
         showAll.setSelected(true);
@@ -374,7 +410,6 @@ public class VehicleController implements Initializable {
     @FXML
     public void showButton(ActionEvent e) throws IOException, ClassNotFoundException // method to show vehicle details on textfields
     {
-        Vehicle v ;
         try
         {
             Stage primaryStage = new Stage();
@@ -387,27 +422,29 @@ public class VehicleController implements Initializable {
             c.id.setVisible(true);
             c.vID.setVisible(true);
             c.regNumber.setEditable(false);
-
-            String regN = table.getSelectionModel().getSelectedItem().getRegNumber();
-            String vecMake = table.getSelectionModel().getSelectedItem().getMake();
-            String vecModel = table.getSelectionModel().getSelectedItem().getModel();
-            double engine = table.getSelectionModel().getSelectedItem().getEngSize();
-            String ft = table.getSelectionModel().getSelectedItem().getFuelType();
-            String col = table.getSelectionModel().getSelectedItem().getColour();
-            String mot = table.getSelectionModel().getSelectedItem().getMotRenewal();
-            String ls = table.getSelectionModel().getSelectedItem().getLastService();
-            int mil = table.getSelectionModel().getSelectedItem().getMileage();
-            String vecType = table.getSelectionModel().getSelectedItem().getVehicleType();
-            String war = table.getSelectionModel().getSelectedItem().getWarranty();
-            String wNameAndAdd = table.getSelectionModel().getSelectedItem().getWarNameAndAdd();
-            String warDate = table.getSelectionModel().getSelectedItem().getWarrantyExpDate();
+            
+            vehicleToDisplay = table.getSelectionModel().getSelectedItem() ;
+            
+            String regN = vehicleToDisplay.getRegNumber();
+            String vecMake = vehicleToDisplay.getMake();
+            String vecModel = vehicleToDisplay.getModel();
+            double engine = vehicleToDisplay.getEngSize();
+            String ft = vehicleToDisplay.getFuelType();
+            String col = vehicleToDisplay.getColour();
+            String mot = vehicleToDisplay.getMotRenewal();
+            String ls = vehicleToDisplay.getLastService();
+            int mil = vehicleToDisplay.getMileage();
+            String vecType = vehicleToDisplay.getVehicleType();
+            String war = vehicleToDisplay.getWarranty();
+            String wNameAndAdd = vehicleToDisplay.getWarNameAndAdd();
+            String warDate = vehicleToDisplay.getWarrantyExpDate();
             if(!warDate.isEmpty())
             {
                 c.warExpiry.setValue(vec.convert(warDate));
             }
-            int ID = table.getSelectionModel().getSelectedItem().getVecID();
-            int cust = table.getSelectionModel().getSelectedItem().getCustID();
-            String cName = table.getSelectionModel().getSelectedItem().getCustName();
+            int ID = vehicleToDisplay.getVecID();
+            int cust = vehicleToDisplay.getCustID();
+            String cName = vehicleToDisplay.getCustName();
             c.motRenDate.setValue(vec.convert(mot));
             c.lastService.setValue(vec.convert(ls));
             
@@ -456,6 +493,8 @@ public class VehicleController implements Initializable {
         catch(Exception ex)
         {
             alertInf("Please select a row to edit a vehicle.");
+            
+            ex.printStackTrace() ;
         }
     }
     
@@ -627,7 +666,7 @@ public class VehicleController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            String SQL = "Select customer_fullname, scheduled_date, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
+            String SQL = "Select customer_fullname, scheduled_date, startTime, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
             while (rs.next()) 
@@ -637,6 +676,7 @@ public class VehicleController implements Initializable {
                 cust.bookingDate.set(rs.getString("scheduled_date"));
                 cust.regNumber.set(rs.getString("RegNumber"));
                 cust.totalCost.set(rs.getDouble("totalCost"));
+                cust.time.set(rs.getString("startTime"));
                 custData.add(cust);
 
             }        
@@ -774,10 +814,10 @@ public class VehicleController implements Initializable {
         custData = FXCollections.observableArrayList(tempData);
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
+        
         for(int i=0; i<custData.size(); i++)
         {
-            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate() + " " + custData.get(i).getTime(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate()+" "+custData.get(i).getTime(),formatter);
             if(now.isBefore(tempDate)) //past dates
             {
                 custData.remove(i);
@@ -809,7 +849,7 @@ public class VehicleController implements Initializable {
   
         for(int i=0; i<custData.size(); i++)
         {
-            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate()  + " " + custData.get(i).getTime(),formatter);
+            LocalDateTime tempDate = LocalDateTime.parse(custData.get(i).getBookingDate()+" "+custData.get(i).getTime(),formatter);
   
             if(now.isAfter(tempDate)) //past dates
             {
@@ -841,12 +881,6 @@ public class VehicleController implements Initializable {
         buildCustomerData();
     }
     
-    /*public LocalDate convert(String string)
-    {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate localDate = LocalDate.parse(string, formatter);
-        return localDate;
-    }*/
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box
         alert.setTitle("Information");
