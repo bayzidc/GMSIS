@@ -424,7 +424,6 @@ public class VehicleController implements Initializable {
             c.regNumber.setEditable(false);
             
             vehicleToDisplay = table.getSelectionModel().getSelectedItem() ;
-            
             String regN = vehicleToDisplay.getRegNumber();
             String vecMake = vehicleToDisplay.getMake();
             String vecModel = vehicleToDisplay.getModel();
@@ -481,6 +480,7 @@ public class VehicleController implements Initializable {
             c.customerNames.setValue(cName);
             c.customerNames.setDisable(true);
             c.fillQuickSelection();
+            
             stage2.hide();
             Scene edit_Scene = new Scene(root);
             //edit_Scene.getStylesheets().add(getClass().getResource("vehicle.css").toExternalForm());
@@ -488,13 +488,14 @@ public class VehicleController implements Initializable {
             primaryStage.setHeight(810);
             primaryStage.setWidth(1359);
             primaryStage.show();
+            
+            
+
         }
         
         catch(Exception ex)
         {
             alertInf("Please select a row to edit a vehicle.");
-            
-            ex.printStackTrace() ;
         }
     }
     
