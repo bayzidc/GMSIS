@@ -715,11 +715,15 @@ public class AddVehicleController implements Initializable {
     }
    
     //Method which error checks the textfields and makes sure that there are no empty fields.
+    @FXML
     public boolean checkTextFields()
     {
         if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
         {
+            System.out.println("Hello world");
             alertInf("Please complete all fields.");
+            motRenDate.setStyle("-fx-border-colour: #ff0000;");
+
             return false;
         }
         
