@@ -145,7 +145,7 @@ public class PartsController implements Initializable {
     @FXML // Observable list to hold partsUsed object.
     ObservableList<partsUsed> data;
     public int usedPartID;
-    public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0,false);
+    public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0);
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
     ObservableList<String> namesCombo = FXCollections.observableArrayList();
     @FXML
@@ -413,7 +413,7 @@ public class PartsController implements Initializable {
             System.out.println("Opened PartsUsed database successfully.");
             System.out.println("Creating data.");
             
-            String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID, addedBill) values(?,?,?,?,?,?,?,?)";
+            String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID) values(?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
 
                 
@@ -596,9 +596,9 @@ public class PartsController implements Initializable {
                 part.setVehicleRegNo(findVehReg(rs.getInt(6)));
                 part.setcustomerFullName(findCustomerName(rs.getInt(7)));
                 part.setBookingID(rs.getInt(8));
-                part.setAddedBill(rs.getBoolean(9));
+                //part.setAddedBill(rs.getBoolean(9));
 
-                data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID(), part.getAddedBill()));
+                data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID()));
                 
                 searchField.clear();
                 searchFilter(data);
@@ -1104,8 +1104,9 @@ public class PartsController implements Initializable {
 
         for(int i=0; i<customerData.size(); i++){
             LocalDate tempDate = LocalDate.parse(customerData.get(i).getBookingDate(),formatter);
-            if(now.isBefore(tempDate)) //past dates
+            if(now.isBefore(tempDate) || now.equals(tempDate)) //past dates
             {
+                
                 customerData.remove(i);
                 i--;
             }
@@ -1138,7 +1139,7 @@ public class PartsController implements Initializable {
         {
             LocalDate tempDate = LocalDate.parse(customerData.get(i).getBookingDate(),formatter);
   
-            if(now.isAfter(tempDate)) //past dates
+            if(now.isAfter(tempDate) || now.equals(tempDate)) //past dates
             {
                 customerData.remove(i);
                 i--;
@@ -1755,7 +1756,7 @@ public class PartsController implements Initializable {
         System.out.println(part.getQuantity());
         System.out.println(part.getCustomerFullName());
         System.out.println("This is date: " + part.getInstallDate());
-        System.out.println("This is added bill: " + part.getAddedBill());
+        
     }
     // TODO
 }
