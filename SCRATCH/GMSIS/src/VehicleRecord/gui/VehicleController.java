@@ -253,6 +253,7 @@ public class VehicleController implements Initializable {
         searchBy.setValue("Make");
         searchBy.setItems(search);
         showAll.setSelected(true);
+        vehicles.setStyle("-fx-background-color:  #85C1E9;");
         if(!Authentication.LoginController.isAdmin)
         {
             users.setDisable(true);

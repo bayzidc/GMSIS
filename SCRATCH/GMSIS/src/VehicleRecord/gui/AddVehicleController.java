@@ -330,9 +330,18 @@ public class AddVehicleController implements Initializable {
         nameAndAdd.clear();
         warExpiry.setValue(null);
         warExpiry.getEditor().setText(null);
-        id.clear();
-        customerNames.setValue(null);
-        custID.clear();
+        if(id.isEditable())
+        {
+           id.clear();
+        }
+        if(!customerNames.isDisable())
+        {
+            customerNames.setValue(null);
+        }
+        if(custID.isEditable())
+        {
+           custID.clear();
+        }
         if(!(yesWarranty.isSelected() && noWarranty.isSelected()))
         {
             nameAndAdd.setVisible(true);
@@ -341,6 +350,7 @@ public class AddVehicleController implements Initializable {
             warrantyDate.setVisible(true);
         }
     }
+    
     
     // Method which allows the user to add a vehicle for a specified customer.
     @FXML
@@ -353,7 +363,7 @@ public class AddVehicleController implements Initializable {
             return;
         }
 
-        if(!checkTextFields() || !checkIndividual())
+        if(!checkIndividual())
         {      
             return;
         }
@@ -415,7 +425,7 @@ public class AddVehicleController implements Initializable {
             return;
         }
         
-        if(!checkTextFieldEdit())
+        if(!checkIndividual())
         {      
             return;
         }
@@ -722,7 +732,6 @@ public class AddVehicleController implements Initializable {
         {
             System.out.println("Hello world");
             alertInf("Please complete all fields.");
-            motRenDate.setStyle("-fx-border-colour: #ff0000;");
 
             return false;
         }
@@ -763,61 +772,95 @@ public class AddVehicleController implements Initializable {
         
         if(vehicleChoice.getValue()==null)
         {
-            alertInf("Please enter the vehicle type.");
+            alertInf("Please complete all fields.");
             return false;
         }
   
         if(regNumber.getText().equals(""))
         {
-            alertInf("Please enter a registration number");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(make.getText().equals(""))
         {
-            alertInf("Please enter a make.");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(model.getText().equals(""))
         {
-            alertInf("Please enter a model.");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(engSize.getText().equals(""))
         {
-            alertInf("Please enter the engine size.");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(fuelType.getValue()==null)
         {
-            alertInf("Please select a fuel type");
+            alertInf("Please complete all fields.");
             return false;         
         }
         
         if(colour.getText().equals(""))
         {
-            alertInf("Please enter a colour");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(motRenDate.getEditor().getText().equals(""))
         {
-            alertInf("Please enter the M.O.T renewal date.");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(lastService.getEditor().getText().equals(""))
         {
-            alertInf("Please enter the date of last service.");
+            alertInf("Please complete all fields.");
             return false;
         }
         
         if(mileage.getText().equals(""))
         {
-            alertInf("Please enter a mileage.");
+            alertInf("Please complete all fields.");
+            return false;
+        }
+        
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        {
+            alertInf("Please enter the name and address for the warranty.");
+            return false;
+        }
+        
+        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the name, address and expiry date for the warranty.");
+            return false;
+        }
+        
+        if(yesWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
+        {
+            alertInf("Please enter the expiry date for the warranty.");
+            return false;
+        }
+        
+        if(noWarranty.isSelected() && nameAndAdd.getText().equals(""))
+        {
+            return true;
+        }
+        
+        if(noWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
+        {
+            return true;
+        }
+        
+        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
+        {
+            alertInf("Please select if the vehicle is under warranty or not.");
             return false;
         }
         return true;

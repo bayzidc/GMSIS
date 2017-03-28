@@ -558,16 +558,16 @@ public class GuiController implements Initializable {
             String SQL = "Select * from booking WHERE customer_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName("");
+                DiagnosisAndRepair.gui.DiagnosisAndRepairController.BookingObj.setPartName("");
                 int vehicleID = rs.getInt(2);
                 java.sql.Statement state = null;
                 state = conn.createStatement();
                 ResultSet rs2 = state.executeQuery("SELECT * FROM vehiclePartsUsed WHERE customerID= " + acc.getCustomerID() + " AND vehicleID=" + vehicleID);
                 while (rs2.next()) {
                     parts = rs2.getInt("parts_id");
-                    DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.setPartName(findPartName(parts));
+                    DiagnosisAndRepair.gui.DiagnosisAndRepairController.BookingObj.setPartName(findPartName(parts));
                 }
-                dataBooking.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), "", findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), 0, rs.getString(7), rs.getString(8), DiagnosisAndRepair.gui.DiagnosisAndRepairController.obj.getPartName()));
+                dataBooking.add(new DiagnosisAndRepairBooking(rs.getInt(1), findVehicleReg(rs.getInt(2)), String.valueOf(rs.getInt(2)), "", findMechanicName(rs.getInt(4)), rs.getString(5), rs.getInt(6), 0, rs.getString(7), rs.getString(8), DiagnosisAndRepair.gui.DiagnosisAndRepairController.BookingObj.getPartName()));
             }
 
             bookingIDBooking.setCellValueFactory(
