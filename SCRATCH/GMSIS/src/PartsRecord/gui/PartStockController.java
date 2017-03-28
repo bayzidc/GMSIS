@@ -425,10 +425,12 @@ public class PartStockController implements Initializable {
         partItemObj.setPartName(findPartsName(value));
         partItemObj.setQuantity(Integer.parseInt(quantity.getText()));
         partItemObj.setArrivalDate(arrivalDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.println("The quantity from the textField " + partItemObj.getQuantity());
+        int stock= partItemObj.getQuantity();
         alertInformation("The item is added to the stock.");
         createDeliveryData(partItemObj);
         buildItemData();
-        updateStockLevel(value, partItemObj.getQuantity());
+        updateStockLevel(value, stock);
         buildPartsStockData();
         alertInformation("The stock level is updated.");
         clearItemFields(); 
@@ -511,11 +513,7 @@ public class PartStockController implements Initializable {
             String sql = "insert into stockDelivery(partName,quantity,deliverydate) values(?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
             
-            if (isFieldsCompleted()){
-
-                alertError("Please complete all the fields.");
-
-            } else {
+            
                 state.setString(1, partItemObj.getPartName());
                 state.setInt(2, partItemObj.getQuantity());
                 state.setString(3, partItemObj.getArrivalDate() );
@@ -524,7 +522,7 @@ public class PartStockController implements Initializable {
                 state.close();
                 conn.close();
 
-            }
+            
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             
@@ -541,7 +539,10 @@ public class PartStockController implements Initializable {
     public void updateStockLevel(int id, int quantity)throws ClassNotFoundException {
         Connection conn = null;
         int stockLevel = findStockLevel(id);
+        System.out.println("The quantity is " + quantity);
+        System.out.println("the stock level is " + stockLevel);
         int newStockLevel = stockLevel + quantity;
+        System.out.println("The new stock is " + newStockLevel);
         
         try {
             conn = (new sqlite().connect());
@@ -931,7 +932,8 @@ public class PartStockController implements Initializable {
     public void clearItemFields(){
         partIdCombo.setValue(null);
         quantity.clear();
-        ((TextField) arrivalDate.getEditor()).clear();
+        arrivalDate.setValue(null);
+        
         
     }
     

@@ -57,6 +57,7 @@ import javafx.scene.control.DateCell;
 import javafx.util.Callback;
 import Authentication.sqlite;
 import CustomerAccount.gui.GuiController;
+import PartsRecord.logic.PartsInformation;
 import PartsRecord.logic.PartsUsedPerVehicle;
 import VehicleRecord.logic.CustBookingInfo;
 import com.jfoenix.controls.JFXButton;
@@ -165,6 +166,20 @@ public class PartsController implements Initializable {
     
     
     @FXML
+    public TableView<PartsInformation> partTable;
+    @FXML
+    public TableColumn<PartsInformation, String> nameOfPartsCol;
+    @FXML
+    public TableColumn<PartsInformation, String> partDescriptionCol;
+    @FXML
+    public TableColumn<PartsInformation, Double> partCostCol;
+    
+    
+    public static PartsInformation partInfo = new PartsInformation("", "", 0.0);
+    ObservableList<PartsInformation> partData;
+    
+    
+    @FXML
     public TableView<vehicleCustomerInfo> custInfoTable;
     @FXML
     public TableColumn<vehicleCustomerInfo, String> regNoCol;
@@ -172,12 +187,61 @@ public class PartsController implements Initializable {
     public TableColumn<vehicleCustomerInfo, String> fullCustomerNameCol;
     @FXML
     public TableColumn<vehicleCustomerInfo, String> bookingDateCol;
-    
-
     public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("", "", "");
-
     ObservableList<vehicleCustomerInfo> customerData;
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    
+    @FXML
+    public void buildPartsInformation(ActionEvent event){
+        
+        try{
+        String partName = table.getSelectionModel().getSelectedItem().getPartName();
+    
+        
+        partData = FXCollections.observableArrayList();
+        
+
+        try {
+            Connection conn = null;
+            conn = (new sqlite().connect());
+            String SQL = "Select description,cost from vehiclePartsStock where nameofPart ='" + partName + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {   
+                
+                partInfo.setPartName("");
+                partInfo.setPartDescription("");
+                partInfo.setCost(0.0);
+                System.out.println("I am here in the part information method");
+                
+                partInfo.setPartName(partName);
+                System.out.println("I am here in the part information method 2");
+                partInfo.setPartDescription(rs.getString("description"));
+                System.out.println("I am here in the part information method 3");
+                partInfo.setCost(rs.getDouble("cost"));
+                System.out.println("I am here in the part information method 4");
+               
+                partData.add(new PartsInformation(partInfo.getPartName(),partInfo.getPartDescription(),partInfo.getCost()));
+                
+            }        
+            
+            partTable.setItems(partData);
+            rs.close();
+            conn.close();
+        }
+        
+        catch(Exception e)
+        {
+            
+            alertError("Error on building parts data. Please try again later.");
+        }
+        }
+        catch(Exception e)
+        {
+            alertInformation( "Please select a row to view the parts used information.");
+        }
+        
+    }
     
     
     @FXML
@@ -348,24 +412,20 @@ public class PartsController implements Initializable {
 
             System.out.println("Opened PartsUsed database successfully.");
             System.out.println("Creating data.");
-            //query you have to write to insert your data
+            
             String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID, addedBill) values(?,?,?,?,?,?,?,?)";
-            //The query is sent to the database and prepared there which means the SQL statement is "analysed".
             PreparedStatement state = conn.prepareStatement(sql);
 
-                // the values are sent to the server
-                // use the appropriate state.setXX() methods to set the appropriate values for the parameters that you've defined.
-                // Then call state.executeUpdate() to execute the call to the database.
+                
                 state.setInt(1, findPartsID(part.getPartName()));
-                //state.setString(2, part.getPartName());
-                //state.setDouble(3, findPartsCost(part.getPartName()));
+                
                 state.setInt(2, part.getQuantity());
                 state.setString(3, part.getInstallDate());
-                state.setString(4, findExpireDate(part.getInstallDate()));// return a string date
+                state.setString(4, findExpireDate(part.getInstallDate()));
                 state.setInt(5, findVehicleID(part.getBookingID()));
                 state.setInt(6, findCustomerID(part.getBookingID()));
-                state.setInt(7, part.getBookingID()); // booking ID
-                //state.setBoolean(8, false);
+                state.setInt(7, part.getBookingID()); 
+                
 
                 state.execute();
 
@@ -672,6 +732,13 @@ public class PartsController implements Initializable {
                 new PropertyValueFactory<>("partUsedName"));
         qCol.setCellValueFactory(
                 new PropertyValueFactory<>("quantity"));
+        nameOfPartsCol.setCellValueFactory(
+                new PropertyValueFactory<>("partName"));
+        partDescriptionCol.setCellValueFactory(
+                new PropertyValueFactory<>("partDescription"));
+        partCostCol.setCellValueFactory(
+                new PropertyValueFactory<>("cost"));
+        
         try {
             buildPartsUsedData();
             buildCustomerData();
@@ -680,6 +747,10 @@ public class PartsController implements Initializable {
             System.out.println("Error 1.");
             e.printStackTrace();
 
+        }
+        if(!Authentication.LoginController.isAdmin)
+        {
+            users.setDisable(true);
         }
     }
     
@@ -732,7 +803,7 @@ public class PartsController implements Initializable {
                createData(part);
                buildPartsUsedData();
                clearFields();
-               //boolean isBillAdded = findIsBillAdded()
+               
                addBill(part.getBookingID(),part.getQuantity(),findPartsCost(part.getPartName()));
             } else if (stockAvailable == 0) {
                alertInformation("The stock is currently empty.");
@@ -1547,13 +1618,17 @@ public class PartsController implements Initializable {
         }
     }
 
-    
+    public void initiateInstallPart(int bookingID, LocalDate date)
+        {
+            bookingIdCombo.setValue(bookingID);
+            dateOfInstall.setValue(date);
+        }
 
     
     public void clearFields() {
         partNameCombo.setValue(null);
         quantity.clear();
-        ((TextField) dateOfInstall.getEditor()).clear();
+        dateOfInstall.setValue(null);
         bookingIdCombo.setValue(null);
 
     }
