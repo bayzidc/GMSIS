@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.scene.Group?>
@@ -20,7 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="793.0" prefWidth="1326.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="793.0" prefWidth="1326.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DiagnosisAndRepair.gui.DiagnosisAndRepairController">
    <children>
        
       <JFXButton fx:id="users" layoutY="2.0" onAction="#usersPage" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
@@ -51,7 +45,7 @@
       </TableView>
       <ComboBox fx:id="mechanicCombo" layoutX="139.0" layoutY="316.0" onAction="#resetDate" prefWidth="150.0" promptText="Select ID/Name" />
       <Label layoutX="41.0" layoutY="320.0" text="Mechanic" />
-      <TextField fx:id="searchField" layoutX="335.0" layoutY="119.0" prefHeight="25.0" prefWidth="292.0" promptText="Enter fully or partially" />
+      <TextField fx:id="searchField" layoutX="493.0" layoutY="119.0" prefHeight="25.0" prefWidth="299.0" promptText="Enter fully or partially" />
       <Group />
       <Button fx:id="editButton" layoutX="553.0" layoutY="553.0" mnemonicParsing="false" onAction="#editBooking" prefHeight="25.0" prefWidth="211.0" text="Edit Booking" />
       <Button fx:id="deleteButton" layoutX="335.0" layoutY="553.0" mnemonicParsing="false" onAction="#deleteBooking" prefHeight="25.0" prefWidth="211.0" text="Delete Booking" />
@@ -68,7 +62,7 @@
       <Separator layoutX="38.0" layoutY="247.0" prefHeight="1.0" prefWidth="252.0" />
       <Label layoutX="41.0" layoutY="277.0" text="Current Mileage" />
       <TextField fx:id="mileage" layoutX="139.0" layoutY="273.0" prefHeight="25.0" prefWidth="150.0" />
-      <ComboBox fx:id="searchCombo" layoutX="631.0" layoutY="119.0" prefWidth="150.0" promptText="Search by" />
+      <ComboBox fx:id="searchCombo" layoutX="335.0" layoutY="119.0" prefWidth="150.0" promptText="Search by" />
       <ComboBox fx:id="monthCombo" layoutX="986.0" layoutY="662.0" onAction="#filterByAnyMonth" prefWidth="150.0" promptText="Filter by a month" />
       <DatePicker fx:id="anyDayPicker" editable="false" layoutX="986.0" layoutY="704.0" onAction="#filterByAnyDay" prefHeight="25.0" prefWidth="150.0" promptText="Filter by a date" />
       <JFXCheckBox fx:id="allBooking" checkedColor="#2f5c9a" layoutX="453.0" layoutY="625.0" onAction="#showAllBooking" text="Show all" />

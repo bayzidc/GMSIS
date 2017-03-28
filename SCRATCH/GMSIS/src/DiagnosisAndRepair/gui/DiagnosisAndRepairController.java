@@ -268,6 +268,7 @@ public class DiagnosisAndRepairController implements Initializable {
         {
             users.setDisable(true);
         }
+        bookings.setStyle("-fx-background-color:  #85C1E9;");
     
     }    
 
@@ -285,6 +286,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         pane.getChildren().setAll(rootPane);
+        
     }
     
     @FXML 
@@ -306,7 +308,7 @@ public class DiagnosisAndRepairController implements Initializable {
     private void bookingPage(ActionEvent event) throws IOException
     {
          AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
-        
+        bookings.setStyle("-fx-background-color: #508ced;");
         pane.getChildren().setAll(rootPane);
     }
     
@@ -338,17 +340,11 @@ public class DiagnosisAndRepairController implements Initializable {
         
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/PartsRecord/gui/parts.fxml"));
         Parent root = (AnchorPane)loader.load();
-        PartsRecord.gui.PartsController BookingObj = (PartsRecord.gui.PartsController) loader.getController();       
-        BookingObj.initiateInstallPart(table.getSelectionModel().getSelectedItem().getBookingID(), LocalDate.parse(table.getSelectionModel().getSelectedItem().getDate(),formatter2));
-        pane.getChildren().setAll(root);*/
-        
-        /*public void initiateInstallPart(int bookingID, LocalDate date)
-        {
-            bookingIdCombo.setValue(bookingID);
-            dateOfInstall.setValue(date);
-        }*/
+        PartsRecord.gui.PartsController obj = (PartsRecord.gui.PartsController) loader.getController();       
+        obj.initiateInstallPart(table.getSelectionModel().getSelectedItem().getBookingID(), LocalDate.parse(table.getSelectionModel().getSelectedItem().getDate(),formatter2));
+        pane.getChildren().setAll(root);
     }
     
   
