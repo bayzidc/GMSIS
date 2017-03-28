@@ -10,6 +10,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -30,9 +32,9 @@
       <Label layoutX="14.0" layoutY="129.0" text="Name Of Parts:" />
       <Label layoutX="14.0" layoutY="163.0" text="Description:" />
       <Label layoutX="28.0" layoutY="146.0" />
-      <Label layoutX="33.0" layoutY="529.0" text="Quantity:" />
+      <Label layoutX="14.0" layoutY="529.0" text="Quantity:" />
       <Label layoutX="18.0" layoutY="288.0" text="Cost:" />
-      <TextField fx:id="quantity" layoutX="126.0" layoutY="524.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity" />
+      <TextField fx:id="quantity" layoutX="122.0" layoutY="524.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity" />
       <TextField fx:id="cost" layoutX="126.0" layoutY="277.0" prefHeight="33.0" prefWidth="237.0" promptText="Enter a cost..." />
       <TableView fx:id="table" layoutX="433.0" layoutY="85.0" prefHeight="283.0" prefWidth="920.0">
         <columns>
@@ -45,9 +47,9 @@
       </TableView>
       <Button fx:id="back" layoutX="29.0" layoutY="737.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="84.0" text="Back" />
       <TextField fx:id="nameOfParts" layoutX="127.0" layoutY="124.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a name..." />
-      <Label layoutX="34.0" layoutY="494.0" text="PartID:" />
-      <Label layoutX="33.0" layoutY="571.0" text="Arrival Date:" />
-      <DatePicker fx:id="arrivalDate" layoutX="124.0" layoutY="566.0" prefHeight="27.0" prefWidth="237.0" promptText="dd/mm/yyyy" />
+      <Label layoutX="14.0" layoutY="494.0" text="PartID:" />
+      <Label layoutX="14.0" layoutY="571.0" text="Arrival Date:" />
+      <DatePicker fx:id="arrivalDate" layoutX="122.0" layoutY="566.0" prefHeight="27.0" prefWidth="237.0" promptText="dd/mm/yyyy" />
       <TableView fx:id="table2" layoutX="433.0" layoutY="433.0" prefHeight="237.0" prefWidth="920.0">
         <columns>
           <TableColumn fx:id="partNameCol" prefWidth="337.0" text="Part Name" />
@@ -55,20 +57,25 @@
             <TableColumn fx:id="quantityCol" prefWidth="303.0" text="Quantity" />
         </columns>
       </TableView>
-      <ComboBox fx:id="partIdCombo" layoutX="126.0" layoutY="489.0" prefHeight="27.0" prefWidth="237.0" promptText="Select Id" />
-      <Button fx:id="addItem" layoutX="34.0" layoutY="620.0" mnemonicParsing="false" onAction="#addItemButton" prefHeight="27.0" prefWidth="84.0" text="Add Items " />
-      <Button fx:id="clear2" layoutX="129.0" layoutY="620.0" mnemonicParsing="false" onAction="#clearButton2" prefHeight="27.0" prefWidth="63.0" text="Clear" />
-      <Button fx:id="clear" layoutX="373.0" layoutY="341.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
-      <Button fx:id="delete" layoutX="201.0" layoutY="341.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="94.0" text="Delete Parts" />
+      <ComboBox fx:id="partIdCombo" layoutX="122.0" layoutY="489.0" prefHeight="27.0" prefWidth="237.0" promptText="Select Id" />
+      <Button fx:id="addItem" layoutX="14.0" layoutY="620.0" mnemonicParsing="false" onAction="#addItemButton" prefHeight="27.0" prefWidth="84.0" text="Add Items " />
+      <Button fx:id="clear2" layoutX="121.0" layoutY="620.0" mnemonicParsing="false" onAction="#clearButton2" prefHeight="27.0" prefWidth="63.0" text="Clear" />
+      <Button fx:id="clear" layoutX="375.0" layoutY="341.0" mnemonicParsing="false" onAction="#clearButton" text="Clear" />
+      <Button fx:id="delete" layoutX="207.0" layoutY="341.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="94.0" text="Delete Parts" />
       <Button fx:id="edit" layoutX="121.0" layoutY="341.0" mnemonicParsing="false" onAction="#editParts" text="Edit Parts" />
       <Button fx:id="addparts" layoutX="5.0" layoutY="341.0" mnemonicParsing="false" onAction="#addButton" prefHeight="27.0" prefWidth="112.0" text="Add New Parts" />
-      <Label layoutX="31.0" layoutY="430.0" text="Add Items To Stock">
+      <Label layoutX="14.0" layoutY="423.0" text="Add Items To Stock">
          <font>
             <Font name="Georgia Bold" size="18.0" />
          </font>
       </Label>
       <Separator layoutX="-72.0" layoutY="394.0" prefHeight="0.0" prefWidth="1456.0" />
-      <Button fx:id="update" layoutX="302.0" layoutY="341.0" mnemonicParsing="false" onAction="#updateParts" text="Update" />
+      <Button fx:id="update" layoutX="305.0" layoutY="341.0" mnemonicParsing="false" onAction="#updateParts" prefHeight="27.0" prefWidth="63.0" text="Update" />
       <TextArea fx:id="description" layoutX="126.0" layoutY="162.0" prefHeight="107.0" prefWidth="237.0" promptText="Enter a description.." />
+      <ImageView fitHeight="59.0" fitWidth="173.0" layoutX="254.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/partsIcon.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

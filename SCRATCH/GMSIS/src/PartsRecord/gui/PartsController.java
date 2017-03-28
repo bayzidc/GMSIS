@@ -57,6 +57,7 @@ import javafx.scene.control.DateCell;
 import javafx.util.Callback;
 import Authentication.sqlite;
 import CustomerAccount.gui.GuiController;
+import PartsRecord.logic.PartsUsedPerVehicle;
 import VehicleRecord.logic.CustBookingInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -102,7 +103,8 @@ public class PartsController implements Initializable {
     //private ComboBox 
     @FXML
     private Button installParts;
-    
+    @FXML
+    private Button update;
     @FXML
     private Button editParts;
     @FXML
@@ -110,7 +112,9 @@ public class PartsController implements Initializable {
     @FXML
     private Button clear;
     @FXML
-    private Button addBill;
+    private Button viewCustomerInfo;
+    @FXML
+    private Button viewPartsInfo;
     @FXML
     private TableView<partsUsed> table;
     @FXML
@@ -143,22 +147,196 @@ public class PartsController implements Initializable {
     public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0,false);
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
     ObservableList<String> namesCombo = FXCollections.observableArrayList();
+    @FXML
+    public TableView<PartsUsedPerVehicle> partInfoTable;
+    @FXML
+    public TableColumn<PartsUsedPerVehicle, String> regCol;
+    @FXML
+    public TableColumn<PartsUsedPerVehicle, String> customerCol;
+    @FXML
+    public TableColumn<PartsUsedPerVehicle, String> pNameCol;
+    @FXML
+    public TableColumn<PartsUsedPerVehicle, Integer> qCol;
     
+
+    public static PartsUsedPerVehicle partVehicle = new PartsUsedPerVehicle("", "", "",0);
+
+    ObservableList<PartsUsedPerVehicle> partVehData;
     
     
     @FXML
     public TableView<vehicleCustomerInfo> custInfoTable;
     @FXML
+    public TableColumn<vehicleCustomerInfo, String> regNoCol;
+    @FXML
     public TableColumn<vehicleCustomerInfo, String> fullCustomerNameCol;
     @FXML
     public TableColumn<vehicleCustomerInfo, String> bookingDateCol;
-    @FXML
-    public TableColumn<vehicleCustomerInfo, String> regNoCol;
+    
 
     public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("", "", "");
 
     ObservableList<vehicleCustomerInfo> customerData;
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    
+    
+    @FXML
+    public void buildPartsDataBtn(ActionEvent event)
+    {
+        try{
+        String vehReg = table.getSelectionModel().getSelectedItem().getVehicleRegNo();
+        int vehicleId = findVehicleID(vehReg);
+        
+        partVehData = FXCollections.observableArrayList();
+        
+
+        try {
+            Connection conn = null;
+            conn = (new sqlite().connect());
+            String SQL = "Select parts_id,quantity,customerID from vehiclePartsUsed where vehicleID ='" + vehicleId + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {   
+                
+                partVehicle.setRegNumber("");
+                partVehicle.setCustomerName("");
+                partVehicle.setPartUsedName("");
+                partVehicle.setQuantity(0);
+                
+                
+                partVehicle.setPartUsedName(findPartsName(rs.getInt("parts_id")));
+                partVehicle.setQuantity(rs.getInt("quantity"));
+                partVehicle.setCustomerName(findCustomerName(rs.getInt("customerID")));
+                partVehicle.setRegNumber(vehReg);
+                
+               
+                partVehData.add(new PartsUsedPerVehicle(partVehicle.getRegNumber(),partVehicle.getCustomerName(),partVehicle.getPartUsedName(),partVehicle.getQuantity()));
+
+            }        
+            
+            partInfoTable.setItems(partVehData);
+            rs.close();
+            conn.close();
+        }
+        
+        catch(Exception e)
+        {
+            
+            alertError("Error on building parts used data. Please try again later.");
+        }
+        }
+        catch(Exception e)
+        {
+            alertInformation( "Please select a row to view the parts/vehicle information for that vehicle.");
+        }
+        }
+    
+   
+    
+    @FXML
+    public void buildCustomerDataBtn(ActionEvent event)
+    {
+        futureBooking.setSelected(false);
+        pastBooking.setSelected(false);
+        showAll.setSelected(false);
+        try{
+        String vehReg = table.getSelectionModel().getSelectedItem().getVehicleRegNo();
+        int vehicleId = findVehicleID(vehReg);
+        tempData.clear();
+        customerData = FXCollections.observableArrayList();
+        
+
+        try {
+            Connection conn = null;
+            conn = (new sqlite().connect());
+            String SQL = "Select customer_id, scheduled_date from booking where vehicleID ='" + vehicleId + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+            {   
+                System.out.println("New customer method");
+                custVehicle.setBookingDate("");
+                custVehicle.setCustomerName("");
+                custVehicle.setRegNumber("");
+                custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
+                custVehicle.setRegNumber(vehReg);
+                custVehicle.setBookingDate(rs.getString("scheduled_date"));
+                customerData.add(new vehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
+
+            }        
+            tempData.addAll(customerData);
+            custInfoTable.setItems(customerData);
+            rs.close();
+            conn.close();
+        }
+        
+        catch(Exception e)
+        {
+            
+            alertError("Error on building customer data. Please try again later.");
+        }
+        }
+        catch(Exception ev)
+        {
+            alertInformation( "Please select a row to view the customer/booking information for that vehicle.");
+        }
+        }
+    
+    private int findVehicleID(String vehReg) throws ClassNotFoundException {
+        int vehRegID = 0;
+        Connection conn = null;
+        try {
+
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+
+            String SQL = "Select vehicleID from vehicleList where RegNumber ='" + vehReg + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                vehRegID = rs.getInt("vehicleID");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding vehicle id.");
+        }
+        return vehRegID;
+    }
+
+    
+    public void buildCustomerData() throws ClassNotFoundException, SQLException {
+        customerData = FXCollections.observableArrayList();
+        tempData.clear();
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened Database Successfully");
+            String SQL = "Select * from booking";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+  
+            while (rs.next()) {
+                custVehicle.setBookingDate("");
+                custVehicle.setCustomerName("");
+                custVehicle.setRegNumber("");
+                custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
+                custVehicle.setRegNumber(findVehReg(rs.getInt("vehicleID")));
+                custVehicle.setBookingDate(rs.getString("scheduled_date"));
+    
+                
+                customerData.add(new vehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
+            }
+            
+            
+            tempData.addAll(customerData);
+            custInfoTable.setItems(customerData);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError("Error in building customer Data.");
+        }
+    }
     
     // add data to the database from the textfield.
     public void createData(partsUsed part) throws ClassNotFoundException {
@@ -175,11 +353,6 @@ public class PartsController implements Initializable {
             //The query is sent to the database and prepared there which means the SQL statement is "analysed".
             PreparedStatement state = conn.prepareStatement(sql);
 
-            if (isFieldsCompleted()) {
-
-                alertError("Please complete all the fields.");
-
-            } else {
                 // the values are sent to the server
                 // use the appropriate state.setXX() methods to set the appropriate values for the parameters that you've defined.
                 // Then call state.executeUpdate() to execute the call to the database.
@@ -199,7 +372,7 @@ public class PartsController implements Initializable {
                 state.close();
                 conn.close();
 
-            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Creating Data");
@@ -299,6 +472,7 @@ public class PartsController implements Initializable {
     }
     
     private String findCustomerName(int customerID) throws ClassNotFoundException {
+        
         String customerName = "";
         Connection conn = null;
         try {
@@ -490,6 +664,14 @@ public class PartsController implements Initializable {
                 new PropertyValueFactory<>("customerName"));
         bookingDateCol.setCellValueFactory(
                 new PropertyValueFactory<>("bookingDate"));
+        regCol.setCellValueFactory(
+                new PropertyValueFactory<>("vehicleRegNo"));
+        customerCol.setCellValueFactory(
+                new PropertyValueFactory<>("customerName"));
+        pNameCol.setCellValueFactory(
+                new PropertyValueFactory<>("partUsedName"));
+        qCol.setCellValueFactory(
+                new PropertyValueFactory<>("quantity"));
         try {
             buildPartsUsedData();
             buildCustomerData();
@@ -516,19 +698,29 @@ public class PartsController implements Initializable {
         if (result.get() == buttonTypeNo) {
             return;
         }
-        if(!isFieldsCompleted()){
+        
+        if(!isFieldsCompleted()) {
+            System.out.println("uhooo");
+            return;
+            
+        }
+        
+        if(!verifyQuantity(quantity.getText())){
             return;
         }
-        if(!verifyQuantity(quantity.getText())){
+        if(!isQuantityZero(quantity.getText())){
             return;
         }
         if(!checkForWhiteSpace()){
             return;
         }
         
-        if(!isFieldsCompleted()) {
-            
-        } else{
+        if(!checkInstallDate(bookingIdCombo.getValue(),dateOfInstall.getValue())){
+            alertError("Booking id : " + bookingIdCombo.getValue() + " has a schedule date of " + dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+ ". Please select either the schedule date or a future date to install a part.");
+            return;
+        }
+        
+         else{
             part.setBookingID(bookingIdCombo.getValue());
             part.setPartName(partNameCombo.getValue());
             part.setQuantity(Integer.parseInt(quantity.getText()));
@@ -552,6 +744,71 @@ public class PartsController implements Initializable {
         
     }
     
+    public boolean checkInstallDate(int bookingId, LocalDate installDate) throws IOException, ClassNotFoundException {
+        boolean check = false;
+        String date = "";
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select scheduled_date from booking where booking_id ='" + bookingId + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+                date = rs.getString("scheduled_date");
+                System.out.println("Getting schedule date value while checking install date : " + date);
+            
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        LocalDate localScheduleDate = convertStringToDateForBookingCombo(date) ;
+        if(localScheduleDate.isBefore(installDate) || localScheduleDate.equals(installDate)){
+            check = true;
+        }
+        return check;
+    }
+    
+    public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
+        String date = "";
+        
+        if(bookingIdCombo.getValue() == null){
+            return;
+        }
+        int comboBookingValue = bookingIdCombo.getValue();
+        
+        System.out.println("Booking id is checking to be " + comboBookingValue);
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select scheduled_date from booking where booking_id ='" + comboBookingValue + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) 
+                date = rs.getString("scheduled_date");
+                System.out.println("Getting date value : " + date);
+            
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error");
+        }
+        LocalDate local = convertStringToDateForBookingCombo(date) ;
+        
+        dateOfInstall.setValue(local);
+       
+        
+        
+    }
+    
     public boolean verifyQuantity(String quantity){
         boolean check = true;
         if(!quantity.matches("[0-9]+")){
@@ -561,6 +818,18 @@ public class PartsController implements Initializable {
         }
         return check;
     }
+    
+    public boolean isQuantityZero(String quantity){
+        boolean check = true;
+        if(Integer.parseInt(quantity) == 0){
+            alertError("Quantity cannot be 0.");
+            check = false;
+            
+        }
+        return check;
+    }
+    
+    
     
     public int findStockLevel(String name) throws ClassNotFoundException {
         int stockLevel = 0;
@@ -747,44 +1016,7 @@ public class PartsController implements Initializable {
     }
     
     
-    
-    public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
-        String date = "";
-        
-        if(bookingIdCombo.getValue() == null){
-            return;
-        }
-        int comboBookingValue = bookingIdCombo.getValue();
-        
-        System.out.println("Booking id is checking to be " + comboBookingValue);
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-
-            String SQL = "Select scheduled_date from booking where booking_id ='" + comboBookingValue + "'";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while (rs.next()) 
-                date = rs.getString("scheduled_date");
-                System.out.println("Getting date value : " + date);
-            
-
-            rs.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
-        LocalDate local = convertStringToDateForBookingCombo(date) ;
-        
-        dateOfInstall.setValue(local);
-       
-        
-        
-    }
-    
-    
+  
     @FXML
     private void filterByPast() throws ClassNotFoundException {
        if(!pastBooking.isSelected()){  
@@ -966,10 +1198,20 @@ public class PartsController implements Initializable {
     
     @FXML
     public void editButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        try {
-            if (isFieldsCompleted()) {
-                alertError("Please complete all the fields.");
-            } else {
+         bookingIdCombo.setDisable(true);
+         partNameCombo.setDisable(true);
+         dateOfInstall.setDisable(true);
+     try
+        {
+            int idFromTable = table.getSelectionModel().getSelectedItem().getUsedID();
+        }
+        catch(Exception e)
+        {
+            alertError("Please select a row first to edit a part.");
+            return;
+        }
+            
+            
                 //part.setPartId(Integer.parseInt(idNumber.getText()));
                 part.setBookingID(bookingIdCombo.getValue());
                 part.setPartName(partNameCombo.getValue());
@@ -980,12 +1222,7 @@ public class PartsController implements Initializable {
                 editData(part);
                 buildPartsUsedData();
                 alertInformation("The database has been updated.");
-            }
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.out.println(" Error in editButton.");
         }
-    }
     
     @FXML
     public void editData(PartsRecord.logic.partsUsed part) throws ClassNotFoundException, IOException {
@@ -1167,37 +1404,7 @@ public class PartsController implements Initializable {
     }
     
     
-    public void buildCustomerData() throws ClassNotFoundException, SQLException {
-        customerData = FXCollections.observableArrayList();
-        tempData.clear();
-        Connection conn = null;
-        try {
-            conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
-            String SQL = "Select * from booking";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-  
-            while (rs.next()) {
-                custVehicle.setBookingDate("");
-                custVehicle.setCustomerName("");
-                custVehicle.setRegNumber("");
-                custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
-                custVehicle.setRegNumber(findVehReg(rs.getInt("vehicleID")));
-                custVehicle.setBookingDate(rs.getString("scheduled_date"));
     
-                
-                customerData.add(new vehicleCustomerInfo(custVehicle.getCustomerName(), custVehicle.getBookingDate(), custVehicle.getRegNumber()));
-            }
-            
-            
-            tempData.addAll(customerData);
-            custInfoTable.setItems(customerData);
-            rs.close();
-            conn.close();
-        } catch (Exception e) {
-            alertError("Error in building customer Data.");
-        }
-    }
     
     public boolean checkForWhiteSpace()
     {
@@ -1215,8 +1422,20 @@ public class PartsController implements Initializable {
     }
 
     public boolean isFieldsCompleted() {
+        if(partNameCombo.getValue() == null){
+            System.out.println(" name combo is null");
+        }
+        else if(quantity.getText().equals("")){
+            System.out.println("quantity is null");
+        }
+        else if(dateOfInstall.getValue().equals("")){
+            System.out.println("date of install  is null");
+        }else if(bookingIdCombo.getValue() == null){
+            System.out.println(" booking is null");
+        }
+        
         if (partNameCombo.getValue() == null || quantity.getText().equals("") || dateOfInstall.getValue().equals("") || bookingIdCombo.getValue() == null) {
-            alertInformation("Please complete all the fields");
+            alertInformation("Please complete all the fields. lhlhlhlh");
             return false;
         }
         return true;

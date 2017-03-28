@@ -367,6 +367,16 @@ public class PartStockController implements Initializable {
         return check;
     }
     
+    public boolean isQuantityZero(String quantity){
+        boolean check = true;
+        if(Integer.parseInt(quantity) == 0){
+            alertError("Quantity cannot be 0.");
+            check = false;
+            
+        }
+        return check;
+    }
+    
     
     public boolean verifyQuantity(String quantity){
         boolean check = true;
@@ -428,6 +438,9 @@ public class PartStockController implements Initializable {
             return;
         }
         if(!verifyQuantity(quantity.getText())){
+            return;
+        }
+        if(!isQuantityZero(quantity.getText())){
             return;
         }
         
