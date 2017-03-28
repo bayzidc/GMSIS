@@ -38,9 +38,9 @@ public class partsUsed {
     public StringProperty vehicleRegNo;
     public StringProperty customerFullName;
     public IntegerProperty bookingID;
-    public BooleanProperty addedBill;
+    
 
-    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID, boolean checkBill) {
+    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID) {
         this.usedID = new SimpleIntegerProperty(usedID);
         this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
@@ -50,7 +50,7 @@ public class partsUsed {
         this.vehicleRegNo = new SimpleStringProperty(vehicleRegNo);
         this.customerFullName = new SimpleStringProperty(customerFullName);
         this.bookingID = new SimpleIntegerProperty(bookingID);
-        this.addedBill = new SimpleBooleanProperty(checkBill);
+        
     }
     
     public int getUsedID(){
@@ -65,9 +65,7 @@ public class partsUsed {
         return cost.get();
     }
     
-    public boolean getAddedBill(){
-        return addedBill.get();
-    }
+    
     
     public int getQuantity() {
         return quantity.get();
@@ -109,9 +107,7 @@ public class partsUsed {
         usedID.set(number);
     }
     
-    public void setAddedBill(boolean check){
-        addedBill.set(check);
-    }
+    
     
     public void setInstallDate(String date) {
         installDate.set(date);
