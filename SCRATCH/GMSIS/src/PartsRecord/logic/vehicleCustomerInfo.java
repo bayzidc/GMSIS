@@ -18,7 +18,7 @@ public class vehicleCustomerInfo {
    public SimpleStringProperty bookingDate;
     
    
-   public vehicleCustomerInfo(String customerName, String bDate, String vehicleregNo)
+   public vehicleCustomerInfo(String vehicleregNo, String customerName, String bDate)
    {
       this.customerName = new SimpleStringProperty(customerName);
       this.vehicleregNo = new SimpleStringProperty(vehicleregNo);
