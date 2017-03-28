@@ -51,9 +51,14 @@ public class LoginController implements Initializable {
     private Button newBtn;
     @FXML
     private Hyperlink forgotPass;
+    public static String userID;
+    
     @FXML 
     private void loginButton(ActionEvent event) throws IOException
     {
+        
+        userID=username.getText();
+        System.out.println("aaa"+userID);
         Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
         //Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
@@ -193,6 +198,9 @@ public class LoginController implements Initializable {
         
         pass.setOnKeyPressed(ev -> {
             try {
+                
+                userID=username.getText();
+        System.out.println("aaa"+userID);
                 Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
                 //Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
                 Scene admin_Scene = new Scene(adminUser);

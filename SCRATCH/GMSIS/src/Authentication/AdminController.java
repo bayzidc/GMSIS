@@ -56,6 +56,10 @@ public class AdminController implements Initializable {
     private JFXButton users;
     
     @FXML
+    private Button exitEdit;
+    @FXML
+    private Button update;
+    @FXML
     private Button backButton;
     @FXML
     private Button customerButton;
@@ -217,15 +221,32 @@ public class AdminController implements Initializable {
         surname.clear();
         newPass.clear();
         admin.setSelected(false);
-        editUser.setDisable(true);
+
         }
 
     }
     
     @FXML
+    private void exitEdit(ActionEvent event)
+    {
+        createUser.setDisable(false);
+        exitEdit.setDisable(true);
+
+        clearFields();
+    }
+    
+    @FXML
     private void clearAllButton(ActionEvent event)
     {
-        id.clear();
+        clearFields();
+    }
+    
+    private void clearFields()
+    {
+        if(!createUser.isDisable())
+        {
+            id.clear();
+        }
         firstName.clear();
         surname.clear();
         newPass.clear();
@@ -240,12 +261,16 @@ public class AdminController implements Initializable {
             alertError(null,"Please select a row to delete a user");
             return;
         }
-        
+        String ID = table.getSelectionModel().getSelectedItem().getID();//Gets ID 
+        if(LoginController.userID.equals(ID))
+        {
+            alertInfo(null,"Cannot delete your own user record");
+            return;
+        }
         
         Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this user?");
         if (confirmDelete.get()==ButtonType.OK && isDeleted()) {
 
-            String ID = table.getSelectionModel().getSelectedItem().getID(); //Gets ID 
             alertInfo(null,"UserID: " + ID + " has been deleted");
             buildData();
         }
@@ -317,6 +342,7 @@ public class AdminController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         id.setEditable(false);
+        exitEdit.setDisable(true);
         
         
         passCol.setCellValueFactory(
@@ -369,8 +395,8 @@ public class AdminController implements Initializable {
             admin.setSelected(false);
         }
         
-        editUser.setDisable(false);
         createUser.setDisable(true);
+        exitEdit.setDisable(false);
         }
       
     }
@@ -404,6 +430,8 @@ public class AdminController implements Initializable {
         newPass.clear();
         admin.setSelected(false);
         createUser.setDisable(false);
+        exitEdit.setDisable(true);
+
         buildData();
         }
     }
