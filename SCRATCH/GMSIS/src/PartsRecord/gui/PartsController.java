@@ -63,6 +63,7 @@ import VehicleRecord.logic.CustBookingInfo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.time.LocalDateTime;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
@@ -103,6 +104,8 @@ public class PartsController implements Initializable {
     @FXML
     private ComboBox<String> searchCombo;
     @FXML
+    public TextArea showPartInfo;
+    @FXML
     private Button backButton;
     @FXML
     private Button installParts;
@@ -116,6 +119,7 @@ public class PartsController implements Initializable {
     private Button viewPartsInfo;
     @FXML
     private Button viewParts;
+    
     @FXML
     private TableView<partsUsed> table;
     @FXML
@@ -186,11 +190,12 @@ public class PartsController implements Initializable {
     public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("", "", "");
     ObservableList<vehicleCustomerInfo> customerData;
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    private partsUsed partToDisplay = null ;
     LocalDate scheduleDateFromBooking;
     
     
-    @FXML
-    public void buildPartsInformation(ActionEvent event){
+    
+    /*public void buildPartsInformation(ActionEvent event){
         
         try{
         String partName = table.getSelectionModel().getSelectedItem().getPartName();
@@ -239,7 +244,7 @@ public class PartsController implements Initializable {
             alertInformation( "Please select a row to view the parts information.");
         }
         
-    }
+    }*/
     
     
     @FXML
@@ -728,7 +733,7 @@ public class PartsController implements Initializable {
         viewCustomerInfo.setTooltip(new Tooltip("Select a row from the repair table and click to view booking information for the selected vehicle"));
         clear.setTooltip(new Tooltip("Click to clear all the fields"));
         viewPartsInfo.setTooltip(new Tooltip("Select a row from the repair table and click to view the parts used for the selected vehicle"));
-        viewParts.setTooltip(new Tooltip("Select a row from the repair table and click to view information for the selected parts used"));
+        //viewParts.setTooltip(new Tooltip("Select a row from the repair table and click to view information for the selected parts used"));
         partStockButton.setTooltip(new Tooltip("Click to go to parts stock "));
         deleteParts.setTooltip(new Tooltip("Select a row from the table and click to delete a part"));
         backButton.setTooltip(new Tooltip("Click to go back"));
@@ -765,12 +770,12 @@ public class PartsController implements Initializable {
                 new PropertyValueFactory<>("partUsedName"));
         qCol.setCellValueFactory(
                 new PropertyValueFactory<>("quantity"));
-        nameOfPartsCol.setCellValueFactory(
-                new PropertyValueFactory<>("partName"));
-        partDescriptionCol.setCellValueFactory(
-                new PropertyValueFactory<>("partDescription"));
-        partCostCol.setCellValueFactory(
-                new PropertyValueFactory<>("cost"));
+        //nameOfPartsCol.setCellValueFactory(
+                //new PropertyValueFactory<>("partName"));
+        //partDescriptionCol.setCellValueFactory(
+               // new PropertyValueFactory<>("partDescription"));
+        //partCostCol.setCellValueFactory(
+                //new PropertyValueFactory<>("cost"));
         
         try {
             buildPartsUsedData();
@@ -781,11 +786,58 @@ public class PartsController implements Initializable {
             e.printStackTrace();
 
         }
+        showPartInfo.setWrapText (true);
+       
+         table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    try {
+                        partToDisplay = table.getSelectionModel().getSelectedItem();
+                        String selectedPartName = partToDisplay.getPartName();
+                        String partDescription = findPartsDescription(partToDisplay.getPartName());
+                        if (partToDisplay != null) {
+                             showPartInfo.setText("Part Name: " + partToDisplay.getPartName() + "\n\n" + "Part Description: " +
+                                     partDescription + "\n\n" + "Part Cost: " +
+                                     partToDisplay.getCost() + "\n" 
+                             );
+                            }
+                 }
+                     catch(Exception e)
+                             {
+                             alertError("Cannot load Parts info.");
+                             }
+                }
+         });
+        
         if(!Authentication.LoginController.isAdmin)
         {
             users.setDisable(true);
         }
        parts.setStyle("-fx-background-color:  #85C1E9;");
+    }
+    
+    private String findPartsDescription(String name) throws ClassNotFoundException {
+        String description  = "";
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select description from vehiclePartsStock where nameofPart='" + name + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                description = rs.getString("description");
+                
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Parts description.");
+        }
+        return description;
     }
     
     public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
