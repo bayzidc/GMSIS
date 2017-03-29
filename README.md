@@ -47,6 +47,9 @@ To check for booking, firstly select the customer on the customer information ta
 How to check a customer for bills?
 To check for bills, simply select a customer on the customer information table. Once a customer is selected, the bills table will be updated with the currently selected customer bill's.
 
+How to initiate a booking?
+Simply select a customer on the customer information table and click the button Create Booking.
+
 How to navigate to other modules or exit?
 Simply use the navigation bar at the top to simply switch between modules or if you require to log out.
 
