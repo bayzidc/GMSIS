@@ -28,7 +28,7 @@
       <Label layoutX="28.0" layoutY="146.0" />
       <Label layoutX="14.0" layoutY="529.0" text="Quantity:" />
       <Label layoutX="18.0" layoutY="288.0" text="Cost:" />
-      <TextField fx:id="quantity" layoutX="122.0" layoutY="524.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity" />
+      <TextField fx:id="quantity" layoutX="122.0" layoutY="524.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity.." />
       <TextField fx:id="cost" layoutX="126.0" layoutY="277.0" prefHeight="33.0" prefWidth="237.0" promptText="Enter a cost..." />
       <TableView fx:id="table" layoutX="433.0" layoutY="85.0" prefHeight="283.0" prefWidth="920.0">
         <columns>
@@ -53,20 +53,20 @@
       </TableView>
       <ComboBox fx:id="partIdCombo" layoutX="122.0" layoutY="489.0" prefHeight="27.0" prefWidth="237.0" promptText="Select Id" />
       <Button fx:id="addItem" layoutX="14.0" layoutY="620.0" mnemonicParsing="false" onAction="#addItemButton" prefHeight="27.0" prefWidth="84.0" text="Add Items " />
-      <Button fx:id="clear2" layoutX="104.0" layoutY="620.0" mnemonicParsing="false" onAction="#clearButton2" prefHeight="27.0" prefWidth="63.0" text="Clear" />
-      <Button fx:id="clear" layoutX="370.0" layoutY="341.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="56.0" text="Clear" />
-      <Button fx:id="delete" layoutX="201.0" layoutY="341.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="100.0" text="Delete Parts" />
-      <Button fx:id="edit" layoutX="121.0" layoutY="341.0" mnemonicParsing="false" onAction="#editParts" text="Edit Parts" />
-      <Button fx:id="addparts" layoutX="5.0" layoutY="341.0" mnemonicParsing="false" onAction="#addButton" prefHeight="27.0" prefWidth="112.0" text="Add New Parts" />
+      <Button fx:id="clear2" layoutX="104.0" layoutY="620.0" mnemonicParsing="false" onAction="#clearButton2" prefHeight="27.0" prefWidth="75.0" text="Clear" />
+      <Button fx:id="clear" layoutX="351.0" layoutY="341.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="56.0" text="Clear" />
+      <Button fx:id="delete" layoutX="179.0" layoutY="341.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="96.0" text="Delete Parts" />
+      <Button fx:id="edit" layoutX="90.0" layoutY="341.0" mnemonicParsing="false" onAction="#editParts" prefHeight="27.0" prefWidth="88.0" text="Edit Parts" />
+      <Button fx:id="addparts" layoutX="5.0" layoutY="341.0" mnemonicParsing="false" onAction="#addButton" prefHeight="27.0" prefWidth="84.0" text="Add Parts" />
       <Label layoutX="14.0" layoutY="423.0" text="Add Items To Stock">
          <font>
             <Font name="Georgia Bold" size="18.0" />
          </font>
       </Label>
       <Separator layoutX="-72.0" layoutY="394.0" prefHeight="0.0" prefWidth="1456.0" />
-      <Button fx:id="update" layoutX="305.0" layoutY="341.0" mnemonicParsing="false" onAction="#updateParts" prefHeight="27.0" prefWidth="63.0" text="Update" />
+      <Button fx:id="update" layoutX="275.0" layoutY="341.0" mnemonicParsing="false" onAction="#updateParts" prefHeight="27.0" prefWidth="76.0" text="Update" />
       <TextArea fx:id="description" layoutX="126.0" layoutY="162.0" prefHeight="107.0" prefWidth="237.0" promptText="Enter a description.." />
-      <ImageView fitHeight="59.0" fitWidth="173.0" layoutX="254.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="64.0" fitWidth="65.0" layoutX="254.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/partsIcon.png" />
          </image>

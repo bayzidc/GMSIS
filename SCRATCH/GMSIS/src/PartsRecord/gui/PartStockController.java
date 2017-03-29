@@ -161,6 +161,7 @@ public class PartStockController implements Initializable {
         edit.setTooltip(new Tooltip("Select a row from the table and click to edit a part"));
         update.setTooltip(new Tooltip("Edit a part and click to update any changes"));
         delete.setTooltip(new Tooltip("Select a row from the table and click to delete a part"));
+        back.setTooltip(new Tooltip("Click to go back to repair information"));
         
         partNameCol.setCellValueFactory(
                 new PropertyValueFactory<>("PartName"));
