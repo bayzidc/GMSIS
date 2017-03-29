@@ -436,13 +436,13 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     //fill vehicle combo for specific customer
-    private void fillVehicleCombo() throws ClassNotFoundException
+    public void fillVehicleCombo() throws ClassNotFoundException
     {
         if(customerCombo.getValue()==null)
         {
             return;
         }
-        
+ 
         String cust = customerCombo.getValue();
         String[] custArr = cust.split(": ");
         String custID = custArr[0];
@@ -692,7 +692,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     //from vehicle page
-    public void initiateBooking(String cName, int id, String reg, int mile)
+    public void initiateBookingFromVehicle(String cName, int id, String reg, int mile)
     {
         try{
              customerCombo.setValue(id+": "+cName);
@@ -707,7 +707,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     //from customer page
-    public void initiateBooking(String cName, int id) 
+    public void initiateBookingFromCustomer(String cName, int id) 
     {
         try{
             customerCombo.setValue(id+": "+cName);
@@ -716,8 +716,7 @@ public class DiagnosisAndRepairController implements Initializable {
         catch(Exception e)
         {
             System.out.println("not the correct arguments");
-        }
-        
+        }  
     }
     
     //check if every entry is complete
