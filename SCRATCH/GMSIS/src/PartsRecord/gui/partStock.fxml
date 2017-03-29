@@ -30,7 +30,7 @@
       <Label layoutX="18.0" layoutY="288.0" text="Cost:" />
       <TextField fx:id="quantity" layoutX="122.0" layoutY="524.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity.." />
       <TextField fx:id="cost" layoutX="126.0" layoutY="277.0" prefHeight="33.0" prefWidth="237.0" promptText="Enter a cost..." />
-      <TableView fx:id="table" layoutX="433.0" layoutY="85.0" prefHeight="283.0" prefWidth="920.0">
+      <TableView fx:id="table" layoutX="433.0" layoutY="110.0" prefHeight="258.0" prefWidth="920.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="64.0" text="Parts ID" />
           <TableColumn fx:id="nameCol" prefWidth="175.0" text="Parts Name" />
@@ -44,7 +44,7 @@
       <Label layoutX="14.0" layoutY="494.0" text="PartID:" />
       <Label layoutX="14.0" layoutY="571.0" text="Arrival Date:" />
       <DatePicker fx:id="arrivalDate" layoutX="122.0" layoutY="566.0" prefHeight="27.0" prefWidth="237.0" promptText="dd/mm/yyyy" />
-      <TableView fx:id="table2" layoutX="433.0" layoutY="433.0" prefHeight="237.0" prefWidth="920.0">
+      <TableView fx:id="table2" layoutX="433.0" layoutY="444.0" prefHeight="237.0" prefWidth="920.0">
         <columns>
           <TableColumn fx:id="partNameCol" prefWidth="337.0" text="Part Name" />
           <TableColumn fx:id="arrivalDateCol" prefWidth="280.0" text="Arrival Date" />
@@ -72,5 +72,15 @@
          </image>
       </ImageView>
       <JFXButton prefHeight="41.0" prefWidth="1359.0" style="-fx-background-color: #081786;" textFill="#081786" />
+      <Label layoutX="872.0" layoutY="416.0" prefHeight="15.0" prefWidth="113.0" text="Stock Deliveries">
+         <font>
+            <Font name="Georgia Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="856.0" layoutY="75.0" text="Parts In Stock">
+         <font>
+            <Font name="Georgia Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
