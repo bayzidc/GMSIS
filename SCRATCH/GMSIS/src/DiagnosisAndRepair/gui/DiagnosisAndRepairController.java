@@ -432,6 +432,12 @@ public class DiagnosisAndRepairController implements Initializable {
     @FXML
     private void findVehicleOnChange(ActionEvent event) throws ClassNotFoundException
     {
+        fillVehicleCombo();
+    }
+    
+    //fill vehicle combo for specific customer
+    private void fillVehicleCombo() throws ClassNotFoundException
+    {
         if(customerCombo.getValue()==null)
         {
             return;
@@ -467,8 +473,9 @@ public class DiagnosisAndRepairController implements Initializable {
         if(vehicleReg.isEmpty())
         {
             alertInfo("There are no vehicle for the selected customer","Please add a vehicle first");
-        }
+        }  
     }
+    
     
     //on action of vehicle combo box, loads its mileage
     @FXML
@@ -486,32 +493,6 @@ public class DiagnosisAndRepairController implements Initializable {
             conn.close();
         } catch (SQLException ex) {
             
-        }
-    }
-    
-    
-    private void fillVehicleCombo() throws ClassNotFoundException
-    {
-        vehicleReg.clear();
-        Connection conn = null;
-        try {
-
-            conn = (new sqlite().connect());
-
-            String SQL = "Select RegNumber from vehicleList";
-            ResultSet rs = conn.createStatement().executeQuery(SQL);
-            while(rs.next())
-            {       
-                vehicleReg.add(rs.getString("RegNumber"));    
-            }
-            vehicleCombo.setItems(vehicleReg);
-            
-            rs.close();
-            conn.close();
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error");
         }
     }
     
@@ -710,11 +691,32 @@ public class DiagnosisAndRepairController implements Initializable {
         mileage.clear();
     }
     
+    //from vehicle page
     public void initiateBooking(String cName, int id, String reg, int mile)
     {
-        customerCombo.setValue(id+": "+cName);
-        vehicleCombo.setValue(reg);
-        mileage.setText(Integer.toString(mile));
+        try{
+             customerCombo.setValue(id+": "+cName);
+             vehicleCombo.setValue(reg);
+             mileage.setText(Integer.toString(mile));   
+        }
+        catch(Exception e)
+        {
+            System.out.println("not the correct arguments");
+        }
+         
+    }
+    
+    //from customer page
+    public void initiateBooking(String cName, int id) 
+    {
+        try{
+            customerCombo.setValue(id+": "+cName);
+            fillVehicleCombo();
+        }
+        catch(Exception e)
+        {
+            System.out.println("not the correct arguments");
+        }
         
     }
     
