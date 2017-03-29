@@ -85,9 +85,11 @@ public class PartsController implements Initializable {
     @FXML
     private JFXButton bookings;
     @FXML
-    private JFXButton partsStock;
+    private JFXButton parts;
     @FXML
     private JFXButton logout;
+    @FXML 
+    private JFXButton partStockButton;
     @FXML
     private ComboBox<String> partNameCombo;
     @FXML
@@ -100,14 +102,10 @@ public class PartsController implements Initializable {
     private TextField searchField;
     @FXML
     private ComboBox<String> searchCombo;
-    //@FXML
-    //private ComboBox 
+    @FXML
+    private Button backButton;
     @FXML
     private Button installParts;
-    @FXML
-    private Button update;
-    @FXML
-    private Button editParts;
     @FXML
     private Button deleteParts;
     @FXML
@@ -116,6 +114,8 @@ public class PartsController implements Initializable {
     private Button viewCustomerInfo;
     @FXML
     private Button viewPartsInfo;
+    @FXML
+    private Button viewParts;
     @FXML
     private TableView<partsUsed> table;
     @FXML
@@ -173,12 +173,8 @@ public class PartsController implements Initializable {
     public TableColumn<PartsInformation, String> partDescriptionCol;
     @FXML
     public TableColumn<PartsInformation, Double> partCostCol;
-    
-    
     public static PartsInformation partInfo = new PartsInformation("", "", 0.0);
     ObservableList<PartsInformation> partData;
-    
-    
     @FXML
     public TableView<vehicleCustomerInfo> custInfoTable;
     @FXML
@@ -190,6 +186,8 @@ public class PartsController implements Initializable {
     public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("", "", "");
     ObservableList<vehicleCustomerInfo> customerData;
     private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    LocalDate scheduleDateFromBooking;
+    
     
     @FXML
     public void buildPartsInformation(ActionEvent event){
@@ -699,6 +697,15 @@ public class PartsController implements Initializable {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PartsController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        installParts.setTooltip(new Tooltip("Complete all the fields and click to install a part"));
+        viewCustomerInfo.setTooltip(new Tooltip("Select a row from the repair table and click to view booking information for the selected vehicle"));
+        clear.setTooltip(new Tooltip("Click to clear all the fields"));
+        viewPartsInfo.setTooltip(new Tooltip("Select a row from the repair table and click to view the parts used for the selected vehicle"));
+        viewParts.setTooltip(new Tooltip("Select a row from the repair table and click to view information for the selected parts used"));
+        partStockButton.setTooltip(new Tooltip("Click to go to parts stock "));
+        deleteParts.setTooltip(new Tooltip("Select a row from the table and click to delete a part"));
+        backButton.setTooltip(new Tooltip("Click to go back"));
 
         usedIdCol.setCellValueFactory(
                 new PropertyValueFactory<>("usedID"));
@@ -752,6 +759,7 @@ public class PartsController implements Initializable {
         {
             users.setDisable(true);
         }
+       parts.setStyle("-fx-background-color:  #85C1E9;");
     }
     
     public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
@@ -787,7 +795,7 @@ public class PartsController implements Initializable {
         }
         
         if(!checkInstallDate(bookingIdCombo.getValue(),dateOfInstall.getValue())){
-            alertError("Booking id : " + bookingIdCombo.getValue() + " has a schedule date of " + dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+ ". Please select either the schedule date or a future date to install a part.");
+            alertError("Booking id : " + bookingIdCombo.getValue() + " has a schedule date of " + scheduleDateFromBooking.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))+ ". Please select either the schedule date or a future date to install a part.");
             return;
         }
         
@@ -837,8 +845,8 @@ public class PartsController implements Initializable {
             e.printStackTrace();
             System.out.println("Error");
         }
-        LocalDate localScheduleDate = convertStringToDateForBookingCombo(date) ;
-        if(localScheduleDate.isBefore(installDate) || localScheduleDate.equals(installDate)){
+         scheduleDateFromBooking = convertStringToDateForBookingCombo(date) ;
+        if(scheduleDateFromBooking.isBefore(installDate) || scheduleDateFromBooking.equals(installDate)){
             check = true;
         }
         return check;
@@ -1168,6 +1176,14 @@ public class PartsController implements Initializable {
         
         buildCustomerData();
     }
+    
+    @FXML 
+    private void partsUsedPage(ActionEvent event) throws IOException
+    {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+    
     @FXML 
     private void logout(ActionEvent event) throws IOException
     {
@@ -1474,9 +1490,6 @@ public class PartsController implements Initializable {
             stage2.show();
         }
     }
-    
-    
-    
     
     public boolean checkForWhiteSpace()
     {
