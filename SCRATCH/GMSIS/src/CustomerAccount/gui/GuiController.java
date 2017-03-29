@@ -768,7 +768,7 @@ public class GuiController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
         Parent root = (AnchorPane) loader.load();
         DiagnosisAndRepair.gui.DiagnosisAndRepairController obj = (DiagnosisAndRepair.gui.DiagnosisAndRepairController) loader.getController();
-        obj.initiateBooking(table.getSelectionModel().getSelectedItem().getCustomerFullName(), table.getSelectionModel().getSelectedItem().getCustomerID(), "", 0);
+        obj.initiateBookingFromCustomer(table.getSelectionModel().getSelectedItem().getCustomerFullName(), table.getSelectionModel().getSelectedItem().getCustomerID());
         pane.getChildren().setAll(root);
     }
 

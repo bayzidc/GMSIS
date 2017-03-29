@@ -16,7 +16,7 @@
    <children>
        
       <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#e10b0b" style="-fx-background-color: #081786;" text="Users" textFill="WHITE" />
-      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
+      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #85C1E9;" text="Customer Accounts" textFill="#f5f5f8" />
       <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecord" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
       <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
       <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
