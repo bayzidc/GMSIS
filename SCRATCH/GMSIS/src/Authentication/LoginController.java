@@ -200,7 +200,6 @@ public class LoginController implements Initializable {
             try {
                 
                 userID=username.getText();
-        System.out.println("aaa"+userID);
                 Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
                 //Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
                 Scene admin_Scene = new Scene(adminUser);
