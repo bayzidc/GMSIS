@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.customerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
+import VehicleRecord.gui.AddVehicleController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
@@ -249,8 +250,32 @@ public class GuiController implements Initializable {
             acc.setCustomerPhone(phoneText.getText());
             acc.setCustomerEmail(emailText.getText());
             acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
-            createData(acc);
-            buildData();
+            if (createData(acc)) {
+                buildData();
+                Optional<ButtonType> selected = alertConfirm("Would you like to add a vehicle?");
+
+                if (selected.get() != ButtonType.OK) {
+                    return;
+
+                }
+                Stage primaryStage = new Stage();
+                FXMLLoader loader = new FXMLLoader();
+                Parent root = loader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml").openStream());
+                AddVehicleController c = (AddVehicleController) loader.getController();
+                Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                c.addEntry.setVisible(true);
+                c.updateBtn.setVisible(false);
+                c.id.setVisible(false);
+                c.vID.setVisible(false);
+                c.customerNames.setValue(acc.getCustomerFullName());
+                c.custID.setText(getCustomerID().toString());
+                stage2.hide();
+                Scene vehicle_Scene = new Scene(root);
+                primaryStage.setScene(vehicle_Scene);
+                primaryStage.setHeight(810);
+                primaryStage.setWidth(1359);
+                primaryStage.show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -448,7 +473,7 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerVehReg"));
     }
 
-    public void createData(customerAccount acc) throws ClassNotFoundException, NullPointerException {
+    public boolean createData(customerAccount acc) throws ClassNotFoundException, NullPointerException {
 
         Connection conn = null;
 
@@ -478,13 +503,13 @@ public class GuiController implements Initializable {
                 conn.close();
                 clearDetails();
                 alertInfoSuccess("Success", "Customer was added.");
+                return true;
             }//submit=true;
         } catch (SQLException e) {
             alertInf();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
-        //return submit;       
-
+        return false;
     }
 
     @FXML
@@ -770,6 +795,28 @@ public class GuiController implements Initializable {
         DiagnosisAndRepair.gui.DiagnosisAndRepairController obj = (DiagnosisAndRepair.gui.DiagnosisAndRepairController) loader.getController();
         obj.initiateBookingFromCustomer(table.getSelectionModel().getSelectedItem().getCustomerFullName(), table.getSelectionModel().getSelectedItem().getCustomerID());
         pane.getChildren().setAll(root);
+    }
+
+    public Integer getCustomerID() throws ClassNotFoundException {
+        int cID = 0;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            System.out.println("Opened Database Successfully");
+
+            String SQL = "Select customer_id from customer";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+
+            while (rs.next()) {
+                cID = rs.getInt("customer_id");
+            }
+
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return cID;
     }
 
     public void alertInf() {
