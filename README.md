@@ -24,7 +24,31 @@ Select a row on the table view and click the "Edit User" button, which will show
 Select a row on the table view and click the "Delete User" button and then confirm the pop-up window.
 
 
-Customer Account:
+Customer Account: 
+
+-How to add a customer?
+To add a customer, simply fill in all the required customer fields, and click the button add. The new customer will be seen on the customer information table.
+
+-How to update a customer?
+Too update a customer, firstly select the customer you want to update on the customer information table. Once you select the customer, the customer details will show up on the textfields. Make any changes on the customer information and then click the button update and confirm you want to update the customer. Once this is done the updated customer will be seen on the customer information table.
+
+-How to delete a customer?
+To delete a customer, firstly select the customer from the customer information table. Once correct customer is selected, click the delete button. Confirm that is the customer you want to delete and press OK. The customer information table will be updated without the customer.
+
+How to search for a customer or a registration number?
+Simply use the search field to look for partial/full customer name or any of the partial/full customer registration numbers. The customer table information will be updated accordingly.
+
+How to clear any details while updating/adding customers?
+If for some reason you want to clear details on the textfields, simply click the clear details button. This will clear all textfields/combo box.
+
+How to check if a customer has any bookings?
+To check for booking, firstly select the customer on the customer information table. Once a customer is selected, the booking table will be updated. Now use the filters for past/future booking to see any past/future bookings.
+
+How to check a customer for bills?
+To check for bills, simply select a customer on the customer information table. Once a customer is selected, the bills table will be updated with the currently selected customer bill's.
+
+How to navigate to other modules or exit?
+Simply use the navigation bar at the top to simply switch between modules or if you require to log out.
 
 
 Vehicle Record:
