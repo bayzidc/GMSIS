@@ -436,7 +436,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     //fill vehicle combo for specific customer
-    public void fillVehicleCombo() throws ClassNotFoundException
+    private void fillVehicleCombo() throws ClassNotFoundException
     {
         if(customerCombo.getValue()==null)
         {
@@ -536,7 +536,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!checkIfCompleted())
         {
-            alertError("Try again","Complete all fields");
+            alertError("Try again","Complete all fields/Combo boxes");
             return;
         }
         
@@ -613,7 +613,7 @@ public class DiagnosisAndRepairController implements Initializable {
                 vehicleCombo.setDisable(false);
             }
          catch (SQLException e) {
-            System.out.println("");
+            System.out.println("update error");
         }
         new Mechanic(0,0,0).updateMechanicBill(BookingObj.getBookingID(),Integer.parseInt(mechArr[0]));
         
@@ -625,7 +625,7 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         if(!checkIfCompleted())
         {
-            alertError("Try again","Complete all fields");
+            alertError("Try again","Complete all fields/Combo boxes");
             return;
         }
         
@@ -772,7 +772,7 @@ public class DiagnosisAndRepairController implements Initializable {
         int mAge = table.getSelectionModel().getSelectedItem().getMileage();
         
         String cust = BookingObj.findCustID(reg)+": "+custName;
-        System.out.println(cust);
+
         customerCombo.setValue(findComboVal(custNames,cust));  
         String mech = BookingObj.findMechID(BookingObj.getBookingID())+": "+mechName;
         mechanicCombo.setValue(findComboVal(mechNames,mech));
@@ -929,17 +929,6 @@ public class DiagnosisAndRepairController implements Initializable {
     {
         textLabel.setVisible(false);
         
-        monthCombo.setValue(null);
-        anyDayPicker.setValue(null);
-        bHour.setSelected(false);
-        bToday.setSelected(false);
-        bMonth.setSelected(false);
-        pBooking.setSelected(false);
-        fBooking.setSelected(false);
-        nBooking.setSelected(false);
-        allBooking.setSelected(true);
-
-        
         data = FXCollections.observableArrayList();
         tempData.clear();
         
@@ -963,7 +952,7 @@ public class DiagnosisAndRepairController implements Initializable {
         rs.close();
         conn.close();
         
-        /*if(bHour.isSelected())
+        if(bHour.isSelected())
         {
             filterByHour();
         }
@@ -995,7 +984,7 @@ public class DiagnosisAndRepairController implements Initializable {
         {
             filterByAnyMonth();
         }
-        else*/
+        else
         {
             searchFilter(data);
         }
@@ -1064,14 +1053,14 @@ public class DiagnosisAndRepairController implements Initializable {
             
             int i = temp.indexOf(rs.getString("startTime"));
             int j = temp.indexOf(rs.getString("endTime"));
-            System.out.println(i+"  "+j);
+           
             if(j == -1) //17:30
             {
                 j=temp.size(); //reached latest time
             }
                 for(int z=0; z<j-i; z++)
                 {
-                    System.out.println(temp.get(i));
+                    
                     temp.remove(i); //removes taken time slot    
                 }   
         }  
@@ -1102,7 +1091,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
          String start = startTime.getValue();
          
-         int closestTime = 10000;
+         int closestTime = 100000;
          String closestTimeString = "";
          
         Connection conn = null;
@@ -1216,14 +1205,7 @@ public class DiagnosisAndRepairController implements Initializable {
     
     @FXML
     private void filterByNextBooking() throws ClassNotFoundException
-    {
-        /*long time1,time2;
-        time1 = new Date().getTime();
-               
-        time2 = new Date().getTime();
-        System.out.println("is "+(time2-time1)+"ms");*/
-        
-        
+    {      
         if(!nBooking.isSelected())
         {
             nBooking.setSelected(true);
@@ -1240,8 +1222,6 @@ public class DiagnosisAndRepairController implements Initializable {
         allBooking.setSelected(false);
         pBooking.setSelected(false);
         fBooking.setSelected(false);
-        
-        
         
         int size = fillVehID();
         
