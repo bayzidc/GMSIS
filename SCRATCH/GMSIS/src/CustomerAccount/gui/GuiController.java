@@ -27,6 +27,7 @@ import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -140,7 +141,8 @@ public class GuiController implements Initializable {
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
     public static customerAccount acc = new customerAccount(0, "", "", "", "", "", "", "");
-    public static bill showBill = new bill(0, "", 0, 0, 0, false);
+    public static bill showBill = new bill(0, "", "", 0, 0, 0, false);
+    private bill buildBill = new bill(0, "", "", 0, 0, 0, false);
 
     /**
      * Initializes the controller class.
@@ -168,7 +170,7 @@ public class GuiController implements Initializable {
                             Connection conn = null;
                             conn = (new sqlite().connect());
                             ID = table.getSelectionModel().getSelectedItem().getCustomerID();
-                            System.out.println("Opened Database Successfully");
+                            System.out.println("Opened Database Successfully here");
                             String whichType = "";
                             java.sql.Statement state = null;
                             state = conn.createStatement();
@@ -332,7 +334,6 @@ public class GuiController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM customer WHERE customer_id= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setInt(1, acc.getCustomerID());
@@ -362,8 +363,6 @@ public class GuiController implements Initializable {
         try {
             conn = (new sqlite().connect());
             int ID = table.getSelectionModel().getSelectedItem().getCustomerID();
-
-            System.out.println("Opened Database Successfully");
 
             String sql = "UPDATE customer SET customer_fullname=?,customer_address=?,customer_postcode=?,customer_phone=?,customer_email=?,customer_type=? WHERE customer_id=?";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -499,44 +498,31 @@ public class GuiController implements Initializable {
         accTypeText.getSelectionModel().selectFirst();
     }
 
-    @FXML
-    public void backButton(ActionEvent event) throws IOException {
-        if (Authentication.LoginController.isAdmin) {
-            Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
-            Scene admin_Scene = new Scene(adminUser);
-            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage2.hide();
-            stage2.setScene(admin_Scene);
-            stage2.show();
-        } else {
-            Parent adminUser = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
-            Scene admin_Scene = new Scene(adminUser);
-            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage2.hide();
-            stage2.setScene(admin_Scene);
-            stage2.show();
-        }
-    }
-
     public void buildDataBill() {
         dataBill = FXCollections.observableArrayList();
         Connection conn = null;
         try {
             int getID = acc.getCustomerID();
+            int bookingID = 0;
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
-
+            String date = "";
             String SQL = "Select * from bill WHERE customerID = " + getID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
-                dataBill.add(new bill(rs.getInt(1), rs.getString(2), rs.getDouble(7), 0, 0, rs.getBoolean(8)));
+                bookingID = rs.getInt(3);
+                String SQL2 = "Select * from booking WHERE booking_id = " + bookingID;
+                ResultSet rs2 = conn.createStatement().executeQuery(SQL2);
+                while (rs2.next()) {
+                    date = rs2.getString(5);
+                    dataBill.add(new bill(0, rs.getString(1), date, rs.getDouble(7), 0, 0, rs.getBoolean(8)));
+                }
             }
 
-            tableBill.setItems(dataBill);
             rs.close();
             conn.close();
+            filterByPastBill();
         } catch (Exception e) {
-            alertError();
+            e.printStackTrace();
         }
 
         bookingIDBill.setCellValueFactory(
@@ -553,7 +539,6 @@ public class GuiController implements Initializable {
         try {
             int ID = GuiController.acc.getCustomerID();
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             int parts = 0;
             String SQL = "Select * from booking WHERE customer_id=" + ID;
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -662,6 +647,41 @@ public class GuiController implements Initializable {
     }
 
     @FXML
+    private void filterByPastBill() throws ClassNotFoundException {
+        try {
+            ObservableList<bill> pastList = FXCollections.observableArrayList(dataBill);
+
+            for (int i = 0; i < pastList.size(); i++) {
+                System.out.println(pastList.get(i).getDate());
+            }
+
+            LocalDate now = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            for (int i = 0; i < pastList.size(); i++) {
+                LocalDate tempDate = LocalDate.parse(pastList.get(i).getDate(), formatter);
+                System.out.println("Doing this");
+                if (now.isBefore(tempDate)) {
+                    System.out.println("Removing: " + pastList.get(i).getDate());
+                    pastList.remove(i);
+                    i--;
+                    System.out.println("Past list in loop" + pastList);
+                }
+            }
+
+            if (pastList.isEmpty()) {
+                System.out.println("It's empty past.");
+            }
+
+            System.out.println("Past list outside" + pastList);
+            tableBill.setItems(pastList);
+            tableBill.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void filterByPast() throws ClassNotFoundException {
         try {
             if (!pastBooking.isSelected()) {
@@ -731,6 +751,25 @@ public class GuiController implements Initializable {
         } catch (Exception e) {
             System.out.println("Error catched");
         }
+    }
+
+    @FXML
+    private void addBooking(ActionEvent event) throws IOException, ClassNotFoundException {
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            //select row;
+            return;
+        }
+
+        if (table.getSelectionModel().getSelectedItem().getCustomerVehReg().isEmpty()) {
+            //no vehicle
+            return;
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        Parent root = (AnchorPane) loader.load();
+        DiagnosisAndRepair.gui.DiagnosisAndRepairController obj = (DiagnosisAndRepair.gui.DiagnosisAndRepairController) loader.getController();
+        obj.initiateBooking(table.getSelectionModel().getSelectedItem().getCustomerFullName(), table.getSelectionModel().getSelectedItem().getCustomerID(), "", 0);
+        pane.getChildren().setAll(root);
     }
 
     public void alertInf() {

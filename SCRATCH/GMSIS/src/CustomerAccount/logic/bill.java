@@ -26,25 +26,31 @@ public class bill {
     public DoubleProperty totalCost;
     public StringProperty bookingID;
     public BooleanProperty billStatus;
+    public StringProperty date;
 
-    public bill(int billID, String bookingID, double costOfBill,double mechanicCost,double partsCost, boolean isSettled) {
+    public bill(int billID, String bookingID, String date, double costOfBill, double mechanicCost, double partsCost, boolean isSettled) {
         this.totalCost = new SimpleDoubleProperty(costOfBill);
         this.bookingID = new SimpleStringProperty(bookingID);
         this.billStatus = new SimpleBooleanProperty(isSettled);
         this.billID = new SimpleIntegerProperty(billID);
         this.partsCost = new SimpleDoubleProperty(partsCost);
         this.mechanicCost = new SimpleDoubleProperty(mechanicCost);
+        this.date = new SimpleStringProperty(date);
+    }
+
+    public String getDate() {
+        return date.get();
     }
 
     public double getTotalCost() {
         return totalCost.get();
     }
-    
-    public double getPartsCost(){
+
+    public double getPartsCost() {
         return partsCost.get();
     }
-    
-    public double getMechanicCost(){
+
+    public double getMechanicCost() {
         return mechanicCost.get();
     }
 
@@ -65,18 +71,22 @@ public class bill {
     }
 
     public void calculateTotalCost() {
-        totalCost.set(mechanicCost.get()+partsCost.get());
+        totalCost.set(mechanicCost.get() + partsCost.get());
     }
-    
-    public void setTotalCost(double cost){
+
+    public void setDate(String d) {
+        date.set(d);
+    }
+
+    public void setTotalCost(double cost) {
         totalCost.set(cost);
     }
-    
-    public void setMechanicCost(double cost){
+
+    public void setMechanicCost(double cost) {
         mechanicCost.set(cost);
     }
-    
-    public void setPartsCost(double cost){
+
+    public void setPartsCost(double cost) {
         partsCost.set(cost);
     }
 
@@ -97,11 +107,11 @@ public class bill {
     }
 
     public void addCostToBillParts(bill Bill, double cost, int quantity) {
-        Bill.partsCost.set(partsCost.get()+(quantity*cost));
+        Bill.partsCost.set(partsCost.get() + (quantity * cost));
     }
-    
-    public void addCostToBillMechanic(bill Bill, DiagnosisAndRepair.logic.Mechanic mech){
-        Bill.mechanicCost.set(mechanicCost.get()+(mech.getHourlyRate()*mech.getHoursWorked()));
+
+    public void addCostToBillMechanic(bill Bill, DiagnosisAndRepair.logic.Mechanic mech) {
+        Bill.mechanicCost.set(mechanicCost.get() + (mech.getHourlyRate() * mech.getHoursWorked()));
     }
 
 }

@@ -55,7 +55,6 @@
       <Label layoutX="29.0" layoutY="289.0" text="Acc type" />
       <ChoiceBox fx:id="accTypeText" layoutX="85.0" layoutY="285.0" prefHeight="25.0" prefWidth="245.0" />
       <Button fx:id="clearButton" layoutX="153.0" layoutY="79.0" mnemonicParsing="false" onAction="#clearDetails" prefHeight="25.0" prefWidth="114.0" text="Clear details" />
-      <Button fx:id="backButtton" layoutX="36.0" layoutY="67.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <Label layoutX="29.0" layoutY="376.0" text="Search" textFill="#b01f1f" />
       <TextField fx:id="searchCustomer" layoutX="87.0" layoutY="365.0" onKeyPressed="#searchCustomer" prefHeight="39.0" prefWidth="245.0" promptText="Name, vehicle reg number..." />
       <TableView fx:id="tableBooking" layoutX="82.0" layoutY="478.0" prefHeight="240.0" prefWidth="791.0">
@@ -87,6 +86,7 @@
       </Label>
       <JFXCheckBox fx:id="pastBooking" checkedColor="#2f5c9a" layoutX="320.0" layoutY="741.0" onAction="#filterByPast" text="Past booking" />
       <JFXCheckBox fx:id="futureBooking" checkedColor="#2f5c9a" layoutX="527.0" layoutY="741.0" onAction="#filterByFuture" text="Future booking" />
+      <Button fx:id="bookingButton" layoutX="140.0" layoutY="418.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="135.0" text="Create Booking" />
    </children>
    <opaqueInsets>
       <Insets />
