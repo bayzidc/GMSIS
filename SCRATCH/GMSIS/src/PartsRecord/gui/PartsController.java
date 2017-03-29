@@ -236,7 +236,7 @@ public class PartsController implements Initializable {
         }
         catch(Exception e)
         {
-            alertInformation( "Please select a row to view the parts used information.");
+            alertInformation( "Please select a row to view the parts information.");
         }
         
     }
@@ -289,7 +289,7 @@ public class PartsController implements Initializable {
         }
         catch(Exception e)
         {
-            alertInformation( "Please select a row to view the parts/vehicle information for that vehicle.");
+            alertInformation( "Please select a row to view the parts used for that particular vehicle.");
         }
         }
     
@@ -411,18 +411,19 @@ public class PartsController implements Initializable {
             System.out.println("Opened PartsUsed database successfully.");
             System.out.println("Creating data.");
             
-            String sql = "insert into vehiclePartsUsed(parts_id,quantity, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID) values(?,?,?,?,?,?,?)";
+            String sql = "insert into vehiclePartsUsed(parts_id,quantity,cost, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID) values(?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
 
                 
                 state.setInt(1, findPartsID(part.getPartName()));
                 
                 state.setInt(2, part.getQuantity());
-                state.setString(3, part.getInstallDate());
-                state.setString(4, findExpireDate(part.getInstallDate()));
-                state.setInt(5, findVehicleID(part.getBookingID()));
-                state.setInt(6, findCustomerID(part.getBookingID()));
-                state.setInt(7, part.getBookingID()); 
+                state.setDouble(3, findPartsCost(part.getPartName()));
+                state.setString(4, part.getInstallDate());
+                state.setString(5, findExpireDate(part.getInstallDate()));
+                state.setInt(6, findVehicleID(part.getBookingID()));
+                state.setInt(7, findCustomerID(part.getBookingID()));
+                state.setInt(8, part.getBookingID()); 
                 
 
                 state.execute();
@@ -436,6 +437,30 @@ public class PartsController implements Initializable {
             System.out.println("Error on Creating Data");
         }
 
+    }
+    
+    private double findPartsCost(String name) throws ClassNotFoundException {
+        double cost  = 0.0;
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+
+            String SQL = "Select cost from vehiclePartsStock where nameofPart='" + name + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                cost = rs.getInt("cost");
+                System.out.println("The cost of the part from the stock is " + cost);
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error finding Parts cost.");
+        }
+        return cost;
     }
     
     private int findPartsID(String name) throws ClassNotFoundException {
@@ -587,13 +612,14 @@ public class PartsController implements Initializable {
                 
                 part.setUsedID(rs.getInt(1));
                 part.setPartName(findPartsName(rs.getInt(2)));
-                part.setCost(findCostFromStock(rs.getInt(2)));
                 part.setQuantity(rs.getInt(3));
-                part.setInstallDate(rs.getString(4));
-                part.setWarrantyExpireDate(rs.getString(5));
-                part.setVehicleRegNo(findVehReg(rs.getInt(6)));
-                part.setcustomerFullName(findCustomerName(rs.getInt(7)));
-                part.setBookingID(rs.getInt(8));
+                part.setCost(rs.getDouble(4));
+                
+                part.setInstallDate(rs.getString(5));
+                part.setWarrantyExpireDate(rs.getString(6));
+                part.setVehicleRegNo(findVehReg(rs.getInt(7)));
+                part.setcustomerFullName(findCustomerName(rs.getInt(8)));
+                part.setBookingID(rs.getInt(9));
                 //part.setAddedBill(rs.getBoolean(9));
 
                 data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID()));
@@ -810,6 +836,7 @@ public class PartsController implements Initializable {
                decreaseStockLevel(part.getPartName(), stockAvailable);
                createData(part);
                buildPartsUsedData();
+               dateOfInstall.setDisable(false);
                clearFields();
                
                addBill(part.getBookingID(),part.getQuantity(),findPartsCost(part.getPartName()));
@@ -883,6 +910,7 @@ public class PartsController implements Initializable {
         LocalDate local = convertStringToDateForBookingCombo(date) ;
         
         dateOfInstall.setValue(local);
+        dateOfInstall.setDisable(true);
        
         
         
@@ -1527,44 +1555,7 @@ public class PartsController implements Initializable {
     }
     
     
-    
-    
-    
-    /*public void settleBills(int ID, boolean value) throws ClassNotFoundException {
-        try {
-            Connection conn = null;
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
-
-            String sql = "UPDATE bill SET settled=? WHERE vehicleID=?";
-            PreparedStatement state = conn.prepareStatement(sql);
-            state.setBoolean(1, value);
-            state.setInt(2, ID);
-
-            state.execute();
-
-            state.close();
-            conn.close();
-
-        } catch (SQLException e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.out.println("error in settling bills");
-        }
-    }*/
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    public void increaseStockLevel(String name, int stockAvailable, int oldQuantity) throws ClassNotFoundException {
+     public void increaseStockLevel(String name, int stockAvailable, int oldQuantity) throws ClassNotFoundException {
         Connection conn = null;
         System.out.println("I am here in the increaseStockLevel");
         int newQuantityWanted = part.getQuantity();
@@ -1675,7 +1666,7 @@ public class PartsController implements Initializable {
 
     
 
-    private Double findPartsCost(String name) throws ClassNotFoundException {
+    /*private Double findPartsCost(String name) throws ClassNotFoundException {
         double cost = 0.0;
         Connection conn = null;
         try {
@@ -1697,7 +1688,7 @@ public class PartsController implements Initializable {
             System.out.println("Error findind cost.");
         }
         return cost;
-    }
+    }*/
 
     
 
