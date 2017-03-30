@@ -198,7 +198,8 @@ public class Vehicle {
    {
        custName.set(cN);
    }
-         
+   
+   //Method which converts a string to a date
    public LocalDate convert(String string)
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -206,6 +207,7 @@ public class Vehicle {
         return localDate;
     }
    
+   //Method which uses regEx to only allow the user to enter 1 decimal point ~ referenced from stack overflow
    public void restrictDecimal(TextField field)
     {
         DecimalFormat format = new DecimalFormat( "#.0" );
@@ -228,6 +230,7 @@ public class Vehicle {
         }));
     }
    
+   //Method which checks if there are more than 2dp entered for a double ~ referenced from stackoverflow
    public boolean decimalPlaces(double num) 
     {
         String numstr = Double.toString(num);

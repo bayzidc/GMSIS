@@ -19,6 +19,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -164,6 +166,9 @@ public class AddVehicleController implements Initializable {
             warrantyDate.setVisible(false);
         });
         
+        /**
+         * Method callbacks which restricts the datepicker ~ referenced from stackoverflow
+         */
         Callback<DatePicker, DateCell> dayCellFactory = dp -> new DateCell()
         {
             @Override
@@ -198,7 +203,7 @@ public class AddVehicleController implements Initializable {
         };
         motRenDate.setDayCellFactory(dayCellFactory1);
 
-        Callback<DatePicker, DateCell> dayCellFactory2 = dp2 -> new DateCell()
+        Callback<DatePicker, DateCell> dayCellFactory2 = dp2 -> new DateCell() 
         {
             @Override
             public void updateItem(LocalDate item, boolean empty)
@@ -240,7 +245,7 @@ public class AddVehicleController implements Initializable {
                 
                 catch(Exception ex)
                 {
-                    
+                    System.out.println(ex.getMessage());
                 }
         });
         quickSel.setOnAction(e ->{ // Lists vehicles so that the user can quick select a vehicle by make and model
@@ -272,7 +277,6 @@ public class AddVehicleController implements Initializable {
                 
                 catch(Exception ex)
                 {
-                    
                 }
             
         });
@@ -280,7 +284,7 @@ public class AddVehicleController implements Initializable {
         }
         catch(Exception e)
         {
-            
+            alertError("Error on building data.");
         }
     }
     
@@ -367,11 +371,8 @@ public class AddVehicleController implements Initializable {
         {      
             return;
         }
-        
-        if(!checkForWhiteSpace())
-        {
-            return;
-        }
+
+
         
         if(!vec.decimalPlaces(Double.parseDouble(engSize.getText())))
         {
@@ -382,7 +383,8 @@ public class AddVehicleController implements Initializable {
             alertInf("Vehicle already exists with registration number " + vec.getRegNumber());
             return;
         }
-        
+        if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
+        {
             double eSize = Double.parseDouble(engSize.getText());
             vec.setRegNumber(regNumber.getText());
             vec.setColour(colour.getText());
@@ -398,7 +400,7 @@ public class AddVehicleController implements Initializable {
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
-            
+            System.out.println(validatePartName());
             createData(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
             buildData();
@@ -408,11 +410,15 @@ public class AddVehicleController implements Initializable {
             stage2.hide();           
             stage2.setScene(vec_Scene);
             stage2.show();
+        }
         
+        else
+        {
+            alertInf("No whitespaces allowed.");
         
         }
         
-    
+    }   
     
     //Method which allows the user to make changes to the vehicle they created
     @FXML
@@ -429,16 +435,16 @@ public class AddVehicleController implements Initializable {
         {      
             return;
         }
-        
-        if(!checkForWhiteSpace())
-        {
-            return;
-        }
+
         
         if(!vec.decimalPlaces(Double.parseDouble(engSize.getText())))
         {
             return;
         }
+        
+        if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
+        {
+            
             vec.setRegNumber(regNumber.getText());
             vec.setColour(colour.getText());
             vec.setEngSize(Double.parseDouble(engSize.getText()));
@@ -464,7 +470,11 @@ public class AddVehicleController implements Initializable {
             stage2.setScene(vec_Scene);
             stage2.show();
         }
-        
+        else
+        {
+            alertInf("No whitespaces allowed.");
+        }
+    }
     
     
     //Method which builds and refreshes the data for the vehicle
@@ -531,6 +541,7 @@ public class AddVehicleController implements Initializable {
         }
         catch(SQLException e)
         {
+            alertError("Error on creating vehicle");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }    
@@ -628,6 +639,7 @@ public class AddVehicleController implements Initializable {
         } 
         catch (SQLException e) 
         {
+            alertInf("Error on editing vehicle");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
@@ -658,6 +670,7 @@ public class AddVehicleController implements Initializable {
         }
         catch(SQLException e)
         {
+            alertError("Error on getting vehicle ID.");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
@@ -691,7 +704,7 @@ public class AddVehicleController implements Initializable {
         
         catch(SQLException e)
         {
-            
+            alertError("Error filling customer names");
         }
     }
     
@@ -725,47 +738,7 @@ public class AddVehicleController implements Initializable {
     }
    
     //Method which error checks the textfields and makes sure that there are no empty fields.
-    @FXML
-    public boolean checkTextFields()
-    {
-        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
-        {
-            System.out.println("Hello world");
-            alertInf("Please complete all fields.");
-
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
-        {
-            alertInf("Please enter the name and address for the warranty.");
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
-        {
-            alertInf("Please enter the name, address and expiry date for the warranty.");
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
-        {
-            alertInf("Please enter the expiry date for the warranty.");
-            return false;
-        }
-        
-        if(noWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
-        {
-            return true;
-        }
-        
-        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
-        {
-            alertInf("Please select if the vehicle is under warranty or not.");
-            return false;
-        }
-        return true;
-    }
+  
     
     public boolean checkIndividual()
     {
@@ -865,60 +838,15 @@ public class AddVehicleController implements Initializable {
         }
         return true;
     }
-    public boolean checkTextFieldEdit()
-    {
-        if(vehicleChoice.getValue()==null || regNumber.getText().equals("") ||  make.getText().equals("") || model.getText().equals("") || engSize.getText().equals("") || fuelType.getValue()==null || colour.getText().equals("") || motRenDate.getEditor().getText().equals("") || lastService.getEditor().getText().equals("") || mileage.getText().equals(""))
-        {
-            alertInf("Please complete all fields.");
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals(""))
-        {
-            alertInf("Please enter the name and address for the warranty.");
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && nameAndAdd.getText().equals("") && warExpiry.getEditor().getText().equals(""))
-        {
-            alertInf("Please enter the name, address and expiry date for the warranty.");
-            return false;
-        }
-        
-        if(yesWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
-        {
-            alertInf("Please enter the expiry date for the warranty.");
-            return false;
-        }
-        
-        if(noWarranty.isSelected() && nameAndAdd.getText().equals(""))
-        {
+    
+    private boolean validatePartName(){
+        Pattern p  = Pattern.compile("^[ A-z]+$");
+        Matcher m = p.matcher(regNumber.getText());
+        if(m.find() && m.group().equals(regNumber.getText())){
             return true;
         }
-        
-        if(noWarranty.isSelected() && warExpiry.getEditor().getText().equals(""))
-        {
-            return true;
-        }
-        
-        if(!(yesWarranty.isSelected() || noWarranty.isSelected()))
-        {
-            alertInf("Please select if the vehicle is under warranty or not.");
             return false;
-        }
-        return true;
     }
-    
-    public boolean checkForWhiteSpace()
-    {
-        if(regNumber.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || engSize.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty())
-         {
-             alertInf("You cannot have a white space at the start of the textfield");
-             return false;
-         }
-        return true;
-    }
-    
 
      public void alertInf(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Pop up box

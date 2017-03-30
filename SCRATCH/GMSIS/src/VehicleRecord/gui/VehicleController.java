@@ -39,13 +39,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -220,7 +218,7 @@ public class VehicleController implements Initializable {
         quantityCol.setCellValueFactory(
                 new PropertyValueFactory<PartsInfo, Integer>("Quantity"));
 
-        // vecI = table.getSelectionModel().getSelectedItem();
+        // table listener which sets the text area on clicking a table row
          table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
                 @Override
                 public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
@@ -268,27 +266,10 @@ public class VehicleController implements Initializable {
         
         catch (Exception e) 
         {
-            e.printStackTrace();
+            alertError("Error on building vehicle and customer data.");
         }
     }
-    
-    //Method which allows the user to press a button to refresh the data shown on the page
-    @FXML
-    public void refreshButton(MouseEvent event)
-    {
-        try
-        {
-            buildData();
-            buildCustomerData();
-        }
-        
-        catch(Exception e)
-        {
-            alertError("Some data is missing from parts of our system. Please try again later.");
-        }
-    }
-    
-    
+ 
     @FXML 
     private void logout(ActionEvent event) throws IOException
     {
@@ -347,9 +328,9 @@ public class VehicleController implements Initializable {
         pane.getChildren().setAll(rootPane);
     }
     
-    //Method which allows the user to go back to the admin page
+    //Method which allows the user to go back to the home page
     @FXML
-    public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
+    public void backButton(ActionEvent event) throws IOException 
     {
         if (Authentication.LoginController.isAdmin) {
             Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
@@ -368,7 +349,7 @@ public class VehicleController implements Initializable {
         }
     }
 
-    //Method which directs the user to another fxml to add a vehicle
+    //Method which directs the user to another fxml to add a booking
     @FXML
     public void addBooking(ActionEvent event) throws IOException
     {
@@ -385,6 +366,7 @@ public class VehicleController implements Initializable {
         
         
     }
+    //Method which allows the user to add a vehicle in another fxml
     @FXML
     public void addEntry(ActionEvent event) throws IOException 
     {
@@ -397,14 +379,12 @@ public class VehicleController implements Initializable {
         c.id.setVisible(false);
         c.vID.setVisible(false);
         Scene vehicle_Scene = new Scene(vehicle_Page);
-        //vehicle_Scene.getStylesheets().add(getClass().getResource("vehicle.css").toExternalForm());
         Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stageVehicle.setScene(vehicle_Scene);
         stageVehicle.setHeight(810);
         stageVehicle.setWidth(1359);
         stageVehicle.show();
         
-
     }
     
     //Method which allows the user to direct to another fxml to edit their vehicle once the appropriate row has been selected
@@ -484,7 +464,6 @@ public class VehicleController implements Initializable {
             
             stage2.hide();
             Scene edit_Scene = new Scene(root);
-            //edit_Scene.getStylesheets().add(getClass().getResource("vehicle.css").toExternalForm());
             primaryStage.setScene(edit_Scene);
             primaryStage.setHeight(810);
             primaryStage.setWidth(1359);
@@ -724,7 +703,9 @@ public class VehicleController implements Initializable {
                 vec.custID.set(rs.getInt("customer_id"));
                 vec.custName.set(rs.getString("customer_fullname"));
                 data.add(vec);
-
+               /**
+                * Searches for vehicle and filters table from search ~ referenced from a youtube tutorial
+                */
                 FilteredList<Vehicle> filteredData = new FilteredList<>(data, e -> true);
                 searchVehicle.setOnKeyReleased(e -> {
                     searchVehicle.textProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -794,6 +775,7 @@ public class VehicleController implements Initializable {
         
         catch (SQLException e) 
         {
+            alertError("Error on deleting vehicle");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
@@ -801,6 +783,7 @@ public class VehicleController implements Initializable {
 
     }
 
+    //Method which filters the booking dates to past dates ~ referenced from stack overflow
     @FXML
     private void filterByPast() throws ClassNotFoundException
     {
@@ -833,6 +816,7 @@ public class VehicleController implements Initializable {
         custTable.setItems(custData);
     }
     
+    //Method which filters the booking dates to future dates ~ referenced from stack overflow
     @FXML
     private void filterByFuture() throws ClassNotFoundException
     {
@@ -866,7 +850,7 @@ public class VehicleController implements Initializable {
         }
         custTable.setItems(custData);    
     }
-    
+    //Method which shows all booking dates
     @FXML
     private void showAllBooking() throws ClassNotFoundException, SQLException
     {

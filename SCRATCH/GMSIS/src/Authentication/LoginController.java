@@ -57,10 +57,7 @@ public class LoginController implements Initializable {
     private void loginButton(ActionEvent event) throws IOException
     {
         
-        userID=username.getText();
-        System.out.println("aaa"+userID);
         Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
-        //Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
         Scene admin_Scene = new Scene(adminUser);
         Stage stage2 = (Stage) ((Node)event.getSource()).getScene().getWindow();
         
@@ -198,10 +195,7 @@ public class LoginController implements Initializable {
         
         pass.setOnKeyPressed(ev -> {
             try {
-                
-                userID=username.getText();
                 Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
-                //Parent adminUser = FXMLLoader.load(getClass().getResource("Admin.fxml"));
                 Scene admin_Scene = new Scene(adminUser);
                 Stage stage2 = (Stage) ((Node)ev.getSource()).getScene().getWindow();
                 

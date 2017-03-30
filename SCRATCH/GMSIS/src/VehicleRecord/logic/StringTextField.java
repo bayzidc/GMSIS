@@ -6,6 +6,9 @@
 package VehicleRecord.logic;
 
 import javafx.scene.control.TextField;
+import javax.print.attribute.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter.FilterBypass;
 
 /**
  *
@@ -26,6 +29,7 @@ public class StringTextField extends TextField{
             super.replaceText(i,i1,string);
         }
     }
+
     @Override
     public void replaceSelection(String string)
     {
