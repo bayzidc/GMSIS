@@ -748,6 +748,97 @@ public class VehicleController implements Initializable {
         }
 
     }
+    
+    public void buildCustomerVehicle(int id, String customerName) throws ClassNotFoundException, SQLException {
+        int customer_data_id = id;
+        data = FXCollections.observableArrayList();
+        Connection conn = null;
+        try {
+
+            conn = (new sqlite().connect());
+            String SQL = "select * from vehicleList where " + customer_data_id + "= vehicleList.customerid";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                Vehicle vec = new Vehicle("", "", "", 0.0, "", "", "", "", 0, "", "", "", "", 0, 0, "");
+                vec.regNumber.set(rs.getString("RegNumber"));
+                vec.make.set(rs.getString("Make"));
+                vec.model.set(rs.getString("Model"));
+                vec.engSize.set(rs.getDouble("EngSize"));
+                vec.fuelType.set(rs.getString("FuelType"));
+                vec.colour.set(rs.getString("Colour"));
+                vec.motRenewal.set(rs.getString("MOTDate"));
+                vec.lastService.set(rs.getString("LastServiceDate"));
+                vec.mileage.set(rs.getInt("Mileage"));
+                vec.vehicleType.set(rs.getString("VehicleType"));
+                vec.warranty.set(rs.getString("Warranty"));
+                vec.warNameAndAdd.set(rs.getString("WarrantyNameAndAdd"));
+                vec.warrantyExpDate.set(rs.getString("WarrantyExpDate"));
+                vec.vecID.set(rs.getInt("vehicleID"));
+                vec.custID.set(customer_data_id);
+                vec.custName.set(customerName);
+                data.add(vec);
+
+                FilteredList<Vehicle> filteredData = new FilteredList<>(data, e -> true);
+                searchVehicle.setOnKeyReleased(e -> {
+                    searchVehicle.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                        filteredData.setPredicate((Predicate<? super Vehicle>) vehicle -> {
+                            if (newValue == null || newValue.isEmpty()) {
+                                return true;
+                            }
+                            String newValLow = newValue.toLowerCase();
+                            if (searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Make") && vehicle.getMake().toLowerCase().contains(newValLow)) {
+                                return true;
+                            } else if (searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Full/Partial RegNumber") && vehicle.getRegNumber().toLowerCase().contains(newValLow)) {
+                                return true;
+                            } else if (searchBy.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Vehicle Type") && vehicle.getVehicleType().toLowerCase().contains(newValLow)) {
+                                return true;
+                            }
+                            return false;
+                        });
+                    });
+                    SortedList<Vehicle> sortedData = new SortedList<>(filteredData);
+                    sortedData.comparatorProperty().bind(table.comparatorProperty());
+                    table.setItems(sortedData);
+                });
+            }
+            table.setItems(data);
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+
+        }
+    }
+    
+    public void buildCustomerData(int id) throws ClassNotFoundException, SQLException {
+        custData = FXCollections.observableArrayList();
+        tempData.clear();
+        Connection conn = null;
+
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select customer_fullname, scheduled_date, startTime, RegNumber, totalCost from customer, booking, vehicleList,bill where customer.customer_id = booking.customer_id AND booking.vehicleID = vehicleList.vehicleID AND customer.customer_id = bill.customerID AND booking.booking_id = bill.bookingID AND customer.customer_id = " + id;
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+
+            while (rs.next()) {
+                CustBookingInfo cust = new CustBookingInfo("", "", "", 0.0, "");
+                cust.fullName.set(rs.getString("customer_fullname"));
+                cust.bookingDate.set(rs.getString("scheduled_date"));
+                cust.regNumber.set(rs.getString("RegNumber"));
+                cust.totalCost.set(rs.getDouble("totalCost"));
+                cust.time.set(rs.getString("startTime"));
+                custData.add(cust);
+
+            }
+            tempData.addAll(custData);
+            custTable.setItems(custData);
+            rs.close();
+            conn.close();
+        } catch (Exception e) {
+            alertError("Error on building customer data. Please try again later.");
+        }
+    }
 
     //Method which deletes the vehicle from the database where the appropriate vehicle ID is specified
     public boolean isVehicleDeleted(Vehicle passVec) throws ClassNotFoundException 
