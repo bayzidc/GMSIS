@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.geometry.Insets?>
@@ -12,7 +18,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="779.0" prefWidth="1358.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.GuiController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="779.0" prefWidth="1358.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CustomerAccount.gui.GuiController">
    <children>
        
       <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#e10b0b" style="-fx-background-color: #081786;" text="Users" textFill="WHITE" />
@@ -86,7 +92,8 @@
       </Label>
       <JFXCheckBox fx:id="pastBooking" checkedColor="#2f5c9a" layoutX="320.0" layoutY="741.0" onAction="#filterByPast" text="Past booking" />
       <JFXCheckBox fx:id="futureBooking" checkedColor="#2f5c9a" layoutX="527.0" layoutY="741.0" onAction="#filterByFuture" text="Future booking" />
-      <Button fx:id="bookingButton" layoutX="140.0" layoutY="418.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="135.0" text="Create Booking" />
+      <Button fx:id="bookingButton" layoutX="56.0" layoutY="417.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="27.0" prefWidth="147.0" text="Create Booking" />
+      <Button fx:id="vehicleReg" layoutX="206.0" layoutY="417.0" mnemonicParsing="false" onAction="#vehicleRegButton" prefHeight="27.0" prefWidth="147.0" text="Vehicle Record" />
    </children>
    <opaqueInsets>
       <Insets />
