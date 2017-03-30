@@ -71,13 +71,13 @@ To search for a vehicle, there is a combo box and a search field on the 'Vehicle
 On the 'Vehicle Records' page, to view the vehicle information of a vehicle, simply select the table row you wish from the list of vehicles, and above you should see a text area which automatically shows all the vehicle information as well as the customer it belongs to.
 
 -How to view customer/booking information for a vehicle?
-On the 'Vehicle Records' page, to view the customer/booking information of a vehicle, simply select the table row you wish from the list of vehicles and click the 'View Cust/Book Info' button. There is a table named 'Customer & Booking Info' and this will display the name of the customer, their vehicle reg number, their booking dates and the total cost of the booking.
+On the 'Vehicle Records' page, to view the customer/booking information of a vehicle, simply select the table row you wish from the list of vehicles and click the 'View Booking Info' button. There is a table named 'Booking Information' and this will display the name of the customer, their vehicle reg number, their booking dates and the total cost of the booking.
 
 -How to view parts information for a vehicle?
-On the 'Vehicle Records' page, to view the parts information of a vehicle, simply select the table row you wish from the list of vehicles and click the 'View Parts Used' button. There is a table named 'Parts Used Info' and this will display the parts used on the vehicle and the quantity.
+On the 'Vehicle Records' page, to view the parts information of a vehicle, simply select the table row you wish from the list of vehicles and click the 'View Parts Used' button. There is a table named 'Parts Used Information' and this will display the parts used on the vehicle and the quantity.
 
 -How to filter the booking dates for a customer?
-Underneath the 'Customer & Booking Info' table, there are 3 ways to filter the table:
+Underneath the 'Booking Information' table, there are 3 ways to filter the table:
 "View All Bookings" check box is the default to show all the bookings, 
 "View Past Bookings" check box shows all past bookings, 
 "View Future Bookings" check box shows all the future bookings. 
@@ -89,6 +89,7 @@ NOTE : Selecting 'View All Bookings' will view all the bookings of all customers
 -How to add a booking from vehicle records?
 If you would like to add a booking from the 'Vehicle Records' page,simply select the table row you wish from the list of vehicles and click the 'Add Booking' button. This will redirect you to the 'Bookings' page and will set the customer name, vehicle registration number and the mileage for you. However, if you wish to start from scratch, you do not have to select the table row from the list of vehicles and you can simply navigate to the bookings page through the button bar at the top. 
 
+-clear button : Clears all the text fields, datepicker and comboBoxes.
 
 Diagnosis and Repair Booking:
 -How to add a booking?
