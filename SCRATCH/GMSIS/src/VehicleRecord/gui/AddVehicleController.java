@@ -386,17 +386,17 @@ public class AddVehicleController implements Initializable {
         if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
         {
             double eSize = Double.parseDouble(engSize.getText());
-            vec.setRegNumber(regNumber.getText());
-            vec.setColour(colour.getText());
+            vec.setRegNumber(regNumber.getText().trim());
+            vec.setColour(colour.getText().trim());
             vec.setEngSize(eSize);
             vec.setFuelType((String) fuelType.getValue());
             vec.setLastService(((TextField) lastService.getEditor()).getText());
-            vec.setMake(make.getText());
+            vec.setMake(make.getText().trim());
             vec.setMileage(Integer.parseInt(mileage.getText()));
-            vec.setModel(model.getText());
+            vec.setModel(model.getText().trim());
             vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
             vec.setVehicleType((String) vehicleChoice.getValue());
-            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
@@ -445,17 +445,17 @@ public class AddVehicleController implements Initializable {
         if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
         {
             
-            vec.setRegNumber(regNumber.getText());
-            vec.setColour(colour.getText());
+            vec.setRegNumber(regNumber.getText().trim());
+            vec.setColour(colour.getText().trim());
             vec.setEngSize(Double.parseDouble(engSize.getText()));
             vec.setFuelType((String) fuelType.getValue());
             vec.setLastService(((TextField) lastService.getEditor()).getText());
-            vec.setMake(make.getText());
+            vec.setMake(make.getText().trim());
             vec.setMileage(Integer.parseInt(mileage.getText()));
             vec.setModel(model.getText());
             vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
             vec.setVehicleType((String) vehicleChoice.getValue());
-            vec.setWarNameAndAdd(nameAndAdd.getText());
+            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
