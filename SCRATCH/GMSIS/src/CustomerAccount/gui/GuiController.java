@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import CustomerAccount.logic.CustomerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.gui.AddVehicleController;
+import VehicleRecord.gui.VehicleController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
@@ -91,6 +92,8 @@ public class GuiController implements Initializable {
     @FXML
     private ObservableList<Bill> dataBill;
     // FOR GUI
+    @FXML
+    private Button vehicleReg;
     @FXML
     private Button backButtton;
     @FXML
@@ -275,7 +278,36 @@ public class GuiController implements Initializable {
                 primaryStage.setHeight(810);
                 primaryStage.setWidth(1359);
                 primaryStage.show();
+
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void vehicleRegButton(ActionEvent event) throws IOException, ClassNotFoundException, NumberFormatException {
+        try {
+            acc.setCustomerFullName(fullNameText.getText());
+            acc.setCustomerAddress(addressText.getText());
+            acc.setCustomerPostCode(postCodeText.getText());
+            acc.setCustomerPhone(phoneText.getText());
+            acc.setCustomerEmail(emailText.getText());
+            acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
+
+            Stage primaryStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml").openStream());
+            VehicleController c = (VehicleController) loader.getController();
+            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            c.buildCustomerVehicle(acc.getCustomerID(), acc.getCustomerFullName());
+            c.buildCustomerData(acc.getCustomerID());
+            stage2.hide();
+            Scene vehicle_Scene = new Scene(root);
+            primaryStage.setScene(vehicle_Scene);
+            primaryStage.setHeight(810);
+            primaryStage.setWidth(1359);
+            primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
