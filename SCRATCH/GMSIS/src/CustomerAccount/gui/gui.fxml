@@ -92,8 +92,8 @@
       </Label>
       <JFXCheckBox fx:id="pastBooking" checkedColor="#2f5c9a" layoutX="320.0" layoutY="741.0" onAction="#filterByPast" text="Past booking" />
       <JFXCheckBox fx:id="futureBooking" checkedColor="#2f5c9a" layoutX="527.0" layoutY="741.0" onAction="#filterByFuture" text="Future booking" />
-      <Button fx:id="bookingButton" layoutX="56.0" layoutY="417.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="27.0" prefWidth="146.0" text="Create Booking" />
-      <Button fx:id="vehicleReg" layoutX="206.0" layoutY="417.0" mnemonicParsing="false" onAction="#vehicleRegButton" prefHeight="27.0" prefWidth="146.0" text="Vehicle Record" />
+      <Button fx:id="bookingButton" layoutX="56.0" layoutY="417.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="27.0" prefWidth="147.0" text="Create Booking" />
+      <Button fx:id="vehicleReg" layoutX="206.0" layoutY="417.0" mnemonicParsing="false" onAction="#vehicleRegButton" prefHeight="27.0" prefWidth="147.0" text="Vehicle Record" />
    </children>
    <opaqueInsets>
       <Insets />
