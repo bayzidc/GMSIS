@@ -52,10 +52,10 @@ public class AdminController implements Initializable {
 
     @FXML
     private AnchorPane pane;
-     
+
     @FXML
     private JFXButton users;
-    
+
     @FXML
     private Button exitEdit;
     @FXML
@@ -102,75 +102,64 @@ public class AdminController implements Initializable {
     private TableColumn<User, String> surnameCol;
     @FXML
     private TableColumn<User, String> adminCol;
-    
-    
+
     private ObservableList<User> data;
     private IntegerProperty index = new SimpleIntegerProperty();
 
     /**
      * Initializes the controller class.
      */
-    
-    
-    @FXML 
-    private void logout(ActionEvent event) throws IOException
-    {
+    @FXML
+    private void logout(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Login.fxml"));
         pane.getChildren().setAll(rootPane);
         Authentication.LoginController.isAdmin = false;
-      
+
     }
-    
-    @FXML 
-    private void users(ActionEvent event) throws IOException
-    {
+
+    @FXML
+    private void users(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/Authentication/Admin.fxml"));
         pane.getChildren().setAll(rootPane);
     }
-    
-    @FXML 
-    private void cus(ActionEvent event) throws IOException
-    {
+
+    @FXML
+    private void cus(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
         pane.getChildren().setAll(rootPane);
     }
-    
+
     @FXML
-    private void vehicleRecord(ActionEvent event) throws IOException
-    {
-          AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
-          pane.getChildren().setAll(rootPane);
-    }
-    
-    @FXML
-    private void vehicleEntry(ActionEvent event) throws IOException
-    {
-         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
-         pane.getChildren().setAll(rootPane);
-    }
-    
-    @FXML 
-    private void diag(ActionEvent event) throws IOException
-    {
-         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
-        
+    private void vehicleRecord(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
         pane.getChildren().setAll(rootPane);
     }
-    
-    @FXML 
-    private void pStock(ActionEvent event) throws IOException
-    {
+
+    @FXML
+    private void vehicleEntry(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void diag(ActionEvent event) throws IOException {
+        AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+
+        pane.getChildren().setAll(rootPane);
+    }
+
+    @FXML
+    private void pStock(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
         pane.getChildren().setAll(rootPane);
     }
-    
-    @FXML 
-    private void pUsed(ActionEvent event) throws IOException
-    {
+
+    @FXML
+    private void pUsed(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
         pane.getChildren().setAll(rootPane);
     }
-    
+
     @FXML
     public void backButton(ActionEvent event) throws IOException // method which goes back to admin page
     {
@@ -190,62 +179,52 @@ public class AdminController implements Initializable {
             stage2.show();
         }
     }
-    
-    private boolean allCompleted()
-    {
+
+    private boolean allCompleted() {
         boolean checked = true;
-        if(firstName.getText().equals("") && surname.getText().equals("") && newPass.getText().equals(""))
-        {
+        if (firstName.getText().equals("") && surname.getText().equals("") && newPass.getText().equals("")) {
             alertError(null, "Please complete all fields.");
             return false;
         }
         return checked;
     }
-    
+
     @FXML
     private void createButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        
-        if(!(allCompleted() && checkForWhiteSpace()))
-        {
+
+        if (!(allCompleted() && checkForWhiteSpace())) {
             return;
-        }
-        else
-        {
-        createData();
-        buildData();
+        } else {
+            createData();
+            buildData();
 
-       
-        alertInfo(null,"Your unique User ID is " + getID());
+            alertInfo(null, "Your unique User ID is " + getID());
 
-        id.clear();
-        firstName.clear();
-        surname.clear();
-        newPass.clear();
-        admin.setSelected(false);
+            id.clear();
+            firstName.clear();
+            surname.clear();
+            newPass.clear();
+            admin.setSelected(false);
 
         }
 
     }
-    
+
     @FXML
-    private void exitEdit(ActionEvent event)
-    {
+    private void exitEdit(ActionEvent event) {
         createUser.setDisable(false);
         exitEdit.setDisable(true);
 
         clearFields();
     }
-    
+
     @FXML
-    private void clearAllButton(ActionEvent event)
-    {
+    private void clearAllButton(ActionEvent event) {
         clearFields();
     }
-    
-    private void clearFields()
-    {
-        if(!createUser.isDisable())
-        {
+
+    private void clearFields() {
+        if (!createUser.isDisable()) {
             id.clear();
         }
         firstName.clear();
@@ -256,96 +235,34 @@ public class AdminController implements Initializable {
 
     @FXML
     private void deleteButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        
-        if(table.getSelectionModel().getSelectedItem()==null)
-        {
-            alertError(null,"Please select a row to delete a user");
+
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            alertError(null, "Please select a row to delete a user");
             return;
         }
         String ID = table.getSelectionModel().getSelectedItem().getID();//Gets ID 
-        if(LoginController.userID.equals(ID))
-        {
-            alertInfo(null,"Cannot delete your own user record");
+  
+        if (LoginController.userID.equals(ID)) {
+            alertInfo(null, "Cannot delete your own user record");
             return;
         }
-        
-        Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this user?");
-        if (confirmDelete.get()==ButtonType.OK && isDeleted()) {
 
-            alertInfo(null,"UserID: " + ID + " has been deleted");
+        Optional<ButtonType> confirmDelete = alertConfirm("Are you sure you want to delete this user?");
+        if (confirmDelete.get() == ButtonType.OK && isDeleted()) {
+
+            alertInfo(null, "UserID: " + ID + " has been deleted");
             buildData();
         }
 
     }
 
-  
-    @FXML
-    private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent logoutPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
-        Scene logout_Scene = new Scene(logoutPage);
-        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageLogout.setScene(logout_Scene);
-        stageLogout.show();
-
-     }
-     
-     
-
-    @FXML
-    private void vehicleBtn(ActionEvent event) throws IOException, ClassNotFoundException {
-
-        Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
-        Scene vehicle_Scene = new Scene(vehicle_Page);
-        Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageVehicle.setScene(vehicle_Scene);
-        stageVehicle.show();
-     }
-      
-    @FXML
-    private void customerButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent logoutPage = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
-        Scene logout_Scene = new Scene(logoutPage);
-        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageLogout.setScene(logout_Scene);
-        stageLogout.show();
-    }
-
-    @FXML
-    private void repairButton(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent repairPage = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
-        Scene repair_Scene = new Scene(repairPage);
-        Stage stageRepair = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageRepair.setScene(repair_Scene);
-        stageRepair.show();
-    }
-    
-    @FXML
-    private void partsButtnUsed(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
-        Scene parts_Scene = new Scene(partsRecordPage);
-        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageParts.setScene(parts_Scene);
-        stageParts.show();
-    }
-    
-    @FXML
-    private void partsButtnStock(ActionEvent event) throws IOException, ClassNotFoundException {
-        Parent partsStockPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
-        Scene partStock_Scene = new Scene(partsStockPage);
-        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageParts.setScene(partStock_Scene);
-        stageParts.show();
-    }
-    
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         id.setEditable(false);
         exitEdit.setDisable(true);
-        
-        
+
         passCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("Password"));
         IDCol.setCellValueFactory(
@@ -357,65 +274,48 @@ public class AdminController implements Initializable {
         adminCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("Admin"));
 
-
-
         try {
             buildData();
         } catch (Exception e) {
             e.printStackTrace();
         }
-          users.setStyle("-fx-background-color:  #85C1E9;");
+        users.setStyle("-fx-background-color:  #85C1E9;");
     }
- 
 
-    
     @FXML
     public void editUser(ActionEvent event) //print on text field
     {
 
-        if(table.getSelectionModel().getSelectedItem()==null)
-        {
-            alertError(null,"Please select a row to edit a user");
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            alertError(null, "Please select a row to edit a user");
             return;
+        } else {
+            id.setText(table.getSelectionModel().getSelectedItem().getID());
+            firstName.setText(table.getSelectionModel().getSelectedItem().getFirstName());
+            surname.setText(table.getSelectionModel().getSelectedItem().getSurname());
+            newPass.setText(table.getSelectionModel().getSelectedItem().getPassword());
+
+            if (table.getSelectionModel().getSelectedItem().getAdmin().equals("1")) {
+                admin.setSelected(true);
+            } else {
+                admin.setSelected(false);
+            }
+
+            createUser.setDisable(true);
+            exitEdit.setDisable(false);
         }
-        
-        
-        else
-        {
-         id.setText(table.getSelectionModel().getSelectedItem().getID());
-         firstName.setText(table.getSelectionModel().getSelectedItem().getFirstName());
-         surname.setText(table.getSelectionModel().getSelectedItem().getSurname());
-         newPass.setText(table.getSelectionModel().getSelectedItem().getPassword());
-       
-        if(table.getSelectionModel().getSelectedItem().getAdmin().equals("1"))
-        {
-            admin.setSelected(true);
-        }
-        else
-        {
-            admin.setSelected(false);
-        }
-        
-        createUser.setDisable(true);
-        exitEdit.setDisable(false);
-        }
-      
+
     }
     // TODO
 
     @FXML
     private void update(ActionEvent event) throws IOException, ClassNotFoundException //update button
     {
-        if(!(allCompleted() && checkForWhiteSpace()))
-        {
+        if (!(allCompleted() && checkForWhiteSpace())) {
             return;
-        }
-        
-        else
-        {
-            if(id.getText().equals(""))
-            {
-                alertError(null,"You can only edit an existing user.");
+        } else {
+            if (id.getText().equals("")) {
+                alertError(null, "You can only edit an existing user.");
                 id.clear();
                 firstName.clear();
                 surname.clear();
@@ -423,49 +323,41 @@ public class AdminController implements Initializable {
                 admin.setSelected(false);
                 return;
             }
-        updateData();
-   
-        id.clear();
-        firstName.clear();
-        surname.clear();
-        newPass.clear();
-        admin.setSelected(false);
-        createUser.setDisable(false);
-        exitEdit.setDisable(true);
+            updateData();
 
-        buildData();
+            id.clear();
+            firstName.clear();
+            surname.clear();
+            newPass.clear();
+            admin.setSelected(false);
+            createUser.setDisable(false);
+            exitEdit.setDisable(true);
+
+            buildData();
         }
     }
 
     private void updateData() throws ClassNotFoundException {
 
-        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
 
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
 
-            System.out.println("Opened Database Successfully");
-
             String sql = "UPDATE User SET FirstName=?, Surname=?, Password=?, Admin=? WHERE ID=?";
             PreparedStatement state = conn.prepareStatement(sql);
-       
+
             state.setString(1, firstName.getText());
             state.setString(2, surname.getText());
             state.setString(3, newPass.getText());
-            
-            if(admin.isSelected())
-            {
+
+            if (admin.isSelected()) {
                 state.setBoolean(4, true);
-            }
-            else
-            {
+            } else {
                 state.setBoolean(4, false);
             }
-            
-           
-            
+
             state.setString(5, id.getText());
 
             state.execute();
@@ -476,7 +368,6 @@ public class AdminController implements Initializable {
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
-       
 
     }
 
@@ -485,9 +376,7 @@ public class AdminController implements Initializable {
         Connection conn = null;
         try {
 
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-            System.out.println("Opened Database Successfully");
+            conn = (new sqlite().connect());
 
             String SQL = "Select * from User";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -505,21 +394,15 @@ public class AdminController implements Initializable {
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error on Building Data");
         }
     }
 
     public void createData() throws ClassNotFoundException {
-        //boolean submit = false;
-        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
-        System.out.println("SELECT * FROM User WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND Password= " + "'" + newPass.getText() + "'");
+
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
-
-            System.out.println("Opened Database Successfully");
+            conn = (new sqlite().connect());
 
             String sql = "insert into User(FirstName, Surname, Password, Admin) values(?,?,?,?)";
             //String sql = "insert into Login(Username,Password) values(?,?)";
@@ -533,20 +416,18 @@ public class AdminController implements Initializable {
             } else {
                 state.setBoolean(4, false);
             }
-            
-           
 
             state.execute();
 
             state.close();
             conn.close();
 
-            //submit=true;
+            alertInfo(null,"User has been added");
+            
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            
+
         }
-        //return submit;       
 
     }
 
@@ -571,7 +452,7 @@ public class AdminController implements Initializable {
             conn.close();
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            
+
         }
         return id;
 
@@ -585,10 +466,8 @@ public class AdminController implements Initializable {
         Connection conn = null;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
+            conn = (new sqlite().connect());
 
-            System.out.println("Opened Database Successfully");
             String sql = "DELETE FROM User WHERE ID= ?";
             PreparedStatement state = conn.prepareStatement(sql);
             state.setString(1, ID);
@@ -601,27 +480,22 @@ public class AdminController implements Initializable {
 
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            
+
         }
         return userDeleted;
 
     }
-    
-  
 
-     public boolean checkForWhiteSpace()
-    {
+    public boolean checkForWhiteSpace() {
         boolean checked = true;
-        if(firstName.getText().trim().isEmpty() || surname.getText().trim().isEmpty() || newPass.getText().trim().isEmpty())
-         {
-             alertInfo("Try Again","You cannot have a white space at the start of the textfield");
-             checked = false;
-         }
+        if (firstName.getText().trim().isEmpty() || surname.getText().trim().isEmpty() || newPass.getText().trim().isEmpty()) {
+            alertInfo("Try Again", "You cannot have a white space at the start of the textfield");
+            checked = false;
+        }
         return checked;
     }
-    
-    private void alertInfo(String header, String information) 
-    {
+
+    private void alertInfo(String header, String information) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(header);
@@ -629,24 +503,21 @@ public class AdminController implements Initializable {
         alert.showAndWait();
     }
 
-    private void alertError(String header, String error) 
-    {
+    private void alertError(String header, String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(header);
         alert.setContentText(error);
         alert.showAndWait();
-        
+
     }
-    
-    
-      private Optional<ButtonType> alertConfirm(String message)
-    {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); 
-	alert.setTitle("Confirmation");
+
+    private Optional<ButtonType> alertConfirm(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
         alert.setHeaderText(null);
         alert.setContentText(message);
         return alert.showAndWait();
     }
-    
+
 }

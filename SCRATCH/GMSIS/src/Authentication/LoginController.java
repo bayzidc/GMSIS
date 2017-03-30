@@ -37,7 +37,7 @@ import javafx.stage.Stage;
  * @author User
  */
 public class LoginController implements Initializable {
-    
+
     public static boolean isAdmin = false;
     @FXML
     private Label titleID;
@@ -52,126 +52,104 @@ public class LoginController implements Initializable {
     @FXML
     private Hyperlink forgotPass;
     public static String userID;
-    
-    @FXML 
-    private void loginButton(ActionEvent event) throws IOException
-    {
+
+    @FXML
+    private void loginButton(ActionEvent event) throws IOException {
+
+        userID=username.getText();
         
         Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
         Scene admin_Scene = new Scene(adminUser);
-        Stage stage2 = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        
+        Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
         stage2.setResizable(false);
-            stage2.setHeight(810);
-            stage2.setWidth(1359);
-        
+        stage2.setHeight(810);
+        stage2.setWidth(1359);
+
         Parent customer = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
         Scene customer_Scene = new Scene(customer);
         Stage stage3 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
-        
+
         stage3.setResizable(false);
-            stage3.setHeight(810);
-            stage3.setWidth(1359);
-            
-        
-        if(isValidLogin() && isAdmin())
-        {
-            stage2.hide();           
+        stage3.setHeight(810);
+        stage3.setWidth(1359);
+
+        if (isValidLogin() && isAdmin()) {
+            stage2.hide();
             stage2.setScene(admin_Scene);
             stage2.show();
             isAdmin = true;
-        }
-        
-        else if(isValidLogin())
-        {
+        } else if (isValidLogin()) {
             stage3.hide();
             stage3.setScene(customer_Scene);
             stage3.show();
-         
-        }
-        else
-        {
+
+        } else {
             username.clear();
             pass.clear();
             Alert alert = new Alert(AlertType.ERROR); // Pop up box
-	    alert.setTitle("Error");
-	    alert.setHeaderText("Invalid Username or password.");
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Username or password.");
             alert.showAndWait();
         }
     }
-   
-    public boolean isValidLogin()
-    {
+
+    public boolean isValidLogin() {
         boolean loggedIn = false;
-        System.out.println("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-        
+
         Connection conn = null;
-        
+
         java.sql.Statement state = null;
-        try
-        {
+        try {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             conn.setAutoCommit(false);
-            
-            System.out.println("Opened Database Successfully");
+
             state = conn.createStatement();
-            
+
             ResultSet rs = state.executeQuery("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-            while(rs.next())
-            {
-                if(rs.getString("ID") !=null && rs.getString("Password") !=null)
-                        {
-                            loggedIn = true;
-                            break;
-                        }
+            while (rs.next()) {
+                if (rs.getString("ID") != null && rs.getString("Password") != null) {
+                    loggedIn = true;
+                    break;
+                }
             }
             rs.close();
             state.close();
             conn.close();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
         return loggedIn;
-            
-            
-        }
-    
-    public boolean isAdmin()
-    {
+
+    }
+
+    public boolean isAdmin() {
         boolean admin = false;
-         Connection conn = null;
-        
+        Connection conn = null;
+
         java.sql.Statement state = null;
-        try
-        {
+        try {
             conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
             conn.setAutoCommit(false);
-            
+
             state = conn.createStatement();
-            
+
             ResultSet rs = state.executeQuery("SELECT Admin FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-            while(rs.next())
-            {
-                if(rs.getBoolean("Admin"))
-                        {
-                            admin = true;
-                            break;
-                        }
+            while (rs.next()) {
+                if (rs.getBoolean("Admin")) {
+                    admin = true;
+                    break;
+                }
             }
             rs.close();
             state.close();
             conn.close();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-       return admin;
+        return admin;
     }
 
     /**
@@ -181,57 +159,52 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         forgotPass.setOnAction(new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent e) {
-            username.clear();
-            pass.clear();
-            Alert alert = new Alert(AlertType.INFORMATION); // Pop up box
-	    alert.setTitle("Information");
-	    alert.setHeaderText("If you have forgotten your password, please contact an administrator so that they can change your password.");
-            alert.showAndWait();
-    }
-});
-        
-        
+            @Override
+            public void handle(ActionEvent e) {
+                username.clear();
+                pass.clear();
+                Alert alert = new Alert(AlertType.INFORMATION); // Pop up box
+                alert.setTitle("Information");
+                alert.setHeaderText("If you have forgotten your password, please contact an administrator so that they can change your password.");
+                alert.showAndWait();
+            }
+        });
+
         pass.setOnKeyPressed(ev -> {
             try {
+                userID=username.getText();
+                
                 Parent adminUser = FXMLLoader.load(getClass().getResource("/common/gui/common.fxml"));
                 Scene admin_Scene = new Scene(adminUser);
-                Stage stage2 = (Stage) ((Node)ev.getSource()).getScene().getWindow();
-                
+                Stage stage2 = (Stage) ((Node) ev.getSource()).getScene().getWindow();
+
                 stage2.setResizable(false);
                 stage2.setHeight(810);
                 stage2.setWidth(1359);
-                
+
                 Parent customer = FXMLLoader.load(getClass().getResource("/customer/gui/customer.fxml"));
                 Scene customer_Scene = new Scene(customer);
                 Stage stage3 = (Stage) ((Node) ev.getSource()).getScene().getWindow();
-                
-                
+
                 stage3.setResizable(false);
                 stage3.setHeight(810);
                 stage3.setWidth(1359);
-                if(ev.getCode() == KeyCode.ENTER){
-                    
+                if (ev.getCode() == KeyCode.ENTER) {
+
                     boolean loggedIn = false;
-                    System.out.println("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-                    
+
                     Connection conn = null;
-                    
+
                     java.sql.Statement state = null;
-                    try
-                    {
+                    try {
                         conn = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                         conn.setAutoCommit(false);
-                        
-                        System.out.println("Opened Database Successfully");
+
                         state = conn.createStatement();
-                        
+
                         ResultSet rs = state.executeQuery("SELECT * FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-                        while(rs.next())
-                        {
-                            if(rs.getString("ID") !=null && rs.getString("Password") !=null)
-                            {
+                        while (rs.next()) {
+                            if (rs.getString("ID") != null && rs.getString("Password") != null) {
                                 loggedIn = true;
                                 break;
                             }
@@ -239,30 +212,24 @@ public class LoginController implements Initializable {
                         rs.close();
                         state.close();
                         conn.close();
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         System.err.println(e.getClass().getName() + ": " + e.getMessage());
                         System.exit(0);
                     }
-                    
-                    
+
                     boolean admin = false;
                     Connection conn2 = null;
-                    
+
                     java.sql.Statement state2 = null;
-                    try
-                    {
+                    try {
                         conn2 = DriverManager.getConnection("jdbc:sqlite:database.sqlite");
                         conn2.setAutoCommit(false);
-                        
+
                         state2 = conn2.createStatement();
-                        
+
                         ResultSet rs = state2.executeQuery("SELECT Admin FROM User WHERE ID= " + "'" + username.getText() + "'" + "AND Password= " + "'" + pass.getText() + "'");
-                        while(rs.next())
-                        {
-                            if(rs.getBoolean("Admin"))
-                            {
+                        while (rs.next()) {
+                            if (rs.getBoolean("Admin")) {
                                 admin = true;
                                 break;
                             }
@@ -270,46 +237,35 @@ public class LoginController implements Initializable {
                         rs.close();
                         state2.close();
                         conn2.close();
-                    }
-                    catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         System.err.println(e.getClass().getName() + ": " + e.getMessage());
                         System.exit(0);
                     }
-                    
-                    if(admin == true && loggedIn == true)
-                    {
+
+                    if (admin == true && loggedIn == true) {
                         stage2.hide();
                         stage2.setScene(admin_Scene);
                         stage2.show();
                         isAdmin = true;
-                    }
-                    
-                    else if(loggedIn == true)
-                    {
+                    } else if (loggedIn == true) {
                         stage3.hide();
                         stage3.setScene(customer_Scene);
                         stage3.show();
-                    }
-                    
-                    else
-                    {
+                    } else {
                         username.clear();
                         pass.clear();
                         Alert alert = new Alert(AlertType.ERROR); // Pop up box
-	                alert.setTitle("Error");
-	                alert.setHeaderText("Invalid Username or password.");
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Invalid Username or password.");
                         alert.showAndWait();
                     }
-                }   } catch (IOException ex) {
+                }
+            } catch (IOException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
 
-    });
-        
-    } 
-    
-    
-    
+        });
+
+    }
+
 }

@@ -229,7 +229,6 @@ public class AddVehicleController implements Initializable {
                 try
                 {
                     conn = (new sqlite().connect());
-                    System.out.println("Opened Database Successfully");
                     String query = "select customer_id, customer_fullname from customer where customer_fullname = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
@@ -245,7 +244,7 @@ public class AddVehicleController implements Initializable {
                 
                 catch(Exception ex)
                 {
-                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
                 }
         });
         quickSel.setOnAction(e ->{ // Lists vehicles so that the user can quick select a vehicle by make and model
@@ -256,7 +255,6 @@ public class AddVehicleController implements Initializable {
                 try
                 {
                     conn = (new sqlite().connect());
-                    System.out.println("Opened Database Successfully");
                     String query = "select make,model,engSize,fuelType from quickSelection where template = ?";
                     ps = conn.prepareStatement(query);
                     ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
@@ -400,7 +398,6 @@ public class AddVehicleController implements Initializable {
             vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
             vec.setCustID(Integer.parseInt(custID.getText()));
             vec.setCustName((String) customerNames.getValue());
-            System.out.println(validatePartName());
             createData(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
             buildData();
@@ -508,7 +505,6 @@ public class AddVehicleController implements Initializable {
         try
         {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
             
             String sql = "insert into vehicleList(RegNumber,Make,Model,EngSize,FuelType,Colour,MOTDate,LastServiceDate,Mileage,VehicleType,Warranty,WarrantyNameAndAdd,WarrantyExpDate,customerid ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -604,8 +600,6 @@ public class AddVehicleController implements Initializable {
         {
             
             conn = (new sqlite().connect());
-
-            System.out.println("Opened Database Successfully");
 
             String sql = "UPDATE vehicleList SET RegNumber=?,Make=?,Model=?,EngSize=?,FuelType=?,Colour=?,MOTDate=?, LastServiceDate=?,Mileage=?,VehicleType=?,Warranty=?,WarrantyNameAndAdd=?,WarrantyExpDate=? WHERE vehicleID=?";
             PreparedStatement state = conn.prepareStatement(sql);

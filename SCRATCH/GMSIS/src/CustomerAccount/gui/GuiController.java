@@ -165,7 +165,6 @@ public class GuiController implements Initializable {
                 users.setDisable(true);
             }
             pastBooking.setSelected(true);
-            System.out.println("Running this. BUILD DATA");
             accTypeText.setItems(FXCollections.observableArrayList("Business", "Private"));
             accTypeText.getSelectionModel().selectFirst();
             buildData();
@@ -178,7 +177,6 @@ public class GuiController implements Initializable {
                             Connection conn = null;
                             conn = (new sqlite().connect());
                             ID = table.getSelectionModel().getSelectedItem().getCustomerID();
-                            System.out.println("Opened Database Successfully here");
                             String whichType = "";
                             java.sql.Statement state = null;
                             state = conn.createStatement();
@@ -206,7 +204,6 @@ public class GuiController implements Initializable {
                             acc.setCustomerPhone(phoneText.getText());
                             acc.setCustomerEmail(emailText.getText());
                             acc.setCustomerType(whichType);
-                            getCustomerDetails(acc);
                             state.close();
                             conn.close();
                             buildDataBill();
@@ -219,7 +216,6 @@ public class GuiController implements Initializable {
                 }
             });
         } catch (Exception e) {
-            System.out.println("Here 2.");
             alertError();
         }
     }
@@ -329,7 +325,6 @@ public class GuiController implements Initializable {
                 buildData();
             }
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
             alertInf();
         }
     }
@@ -352,7 +347,6 @@ public class GuiController implements Initializable {
                 buildData();
             }
         } catch (Exception e) {
-            System.out.println("Here 4.");
             alertError();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -366,7 +360,6 @@ public class GuiController implements Initializable {
             billstage.setScene(parts_Scene);
             billstage.show();
         } catch (Exception e) {
-            System.out.print("Exception caught.");
             e.printStackTrace();
         }
     }
@@ -379,7 +372,6 @@ public class GuiController implements Initializable {
             billstage.setScene(parts_Scene);
             billstage.show();
         } catch (Exception e) {
-            System.out.print("Exception caught.");
             e.printStackTrace();
         }
     }
@@ -406,7 +398,6 @@ public class GuiController implements Initializable {
             alertInfoSuccess("Success", "Customer was deleted.");
         } catch (SQLException e) {
             alertError();
-            System.out.println("Here 5.");
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
         return customerDeleted;
@@ -415,7 +406,6 @@ public class GuiController implements Initializable {
 
     private void updateData(CustomerAccount acc) throws ClassNotFoundException {
 
-        //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
 
         try {
@@ -448,7 +438,6 @@ public class GuiController implements Initializable {
             }//submit=true;
         } catch (Exception e) {
             alertInf();
-            System.out.println("Here 6.");
         }
 
     }
@@ -476,7 +465,6 @@ public class GuiController implements Initializable {
                 ResultSet rs2 = state.executeQuery("SELECT * FROM vehicleList WHERE customerid= " + acc.getCustomerID());
                 while (rs2.next()) {
                     acc.setCustomerVehReg(rs2.getString("RegNumber"));
-                    System.out.println("This is what will be passed to constructer: " + acc.getCustomerVehReg());
                 }
                 data.add(new CustomerAccount(acc.getCustomerID(), acc.getCustomerFullName(), acc.getCustomerAddress(), acc.getCustomerPostCode(), acc.getCustomerPhone(), acc.getCustomerEmail(), acc.getCustomerType(), acc.getCustomerVehReg()));
             }
@@ -512,7 +500,6 @@ public class GuiController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            System.out.println("Creating data.");
 
             String sql = "insert into customer(customer_fullname, customer_address, customer_postcode, customer_phone, customer_email, customer_type) values(?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -657,7 +644,6 @@ public class GuiController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error finding Customer Name.");
         }
         return vehicleRegIS;
     }
@@ -678,7 +664,6 @@ public class GuiController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error finding Customer Name.");
         }
         return PartName;
     }
@@ -699,7 +684,6 @@ public class GuiController implements Initializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error finding Customer Name.");
         }
         return mechanicName;
     }
@@ -708,29 +692,17 @@ public class GuiController implements Initializable {
         try {
             ObservableList<Bill> pastList = FXCollections.observableArrayList(dataBill);
 
-            for (int i = 0; i < pastList.size(); i++) {
-                System.out.println(pastList.get(i).getDate());
-            }
-
             LocalDate now = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             for (int i = 0; i < pastList.size(); i++) {
                 LocalDate tempDate = LocalDate.parse(pastList.get(i).getDate(), formatter);
-                System.out.println("Doing this");
                 if (now.isBefore(tempDate)) {
-                    System.out.println("Removing: " + pastList.get(i).getDate());
                     pastList.remove(i);
                     i--;
-                    System.out.println("Past list in loop" + pastList);
                 }
             }
 
-            if (pastList.isEmpty()) {
-                System.out.println("It's empty past.");
-            }
-
-            System.out.println("Past list outside" + pastList);
             tableBill.setItems(pastList);
             tableBill.refresh();
         } catch (Exception e) {
@@ -763,14 +735,9 @@ public class GuiController implements Initializable {
                 }
             }
 
-            if (pastList.isEmpty()) {
-                System.out.println("It's empty past.");
-            }
-
             tableBooking.setItems(pastList);
             tableBooking.refresh();
         } catch (Exception e) {
-            System.out.println("Error catched");
         }
     }
 
@@ -799,14 +766,9 @@ public class GuiController implements Initializable {
                 }
             }
 
-            if (futureList.isEmpty()) {
-                System.out.println("It's empty the future");
-            }
-
             tableBooking.setItems(futureList);
             tableBooking.refresh();
         } catch (Exception e) {
-            System.out.println("Error catched");
         }
     }
 
@@ -834,7 +796,6 @@ public class GuiController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
 
             String SQL = "Select customer_id from customer";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -846,7 +807,7 @@ public class GuiController implements Initializable {
             rs.close();
             conn.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return cID;
     }
@@ -881,17 +842,6 @@ public class GuiController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         return alert.showAndWait();
-    }
-
-    public void getCustomerDetails(CustomerAccount acc) {
-        System.out.println(acc.getCustomerID());
-        System.out.println(acc.getCustomerFullName());
-        System.out.println(acc.getCustomerAddress());
-        System.out.println(acc.getCustomerPostCode());
-        System.out.println(acc.getCustomerEmail());
-        System.out.println(acc.getCustomerPhone());
-        System.out.println(acc.getCustomerType());
-        System.out.println(acc.getCustomerVehReg());
     }
 
     ///FXML BAR STUFF

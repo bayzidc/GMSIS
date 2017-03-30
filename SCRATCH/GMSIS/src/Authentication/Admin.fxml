@@ -48,7 +48,6 @@
       <Button fx:id="clearAll" layoutX="114.0" layoutY="594.0" mnemonicParsing="false" onAction="#clearAllButton" prefHeight="25.0" prefWidth="149.0" text="Clear All" />
       <Button fx:id="backButton" layoutX="114.0" layoutY="85.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="66.0" text="Back" />
       <Button fx:id="exitEdit" layoutX="114.0" layoutY="479.0" mnemonicParsing="false" onAction="#exitEdit" prefHeight="25.0" prefWidth="149.0" text="Exit Edit Mode" />
-      <Label fx:id="loggedIn" layoutX="1187.0" layoutY="52.0" prefHeight="25.0" prefWidth="179.0" text="Label" />
 
    </children>
 </AnchorPane>

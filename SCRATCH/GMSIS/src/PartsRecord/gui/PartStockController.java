@@ -203,7 +203,6 @@ public class PartStockController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully.");
             
             String sql = "insert into vehiclePartsStock(nameofPart,description,stockLevelsOfParts,cost) values(?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -232,7 +231,6 @@ public class PartStockController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully while buildingPartsStockData");
 
             String SQL = "Select * from vehiclePartsStock";
             
@@ -267,7 +265,6 @@ public class PartStockController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully.");
 
             String SQL = "Select * from stockDelivery";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
@@ -423,7 +420,6 @@ public class PartStockController implements Initializable {
         partItemObj.setPartName(findPartsName(value));
         partItemObj.setQuantity(Integer.parseInt(quantity.getText()));
         partItemObj.setArrivalDate(arrivalDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        System.out.println("The quantity from the textField " + partItemObj.getQuantity());
         int stock= partItemObj.getQuantity();
         alertInformation("The item is added to the stock.");
         createDeliveryData(partItemObj);
@@ -506,7 +502,6 @@ public class PartStockController implements Initializable {
         try {
             
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully while creatingDeliveryData");
             
             String sql = "insert into stockDelivery(partName,quantity,deliverydate) values(?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -537,10 +532,7 @@ public class PartStockController implements Initializable {
     public void updateStockLevel(int id, int quantity)throws ClassNotFoundException {
         Connection conn = null;
         int stockLevel = findStockLevel(id);
-        System.out.println("The quantity is " + quantity);
-        System.out.println("the stock level is " + stockLevel);
         int newStockLevel = stockLevel + quantity;
-        System.out.println("The new stock is " + newStockLevel);
         
         try {
             conn = (new sqlite().connect());

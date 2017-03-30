@@ -424,7 +424,6 @@ public class DiagnosisAndRepairController implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error");
         }
     }
     
@@ -467,7 +466,6 @@ public class DiagnosisAndRepairController implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error");
         }
         
         if(vehicleReg.isEmpty())
@@ -518,7 +516,6 @@ public class DiagnosisAndRepairController implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error");
         }
     }
     
@@ -613,7 +610,7 @@ public class DiagnosisAndRepairController implements Initializable {
                 vehicleCombo.setDisable(false);
             }
          catch (SQLException e) {
-            System.out.println("update error");
+           e.printStackTrace();
         }
         new Mechanic(0,0,0).updateMechanicBill(BookingObj.getBookingID(),Integer.parseInt(mechArr[0]));
         
@@ -701,7 +698,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
         catch(Exception e)
         {
-            System.out.println("not the correct arguments");
+            e.printStackTrace();
         }
          
     }
@@ -715,7 +712,7 @@ public class DiagnosisAndRepairController implements Initializable {
         }
         catch(Exception e)
         {
-            System.out.println("not the correct arguments");
+            e.printStackTrace();
         }  
     }
     
@@ -991,8 +988,7 @@ public class DiagnosisAndRepairController implements Initializable {
         
     }
     catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error on Building Data");            
+          e.printStackTrace();         
     }
     }
     
@@ -1075,8 +1071,7 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error");            
+          e.printStackTrace();        
     }
     }
     
@@ -1125,8 +1120,7 @@ public class DiagnosisAndRepairController implements Initializable {
         rs.close();
     }
     catch(SQLException e){
-          e.printStackTrace();
-          System.out.println("Error");            
+          e.printStackTrace();         
     }
     }
     
@@ -1197,7 +1191,6 @@ public class DiagnosisAndRepairController implements Initializable {
             
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error");
         }  
         
         return vehID.size();
@@ -1296,7 +1289,6 @@ public class DiagnosisAndRepairController implements Initializable {
        } //end for loop
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error");
         }  
         table.setItems(nextList);
  
