@@ -568,7 +568,6 @@ public class AddVehicleController implements Initializable {
              {
                  try 
                  {
-                    rset.close();
                     conn.close();
                  } 
                  catch(SQLException e)
@@ -581,7 +580,6 @@ public class AddVehicleController implements Initializable {
              {
                  try 
                  {
-                     stmt.close();
                      conn.close();
                  }
                  catch(SQLException e) 
@@ -589,6 +587,19 @@ public class AddVehicleController implements Initializable {
                      e.printStackTrace();
                  }
             }     
+             
+             if(conn !=null)
+                 {
+                 try 
+                 {
+                     conn.close();
+                 }
+                 catch(SQLException e) 
+                 {
+                     e.printStackTrace();
+                 }
+            }     
+              
              
         }  
          

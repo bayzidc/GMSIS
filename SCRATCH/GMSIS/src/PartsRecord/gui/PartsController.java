@@ -222,7 +222,6 @@ public class PartsController implements Initializable {
         viewPartsInfo.setTooltip(new Tooltip("Select a row from the repair table and click to view the parts used for the selected vehicle"));
         partStockButton.setTooltip(new Tooltip("Click to go to parts stock "));
         deleteParts.setTooltip(new Tooltip("Select a row from the table and click to delete a part"));
-        backButton.setTooltip(new Tooltip("Click to go back home"));
 
         usedIdCol.setCellValueFactory(
                 new PropertyValueFactory<>("usedID"));
@@ -272,6 +271,10 @@ public class PartsController implements Initializable {
                 @Override
                 public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
                     try {
+                        if(table.getSelectionModel().getSelectedItem()==null)
+                        {
+                            return;
+                        }
                         partDisplay = table.getSelectionModel().getSelectedItem();
                         String selectedPartName = partDisplay.getPartName();
                         String partDescription = findPartsDescription(partDisplay.getPartName());
@@ -282,7 +285,7 @@ public class PartsController implements Initializable {
                 }
                     catch(Exception e)
                             {
-                             alertError("Cannot load Parts information.");
+                             e.printStackTrace();
                             }
                 }
          });
@@ -838,6 +841,8 @@ public class PartsController implements Initializable {
                    alertInformation("RepairID: " + id + " has been deleted.");
                 }
                 buildPartsUsedData();
+                showPartInfo.clear();
+                
     }
     
     /**

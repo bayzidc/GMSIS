@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="416.0" prefWidth="1384.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="customer.gui.CustomerController">
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="567.0" prefWidth="1384.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="customer.gui.CustomerController">
    <children>
-      <Label layoutX="591.0" layoutY="72.0" prefHeight="65.0" prefWidth="202.0" text="Day-to-day User">
+      <Label layoutX="614.0" layoutY="65.0" prefHeight="56.0" prefWidth="179.0" text="Day-to-day User">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
       
@@ -22,11 +22,24 @@
       <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
       
-      <Label layoutX="461.0" layoutY="121.0" prefHeight="32.0" prefWidth="482.0" text="Welcome to GMSIS. You are logged in as a day-to-day user. Navigate through our system!" />
-      <ImageView fitHeight="223.0" fitWidth="405.0" layoutX="570.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true">
+      <Label layoutX="451.0" layoutY="121.0" prefHeight="32.0" prefWidth="483.0" text="Welcome to GMSIS. You are logged in as a day-to-day user.">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <ImageView fitHeight="223.0" fitWidth="405.0" layoutX="581.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../common/gui/image/garage.png" />
          </image>
       </ImageView>
+      <Label layoutX="670.0" layoutY="200.0" prefHeight="43.0" prefWidth="64.0" text="GMSIS" textFill="#081786">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="543.0" layoutY="410.0" text=" Select a module to start using the system.">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

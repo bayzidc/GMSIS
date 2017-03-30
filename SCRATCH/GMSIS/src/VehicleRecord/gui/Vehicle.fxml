@@ -10,19 +10,21 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="743.0" prefWidth="1359.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="VehicleRecord.gui.VehicleController">
    <children>
-      <Label layoutX="524.0" layoutY="65.0" prefHeight="43.0" prefWidth="167.0" text="Vehicle Record">
+      <Label layoutX="620.0" layoutY="56.0" prefHeight="43.0" prefWidth="167.0" text="Vehicle Records">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Button fx:id="editBtn" layoutX="725.0" layoutY="199.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="105.0" text="Edit Vehicle" />
-      <Button fx:id="deleteBtn" layoutX="725.0" layoutY="236.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="105.0" text="Delete Vehicle" />
-      <TextField fx:id="searchVehicle" layoutX="238.0" layoutY="451.0" prefHeight="25.0" prefWidth="218.0" promptText="Enter fully or partially..." />
+      <Button fx:id="editBtn" layoutX="741.0" layoutY="200.0" mnemonicParsing="false" onAction="#showButton" prefHeight="25.0" prefWidth="113.0" text="Edit Vehicle" />
+      <Button fx:id="deleteBtn" layoutX="741.0" layoutY="236.0" mnemonicParsing="false" onAction="#deleteVehicle" prefHeight="25.0" prefWidth="113.0" text="Delete Vehicle" />
+      <TextField fx:id="searchVehicle" layoutX="1062.0" layoutY="451.0" prefHeight="17.0" prefWidth="275.0" promptText="Enter fully or partially..." />
       <SplitPane dividerPositions="0.624" layoutX="14.0" layoutY="161.0" prefHeight="241.0" prefWidth="673.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="616.0">
@@ -50,14 +52,14 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="addEntryBtn" layoutX="725.0" layoutY="161.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="2.0" prefWidth="105.0" text="Add Vehicle" />
-      <Button fx:id="viewParts" layoutX="976.0" layoutY="451.0" mnemonicParsing="false" onAction="#buildParts" prefHeight="16.0" prefWidth="105.0" text="View Parts Used" />
-      <Label layoutX="616.0" layoutY="435.0" prefHeight="40.0" prefWidth="218.0" text="Vehicle List">
+      <Button fx:id="addEntryBtn" layoutX="741.0" layoutY="161.0" mnemonicParsing="false" onAction="#addEntry" prefHeight="25.0" prefWidth="113.0" text="Add Vehicle" />
+      <Button fx:id="viewParts" layoutX="741.0" layoutY="278.0" mnemonicParsing="false" onAction="#buildParts" prefHeight="25.0" prefWidth="113.0" text="View Parts Used" />
+      <Label layoutX="24.0" layoutY="442.0" prefHeight="43.0" prefWidth="113.0" text="Vehicle List">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="122.0" prefHeight="32.0" prefWidth="375.0" text="Customer &amp; Booking Information">
+      <Label layoutX="14.0" layoutY="122.0" prefHeight="32.0" prefWidth="375.0" text="Booking Information">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -67,11 +69,11 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <JFXCheckBox fx:id="pastB" checkedColor="#0f1d9b" layoutX="11.0" layoutY="413.0" onAction="#filterByPast" text="View Past Bookings" />
-      <JFXCheckBox fx:id="futureB" checkedColor="#0f1d9b" layoutX="158.0" layoutY="413.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="138.0" text="View Future Bookings" />
-      <JFXCheckBox fx:id="showAll" checkedColor="#0f1d9b" layoutX="316.0" layoutY="413.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="150.0" text="View All Bookings" />
-      <ChoiceBox fx:id="searchBy" layoutX="83.0" layoutY="451.0" prefWidth="150.0" value="Search By..." />
-      <Label layoutX="28.0" layoutY="455.0" prefHeight="17.0" prefWidth="72.0" text="Search By:" />
+      <JFXCheckBox fx:id="pastB" checkedColor="#0f1d9b" layoutX="137.0" layoutY="405.0" onAction="#filterByPast" text="View Past Bookings" />
+      <JFXCheckBox fx:id="futureB" checkedColor="#0f1d9b" layoutX="277.0" layoutY="405.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="138.0" text="View Future Bookings" />
+      <JFXCheckBox fx:id="showAll" checkedColor="#0f1d9b" layoutX="6.0" layoutY="405.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="150.0" text="View All Bookings" />
+      <ChoiceBox fx:id="searchBy" layoutX="906.0" layoutY="451.0" prefWidth="150.0" value="Search By..." />
+      <Label layoutX="843.0" layoutY="455.0" prefHeight="17.0" prefWidth="56.0" text="Search By:" />
       
       <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
       <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
@@ -79,7 +81,6 @@
       <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
       <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
-      <Button fx:id="backBtn" layoutX="20.0" layoutY="65.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="105.0" text="Back to Home" />
       <TableView fx:id="table" fixedCellSize="0.0" layoutX="20.0" layoutY="486.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="1317.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="85.0" text="RegNo." />
@@ -100,13 +101,18 @@
             <TableColumn fx:id="vecIDCol" prefWidth="90.0" text="VehicleID" />
         </columns>
       </TableView>
-      <Button fx:id="viewInfo" layoutX="1095.0" layoutY="451.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="25.0" prefWidth="124.0" text="View Cust/Book Info" />
-      <Button fx:id="addBooking" layoutX="1232.0" layoutY="451.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="105.0" text="Add Booking" />
+      <Button fx:id="viewInfo" layoutX="741.0" layoutY="318.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="25.0" prefWidth="113.0" text="View Booking Info" />
+      <Button fx:id="addBooking" layoutX="741.0" layoutY="353.0" mnemonicParsing="false" onAction="#addBooking" prefHeight="25.0" prefWidth="113.0" text="Add Booking" />
       <TextArea fx:id="vecInfo" editable="false" layoutX="899.0" layoutY="161.0" prefHeight="258.0" prefWidth="438.0" />
       <Label layoutX="899.0" layoutY="122.0" prefHeight="32.0" prefWidth="387.0" text="Vehicle Information">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
+      <ImageView fitHeight="63.0" fitWidth="113.0" layoutX="785.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/Cars.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
