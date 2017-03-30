@@ -305,7 +305,6 @@ public class PartsController implements Initializable {
 
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened database successfully.");
           
             String sql = "insert into vehiclePartsUsed(parts_id,quantity,cost, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID) values(?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
@@ -473,7 +472,7 @@ public class PartsController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened Database Successfully");
+
             String SQL = "Select * from booking";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
   
@@ -740,7 +739,7 @@ public class PartsController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Opened database successfully to get mechanic cost");
+      
             String SQL = "Select mechanicCost from bill where bookingID ='" + bookingID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {
@@ -1294,7 +1293,7 @@ public class PartsController implements Initializable {
      * @param data 
      */
     public void searchFilter(ObservableList<PartsUsed> data) {
-            System.out.println("new");
+
             FilteredList<PartsUsed> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
             searchField.textProperty().addListener((observableValue, oldValue2, newValue2) -> {

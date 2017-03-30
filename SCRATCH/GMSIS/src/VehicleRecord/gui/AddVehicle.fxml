@@ -16,7 +16,7 @@
    <children>
       <Label layoutX="599.0" layoutY="33.0" prefHeight="66.0" prefWidth="162.0" text="Vehicle Entry">
          <font>
-            <Font name="Bauhaus 93" size="24.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
       <Label layoutX="306.0" layoutY="99.0" prefHeight="25.0" prefWidth="245.0" text="Please complete all fields with *" textFill="#e40606" />

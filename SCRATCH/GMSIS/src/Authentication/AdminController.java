@@ -214,6 +214,7 @@ public class AdminController implements Initializable {
     private void exitEdit(ActionEvent event) {
         createUser.setDisable(false);
         exitEdit.setDisable(true);
+        id.setVisible(false);
 
         clearFields();
     }
@@ -241,7 +242,6 @@ public class AdminController implements Initializable {
             return;
         }
         String ID = table.getSelectionModel().getSelectedItem().getID();//Gets ID 
-  
         if (LoginController.userID.equals(ID)) {
             alertInfo(null, "Cannot delete your own user record");
             return;
@@ -256,11 +256,66 @@ public class AdminController implements Initializable {
 
     }
 
+    @FXML
+    private void logoutButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent logoutPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
+        Scene logout_Scene = new Scene(logoutPage);
+        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageLogout.setScene(logout_Scene);
+        stageLogout.show();
+
+    }
+
+    @FXML
+    private void vehicleBtn(ActionEvent event) throws IOException, ClassNotFoundException {
+
+        Parent vehicle_Page = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+        Scene vehicle_Scene = new Scene(vehicle_Page);
+        Stage stageVehicle = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageVehicle.setScene(vehicle_Scene);
+        stageVehicle.show();
+    }
+
+    @FXML
+    private void customerButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent logoutPage = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/gui.fxml"));
+        Scene logout_Scene = new Scene(logoutPage);
+        Stage stageLogout = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageLogout.setScene(logout_Scene);
+        stageLogout.show();
+    }
+
+    @FXML
+    private void repairButton(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent repairPage = FXMLLoader.load(getClass().getResource("/DiagnosisAndRepair/gui/DiagnosisAndRepairGui.fxml"));
+        Scene repair_Scene = new Scene(repairPage);
+        Stage stageRepair = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageRepair.setScene(repair_Scene);
+        stageRepair.show();
+    }
+
+    @FXML
+    private void partsButtnUsed(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent partsRecordPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/parts.fxml"));
+        Scene parts_Scene = new Scene(partsRecordPage);
+        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageParts.setScene(parts_Scene);
+        stageParts.show();
+    }
+
+    @FXML
+    private void partsButtnStock(ActionEvent event) throws IOException, ClassNotFoundException {
+        Parent partsStockPage = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
+        Scene partStock_Scene = new Scene(partsStockPage);
+        Stage stageParts = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stageParts.setScene(partStock_Scene);
+        stageParts.show();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        id.setEditable(false);
+        id.setVisible(false);
         exitEdit.setDisable(true);
 
         passCol.setCellValueFactory(
@@ -301,6 +356,7 @@ public class AdminController implements Initializable {
                 admin.setSelected(false);
             }
 
+            id.setVisible(true);
             createUser.setDisable(true);
             exitEdit.setDisable(false);
         }
@@ -332,7 +388,8 @@ public class AdminController implements Initializable {
             admin.setSelected(false);
             createUser.setDisable(false);
             exitEdit.setDisable(true);
-
+            id.setVisible(false);
+            
             buildData();
         }
     }
@@ -422,12 +479,12 @@ public class AdminController implements Initializable {
             state.close();
             conn.close();
 
-            alertInfo(null,"User has been added");
-            
+            //submit=true;
         } catch (SQLException e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
 
         }
+        //return submit;       
 
     }
 
