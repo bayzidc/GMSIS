@@ -6,8 +6,8 @@
 package PartsRecord.gui;
 
 import Authentication.sqlite;
-import PartsRecord.logic.parts;
-import PartsRecord.logic.partsUsed;
+import PartsRecord.logic.PartsStock;
+import PartsRecord.logic.PartsUsed;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,8 +35,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
-import PartsRecord.logic.partsUsed;
-import PartsRecord.logic.vehicleCustomerInfo;
+import PartsRecord.logic.PartsUsed;
+import PartsRecord.logic.VehicleCustomerInfo;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -123,25 +123,25 @@ public class PartsController implements Initializable {
     public JFXCheckBox showAll;
   
      @FXML
-    private TableView<partsUsed> table;
+    private TableView<PartsUsed> table;
     @FXML
-    private TableColumn<partsUsed, Integer> usedIdCol;
+    private TableColumn<PartsUsed, Integer> usedIdCol;
     @FXML
-    private TableColumn<partsUsed, String> nameCol;
+    private TableColumn<PartsUsed, String> nameCol;
     @FXML
-    private TableColumn<partsUsed, Double> costCol;
+    private TableColumn<PartsUsed, Double> costCol;
     @FXML
-    private TableColumn<partsUsed, Integer> quantityCol;
+    private TableColumn<PartsUsed, Integer> quantityCol;
     @FXML
-    private TableColumn<partsUsed, String> installDateCol;
+    private TableColumn<PartsUsed, String> installDateCol;
     @FXML
-    private TableColumn<partsUsed, String> expireDateCol;
+    private TableColumn<PartsUsed, String> expireDateCol;
     @FXML
-    private TableColumn<partsUsed, String> registrationNoCol;
+    private TableColumn<PartsUsed, String> registrationNoCol;
     @FXML
-    private TableColumn<partsUsed, String> customerNameCol;
+    private TableColumn<PartsUsed, String> customerNameCol;
     @FXML
-    private TableColumn<partsUsed, Integer> bookingIdCol;
+    private TableColumn<PartsUsed, Integer> bookingIdCol;
     
     @FXML
     public TableView<PartsUsedPerVehicle> partInfoTable;
@@ -155,28 +155,28 @@ public class PartsController implements Initializable {
     public TableColumn<PartsUsedPerVehicle, Integer> qCol;
     
     @FXML
-    public TableView<vehicleCustomerInfo> custInfoTable;
+    public TableView<VehicleCustomerInfo> custInfoTable;
     @FXML
-    public TableColumn<vehicleCustomerInfo, String> regNoCol;
+    public TableColumn<VehicleCustomerInfo, String> regNoCol;
     @FXML
-    public TableColumn<vehicleCustomerInfo, String> fullCustomerNameCol;
+    public TableColumn<VehicleCustomerInfo, String> fullCustomerNameCol;
     @FXML
-    public TableColumn<vehicleCustomerInfo, String> bookingDateCol;
+    public TableColumn<VehicleCustomerInfo, String> bookingDateCol;
     
-    public static partsUsed part = new partsUsed(0, "", 0.0, 0, "", "", "", "", 0);
-    public static PartsUsedPerVehicle partVehicle = new PartsUsedPerVehicle("", "", "",0);
-    public static vehicleCustomerInfo custVehicle = new vehicleCustomerInfo("", "", "");
+    private static PartsUsed part = new PartsUsed(0, "", 0.0, 0, "", "", "", "", 0);
+    private static PartsUsedPerVehicle partVehicle = new PartsUsedPerVehicle("", "", "",0);
+    private static VehicleCustomerInfo custVehicle = new VehicleCustomerInfo("", "", "");
     
     @FXML// ObservableList to hold the data for the tableviews.
-    ObservableList<partsUsed> data;
+    ObservableList<PartsUsed> data;
     ObservableList<PartsUsedPerVehicle> partVehData;
-    ObservableList<vehicleCustomerInfo> customerData;
-    private ObservableList<vehicleCustomerInfo> tempData = FXCollections.observableArrayList();
+    ObservableList<VehicleCustomerInfo> customerData;
+    private ObservableList<VehicleCustomerInfo> tempData = FXCollections.observableArrayList();
     // ObservableList to hold the bookingIds and partNames for the bookingIdCombo and partNameCombo
     ObservableList<Integer> bookingId = FXCollections.observableArrayList();
     ObservableList<String> namesCombo = FXCollections.observableArrayList();
     private int usedPartID;
-    private partsUsed partDisplay = null ;
+    private PartsUsed partDisplay = null ;
     private LocalDate scheduleDateFromBooking;
     
     
@@ -300,7 +300,7 @@ public class PartsController implements Initializable {
      * @param part
      * @throws ClassNotFoundException 
      */
-    public void createData(partsUsed part) throws ClassNotFoundException {
+    public void createData(PartsUsed part) throws ClassNotFoundException {
 
         Connection conn = null;
 
@@ -355,7 +355,7 @@ public class PartsController implements Initializable {
                 part.setBookingID(rs.getInt(9));
                 
 
-                data.add(new partsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID()));
+                data.add(new PartsUsed(part.getUsedID(), part.getPartName(), part.getCost(), part.getQuantity(), part.getInstallDate(), part.getWarrantyExpireDate(), part.getVehicleRegNo(), part.getCustomerFullName(), part.getBookingID()));
                 
                 searchField.clear();
                 searchFilter(data);
@@ -445,7 +445,7 @@ public class PartsController implements Initializable {
                     custVehicle.setCustomerName(findCustomerName(rs.getInt("customer_id")));
                     custVehicle.setRegNumber(vehReg);
                     custVehicle.setBookingDate(rs.getString("scheduled_date"));
-                    customerData.add(new vehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
+                    customerData.add(new VehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
 
                 }        
                 tempData.addAll(customerData);
@@ -486,7 +486,7 @@ public class PartsController implements Initializable {
                 custVehicle.setRegNumber(findVehReg(rs.getInt("vehicleID")));
                 custVehicle.setBookingDate(rs.getString("scheduled_date"));
                 
-                customerData.add(new vehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
+                customerData.add(new VehicleCustomerInfo(custVehicle.getRegNumber(),custVehicle.getCustomerName(), custVehicle.getBookingDate()));
             }
             
             tempData.addAll(customerData);
@@ -528,9 +528,6 @@ public class PartsController implements Initializable {
             return;
         }
         if(!isQuantityZero(quantity.getText())){
-            return;
-        }
-        if(!checkForWhiteSpace()){
             return;
         }
         else{
@@ -850,7 +847,7 @@ public class PartsController implements Initializable {
      * @return
      * @throws ClassNotFoundException 
      */
-    public boolean isPartsDeleted(partsUsed part) throws ClassNotFoundException {
+    public boolean isPartsDeleted(PartsUsed part) throws ClassNotFoundException {
         boolean partsDeleted = false;
 
         int ID = table.getSelectionModel().getSelectedItem().getUsedID();
@@ -1295,12 +1292,12 @@ public class PartsController implements Initializable {
      * This method is used to search for a partsUsed by either full/partial vehicle registration number or customer name.
      * @param data 
      */
-    private void searchFilter(ObservableList<partsUsed> data) {
+    public void searchFilter(ObservableList<PartsUsed> data) {
             System.out.println("new");
-            FilteredList<partsUsed> filteredData = new FilteredList<>(data, e -> true);
+            FilteredList<PartsUsed> filteredData = new FilteredList<>(data, e -> true);
         searchField.setOnKeyReleased(e -> {
             searchField.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
-                filteredData.setPredicate((Predicate<? super partsUsed>) partsUsed -> {
+                filteredData.setPredicate((Predicate<? super PartsUsed>) partsUsed -> {
                     if (newValue2 == null || newValue2.isEmpty()) {
                         return true;
                     }
@@ -1315,7 +1312,7 @@ public class PartsController implements Initializable {
                     return false;
                 }); 
             });
-                SortedList<partsUsed> sortedData = new SortedList<>(filteredData);
+                SortedList<PartsUsed> sortedData = new SortedList<>(filteredData);
                 sortedData.comparatorProperty().bind(table.comparatorProperty());
                 table.setItems(sortedData);
         });

@@ -11,14 +11,14 @@ import javafx.beans.property.SimpleStringProperty;
  *
  * @author Fabiha
  */
-public class vehicleCustomerInfo {
+public class VehicleCustomerInfo {
     
    public SimpleStringProperty customerName; 
    public SimpleStringProperty vehicleregNo;
    public SimpleStringProperty bookingDate;
     
    
-   public vehicleCustomerInfo(String vehicleregNo, String customerName, String bDate)
+   public VehicleCustomerInfo(String vehicleregNo, String customerName, String bDate)
    {
       this.customerName = new SimpleStringProperty(customerName);
       this.vehicleregNo = new SimpleStringProperty(vehicleregNo);

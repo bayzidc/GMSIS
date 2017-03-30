@@ -1,7 +1,7 @@
 package CustomerAccount.gui;
 
 import Authentication.sqlite;
-import CustomerAccount.logic.bill;
+import CustomerAccount.logic.Bill;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import CustomerAccount.logic.customerAccount;
+import CustomerAccount.logic.CustomerAccount;
 import DiagnosisAndRepair.logic.DiagnosisAndRepairBooking;
 import VehicleRecord.gui.AddVehicleController;
 import com.jfoenix.controls.JFXButton;
@@ -81,15 +81,15 @@ public class GuiController implements Initializable {
     private TableColumn<DiagnosisAndRepairBooking, String> partsUsedBooking;
     //FOR BILL
     @FXML
-    private TableView<bill> tableBill;
+    private TableView<Bill> tableBill;
     @FXML
-    private TableColumn<bill, Integer> bookingIDBill;
+    private TableColumn<Bill, Integer> bookingIDBill;
     @FXML
-    private TableColumn<bill, Boolean> billStatus;
+    private TableColumn<Bill, Boolean> billStatus;
     @FXML
-    private TableColumn<bill, Integer> cost;
+    private TableColumn<Bill, Integer> cost;
     @FXML
-    private ObservableList<bill> dataBill;
+    private ObservableList<Bill> dataBill;
     // FOR GUI
     @FXML
     private Button backButtton;
@@ -120,30 +120,30 @@ public class GuiController implements Initializable {
     @FXML
     private ChoiceBox accTypeText;
     @FXML
-    private TableView<customerAccount> table;
+    private TableView<CustomerAccount> table;
     @FXML
-    private TableColumn<customerAccount, Integer> customerID;
+    private TableColumn<CustomerAccount, Integer> customerID;
     @FXML
-    private TableColumn<customerAccount, String> customerFullName;
+    private TableColumn<CustomerAccount, String> customerFullName;
     @FXML
-    private TableColumn<customerAccount, String> customerAddress;
+    private TableColumn<CustomerAccount, String> customerAddress;
     @FXML
-    private TableColumn<customerAccount, String> customerPostCode;
+    private TableColumn<CustomerAccount, String> customerPostCode;
     @FXML
-    private TableColumn<customerAccount, String> customerVehReg;
+    private TableColumn<CustomerAccount, String> customerVehReg;
     @FXML
-    private TableColumn<customerAccount, String> customerPhone;
+    private TableColumn<CustomerAccount, String> customerPhone;
     @FXML
-    private TableColumn<customerAccount, String> customerEmail;
+    private TableColumn<CustomerAccount, String> customerEmail;
     @FXML
-    private TableColumn<customerAccount, String> customerType;
-    private ObservableList<customerAccount> data;
-    private ObservableList<bill> data2;
+    private TableColumn<CustomerAccount, String> customerType;
+    private ObservableList<CustomerAccount> data;
+    private ObservableList<Bill> data2;
     public int ID;
     private IntegerProperty index = new SimpleIntegerProperty();
-    public static customerAccount acc = new customerAccount(0, "", "", "", "", "", "", "");
-    public static bill showBill = new bill(0, "", "", 0, 0, 0, false);
-    private bill buildBill = new bill(0, "", "", 0, 0, 0, false);
+    public static CustomerAccount acc = new CustomerAccount(0, "", "", "", "", "", "", "");
+    public static Bill showBill = new Bill(0, "", "", 0, 0, 0, false);
+    private Bill buildBill = new Bill(0, "", "", 0, 0, 0, false);
 
     /**
      * Initializes the controller class.
@@ -219,10 +219,10 @@ public class GuiController implements Initializable {
 
     @FXML
     private void searchCustomer() {
-        FilteredList<customerAccount> filteredData = new FilteredList<>(data, e -> true);
+        FilteredList<CustomerAccount> filteredData = new FilteredList<>(data, e -> true);
         searchCustomer.setOnKeyReleased(e -> {
             searchCustomer.textProperty().addListener((observableValue, oldValue2, newValue2) -> {
-                filteredData.setPredicate((Predicate<? super customerAccount>) customerAccount -> {
+                filteredData.setPredicate((Predicate<? super CustomerAccount>) customerAccount -> {
                     if (newValue2 == null || newValue2.isEmpty()) {
                         return true;
                     }
@@ -234,7 +234,7 @@ public class GuiController implements Initializable {
                     }
                     return false;
                 });
-                SortedList<customerAccount> sortedData = new SortedList<>(filteredData);
+                SortedList<CustomerAccount> sortedData = new SortedList<>(filteredData);
                 sortedData.comparatorProperty().bind(table.comparatorProperty());
                 table.setItems(sortedData);
             });
@@ -350,7 +350,7 @@ public class GuiController implements Initializable {
         }
     }
 
-    private boolean isDeleted(customerAccount acc) throws ClassNotFoundException {
+    private boolean isDeleted(CustomerAccount acc) throws ClassNotFoundException {
         boolean customerDeleted = false;
 
         ID = table.getSelectionModel().getSelectedItem().getCustomerID();
@@ -380,7 +380,7 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    private void updateData(customerAccount acc) throws ClassNotFoundException {
+    private void updateData(CustomerAccount acc) throws ClassNotFoundException {
 
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
         Connection conn = null;
@@ -445,7 +445,7 @@ public class GuiController implements Initializable {
                     acc.setCustomerVehReg(rs2.getString("RegNumber"));
                     System.out.println("This is what will be passed to constructer: " + acc.getCustomerVehReg());
                 }
-                data.add(new customerAccount(acc.getCustomerID(), acc.getCustomerFullName(), acc.getCustomerAddress(), acc.getCustomerPostCode(), acc.getCustomerPhone(), acc.getCustomerEmail(), acc.getCustomerType(), acc.getCustomerVehReg()));
+                data.add(new CustomerAccount(acc.getCustomerID(), acc.getCustomerFullName(), acc.getCustomerAddress(), acc.getCustomerPostCode(), acc.getCustomerPhone(), acc.getCustomerEmail(), acc.getCustomerType(), acc.getCustomerVehReg()));
             }
             table.setItems(data);
             rs.close();
@@ -473,7 +473,7 @@ public class GuiController implements Initializable {
                 new PropertyValueFactory<>("customerVehReg"));
     }
 
-    public boolean createData(customerAccount acc) throws ClassNotFoundException, NullPointerException {
+    public boolean createData(CustomerAccount acc) throws ClassNotFoundException, NullPointerException {
 
         Connection conn = null;
 
@@ -539,7 +539,7 @@ public class GuiController implements Initializable {
                 ResultSet rs2 = conn.createStatement().executeQuery(SQL2);
                 while (rs2.next()) {
                     date = rs2.getString(5);
-                    dataBill.add(new bill(0, rs.getString(1), date, rs.getDouble(7), 0, 0, rs.getBoolean(8)));
+                    dataBill.add(new Bill(0, rs.getString(1), date, rs.getDouble(7), 0, 0, rs.getBoolean(8)));
                 }
             }
 
@@ -674,7 +674,7 @@ public class GuiController implements Initializable {
     @FXML
     private void filterByPastBill() throws ClassNotFoundException {
         try {
-            ObservableList<bill> pastList = FXCollections.observableArrayList(dataBill);
+            ObservableList<Bill> pastList = FXCollections.observableArrayList(dataBill);
 
             for (int i = 0; i < pastList.size(); i++) {
                 System.out.println(pastList.get(i).getDate());
@@ -851,7 +851,7 @@ public class GuiController implements Initializable {
         return alert.showAndWait();
     }
 
-    public void getCustomerDetails(customerAccount acc) {
+    public void getCustomerDetails(CustomerAccount acc) {
         System.out.println(acc.getCustomerID());
         System.out.println(acc.getCustomerFullName());
         System.out.println(acc.getCustomerAddress());

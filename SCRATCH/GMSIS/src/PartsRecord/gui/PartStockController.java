@@ -6,7 +6,7 @@
 package PartsRecord.gui;
 
 import PartsRecord.logic.PartsItem;
-import PartsRecord.logic.parts;
+import PartsRecord.logic.PartsStock;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -75,17 +75,17 @@ public class PartStockController implements Initializable {
     private DatePicker arrivalDate;
     
     @FXML
-    private TableView<parts> table;
+    private TableView<PartsStock> table;
     @FXML
-    private TableColumn<parts, Integer> idCol;
+    private TableColumn<PartsStock, Integer> idCol;
     @FXML
-    private TableColumn<parts, String> nameCol;
+    private TableColumn<PartsStock, String> nameCol;
     @FXML
-    private TableColumn<parts, String> descriptionCol;
+    private TableColumn<PartsStock, String> descriptionCol;
     @FXML
-    private TableColumn<parts, Integer> stockLevelsCol;
+    private TableColumn<PartsStock, Integer> stockLevelsCol;
     @FXML
-    private TableColumn<parts, Double> costCol;
+    private TableColumn<PartsStock, Double> costCol;
     
     
     @FXML
@@ -114,13 +114,13 @@ public class PartStockController implements Initializable {
     @FXML
     private Button addItem;
     // ObservableList to hold the data for the tableviews.
-    ObservableList<parts> data;
+    ObservableList<PartsStock> data;
     ObservableList<PartsItem> partItemData;
     // ObservableList to hold the partIds for the partIdCombo
     ObservableList<Integer> partIdList = FXCollections.observableArrayList();
     // Creating objects.
-    public static parts showPart = new parts(0, "", "", 0, 0.0); // an object of type parts.
-    public static PartsItem partItemObj = new PartsItem("",0, "");
+    private static PartsStock showPart = new PartsStock(0, "", "", 0, 0.0); // an object of type parts.
+    private static PartsItem partItemObj = new PartsItem("",0, "");
     
     private int partID;
     private int currentStockLevel;
@@ -198,7 +198,7 @@ public class PartStockController implements Initializable {
      * @param part
      * @throws ClassNotFoundException 
      */
-    public void createData(parts part) throws ClassNotFoundException {
+    public void createData(PartsStock part) throws ClassNotFoundException {
 
         Connection conn = null;
         try {
@@ -244,7 +244,7 @@ public class PartStockController implements Initializable {
                 showPart.setPartStockLevel(rs.getInt(4));
                 showPart.setCost(rs.getDouble(5));
                 
-                data.add(new parts(showPart.getPartIDentify(), showPart.getPartName(), showPart.getPartDescription(), showPart.getPartStockLevel(), showPart.getCost()));
+                data.add(new PartsStock(showPart.getPartIDentify(), showPart.getPartName(), showPart.getPartDescription(), showPart.getPartStockLevel(), showPart.getCost()));
             }
 
             table.setItems(data);
@@ -316,9 +316,6 @@ public class PartStockController implements Initializable {
             return;
         }
         if(!verifyCost(cost.getText())){
-            return;
-        }
-        if(!checkForWhiteSpace()){
             return;
         }
         
@@ -642,7 +639,7 @@ public class PartStockController implements Initializable {
         }
         if(!verifyCost(cost.getText())){
             return;
-        }  
+        }
         
         showPart.setPartName((nameOfParts.getText().toLowerCase()));
         showPart.setPartDescription(description.getText());
@@ -662,7 +659,7 @@ public class PartStockController implements Initializable {
      * @throws ClassNotFoundException 
      */
     @FXML
-    private void updatePartsInDataBase(parts showPart) throws ClassNotFoundException {
+    private void updatePartsInDataBase(PartsStock showPart) throws ClassNotFoundException {
 
         Connection conn = null;
 
@@ -792,7 +789,7 @@ public class PartStockController implements Initializable {
      * @return
      * @throws ClassNotFoundException 
      */
-    public boolean isPartsDeleted(parts part) throws ClassNotFoundException {
+    public boolean isPartsDeleted(PartsStock part) throws ClassNotFoundException {
         boolean partsDeleted = false;
 
         int ID = table.getSelectionModel().getSelectedItem().getPartIDentify();
@@ -923,7 +920,7 @@ public class PartStockController implements Initializable {
      */
     public boolean checkForWhiteSpace()
     {
-        if(nameOfParts.getText().trim().isEmpty() || description.getText().trim().isEmpty())
+        if(nameOfParts.getText().trim().isEmpty() || description.getText().trim().isEmpty()|| cost.getText().trim().isEmpty())
          {
              alertError("You cannot have a white space at the start of the fields.");
              return false;

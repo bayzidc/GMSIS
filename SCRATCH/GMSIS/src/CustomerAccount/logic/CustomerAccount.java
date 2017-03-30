@@ -14,7 +14,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author Joen
  */
-public class customerAccount {
+public class CustomerAccount {
 
     public IntegerProperty customerID;
     public StringProperty customerFullName;
@@ -25,7 +25,7 @@ public class customerAccount {
     public StringProperty customerVehReg;
     public StringProperty customerPhone;
 
-    public customerAccount(int id, String fullname, String address, String postcode, String phone, String email, String type, String vehReg) {
+    public CustomerAccount(int id, String fullname, String address, String postcode, String phone, String email, String type, String vehReg) {
         this.customerID = new SimpleIntegerProperty(id);
         this.customerFullName = new SimpleStringProperty(fullname);
         this.customerAddress = new SimpleStringProperty(address);

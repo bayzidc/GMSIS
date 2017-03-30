@@ -16,7 +16,7 @@ import javafx.beans.property.DoubleProperty;
  *
  * @author Fabiha
  */
-public class parts {
+public class PartsStock {
     
     public IntegerProperty partIDentify;
     public StringProperty partName;
@@ -25,7 +25,7 @@ public class parts {
     public DoubleProperty cost;
    
    
-    public parts(int partId,String partName, String partDescription,int partStockLevel, double cost) {
+    public PartsStock(int partId,String partName, String partDescription,int partStockLevel, double cost) {
         
         this.partIDentify = new SimpleIntegerProperty(partId);
         this.partName = new SimpleStringProperty(partName);

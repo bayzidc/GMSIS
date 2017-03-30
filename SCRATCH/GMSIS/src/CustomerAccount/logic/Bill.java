@@ -18,7 +18,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author Joen
  */
-public class bill {
+public class Bill {
 
     public IntegerProperty billID;
     public DoubleProperty partsCost;
@@ -28,7 +28,7 @@ public class bill {
     public BooleanProperty billStatus;
     public StringProperty date;
 
-    public bill(int billID, String bookingID, String date, double costOfBill, double mechanicCost, double partsCost, boolean isSettled) {
+    public Bill(int billID, String bookingID, String date, double costOfBill, double mechanicCost, double partsCost, boolean isSettled) {
         this.totalCost = new SimpleDoubleProperty(costOfBill);
         this.bookingID = new SimpleStringProperty(bookingID);
         this.billStatus = new SimpleBooleanProperty(isSettled);
@@ -106,11 +106,11 @@ public class bill {
         return bookingID;
     }
 
-    public void addCostToBillParts(bill Bill, double cost, int quantity) {
+    public void addCostToBillParts(Bill Bill, double cost, int quantity) {
         Bill.partsCost.set(partsCost.get() + (quantity * cost));
     }
 
-    public void addCostToBillMechanic(bill Bill, DiagnosisAndRepair.logic.Mechanic mech) {
+    public void addCostToBillMechanic(Bill Bill, DiagnosisAndRepair.logic.Mechanic mech) {
         Bill.mechanicCost.set(mechanicCost.get() + (mech.getHourlyRate() * mech.getHoursWorked()));
     }
 

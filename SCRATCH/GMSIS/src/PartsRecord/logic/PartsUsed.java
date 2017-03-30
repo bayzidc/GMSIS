@@ -27,7 +27,7 @@ import javafx.fxml.FXML;
  *
  * @author Fabiha
  */
-public class partsUsed {
+public class PartsUsed {
     
     public IntegerProperty usedID;
     public StringProperty partName;
@@ -40,7 +40,7 @@ public class partsUsed {
     public IntegerProperty bookingID;
     
 
-    public partsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID) {
+    public PartsUsed(int usedID,String partName, double cost,int quantity, String installDate, String warrantyExpireDate, String vehicleRegNo, String customerFullName, int bookingID) {
         this.usedID = new SimpleIntegerProperty(usedID);
         this.partName = new SimpleStringProperty(partName);
         this.cost = new SimpleDoubleProperty(cost);
