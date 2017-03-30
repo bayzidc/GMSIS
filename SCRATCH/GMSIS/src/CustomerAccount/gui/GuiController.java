@@ -76,7 +76,6 @@ public class GuiController implements Initializable {
     private TableColumn<DiagnosisAndRepairBooking, Integer> date;
     @FXML
     private TableColumn<DiagnosisAndRepairBooking, Integer> duration;
-    @FXML
     private ObservableList<DiagnosisAndRepairBooking> dataBooking;
     @FXML
     private TableColumn<DiagnosisAndRepairBooking, String> partsUsedBooking;
@@ -89,13 +88,10 @@ public class GuiController implements Initializable {
     private TableColumn<Bill, Boolean> billStatus;
     @FXML
     private TableColumn<Bill, Integer> cost;
-    @FXML
     private ObservableList<Bill> dataBill;
     // FOR GUI
     @FXML
     private Button vehicleReg;
-    @FXML
-    private Button backButtton;
     @FXML
     private Button clearButton;
     @FXML
@@ -106,8 +102,6 @@ public class GuiController implements Initializable {
     private Button deleteButton;
     @FXML
     private Button bookingButton;
-    @FXML
-    private Button billsButton;
     @FXML
     private TextField fullNameText;
     @FXML
@@ -147,6 +141,16 @@ public class GuiController implements Initializable {
     public static CustomerAccount acc = new CustomerAccount(0, "", "", "", "", "", "", "");
     public static Bill showBill = new Bill(0, "", "", 0, 0, 0, false);
     private Bill buildBill = new Bill(0, "", "", 0, 0, 0, false);
+    @FXML
+    private JFXButton customers;
+    @FXML
+    private JFXButton vehicles;
+    @FXML
+    private JFXButton bookings;
+    @FXML
+    private JFXButton parts;
+    @FXML
+    private JFXButton logout;
 
     /**
      * Initializes the controller class.
@@ -354,7 +358,6 @@ public class GuiController implements Initializable {
         }
     }
 
-    @FXML
     private void billsButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/bill.fxml"));
@@ -368,7 +371,6 @@ public class GuiController implements Initializable {
         }
     }
 
-    @FXML
     private void bookingButton(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             Parent bills = FXMLLoader.load(getClass().getResource("/CustomerAccount/gui/Booking.fxml"));
@@ -411,7 +413,6 @@ public class GuiController implements Initializable {
 
     }
 
-    @FXML
     private void updateData(CustomerAccount acc) throws ClassNotFoundException {
 
         //System.out.println("SELECT * FROM NewUsers WHERE FirstName= " + "'" + firstName.getText() + "'" + "AND Surname= " + "'" + surname.getText() + "'" + "AND UserID= " + "'" + newUserID.getText() + "'");
@@ -703,7 +704,6 @@ public class GuiController implements Initializable {
         return mechanicName;
     }
 
-    @FXML
     private void filterByPastBill() throws ClassNotFoundException {
         try {
             ObservableList<Bill> pastList = FXCollections.observableArrayList(dataBill);
@@ -920,7 +920,6 @@ public class GuiController implements Initializable {
         pane.getChildren().setAll(rootPane);
     }
 
-    @FXML
     private void vehicleEntry(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
         pane.getChildren().setAll(rootPane);
@@ -933,7 +932,6 @@ public class GuiController implements Initializable {
         pane.getChildren().setAll(rootPane);
     }
 
-    @FXML
     private void pStock(ActionEvent event) throws IOException {
         AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/PartsRecord/gui/partStock.fxml"));
         pane.getChildren().setAll(rootPane);
