@@ -167,7 +167,6 @@ public class PartsController implements Initializable {
     private static PartsUsedPerVehicle partVehicle = new PartsUsedPerVehicle("", "", "",0);
     private static VehicleCustomerInfo custVehicle = new VehicleCustomerInfo("", "", "");
     
-    @FXML// ObservableList to hold the data for the tableviews.
     ObservableList<PartsUsed> data;
     ObservableList<PartsUsedPerVehicle> partVehData;
     ObservableList<VehicleCustomerInfo> customerData;
@@ -504,6 +503,7 @@ public class PartsController implements Initializable {
      * @throws IOException
      * @throws ClassNotFoundException 
      */
+    @FXML
     public void installButton(ActionEvent event) throws IOException, ClassNotFoundException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
@@ -562,6 +562,7 @@ public class PartsController implements Initializable {
      * @throws IOException
      * @throws ClassNotFoundException 
      */
+    @FXML
     public void showInstallDate (ActionEvent event) throws IOException, ClassNotFoundException {
         String date = "";
         
@@ -1454,7 +1455,6 @@ public class PartsController implements Initializable {
      * @param event
      * @throws IOException 
      */
-    @FXML
     private void vehicleEntry(ActionEvent event) throws IOException {
          AnchorPane rootPane = FXMLLoader.load(getClass().getResource("/VehicleRecord/gui/AddVehicle.fxml"));
          pane.getChildren().setAll(rootPane);
@@ -1527,6 +1527,7 @@ public class PartsController implements Initializable {
      * @throws IOException
      * @throws ClassNotFoundException 
      */
+    @FXML
     public void clearButton(ActionEvent event) throws IOException, ClassNotFoundException {
         clearFields();
     }
@@ -1551,6 +1552,8 @@ public class PartsController implements Initializable {
     public void initiateInstallPart(int bookingID, LocalDate date) {
             bookingIdCombo.setValue(bookingID);
             dateOfInstall.setValue(date);
+            dateOfInstall.setDisable(true);
+            
         }
 
     /**
