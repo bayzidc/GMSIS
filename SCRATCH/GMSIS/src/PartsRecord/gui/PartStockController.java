@@ -116,7 +116,7 @@ public class PartStockController implements Initializable {
     // ObservableList to hold the data for the tableviews.
     ObservableList<parts> data;
     ObservableList<PartsItem> partItemData;
-    // ObservableList to hold the partId's for the partIdCombo
+    // ObservableList to hold the partIds for the partIdCombo
     ObservableList<Integer> partIdList = FXCollections.observableArrayList();
     // Creating objects.
     public static parts showPart = new parts(0, "", "", 0, 0.0); // an object of type parts.
@@ -252,7 +252,7 @@ public class PartStockController implements Initializable {
             conn.close();
         } catch (Exception e) {
             
-           alertError("Error on building data for repair information.");
+           alertError("Error on building data for parts stock information.");
         }
 
     }
@@ -845,7 +845,11 @@ public class PartStockController implements Initializable {
         }
     }
     
-    
+    /**
+     * This method is used to redirect the user to the Parts Record page when the user clicks the back button.
+     * @param event
+     * @throws IOException 
+     */
     @FXML
     public void backButton(ActionEvent event) throws IOException
     {
