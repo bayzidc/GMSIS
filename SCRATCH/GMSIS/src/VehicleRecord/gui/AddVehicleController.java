@@ -357,6 +357,20 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void addEntry(ActionEvent event) throws IOException, ClassNotFoundException, SQLException // button method to add vehicle
     {
+            vec.setRegNumber(regNumber.getText().trim());
+            vec.setColour(colour.getText().trim());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType((String) fuelType.getValue());
+            vec.setLastService(((TextField) lastService.getEditor()).getText());
+            vec.setMake(make.getText().trim());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText().trim());
+            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
+            vec.setVehicleType((String) vehicleChoice.getValue());
+            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
+            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
+            vec.setCustID(Integer.parseInt(custID.getText()));
+            vec.setCustName((String) customerNames.getValue());
         Optional<ButtonType> selected = alertConfirm("Are you sure you want to add this vehicle?");
         
         if(selected.get() != ButtonType.OK)
@@ -382,21 +396,7 @@ public class AddVehicleController implements Initializable {
         }
         if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
         {
-            double eSize = Double.parseDouble(engSize.getText());
-            vec.setRegNumber(regNumber.getText().trim());
-            vec.setColour(colour.getText().trim());
-            vec.setEngSize(eSize);
-            vec.setFuelType((String) fuelType.getValue());
-            vec.setLastService(((TextField) lastService.getEditor()).getText());
-            vec.setMake(make.getText().trim());
-            vec.setMileage(Integer.parseInt(mileage.getText()));
-            vec.setModel(model.getText().trim());
-            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
-            vec.setVehicleType((String) vehicleChoice.getValue());
-            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
-            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
-            vec.setCustID(Integer.parseInt(custID.getText()));
-            vec.setCustName((String) customerNames.getValue());
+            
             createData(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been added for " + customerNames.getSelectionModel().getSelectedItem());
             buildData();
@@ -420,6 +420,21 @@ public class AddVehicleController implements Initializable {
     @FXML
     public void updateButton(ActionEvent event) throws IOException, ClassNotFoundException, SQLException
     {
+            vec.setRegNumber(regNumber.getText().trim());
+            vec.setColour(colour.getText().trim());
+            vec.setEngSize(Double.parseDouble(engSize.getText()));
+            vec.setFuelType((String) fuelType.getValue());
+            vec.setLastService(((TextField) lastService.getEditor()).getText());
+            vec.setMake(make.getText().trim());
+            vec.setMileage(Integer.parseInt(mileage.getText()));
+            vec.setModel(model.getText().trim());
+            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
+            vec.setVehicleType((String) vehicleChoice.getValue());
+            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
+            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
+            vec.setCustID(Integer.parseInt(custID.getText()));
+            vec.setCustName((String) customerNames.getValue());
+            vec.setVecID(Integer.parseInt(id.getText()));
         Optional<ButtonType> selected = alertConfirm("Are you sure you want to edit this vehicle?");
         
         if(selected.get() != ButtonType.OK)
@@ -440,23 +455,6 @@ public class AddVehicleController implements Initializable {
         
         if(!(regNumber.getText().trim().isEmpty() || colour.getText().trim().isEmpty() || make.getText().trim().isEmpty() || model.getText().trim().isEmpty() || yesWarranty.isSelected() && nameAndAdd.getText().trim().isEmpty() ))
         {
-            
-            vec.setRegNumber(regNumber.getText().trim());
-            vec.setColour(colour.getText().trim());
-            vec.setEngSize(Double.parseDouble(engSize.getText()));
-            vec.setFuelType((String) fuelType.getValue());
-            vec.setLastService(((TextField) lastService.getEditor()).getText());
-            vec.setMake(make.getText().trim());
-            vec.setMileage(Integer.parseInt(mileage.getText()));
-            vec.setModel(model.getText().trim());
-            vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
-            vec.setVehicleType((String) vehicleChoice.getValue());
-            vec.setWarNameAndAdd(nameAndAdd.getText().trim());
-            vec.setWarrantyExpDate(((TextField) warExpiry.getEditor()).getText());
-            vec.setCustID(Integer.parseInt(custID.getText()));
-            vec.setCustName((String) customerNames.getValue());
-            vec.setVecID(Integer.parseInt(id.getText()));
-        
             editVehicle(vec);
             alertInf("Vehicle ID: " + getVehicleID() + " has been updated for " + customerNames.getSelectionModel().getSelectedItem());
             Parent vecRecords = FXMLLoader.load(getClass().getResource("Vehicle.fxml"));
