@@ -198,7 +198,7 @@ public class AdminController implements Initializable {
             createData();
             buildData();
 
-            alertInfo(null, "Your unique User ID is " + getID());
+            alertInfo(null, "User created. Your unique User ID is " + getID());
 
             id.clear();
             firstName.clear();
@@ -380,7 +380,7 @@ public class AdminController implements Initializable {
                 return;
             }
             updateData();
-
+            alertInfo(null,"User details have been updated successfully.");
             id.clear();
             firstName.clear();
             surname.clear();

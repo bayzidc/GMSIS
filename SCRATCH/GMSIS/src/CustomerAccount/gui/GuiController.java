@@ -775,12 +775,13 @@ public class GuiController implements Initializable {
     @FXML
     private void addBooking(ActionEvent event) throws IOException, ClassNotFoundException {
         if (table.getSelectionModel().getSelectedItem() == null) {
+            alertInf();
             //select row;
             return;
         }
 
         if (table.getSelectionModel().getSelectedItem().getCustomerVehReg().isEmpty()) {
-            //no vehicle
+            alertErrorMessage("Customer doesn't have a vehicle. Not possible to create booking.");
             return;
         }
 
@@ -833,6 +834,14 @@ public class GuiController implements Initializable {
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText("Something went wrong.");
+        alert.showAndWait();
+    }
+    
+        public void alertErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR); // Pop up box
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 

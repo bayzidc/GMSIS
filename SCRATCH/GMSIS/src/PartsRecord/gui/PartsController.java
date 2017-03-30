@@ -767,7 +767,6 @@ public class PartsController implements Initializable {
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
-            System.out.println("Openend database successfully to check if booking exists.");
             String SQL = "Select bookingID from bill where bookingID ='" + bookingID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             while (rs.next()) {

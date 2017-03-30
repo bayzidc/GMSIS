@@ -127,8 +127,12 @@ public class AddVehicleController implements Initializable {
     
      @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        
+        try {
+            // TODO
+            buildData();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AddVehicleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         vehicleChoice.setOnAction(e -> {
             try {
                 fillQuickSelection();
@@ -221,25 +225,22 @@ public class AddVehicleController implements Initializable {
         warExpiry.setDayCellFactory(dayCellFactory2);
         
         try {
-            buildData();
+            
              customerNames.setOnAction(e ->{ //Customer names show up on the database into a choicebox for the user to select
-                Connection conn = null;
-                PreparedStatement ps = null;
-                ResultSet rs = null;
+                Connection conn5 = null;
+                ResultSet rs5 = null;
                 try
                 {
-                    conn = (new sqlite().connect());
-                    String query = "select customer_id, customer_fullname from customer where customer_fullname = ?";
-                    ps = conn.prepareStatement(query);
-                    ps.setString(1,(String) customerNames.getSelectionModel().getSelectedItem());
-                    rs = ps.executeQuery();
-                    while(rs.next())
+                    conn5 = (new sqlite().connect());
+                    String query = "select customer_id, customer_fullname from customer where customer_fullname = '" + (String) customerNames.getSelectionModel().getSelectedItem() + "'";
+                    rs5 = conn5.createStatement().executeQuery(query);
+
+                    while(rs5.next())
                     {
-                        custID.setText(String.valueOf(rs.getInt("customer_id")));
+                        custID.setText(String.valueOf(rs5.getInt("customer_id")));
                     }
-                    conn.close();
-                    ps.close();
-                    rs.close();
+                    conn5.close();
+                    rs5.close();
                 }
                 
                 catch(Exception ex)
@@ -250,15 +251,13 @@ public class AddVehicleController implements Initializable {
         quickSel.setOnAction(e ->{ // Lists vehicles so that the user can quick select a vehicle by make and model
             
                 Connection conn = null;
-                PreparedStatement ps = null;
                 ResultSet rs = null;
                 try
                 {
                     conn = (new sqlite().connect());
-                    String query = "select make,model,engSize,fuelType from quickSelection where template = ?";
-                    ps = conn.prepareStatement(query);
-                    ps.setString(1,(String) quickSel.getSelectionModel().getSelectedItem());
-                    rs = ps.executeQuery();
+                    String query = "select make,model,engSize,fuelType from quickSelection where template = '"+ quickSel.getSelectionModel().getSelectedItem() + "'";
+                    rs = conn.createStatement().executeQuery(query);
+                   // rs = ps.executeQuery();
                     
                     while(rs.next())
                     {
@@ -269,12 +268,12 @@ public class AddVehicleController implements Initializable {
                     }
     
                     conn.close();
-                    ps.close();
                     rs.close();
                 }
                 
                 catch(Exception ex)
                 {
+                     ex.printStackTrace();
                 }
             
         });
@@ -449,7 +448,7 @@ public class AddVehicleController implements Initializable {
             vec.setLastService(((TextField) lastService.getEditor()).getText());
             vec.setMake(make.getText().trim());
             vec.setMileage(Integer.parseInt(mileage.getText()));
-            vec.setModel(model.getText());
+            vec.setModel(model.getText().trim());
             vec.setMotRenewal(((TextField)motRenDate.getEditor()).getText());
             vec.setVehicleType((String) vehicleChoice.getValue());
             vec.setWarNameAndAdd(nameAndAdd.getText().trim());
@@ -570,6 +569,7 @@ public class AddVehicleController implements Initializable {
                  try 
                  {
                     rset.close();
+                    conn.close();
                  } 
                  catch(SQLException e)
                  {
@@ -582,13 +582,16 @@ public class AddVehicleController implements Initializable {
                  try 
                  {
                      stmt.close();
+                     conn.close();
                  }
                  catch(SQLException e) 
                  {
                      e.printStackTrace();
                  }
-            }        
-        }    
+            }     
+             
+        }  
+         
     }
     
     //Method which updates the vehicle changes into the database

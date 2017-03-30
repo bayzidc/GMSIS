@@ -25,6 +25,7 @@ public class Login extends Application {
             stage.setResizable(false);
             stage.setHeight(810);
             stage.setWidth(1359);
+            stage.setTitle("GMSIS");
             stage.show();
 
         } catch (Exception e) {
