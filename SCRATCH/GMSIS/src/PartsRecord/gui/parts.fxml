@@ -25,15 +25,15 @@
       <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#partsUsedPage" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
       <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
       
-      <Label layoutX="12.0" layoutY="201.0" prefHeight="17.0" prefWidth="79.0" text="Part Name:" />
-      <Label layoutX="10.0" layoutY="309.0" text="Date Of Install:" />
-      <Label layoutX="14.0" layoutY="78.0" text="Install Parts">
+      <Label layoutX="12.0" layoutY="248.0" prefHeight="17.0" prefWidth="79.0" text="Part Name:" />
+      <Label layoutX="12.0" layoutY="336.0" prefHeight="17.0" prefWidth="101.0" text="Date Of Install:" />
+      <Label layoutX="13.0" layoutY="152.0" prefHeight="16.0" prefWidth="94.0" text="Install Parts">
          <font>
             <Font name="Georgia Bold" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="backButton" layoutX="11.0" layoutY="746.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="89.0" text="Back" />
-      <TableView fx:id="table" layoutX="364.0" layoutY="149.0" prefHeight="261.0" prefWidth="980.0">
+      <Button fx:id="backButton" layoutX="9.0" layoutY="65.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="121.0" text="Back To Home" />
+      <TableView fx:id="table" layoutX="364.0" layoutY="179.0" prefHeight="261.0" prefWidth="980.0">
         <columns>
             <TableColumn fx:id="usedIdCol" prefWidth="74.0" text="RepairID" />
           <TableColumn fx:id="nameCol" prefWidth="106.0" text="Part Name" />
@@ -46,34 +46,34 @@
             <TableColumn fx:id="bookingIdCol" prefWidth="110.0" text="BookingID" />
         </columns>
       </TableView>
-      <Label layoutX="12.0" layoutY="154.0" prefHeight="17.0" prefWidth="79.0" text="BookingID :" />
-      <DatePicker fx:id="dateOfInstall" layoutX="117.0" layoutY="304.0" prefHeight="27.0" prefWidth="210.0" promptText="dd/mm/yyyy" />
-      <Button fx:id="installParts" layoutX="10.0" layoutY="364.0" mnemonicParsing="false" onAction="#installButton" prefHeight="27.0" prefWidth="101.0" text="Install parts" />
-      <Button fx:id="deleteParts" layoutX="121.0" layoutY="364.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="27.0" prefWidth="101.0" text="Delete Parts" />
-      <TextField fx:id="searchField" layoutX="551.0" layoutY="119.0" prefHeight="27.0" prefWidth="466.0" promptText="Enter fully or partially" />
-      <Button fx:id="clear" layoutX="229.0" layoutY="364.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="101.0" text="Clear" />
-      <Label layoutX="11.0" layoutY="257.0" prefHeight="17.0" prefWidth="69.0" text="Quantity : " />
-      <TextField fx:id="quantity" layoutX="117.0" layoutY="252.0" prefHeight="27.0" prefWidth="210.0" promptText="Enter a quantity.." />
-      <ComboBox fx:id="bookingIdCombo" layoutX="117.0" layoutY="149.0" onAction="#showInstallDate" prefHeight="27.0" prefWidth="210.0" promptText="Select ID" />
-      <ComboBox fx:id="partNameCombo" layoutX="117.0" layoutY="196.0" prefHeight="27.0" prefWidth="210.0" promptText="Select Name" />
-      <TableView fx:id="custInfoTable" layoutX="12.0" layoutY="453.0" prefHeight="215.0" prefWidth="456.0">
+      <Label layoutX="12.0" layoutY="202.0" prefHeight="17.0" prefWidth="79.0" text="BookingID :" />
+      <DatePicker fx:id="dateOfInstall" layoutX="109.0" layoutY="331.0" prefHeight="27.0" prefWidth="210.0" promptText="dd/mm/yyyy" />
+      <Button fx:id="installParts" layoutX="12.0" layoutY="410.0" mnemonicParsing="false" onAction="#installButton" prefHeight="27.0" prefWidth="101.0" text="Install parts" />
+      <Button fx:id="deleteParts" layoutX="124.0" layoutY="410.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="27.0" prefWidth="101.0" text="Delete Part" />
+      <TextField fx:id="searchField" layoutX="556.0" layoutY="146.0" prefHeight="27.0" prefWidth="466.0" promptText="Enter fully or partially" />
+      <Button fx:id="clear" layoutX="240.0" layoutY="410.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="79.0" text="Clear" />
+      <Label layoutX="13.0" layoutY="294.0" prefHeight="17.0" prefWidth="72.0" text="Quantity : " />
+      <TextField fx:id="quantity" layoutX="109.0" layoutY="289.0" prefHeight="27.0" prefWidth="210.0" promptText="Enter a quantity.." />
+      <ComboBox fx:id="bookingIdCombo" layoutX="109.0" layoutY="197.0" onAction="#showInstallDate" prefHeight="27.0" prefWidth="210.0" promptText="Select ID" />
+      <ComboBox fx:id="partNameCombo" layoutX="109.0" layoutY="243.0" prefHeight="27.0" prefWidth="210.0" promptText="Select Name" />
+      <TableView fx:id="custInfoTable" layoutX="13.0" layoutY="488.0" prefHeight="215.0" prefWidth="456.0">
         <columns>
           <TableColumn fx:id="regNoCol" prefWidth="116.00003051757812" text="VehRegNo" />
           <TableColumn fx:id="fullCustomerNameCol" minWidth="0.0" prefWidth="180.0" text="Customer Name" />
             <TableColumn fx:id="bookingDateCol" prefWidth="158.0" text="BookingDate" />
         </columns>
       </TableView>
-      <ComboBox fx:id="searchCombo" layoutX="364.0" layoutY="119.0" prefHeight="21.0" prefWidth="183.0" />
-      <Separator layoutX="1.0" layoutY="420.0" prefHeight="17.0" prefWidth="1384.0" />
-      <Label layoutX="109.0" layoutY="437.0" text="Vehicle Booking Information">
+      <ComboBox fx:id="searchCombo" layoutX="364.0" layoutY="146.0" prefHeight="21.0" prefWidth="183.0" />
+      <Separator layoutX="1.0" layoutY="446.0" prefHeight="17.0" prefWidth="1384.0" />
+      <Label layoutX="109.0" layoutY="463.0" text="Vehicle Booking Information">
          <font>
             <Font name="Georgia Bold" size="14.0" />
          </font>
       </Label>
-      <JFXCheckBox fx:id="showAll" checkedColor="#0f1d9b" layoutX="5.0" layoutY="711.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="151.0" text="View All Bookings" />
-      <JFXCheckBox fx:id="pastBooking" checkedColor="#0f1d9b" layoutX="156.0" layoutY="709.0" onAction="#filterByPast" prefHeight="21.0" prefWidth="183.0" text="View Past Bookings" />
-      <JFXCheckBox fx:id="futureBooking" checkedColor="#0f1d9b" layoutX="321.0" layoutY="711.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="170.0" text="View Future Bookings" />
-      <TableView fx:id="partInfoTable" layoutX="509.0" layoutY="453.0" prefHeight="215.0" prefWidth="488.0">
+      <JFXCheckBox fx:id="showAll" checkedColor="#0f1d9b" layoutX="5.0" layoutY="744.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="151.0" text="View All Bookings" />
+      <JFXCheckBox fx:id="pastBooking" checkedColor="#0f1d9b" layoutX="149.0" layoutY="742.0" onAction="#filterByPast" prefHeight="21.0" prefWidth="183.0" text="View Past Bookings" />
+      <JFXCheckBox fx:id="futureBooking" checkedColor="#0f1d9b" layoutX="319.0" layoutY="744.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="170.0" text="View Future Bookings" />
+      <TableView fx:id="partInfoTable" layoutX="515.0" layoutY="488.0" prefHeight="215.0" prefWidth="488.0">
         <columns>
           <TableColumn fx:id="regCol" prefWidth="89.0" text="VehRegNo" />
           <TableColumn fx:id="customerCol" prefWidth="181.0" text="Customer Name" />
@@ -81,30 +81,34 @@
             <TableColumn fx:id="qCol" minWidth="0.0" prefWidth="112.0" text="Quantity" />
         </columns>
       </TableView>
-      <Button fx:id="viewPartsInfo" layoutX="689.0" layoutY="676.0" mnemonicParsing="false" onAction="#buildPartsDataBtn" prefHeight="27.0" prefWidth="161.0" text="View Parts Used" />
-      <Label layoutX="623.0" layoutY="437.0" text="Parts Used/Vehicle Information">
+      <Button fx:id="viewPartsInfo" layoutX="682.0" layoutY="709.0" mnemonicParsing="false" onAction="#buildPartsDataBtn" prefHeight="27.0" prefWidth="161.0" text="View Parts Used" />
+      <Label layoutX="631.0" layoutY="463.0" text="Parts Used/Vehicle Information">
          <font>
             <Font name="Georgia Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="751.0" layoutY="81.0" text="Repair Information">
+      <Label layoutX="746.0" layoutY="122.0" text="Repair Information">
          <font>
             <Font name="Georgia Bold" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="viewCustomerInfo" layoutX="139.0" layoutY="676.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="27.0" prefWidth="151.0" text="View Vehicle Booking" />
-      <ImageView fitHeight="81.0" fitWidth="101.0" layoutX="113.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="53.0" fitWidth="62.0" layoutX="120.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="viewCustomerInfo" layoutX="139.0" layoutY="709.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="27.0" prefWidth="151.0" text="View Vehicle Booking" />
+      <ImageView fitHeight="43.0" fitWidth="47.0" layoutX="118.0" layoutY="139.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@image/toolsIcon.png" />
          </image>
       </ImageView>
-      <Label layoutX="1121.0" layoutY="438.0" text="Parts Information">
+      <Label layoutX="1121.0" layoutY="464.0" text="Parts Information">
          <font>
             <Font name="Georgia Bold" size="13.0" />
          </font>
       </Label>
       <JFXButton fx:id="partStockButton" layoutX="1207.0" layoutY="61.0" onAction="#pStock" prefHeight="35.0" prefWidth="101.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Stock" textFill="#f5f5f8" />
-      <TextArea fx:id="showPartInfo" layoutX="1039.0" layoutY="453.0" prefHeight="215.0" prefWidth="304.0" />
+      <TextArea fx:id="showPartInfo" layoutX="1044.0" layoutY="488.0" prefHeight="215.0" prefWidth="304.0" />
+      <Label layoutX="614.0" layoutY="68.0" text="Parts Record">
+         <font>
+            <Font name="Georgia Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -438,9 +438,7 @@ public class PartsController implements Initializable {
                 conn = (new sqlite().connect());
                 String SQL = "Select customer_id, scheduled_date from booking where vehicleID ='" + vehicleId + "'";
                 ResultSet rs = conn.createStatement().executeQuery(SQL);
-                while (rs.next()) 
-                {   
-                    System.out.println("New customer method");
+                while (rs.next()) {   
                     custVehicle.setBookingDate("");
                     custVehicle.setCustomerName("");
                     custVehicle.setRegNumber("");
