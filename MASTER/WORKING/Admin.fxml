@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import VehicleRecord.logic.*?>
+
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="810.0" prefWidth="1300.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Authentication.AdminController">
+   <children>
+       
+        <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
+      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
+      <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecord" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
+      <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
+      <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#pUsed" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
+      <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
+       
+       
+      <Label layoutX="626.0" layoutY="76.0" prefHeight="43.0" prefWidth="179.0" text="User Records">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font></Label>
+      <Button fx:id="createUser" layoutX="114.0" layoutY="517.0" mnemonicParsing="false" onAction="#createButton" prefHeight="25.0" prefWidth="149.0" text="Create User" />
+      <Button fx:id="editUser" layoutX="649.0" layoutY="607.0" mnemonicParsing="false" onAction="#editUser" prefHeight="25.0" prefWidth="179.0" text="Edit User" />
+      <Button fx:id="deleteUser" layoutX="457.0" layoutY="607.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="25.0" prefWidth="179.0" text="Delete User" />
+      <TableView fx:id="table" layoutX="457.0" layoutY="146.0" prefHeight="451.0" prefWidth="730.0">
+        <columns>
+          <TableColumn fx:id="passCol" prefWidth="146.0" text="Password" />
+          <TableColumn fx:id="IDCol" prefWidth="118.0" text="ID" />
+            <TableColumn fx:id="firstnameCol" prefWidth="153.0" text="FirstName" />
+            <TableColumn fx:id="surnameCol" prefWidth="153.0" text="Surname" />
+            <TableColumn fx:id="adminCol" prefWidth="159.0" text="Admin" />
+        </columns>
+      </TableView>
+      <LettersTextField fx:id="firstName" layoutX="114.0" layoutY="236.0" promptText="First Name..." />
+      <LettersTextField fx:id="surname" layoutX="114.0" layoutY="277.0" promptText="Surname..." />
+      <StringTextField fx:id="newPass" layoutX="114.0" layoutY="318.0" promptText="Password..." />
+      <Button fx:id="update" layoutX="114.0" layoutY="556.0" mnemonicParsing="false" onAction="#update" prefHeight="25.0" prefWidth="149.0" text="Update Details" />
+ 
+      <CheckBox fx:id="admin" layoutX="114.0" layoutY="379.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Select if Admin" />
+      <TextField fx:id="id" layoutX="114.0" layoutY="198.0" promptText="ID" />
+      <Button fx:id="clearAll" layoutX="114.0" layoutY="594.0" mnemonicParsing="false" onAction="#clearAllButton" prefHeight="25.0" prefWidth="149.0" text="Clear All" />
+      <Button fx:id="backButton" layoutX="114.0" layoutY="85.0" mnemonicParsing="false" onAction="#backButton" prefHeight="25.0" prefWidth="101.0" text="Back to Home" />
+      <Button fx:id="exitEdit" layoutX="114.0" layoutY="479.0" mnemonicParsing="false" onAction="#exitEdit" prefHeight="25.0" prefWidth="149.0" text="Exit Edit Mode" />
+      <ImageView fitHeight="137.0" fitWidth="111.0" layoutX="784.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@users.png" />
+         </image>
+      </ImageView>
+
+   </children>
+</AnchorPane>

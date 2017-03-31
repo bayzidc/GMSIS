@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="pane" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartsController">
+   <children>
+       <JFXButton fx:id="users" layoutY="2.0" onAction="#users" prefHeight="43.0" prefWidth="227.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Users" textFill="#f5f5f8" />
+      <JFXButton fx:id="customers" layoutX="227.0" layoutY="2.0" onAction="#cus" prefHeight="43.0" prefWidth="249.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Customer Accounts" textFill="#f5f5f8" />
+      <JFXButton fx:id="vehicles" layoutX="476.0" layoutY="2.0" onAction="#vehicleRecord" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Vehicle Records" textFill="#f5f5f8" />
+      <JFXButton fx:id="bookings" layoutX="703.0" layoutY="2.0" onAction="#diag" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Diagnosis &amp; Repair Booking" textFill="#f5f5f8" />
+      <JFXButton fx:id="parts" layoutX="930.0" layoutY="2.0" onAction="#partsUsedPage" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Record" textFill="#f5f5f8" />
+      <JFXButton fx:id="logout" layoutX="1157.0" layoutY="2.0" onAction="#logout" prefHeight="43.0" prefWidth="226.6" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Logout" textFill="#f5f5f8" />
+      
+      <Label layoutX="12.0" layoutY="248.0" prefHeight="17.0" prefWidth="79.0" text="Part Name:" />
+      <Label layoutX="12.0" layoutY="336.0" prefHeight="17.0" prefWidth="101.0" text="Date Of Install:" />
+      <Label layoutX="14.0" layoutY="145.0" prefHeight="27.0" prefWidth="107.0" text="Install Parts">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TableView fx:id="table" layoutX="364.0" layoutY="178.0" prefHeight="262.0" prefWidth="958.0">
+        <columns>
+            <TableColumn fx:id="usedIdCol" prefWidth="74.0" text="RepairID" />
+          <TableColumn fx:id="nameCol" prefWidth="106.0" text="Part Name" />
+          <TableColumn fx:id="costCol" prefWidth="110.0" text="Cost(£)" />
+            <TableColumn fx:id="quantityCol" prefWidth="65.0" text="Quantity" />
+            <TableColumn fx:id="installDateCol" prefWidth="96.0" text="DateOfInstall" />
+            <TableColumn fx:id="expireDateCol" prefWidth="151.0" text="DateOfWarrantyExpire" />
+            <TableColumn fx:id="customerNameCol" prefWidth="128.0" text="Customer Name" />
+            <TableColumn fx:id="registrationNoCol" prefWidth="106.0" text="VehRegNo" />
+            <TableColumn fx:id="bookingIdCol" prefWidth="120.0" text="BookingID" />
+        </columns>
+      </TableView>
+      <Label layoutX="12.0" layoutY="202.0" prefHeight="17.0" prefWidth="79.0" text="BookingID :" />
+      <DatePicker fx:id="dateOfInstall" editable="false" layoutX="109.0" layoutY="331.0" prefHeight="27.0" prefWidth="210.0" promptText="dd/mm/yyyy" />
+      <Button fx:id="installParts" layoutX="12.0" layoutY="410.0" mnemonicParsing="false" onAction="#installButton" prefHeight="27.0" prefWidth="101.0" text="Install parts" />
+      <Button fx:id="deleteParts" layoutX="124.0" layoutY="410.0" mnemonicParsing="false" onAction="#deleteButton" prefHeight="27.0" prefWidth="101.0" text="Delete Part" />
+      <TextField fx:id="searchField" layoutX="1006.0" layoutY="146.0" prefHeight="25.0" prefWidth="316.0" promptText="Enter fully or partially" />
+      <Button fx:id="clear" layoutX="240.0" layoutY="410.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="79.0" text="Clear" />
+      <Label layoutX="13.0" layoutY="294.0" prefHeight="17.0" prefWidth="72.0" text="Quantity : " />
+      <TextField fx:id="quantity" layoutX="109.0" layoutY="289.0" prefHeight="27.0" prefWidth="210.0" promptText="Enter a quantity.." />
+      <ComboBox fx:id="bookingIdCombo" layoutX="109.0" layoutY="197.0" onAction="#showInstallDate" prefHeight="27.0" prefWidth="210.0" promptText="Select ID" />
+      <ComboBox fx:id="partNameCombo" layoutX="109.0" layoutY="243.0" prefHeight="27.0" prefWidth="210.0" promptText="Select Name" />
+      <TableView fx:id="custInfoTable" layoutX="13.0" layoutY="488.0" prefHeight="215.0" prefWidth="456.0">
+        <columns>
+          <TableColumn fx:id="regNoCol" prefWidth="116.00003051757812" text="VehRegNo" />
+          <TableColumn fx:id="fullCustomerNameCol" minWidth="0.0" prefWidth="180.0" text="Customer Name" />
+            <TableColumn fx:id="bookingDateCol" prefWidth="158.0" text="BookingDate" />
+        </columns>
+      </TableView>
+      <ComboBox fx:id="searchCombo" layoutX="817.0" layoutY="146.0" prefHeight="21.0" prefWidth="183.0" />
+      <Separator layoutX="1.0" layoutY="446.0" prefHeight="17.0" prefWidth="1384.0" />
+      <Label layoutX="13.0" layoutY="463.0" text="Booking Information">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <JFXCheckBox fx:id="showAll" checkedColor="#0f1d9b" layoutX="5.0" layoutY="744.0" onAction="#showAllBooking" prefHeight="17.0" prefWidth="151.0" text="View All Bookings" />
+      <JFXCheckBox fx:id="pastBooking" checkedColor="#0f1d9b" layoutX="149.0" layoutY="742.0" onAction="#filterByPast" prefHeight="21.0" prefWidth="183.0" text="View Past Bookings" />
+      <JFXCheckBox fx:id="futureBooking" checkedColor="#0f1d9b" layoutX="319.0" layoutY="744.0" onAction="#filterByFuture" prefHeight="17.0" prefWidth="170.0" text="View Future Bookings" />
+      <TableView fx:id="partInfoTable" layoutX="515.0" layoutY="488.0" prefHeight="215.0" prefWidth="488.0">
+        <columns>
+          <TableColumn fx:id="regCol" prefWidth="89.0" text="VehRegNo" />
+          <TableColumn fx:id="customerCol" prefWidth="181.0" text="Customer Name" />
+            <TableColumn fx:id="pNameCol" prefWidth="105.0" text="Parts Used" />
+            <TableColumn fx:id="qCol" minWidth="0.0" prefWidth="112.0" text="Quantity" />
+        </columns>
+      </TableView>
+      <Button fx:id="viewPartsInfo" layoutX="682.0" layoutY="709.0" mnemonicParsing="false" onAction="#buildPartsDataBtn" prefHeight="27.0" prefWidth="161.0" text="View Parts Used" />
+      <Label layoutX="516.0" layoutY="463.0" text="Parts Used Information">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="364.0" layoutY="145.0" text="Repair Information">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="viewCustomerInfo" layoutX="139.0" layoutY="709.0" mnemonicParsing="false" onAction="#buildCustomerDataBtn" prefHeight="27.0" prefWidth="151.0" text="View Vehicle Booking" />
+      <ImageView fitHeight="54.0" fitWidth="47.0" layoutX="757.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@image/toolsIcon.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="1044.0" layoutY="463.0" text="Parts Information">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="partStockButton" layoutX="1220.0" layoutY="61.0" onAction="#pStock" prefHeight="35.0" prefWidth="101.0" ripplerFill="#081786" style="-fx-background-color: #081786;" text="Parts Stock" textFill="#f5f5f8" />
+      <TextArea fx:id="showPartInfo" layoutX="1044.0" layoutY="488.0" prefHeight="215.0" prefWidth="277.0" />
+      <Label layoutX="614.0" layoutY="68.0" text="Parts Record">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="757.0" layoutY="150.0" prefHeight="17.0" prefWidth="56.0" text="Search By:" />
+   </children>
+</AnchorPane>
