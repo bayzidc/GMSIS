@@ -322,7 +322,6 @@ public class PartsController implements Initializable {
                 state.setInt(7, findCustomerID(part.getBookingID()));
                 state.setInt(8, part.getBookingID()); 
                 int justCheck = count + part.getQuantity();
-                System.out.println("The count to be added is " + justCheck);
                 state.setInt(9, justCheck);
                 
                 state.execute();
@@ -543,42 +542,61 @@ public class PartsController implements Initializable {
         part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             
         boolean checkingBooking =  checkIfBookingExistsInPartsUsed(part.getBookingID());
-        if(checkingBooking){
-            int partIdValue = findPartsID(part.getPartName());
-            boolean checkPartIdExists = checkPartId(partIdValue, part.getBookingID()); 
-          
-            if(checkPartIdExists){
-                alertInformation("The part name: " + part.getPartName() + " has already been used for this vehicle. Please select a different part for repair.");
-                clearFields();
-                return;
-            }
-            
-            else {
-                count = findCountForBooking(part.getBookingID());
+        if(checkingBooking)
+        {
+             count = findCountForBooking(part.getBookingID());
+
                 int totalCount = count + part.getQuantity();
-                if(count<=10 && totalCount<=10){
-                   withdrawPart(part);
-                
-                }else{
-                    alertInformation("You cannot install more than 10 parts on a vehicle.");
-                    clearFields();
-                    return;
+                if(count<=10)
+                {
+                   if(totalCount<=10)
+                   {
+                        int partIdValue = findPartsID(part.getPartName());
+                        boolean checkPartIdExists = checkPartId(partIdValue, part.getBookingID());
+                        if(checkPartIdExists) 
+                        {
+                            alertInformation("The part name: " + part.getPartName() + " has already been used for this vehicle. Please select a different part for repair.");
+                            clearFields();
+                            return;
+                        }
+                        else
+                        {
+                            withdrawPart(part);
+                        }
+                    }
+                   else
+                    {
+                        alertInformation("You cannot install more than 10 parts on a vehicle.");
+                        clearFields();
+                        return;
+                    }
                 }
-            }
-                   
-        }else{
-            count = 0 ;
-            if(part.getQuantity()>10){
-                alertError("You cannot install more than 10 parts on a vehicle.");
-                clearFields();
-                return;
-            }
-            else{
-                withdrawPart(part);
-            }
+                else
+                {
+                        alertInformation("You cannot install more than 10 parts on a vehicle.");
+                        clearFields();
+                        return;
+                }
                 
-        }
+           }
         
+                
+                if(!checkingBooking)
+                {
+                    count = 0 ;
+                     if(part.getQuantity()>10)
+                     {
+                        alertError("You cannot install more than 10 parts on a vehicle.");
+                        clearFields();
+                        return;
+                     }
+                
+                    else
+                    {
+                        withdrawPart(part);
+                    }
+                }
+  
     }
         
     
@@ -627,9 +645,8 @@ public class PartsController implements Initializable {
             conn = (new sqlite().connect());
             String SQL = "Select bookingID from vehiclePartsUsed where parts_id ='" + partID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
-            if(rs.next()){
-                bookingIdFromDatabase = rs.getInt("bookingID");
-                if(bookingIdFromDatabase == bookingId){
+           while(rs.next()){
+                if(rs.getInt("bookingID") == bookingId){
                     value = true;
                 }
             }
