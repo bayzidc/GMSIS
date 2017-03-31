@@ -23,6 +23,7 @@ public class PartsStock {
     public StringProperty partDescription;
     public IntegerProperty partStockLevel;
     public DoubleProperty cost;
+    
    
    
     public PartsStock(int partId,String partName, String partDescription,int partStockLevel, double cost) {
@@ -33,6 +34,7 @@ public class PartsStock {
         this.partStockLevel= new SimpleIntegerProperty(partStockLevel);
         this.cost = new SimpleDoubleProperty(cost);
     }
+    
     
     // Return the 'partsid' value.
     public int getPartIDentify() {

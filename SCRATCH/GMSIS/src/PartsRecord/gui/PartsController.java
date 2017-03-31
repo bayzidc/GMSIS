@@ -177,10 +177,11 @@ public class PartsController implements Initializable {
     private int usedPartID;
     private PartsUsed partDisplay = null ;
     private LocalDate scheduleDateFromBooking;
+    private int count;
     
     
     /**
-     * Initializes the controller class.
+     * Initialize the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -309,7 +310,7 @@ public class PartsController implements Initializable {
         try {
             conn = (new sqlite().connect());
           
-            String sql = "insert into vehiclePartsUsed(parts_id,quantity,cost, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID) values(?,?,?,?,?,?,?,?)";
+            String sql = "insert into vehiclePartsUsed(parts_id,quantity,cost, dateOfInstall, dateOfWarrantyExpire,vehicleID, customerID, bookingID,count) values(?,?,?,?,?,?,?,?,?)";
             PreparedStatement state = conn.prepareStatement(sql);
 
                 state.setInt(1, findPartsID(part.getPartName()));
@@ -320,6 +321,9 @@ public class PartsController implements Initializable {
                 state.setInt(6, findVehicleID(part.getBookingID()));
                 state.setInt(7, findCustomerID(part.getBookingID()));
                 state.setInt(8, part.getBookingID()); 
+                int justCheck = count + part.getQuantity();
+                System.out.println("The count to be added is " + justCheck);
+                state.setInt(9, justCheck);
                 
                 state.execute();
                 state.close();
@@ -532,31 +536,163 @@ public class PartsController implements Initializable {
         if(!isQuantityZero(quantity.getText())){
             return;
         }
-        else{
-            part.setBookingID(bookingIdCombo.getValue());
-            part.setPartName(partNameCombo.getValue());
-            part.setQuantity(Integer.parseInt(quantity.getText()));
-            part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         
-            int stockAvailable = findStockLevel(part.getPartName());
-            if ((stockAvailable > 0) && stockAvailable >= part.getQuantity()) {
-               decreaseStockLevel(part.getPartName(), stockAvailable);
-               createData(part);
-               buildPartsUsedData();
-               dateOfInstall.setDisable(false);
-               clearFields();
-               
-               addBill(part.getBookingID(),part.getQuantity(),findPartsCost(part.getPartName()));
-               
-            } else if (stockAvailable == 0) {
-                alertInformation("The stock is currently empty.");
-            } else if (stockAvailable < part.getQuantity()) {
-                alertInformation("The quantity you want is not available in the stock.");
-            }
+        part.setBookingID(bookingIdCombo.getValue());
+        part.setPartName(partNameCombo.getValue());
+        part.setQuantity(Integer.parseInt(quantity.getText()));
+        part.setInstallDate(dateOfInstall.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             
+        boolean checkingBooking =  checkIfBookingExistsInPartsUsed(part.getBookingID());
+        if(checkingBooking){
+            int partIdValue = findPartsID(part.getPartName());
+            boolean checkPartIdExists = checkPartId(partIdValue, part.getBookingID()); 
+          
+            if(checkPartIdExists){
+                alertInformation("The part name: " + part.getPartName() + " has already been used for this vehicle. Please select a different part for repair.");
+            }
+            else {
+                count = findCountForBooking(part.getBookingID());
+                int totalCount = count + part.getQuantity();
+                if(count<10 && totalCount<10){
+                   withdrawPart(part);
+                
+                }else{
+                    alertInformation("You cannot install more than 10 parts on a vehicle.");
+                }
+            }
+                   
+        }else{
+            count = 0 ;
+            if(part.getQuantity()>10){
+                alertError("You cannot install more than 10 parts on a vehicle.");
+            }
+            else{
+                withdrawPart(part);
+            }
+                
         }
         
     }
+        
+    
+    /**
+     * This method is used to withdraw parts from the partsStock table.
+     * @param part
+     * @throws ClassNotFoundException 
+     */
+    public void withdrawPart(PartsUsed part) throws ClassNotFoundException{
+        try{
+                    int stockAvailable = findStockLevel(part.getPartName());
+                    if ((stockAvailable > 0) && stockAvailable >= part.getQuantity()) {
+                        decreaseStockLevel(part.getPartName(), stockAvailable);
+                        createData(part);
+                        buildPartsUsedData();
+                        dateOfInstall.setDisable(false);
+                        clearFields();
+               
+                       addBill(part.getBookingID(),part.getQuantity(),findPartsCost(part.getPartName()));
+               
+                    } else if (stockAvailable == 0) {
+                        alertInformation("The stock is currently empty.");
+                    } else if (stockAvailable < part.getQuantity()) {
+                        alertInformation("The quantity you want is not available in the stock.");
+                   }
+        }
+         catch(Exception e) {
+            e.printStackTrace();
+            
+        }
+
+    }
+    
+    /**
+     * This method is used to check whether a part is already being used once.
+     * @param partID
+     * @param bookingId
+     * @return
+     * @throws ClassNotFoundException 
+     */
+    public boolean checkPartId(int partID, int bookingId) throws ClassNotFoundException {
+        boolean value  = false;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select bookingID from vehiclePartsUsed where parts_id ='" + partID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            if(rs.next()){
+               
+                value = true;
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+            
+        }
+        return value;
+    }
+
+    
+    
+    /**
+     * This method returns the number of parts used to repair a vehicle.
+     * @param bookingID
+     * @return
+     * @throws ClassNotFoundException 
+     */
+    public int findCountForBooking(int bookingID) throws ClassNotFoundException{
+        int value  = 0;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select count from vehiclePartsUsed where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+               value = rs.getInt("count");
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            
+        }
+        return value;
+    }
+    
+    /**
+     * This method is used to check whether a repair has already been done for a particular booking id.
+     * @param bookingID
+     * @return
+     * @throws ClassNotFoundException 
+     */
+    public boolean checkIfBookingExistsInPartsUsed(int bookingID) throws ClassNotFoundException{
+        boolean value  = false;
+        Connection conn = null;
+        try {
+            conn = (new sqlite().connect());
+            String SQL = "Select bookingID from vehiclePartsUsed where bookingID ='" + bookingID + "'";
+            ResultSet rs = conn.createStatement().executeQuery(SQL);
+            while (rs.next()) {
+                
+                value = true;
+                
+            }
+
+            rs.close();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            
+        }
+        return value;
+    }
+    
+    
     
     /**
      * This method is used to show the installed date of a part in the datePicker when the user selects a bookingId in the bookingIdCombo.

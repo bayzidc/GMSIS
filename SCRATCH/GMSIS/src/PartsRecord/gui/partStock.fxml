@@ -18,7 +18,7 @@
 <AnchorPane id="AnchorPane" fx:id="pane" prefHeight="800.0" prefWidth="1208.0" style="-fx-background-color: #85C1E9;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PartsRecord.gui.PartStockController">
    <children>
        
-      <Label layoutX="9.0" layoutY="114.0" text="Add New Parts To  Stock">
+      <Label layoutX="9.0" layoutY="114.0" text="Add New Parts In  Stock">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -26,11 +26,11 @@
       <Label layoutX="9.0" layoutY="168.0" text="Name Of Parts:" />
       <Label layoutX="8.0" layoutY="201.0" text="Description:" />
       <Label layoutX="28.0" layoutY="146.0" />
-      <Label layoutX="11.0" layoutY="561.0" prefHeight="17.0" prefWidth="64.0" text="Quantity:" />
+      <Label layoutX="13.0" layoutY="588.0" prefHeight="17.0" prefWidth="64.0" text="Quantity:" />
       <Label layoutX="12.0" layoutY="329.0" text="Cost:" />
-      <TextField fx:id="quantity" layoutX="122.0" layoutY="556.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a quantity.." />
+      <TextField fx:id="quantity" layoutX="116.0" layoutY="583.0" prefHeight="27.0" prefWidth="230.0" promptText="Enter a quantity.." />
       <TextField fx:id="cost" layoutX="127.0" layoutY="321.0" prefHeight="33.0" prefWidth="237.0" promptText="Enter a cost..." />
-      <TableView fx:id="table" layoutX="443.0" layoutY="159.0" prefHeight="264.0" prefWidth="878.0">
+      <TableView fx:id="table" layoutX="443.0" layoutY="159.0" prefHeight="269.0" prefWidth="878.0">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="64.0" text="Parts ID" />
           <TableColumn fx:id="nameCol" prefWidth="175.0" text="Parts Name" />
@@ -41,30 +41,21 @@
       </TableView>
       <Button fx:id="back" layoutX="9.0" layoutY="68.0" mnemonicParsing="false" onAction="#backButton" prefHeight="27.0" prefWidth="149.0" text="Back to Parts Record" />
       <TextField fx:id="nameOfParts" layoutX="127.0" layoutY="163.0" prefHeight="27.0" prefWidth="237.0" promptText="Enter a name..." />
-      <Label layoutX="11.0" layoutY="516.0" prefHeight="17.0" prefWidth="64.0" text="PartID:" />
-      <Label layoutX="9.0" layoutY="603.0" prefHeight="17.0" prefWidth="84.0" text="Arrival Date:" />
-      <DatePicker fx:id="arrivalDate" editable="false" layoutX="122.0" layoutY="598.0" prefHeight="27.0" prefWidth="237.0" promptText="dd/mm/yyyy" />
-      <TableView fx:id="table2" layoutX="439.0" layoutY="501.0" prefHeight="238.0" prefWidth="887.0">
+      <Label layoutX="14.0" layoutY="640.0" prefHeight="17.0" prefWidth="84.0" text="Arrival Date:" />
+      <DatePicker fx:id="arrivalDate" editable="false" layoutX="113.0" layoutY="627.0" prefHeight="27.0" prefWidth="237.0" promptText="dd/mm/yyyy" />
+      <TableView fx:id="table2" layoutX="443.0" layoutY="515.0" prefHeight="224.0" prefWidth="878.0">
         <columns>
-          <TableColumn fx:id="partNameCol" prefWidth="337.0" text="Part Name" />
-          <TableColumn fx:id="arrivalDateCol" prefWidth="280.0" text="Arrival Date" />
-            <TableColumn fx:id="quantityCol" prefWidth="269.0" text="Quantity" />
+          <TableColumn fx:id="partNameCol" prefWidth="324.0" text="Part Name" />
+          <TableColumn fx:id="arrivalDateCol" prefWidth="262.0" text="Arrival Date" />
+            <TableColumn fx:id="quantityCol" prefWidth="291.0" text="Quanity" />
         </columns>
       </TableView>
-      <ComboBox fx:id="partIdCombo" layoutX="122.0" layoutY="511.0" prefHeight="27.0" prefWidth="237.0" promptText="Select Id" />
-      <Button fx:id="addItem" layoutX="9.0" layoutY="661.0" mnemonicParsing="false" onAction="#addItemButton" prefHeight="27.0" prefWidth="84.0" text="Add Items " />
-      <Button fx:id="clear2" layoutX="100.0" layoutY="661.0" mnemonicParsing="false" onAction="#clearButton2" prefHeight="27.0" prefWidth="75.0" text="Clear" />
-      <Button fx:id="clear" layoutX="351.0" layoutY="387.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="64.0" text="Clear" />
-      <Button fx:id="delete" layoutX="181.0" layoutY="387.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="96.0" text="Delete Part" />
-      <Button fx:id="edit" layoutX="93.0" layoutY="387.0" mnemonicParsing="false" onAction="#editParts" prefHeight="27.0" prefWidth="88.0" text="Edit Part" />
-      <Button fx:id="addparts" layoutX="9.0" layoutY="387.0" mnemonicParsing="false" onAction="#addButton" prefHeight="27.0" prefWidth="84.0" text="Add Part" />
-      <Label layoutX="8.0" layoutY="454.0" text="Add Items To Stock">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
-      <Separator layoutX="-72.0" layoutY="432.0" prefHeight="15.0" prefWidth="1456.0" />
-      <Button fx:id="update" layoutX="277.0" layoutY="387.0" mnemonicParsing="false" onAction="#updateParts" prefHeight="27.0" prefWidth="75.0" text="Update" />
+      <Button fx:id="clear" layoutX="375.0" layoutY="400.0" mnemonicParsing="false" onAction="#clearButton" prefHeight="27.0" prefWidth="64.0" text="Clear" />
+      <Button fx:id="delete" layoutX="196.0" layoutY="400.0" mnemonicParsing="false" onAction="#deleteParts" prefHeight="27.0" prefWidth="96.0" text="Delete Part" />
+      <Button fx:id="edit" layoutX="103.0" layoutY="400.0" mnemonicParsing="false" onAction="#editParts" prefHeight="27.0" prefWidth="88.0" text="Edit Part" />
+      <Button fx:id="addparts" layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#addButton" prefHeight="27.0" prefWidth="84.0" text="Add Part" />
+      <Separator layoutX="-63.0" layoutY="460.0" prefHeight="15.0" prefWidth="1456.0" />
+      <Button fx:id="update" layoutX="294.0" layoutY="400.0" mnemonicParsing="false" onAction="#updateParts" prefHeight="27.0" prefWidth="75.0" text="Update" />
       <TextArea fx:id="description" layoutX="127.0" layoutY="201.0" prefHeight="107.0" prefWidth="237.0" promptText="Enter a description.." />
       <ImageView fitHeight="64.0" fitWidth="65.0" layoutX="769.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -72,7 +63,7 @@
          </image>
       </ImageView>
       <JFXButton layoutX="1.0" prefHeight="51.0" prefWidth="1384.0" style="-fx-background-color: #081786;" textFill="#081786" />
-      <Label layoutX="439.0" layoutY="468.0" prefHeight="27.0" prefWidth="139.0" text="Stock Deliveries">
+      <Label layoutX="443.0" layoutY="483.0" prefHeight="27.0" prefWidth="139.0" text="Stock Deliveries">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -85,6 +76,15 @@
       <Label layoutX="640.0" layoutY="71.0" text="Parts Stock">
          <font>
             <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="538.0" text="Part Id:" />
+      <ComboBox fx:id="partIdCombo" layoutX="116.0" layoutY="533.0" prefHeight="27.0" prefWidth="230.0" />
+      <Button fx:id="addItem" layoutX="16.0" layoutY="695.0" mnemonicParsing="false" onAction="#addItemButton" text="Add Items" />
+      <Button fx:id="clear2" layoutX="113.0" layoutY="695.0" mnemonicParsing="false" onAction="#clearButton2" text="Clear" />
+      <Label layoutX="14.0" layoutY="480.0" prefHeight="33.0" prefWidth="230.0" text="Add new Items in Stock">
+         <font>
+            <Font size="18.0" />
          </font>
       </Label>
    </children>
