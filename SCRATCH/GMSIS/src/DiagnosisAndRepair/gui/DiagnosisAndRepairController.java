@@ -717,9 +717,9 @@ public class DiagnosisAndRepairController implements Initializable {
     }
     
     //check if every entry is complete
-    private boolean checkIfCompleted()
+    private boolean checkIfCompleted()       
     { 
-        if(customerCombo.getValue()!=null && vehicleCombo.getValue()!=null && mechanicCombo.getValue()!=null && datePicked.getValue()!=null && startTime.getValue()!=null && endTime.getValue()!=null && mileage.getText()!=null)
+        if(customerCombo.getValue()!=null && vehicleCombo.getValue()!=null && mechanicCombo.getValue()!=null && datePicked.getValue()!=null && startTime.getValue()!=null && endTime.getValue()!=null && !mileage.getText().isEmpty())
         {
             return true;
         }
