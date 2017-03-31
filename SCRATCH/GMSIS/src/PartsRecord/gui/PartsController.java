@@ -579,7 +579,6 @@ public class PartsController implements Initializable {
                 }
                 
            }
-        
                 
                 if(!checkingBooking)
                 {
