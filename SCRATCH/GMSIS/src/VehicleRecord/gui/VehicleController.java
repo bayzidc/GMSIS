@@ -640,6 +640,11 @@ public class VehicleController implements Initializable {
             custTable.setItems(custData);
             rs.close();
             conn.close();
+            
+            if(custData.isEmpty())
+            {
+                alertInf("There are no bookings for this vehicle");
+            }
         }
         
         catch(Exception e)
