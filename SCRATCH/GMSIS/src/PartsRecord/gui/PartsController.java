@@ -549,6 +549,7 @@ public class PartsController implements Initializable {
           
             if(checkPartIdExists){
                 alertInformation("The part name: " + part.getPartName() + " has already been used for this vehicle. Please select a different part for repair.");
+                clearFields();
                 return;
             }
             
@@ -560,6 +561,7 @@ public class PartsController implements Initializable {
                 
                 }else{
                     alertInformation("You cannot install more than 10 parts on a vehicle.");
+                    clearFields();
                     return;
                 }
             }
@@ -568,6 +570,7 @@ public class PartsController implements Initializable {
             count = 0 ;
             if(part.getQuantity()>10){
                 alertError("You cannot install more than 10 parts on a vehicle.");
+                clearFields();
                 return;
             }
             else{
