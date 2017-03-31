@@ -295,19 +295,12 @@ public class GuiController implements Initializable {
             acc.setCustomerEmail(emailText.getText());
             acc.setCustomerType(String.valueOf(accTypeText.getSelectionModel().getSelectedItem()));
 
-            Stage primaryStage = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            Parent root = loader.load(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml").openStream());
-            VehicleController c = (VehicleController) loader.getController();
-            Stage stage2 = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            c.buildCustomerVehicle(acc.getCustomerID(), acc.getCustomerFullName());
-            c.buildCustomerData(acc.getCustomerID());
-            stage2.hide();
-            Scene vehicle_Scene = new Scene(root);
-            primaryStage.setScene(vehicle_Scene);
-            primaryStage.setHeight(810);
-            primaryStage.setWidth(1359);
-            primaryStage.show();
+             FXMLLoader loader = new FXMLLoader(getClass().getResource("/VehicleRecord/gui/Vehicle.fxml"));
+        Parent root = (AnchorPane)loader.load();
+        VehicleRecord.gui.VehicleController obj = (VehicleRecord.gui.VehicleController) loader.getController();       
+        pane.getChildren().setAll(root);
+            obj.buildCustomerVehicle(acc.getCustomerID(), acc.getCustomerFullName());
+            obj.buildCustomerData(acc.getCustomerID());
         } catch (Exception e) {
             e.printStackTrace();
         }
