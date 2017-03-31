@@ -44,6 +44,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -168,7 +169,8 @@ public class VehicleController implements Initializable {
     public ActionEvent e;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // TODO]
+        ImageView iv = new ImageView(getClass().getResource("Cars.png").toExternalForm());
         regCol.setCellValueFactory(
                 new PropertyValueFactory<Vehicle, String>("RegNumber"));
         makeCol.setCellValueFactory(
