@@ -128,16 +128,16 @@ Clears all the combo boxes and text fields.
 
 Parts Record:
 -How to add a new part in stock?
-Once you are in the "Parts Record" page click the button "Parts Stock". You will be redirected to the parts stock page where you can add new parts and items in stock. To add a new part in stock enter all the part details as shown on the top section. After all the entries are complete click the "Add Part" button. You will get a confirmation dialog which will ask for your confirmation before adding the part in stock. After you click 'Yes' the part is going to be added in stock and you can see a new row with the part details being added in the 'Parts In Stock' table which lists all the parts added in the stock.
+Once you are in the "Parts Record" page click the button "Parts Stock". You will be redirected to the "Parts Stock" page where you can add new parts and items in stock. To add a new part in stock enter all the part details as shown on the top section. After all the entries are complete click the "Add Part" button. You will get a confirmation dialog which will ask for your confirmation before adding the part in stock. After you click 'Yes' the part is going to be added in stock and you can see a new row with the part details being added in the 'Parts Available In Stock' table which lists all the parts added in the stock.
 
 -How to add items in stock?
-To add an item in the stock, refer to the bottom section of the parts stock page. First, select the part ID of the item you want to add from the comboBox and then enter the quantity and the arrival date. After all the entries are complete click the "Add Items" button. You will get a confirmation dialog which will ask for your confirmation before adding items in the stock. After you click 'Yes' the item is going to be added in the stock and the stock level of parts will increase. You can see a new row with the delivery details being added to the 'Stock Delivery' table which lists all the stock deliveries.
+To add an item in the stock, refer to the bottom section of the "Parts Stock" page. First, select the part ID of the item you want to add from the comboBox and then enter the quantity and the arrival date. After all the entries are complete click the "Add Items" button. You will get a confirmation dialog which will ask for your confirmation before adding items in the stock. After you click 'Yes' the item is going to be added in the stock and the stock level of parts will increase. You can see a new row with the delivery details being added to the 'Stock Deliveries' table which lists all the stock deliveries.
 
 -How to edit a part in stock?
 You will see a table 'Parts In Stock' on the top section of the parts stock page which lists all the parts added in the stock. To edit a part, select the row of the part you want to edit and click on the 'Edit Part' button. You will see that all the data from the selected row will appear in the text fields. Once you have made the changes, click on the 'Update' button. You will get a confirmation dialog which will ask for your confirmation before updating the data of the part. After you click 'Yes' the data is going to be updated and you can see the changes in the table.
 
 -How to delete a part?
-You will see a table 'Parts In Stock' on the top section of the 'Parts Stock' page which lists all the parts added in the stock. To delete a part, select the row of the part you want to delete and click on the 'Delete Part' button. You will get a confirmation dialog which will ask for your confirmation before deleting the part. After you click 'Yes' the part is going to be deleted from the system and you can see the changes in the table.
+You will see a table 'Parts Available In Stock' on the top section of the 'Parts Stock' page which lists all the parts added in the stock. To delete a part, select the row of the part you want to delete and click on the 'Delete Part' button. You will get a confirmation dialog which will ask for your confirmation before deleting the part. After you click 'Yes' the part is going to be deleted from the system and you can see the changes in the table.
 
 -How to install a part in a vehicle?
 To install a part in a vehicle refer to the top section of the "Parts Record" page. First, select the booking Id from the comboBox and you will see that the installation date will appear in the datePicker. Then select the part name that you want to install from the comboBox and enter the quantity you wish to install. After all the entries are complete click the "Install parts" button. You will get a confirmation dialog which will ask for your confirmation before installing the part. After you click 'Yes' the part is going to be installed in a vehicle and you will see an information dialog informing you that a bill has been added to the system.
@@ -149,10 +149,10 @@ You will see a table on the top section of the 'Parts Record' page which lists a
 To search for a part, select what you want to search by from the comboBox. You can search either by full/partial vehicle registration number or customer name. Based on what you have selected from the comboBox enter either the customer name or vehicle registration number on the search text field. You will see that the list of parts in the table will filter according to your search preference.
 
 -How to view vehicle booking information of a particular vehicle?
-On the 'Parts Record' page, to view the vehicle booking information of a particular vehicle, select the row from the 'Repair Information' table for the vehicle you wish to view and click the 'View Vehicle Booking' button. There is a table named 'Vehicle Booking Information' which will display the selected vehicle's registration number, customer name, and their booking dates.
+On the 'Parts Record' page, to view the vehicle booking information of a particular vehicle, select the row from the 'Repair Information' table for the vehicle you wish to view and click the 'View Vehicle Booking' button. There is a table named 'Booking Information' which will display the selected vehicle's registration number, customer name, and their booking dates.
 
 -How to filter the booking dates for a vehicle?
-You have three check boxes below the 'Vehicle Booking Information' table that will allow you to filter booking dates in 3 ways:
+You have three check boxes below the 'Booking Information' table that will allow you to filter booking dates in 3 ways:
 "View All Bookings" check box is the default which shows all the bookings, 
 "View Past Bookings" check box shows all the past bookings, 
 "View Future Bookings" check box shows all the future bookings. 
@@ -160,11 +160,12 @@ You have three check boxes below the 'Vehicle Booking Information' table that wi
 NOTE : Selecting 'View All Bookings' will view all the bookings of all vehicles.
 
 -How to view parts used per vehicle information?
-On the 'Parts Record' page, to view the information of parts used per vehicle, select the row from the 'Repair Information' table for the vehicle you wish to view and click the 'View Parts Used' button. There is a table named 'Parts Used/Vehicle Information' which will display the selected vehicle's registration number, customer name, parts used name and quantity.
+On the 'Parts Record' page, to view the information of parts used per vehicle, select the row from the 'Repair Information' table for the vehicle you wish to view and click the 'View Parts Used' button. There is a table named 'Parts Used Information' which will display the selected vehicle's registration number, customer name, parts used name and quantity.
 
 -How to view the details of a part used?
-On the 'Parts Record' page, to view the information of a part used, select the row from the 'Repair Information' table for the part you wish to view and click the 'View Parts Information' button. There is a table named 'Parts Information' which will display the selected part's name,description and cost.
+On the 'Parts Record' page, to view the information of a part used, select the row from the 'Repair Information' table for the part you wish to view and you can see the parts information on the text area.The information in the text area will change depending on which row you have selected.
 
--clear button : Clears all the text fields, datepicker and comboBoxes.
+-clear button 
+Clears all the text fields, datepicker and combo Boxes.
 
 
