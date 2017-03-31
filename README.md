@@ -109,9 +109,9 @@ You select from customer name, registration number or make from the combo box an
 
 -How to filter booking dates in the table for customers?
 Underneath the booking table view there are 9 ways to filter the table view:
-"Show all" check box is the default to show all the bookings, 
-"Past bookings" check box shows all past bookings, 
-"Future bookings" check box shows all the future bookings. 
+"View all bookings" check box is the default to show all the bookings, 
+"View Past bookings" check box shows all past bookings, 
+"View Future bookings" check box shows all the future bookings. 
 "Within next hour" check box shows bookings that starts within an hour from now. 
 "Today's booking" check box shows all bookings for today.
 "Bookings For This Month" check box shows all the bookings for this current month.
