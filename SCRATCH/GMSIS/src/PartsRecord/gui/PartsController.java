@@ -553,7 +553,7 @@ public class PartsController implements Initializable {
             else {
                 count = findCountForBooking(part.getBookingID());
                 int totalCount = count + part.getQuantity();
-                if(count<10 && totalCount<10){
+                if(count<=10 && totalCount<=10){
                    withdrawPart(part);
                 
                 }else{
@@ -614,15 +614,19 @@ public class PartsController implements Initializable {
      */
     public boolean checkPartId(int partID, int bookingId) throws ClassNotFoundException {
         boolean value  = false;
+        int bookingIdFromDatabase = 0;
         Connection conn = null;
         try {
             conn = (new sqlite().connect());
             String SQL = "Select bookingID from vehiclePartsUsed where parts_id ='" + partID + "'";
             ResultSet rs = conn.createStatement().executeQuery(SQL);
             if(rs.next()){
-               
-                value = true;
+                bookingIdFromDatabase = rs.getInt("bookingID");
+                if(bookingIdFromDatabase == bookingId){
+                    value = true;
+                }
             }
+            
 
             rs.close();
             conn.close();
